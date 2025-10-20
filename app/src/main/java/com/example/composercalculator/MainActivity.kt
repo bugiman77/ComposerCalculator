@@ -14,9 +14,11 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -89,11 +92,13 @@ fun CalculatorScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.4f) // Задаем высоту для контейнера
+                    .fillMaxHeight(0.35f) // Задаем высоту для контейнера
                     .padding(vertical = 8.dp, horizontal = 8.dp),
                 contentAlignment = Alignment.BottomEnd // Привязываем контент к нижнему правому углу
             ) {
                 Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
                     text = displayText,
                     fontSize = 80.sp, // Крупный шрифт для результата
                     color = Color.White,
@@ -161,7 +166,7 @@ fun CalculatorScreen(
                         .weight(1f)
                         .aspectRatio(1f) // Сохраняем круглую форму
                         .align(Alignment.CenterVertically),
-                    fontSize = 20.sp
+                    fontSize = 30.sp
                 )
                 BtnCalculation(
                     text = "+/-",
@@ -179,7 +184,7 @@ fun CalculatorScreen(
                         .weight(1f)
                         .aspectRatio(1f) // Сохраняем круглую форму
                         .align(Alignment.CenterVertically),
-                    fontSize = 60.sp
+                    fontSize = 45.sp
                 )
                 BtnCalculation(
                     text = "÷",
@@ -205,7 +210,7 @@ fun CalculatorScreen(
                         .weight(1f)
                         .aspectRatio(1f) // Сохраняем круглую форму
                         .align(Alignment.CenterVertically),
-                    fontSize = 45.sp
+                    fontSize = 40.sp
                 )
                 BtnCalculation(
                     text = "8",
@@ -214,7 +219,7 @@ fun CalculatorScreen(
                         .weight(1f)
                         .aspectRatio(1f) // Сохраняем круглую форму
                         .align(Alignment.CenterVertically),
-                    fontSize = 45.sp
+                    fontSize = 40.sp
                 )
                 BtnCalculation(
                     text = "9",
@@ -223,7 +228,7 @@ fun CalculatorScreen(
                         .weight(1f)
                         .aspectRatio(1f) // Сохраняем круглую форму
                         .align(Alignment.CenterVertically),
-                    fontSize = 45.sp
+                    fontSize = 40.sp
                 )
                 BtnCalculation(
                     text = "×",
@@ -249,7 +254,7 @@ fun CalculatorScreen(
                         .weight(1f)
                         .aspectRatio(1f) // Сохраняем круглую форму
                         .align(Alignment.CenterVertically),
-                    fontSize = 45.sp
+                    fontSize = 40.sp
                 )
                 BtnCalculation(
                     text = "5",
@@ -258,7 +263,7 @@ fun CalculatorScreen(
                         .weight(1f)
                         .aspectRatio(1f) // Сохраняем круглую форму
                         .align(Alignment.CenterVertically),
-                    fontSize = 45.sp
+                    fontSize = 40.sp
                 )
                 BtnCalculation(
                     text = "6",
@@ -267,7 +272,7 @@ fun CalculatorScreen(
                         .weight(1f)
                         .aspectRatio(1f) // Сохраняем круглую форму
                         .align(Alignment.CenterVertically),
-                    fontSize = 45.sp
+                    fontSize = 40.sp
                 )
                 BtnCalculation(
                     text = "-",
@@ -293,7 +298,7 @@ fun CalculatorScreen(
                         .weight(1f)
                         .aspectRatio(1f) // Сохраняем круглую форму
                         .align(Alignment.CenterVertically),
-                    fontSize = 45.sp
+                    fontSize = 40.sp
                 )
                 BtnCalculation(
                     text = "2",
@@ -302,7 +307,7 @@ fun CalculatorScreen(
                         .weight(1f)
                         .aspectRatio(1f) // Сохраняем круглую форму
                         .align(Alignment.CenterVertically),
-                    fontSize = 45.sp
+                    fontSize = 40.sp
                 )
                 BtnCalculation(
                     text = "3",
@@ -311,7 +316,7 @@ fun CalculatorScreen(
                         .weight(1f)
                         .aspectRatio(1f) // Сохраняем круглую форму
                         .align(Alignment.CenterVertically),
-                    fontSize = 45.sp
+                    fontSize = 40.sp
                 )
                 BtnCalculation(
                     text = "+",
@@ -346,7 +351,7 @@ fun CalculatorScreen(
                         .weight(1f)
                         .aspectRatio(1f) // Сохраняем круглую форму
                         .align(Alignment.CenterVertically),
-                    fontSize = 45.sp
+                    fontSize = 40.sp
                 )
                 BtnCalculation(
                     text = ",",
@@ -390,7 +395,7 @@ private fun BtnCalculation(
             fontSize = fontSize, // Увеличим размер текста для лучшей читаемости
             color = Color.White, // Устанавливаем цвет текста
             fontStyle = FontStyle.Normal,
-            fontWeight = FontWeight.ExtraLight
+            fontWeight = FontWeight.Normal,
         )
     }
 }

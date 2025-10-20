@@ -72,6 +72,20 @@ fun CalculatorScreen(
             verticalArrangement = Arrangement.spacedBy(4.dp) // Расстояние между рядами
         ) {
 
+            Row {
+                Icon(
+                    modifier = Modifier
+                        .padding(
+                            start = 12.dp,
+                            top = 16.dp
+                        )
+                        .size(40.dp),
+                    painter = painterResource(id = R.drawable.ic_outline_list),
+                    contentDescription = null,
+                    tint = Orange
+                )
+            }
+            
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

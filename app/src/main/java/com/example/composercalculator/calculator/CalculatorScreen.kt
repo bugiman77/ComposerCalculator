@@ -1,13 +1,20 @@
 package com.example.composercalculator.calculator
 
+import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,7 +22,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -26,11 +36,16 @@ import com.example.composercalculator.ui.theme.LightGray
 import com.example.composercalculator.ui.theme.Orange
 
 // Главный экран, который принимает состояние и обработчик событий
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CalculatorScreen(
     uiState: CalculatorState,
     onEvent: (CalculatorEvent) -> Unit
 ) {
+
+    val clipboardManager = LocalClipboardManager.current
+    val context = LocalContext.current
+
     Box(
         modifier = Modifier
             .background(color = Color.Black)
@@ -58,7 +73,13 @@ fun CalculatorScreen(
 
             var fontSize by remember { mutableStateOf(80.sp) }
             val minFontSize = 28.sp // Минимальный размер шрифта
-            val maxLinesBeforeWrap = 5 // Сколько строк разрешить после достижения minFontSize
+            val maxLinesBeforeWrap = Int.MAX_VALUE // Сколько строк разрешить после достижения minFontSize
+
+            val scrollState = rememberScrollState()
+
+            LaunchedEffect(uiState.displayText) {
+                scrollState.animateScrollTo(scrollState.maxValue)
+            }
 
             Box(
                 modifier = Modifier
@@ -68,6 +89,27 @@ fun CalculatorScreen(
                 contentAlignment = Alignment.BottomEnd // Привязываем контент к нижнему правому углу
             ) {
                 Text(
+                    modifier = Modifier
+                        .verticalScroll(scrollState)
+                        .combinedClickable(
+                            onClick = {}, // Оставляем пустым
+                            onLongClick = {
+                                // При долгом нажатии копируем текст
+                                clipboardManager.setText(
+                                    AnnotatedString(
+                                        uiState.displayText
+                                    )
+                                )
+                                // Показываем уведомление
+                                Toast
+                                    .makeText(
+                                        context,
+                                        "Скопировано: ${uiState.displayText}",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                    .show()
+                            }
+                        ),
                     text = uiState.displayText,
                     color = Color.White,
                     textAlign = TextAlign.End,
@@ -94,6 +136,7 @@ fun CalculatorScreen(
 
             // Сетка кнопок
             CalculatorButtonGrid(
+                uiState = uiState,
                 onEvent = onEvent,
                 resetFontSize = { fontSize = 80.sp }
             )
@@ -103,6 +146,7 @@ fun CalculatorScreen(
 
 @Composable
 private fun CalculatorButtonGrid(
+    uiState: CalculatorState,
     onEvent: (CalculatorEvent) -> Unit,
     resetFontSize: () -> Unit
 ) {
@@ -272,6 +316,10 @@ private fun BtnCalculation(
     text: String,
     color: Color,
     fontSize: TextUnit = 36.sp,
+    iconRes: Int? = null, // ID ресурса иконки
+    isZero: Boolean = false,
+    isToggle: Boolean = false, // Наша кнопка AC/C
+    onLongClick: (() -> Unit)? = null,
     onClick: () -> Unit
 ) {
     // Для кнопки "0" устанавливаем aspectRatio 2:1, для остальных - 1:1

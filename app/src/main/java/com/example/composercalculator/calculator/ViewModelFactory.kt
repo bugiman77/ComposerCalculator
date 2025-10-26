@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.composercalculator.viewmodel.CalculatorViewModel
 
-class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+/*class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CalculatorViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
@@ -13,4 +13,4 @@ class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
-}
+}*/

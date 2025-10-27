@@ -16,5 +16,4 @@ sealed interface CalculatorEvent {
     object LongClear : CalculatorEvent
     object DecimalClick : CalculatorEvent
     object Delete : CalculatorEvent
-
 }

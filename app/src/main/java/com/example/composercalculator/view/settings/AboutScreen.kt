@@ -55,13 +55,7 @@ fun AboutScreen(
             CenterAlignedTopAppBar(
                 title = { Text("О приложении", color = Color.White, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Назад",
-                            tint = Orange
-                        )
-                    }
+                    CustomBackButton(onClick = onNavigateBack)
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
             )

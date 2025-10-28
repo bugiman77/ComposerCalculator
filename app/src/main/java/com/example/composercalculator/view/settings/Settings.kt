@@ -1,10 +1,13 @@
 package com.example.composercalculator.view.settings
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -12,12 +15,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -41,6 +48,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -70,13 +78,7 @@ fun SettingsScreen(
             CenterAlignedTopAppBar (
                 title = { Text("Настройки", color = Color.White, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Назад",
-                            tint = Orange
-                        )
-                    }
+                    CustomBackButton(onClick = onNavigateBack)
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
             )
@@ -192,6 +194,66 @@ fun SettingsScreen(
                     )
                 }
             }
+        }
+    }
+}
+
+/**
+ * Кастомная круглая кнопка "Назад" в стиле приложения.
+ * @param onClick Действие при нажатии.
+ * @param modifier Модификатор для позиционирования.
+ */
+@Composable
+fun CustomBackButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    // Создаем едва заметный вертикальный градиент для фона
+    val backgroundBrush = Brush.verticalGradient(
+        colors = listOf(
+            Orange.copy(alpha = 0.9f),
+            Orange
+        )
+    )
+
+    // Создаем границу, которая имитирует внутреннюю тень
+    val borderBrush = Brush.verticalGradient(
+        colors = listOf(
+            Color.White.copy(alpha = 0.2f),
+            Color.Transparent
+        )
+    )
+
+    Button(
+        onClick = onClick,
+        modifier = modifier
+            .padding(start = 16.dp)
+            .size(40.dp),
+        shape = CircleShape,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Transparent // Фон кнопки будет задан через Modifier.background
+        ),
+        // Убираем стандартную тень
+        elevation = ButtonDefaults.buttonElevation(
+            defaultElevation = 0.dp,
+            pressedElevation = 0.dp
+        ),
+        // Устанавливаем кастомную границу
+        border = BorderStroke(1.dp, borderBrush),
+        contentPadding = PaddingValues(0.dp)
+    ) {
+        // Оборачиваем Icon в Box с градиентным фоном
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundBrush, shape = CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Назад",
+                tint = Color.White
+            )
         }
     }
 }

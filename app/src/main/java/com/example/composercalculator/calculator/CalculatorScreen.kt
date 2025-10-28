@@ -77,7 +77,8 @@ fun CalculatorScreen(
     uiState: CalculatorState,
     onEvent: (CalculatorEvent) -> Unit,
     onNavigateToSettings: () -> Unit, // <-- ДОБАВЛЕНО
-    onNavigateToHistory: () -> Unit
+    onNavigateToHistory: () -> Unit,
+    showHistoryButton: Boolean
 ) {
 
     val clipboardManager = LocalClipboardManager.current
@@ -112,13 +113,19 @@ fun CalculatorScreen(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
 
-                    IconButton(onClick = { showHistorySheet = true }) { // <-- Сделали кликабельной
-                        Icon(
-                            modifier = Modifier.size(40.dp),
-                            painter = painterResource(id = R.drawable.ic_outline_list),
-                            contentDescription = "История",
-                            tint = Orange
-                        )
+                    if (showHistoryButton) {
+                        IconButton(onClick = { showHistorySheet = true }) {
+                            Icon(
+                                modifier = Modifier.size(40.dp),
+                                painter = painterResource(id = R.drawable.ic_outline_list),
+                                contentDescription = "История",
+                                tint = Orange
+                            )
+                        }
+                    } else {
+                        // Если кнопка скрыта, добавляем пустой Spacer,
+                        // чтобы кнопка настроек не смещалась влево.
+                        Spacer(modifier = Modifier.size(40.dp))
                     }
 
                     IconButton(onClick = onNavigateToSettings) { // <-- Сделали кликабельной

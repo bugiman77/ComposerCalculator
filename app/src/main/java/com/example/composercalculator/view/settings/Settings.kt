@@ -54,7 +54,9 @@ import com.example.composercalculator.ui.theme.Orange
 @Composable
 fun SettingsScreen(
     onNavigateBack: () -> Unit, // Лямбда для возврата на предыдущий экран
-    onNavigateToAbout: () -> Unit
+    onNavigateToAbout: () -> Unit,
+    showHistoryButton: Boolean, // Текущее состояние переключателя
+    onShowHistoryChange: (Boolean) -> Unit
 ) {
     // Локальные состояния для настроек. В реальном приложении их нужно будет
     // получать из ViewModel, которая работает с DataStore или SharedPreferences.
@@ -104,6 +106,25 @@ fun SettingsScreen(
                         )
                     )
                 }
+
+                HorizontalDivider(color = Color(0xFF3A3A3C))
+
+                SettingsRow(
+                    title = "Кнопка истории",
+                    modifier = Modifier.padding(vertical = 4.dp)
+                ) {
+                    Switch(
+                        checked = showHistoryButton, // Используем новый параметр
+                        onCheckedChange = onShowHistoryChange, // Вызываем лямбду при изменении
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            checkedTrackColor = Orange,
+                            uncheckedThumbColor = Color.White,
+                            uncheckedTrackColor = Color.Gray
+                        )
+                    )
+                }
+
             }
 
             Spacer(modifier = Modifier.height(24.dp))

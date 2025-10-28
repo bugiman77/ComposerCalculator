@@ -59,7 +59,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -70,7 +69,6 @@ import com.example.composercalculator.ui.theme.DarkGray
 import com.example.composercalculator.ui.theme.LightGray
 import com.example.composercalculator.ui.theme.Orange
 
-// Главный экран, который принимает состояние и обработчик событий
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CalculatorScreen(
@@ -123,8 +121,6 @@ fun CalculatorScreen(
                             )
                         }
                     } else {
-                        // Если кнопка скрыта, добавляем пустой Spacer,
-                        // чтобы кнопка настроек не смещалась влево.
                         Spacer(modifier = Modifier.size(40.dp))
                     }
 
@@ -150,13 +146,7 @@ fun CalculatorScreen(
                 // Сетка кнопок
                 CalculatorButtonGrid(
                     uiState = uiState,
-                    onEvent = onEvent,
-//                resetFontSize = { fontSize = 80.sp },
-                    /*onPaste = {
-                        val text = clipboardManager.getText()?.text
-                        onEvent(CalculatorEvent.Paste(text))
-                        Toast.makeText(context, "Вставлено", Toast.LENGTH_SHORT).show()
-                    }*/
+                    onEvent = onEvent
                 )
             }
         }
@@ -285,9 +275,8 @@ private fun CalculatorButtonGrid(
     onEvent: (CalculatorEvent) -> Unit
 ) {
     val clipboardManager = LocalClipboardManager.current
-    val context = LocalContext.current
+//    val context = LocalContext.current
 
-    // Убрали лишний Box, используем Column напрямую
     Column(
         modifier = Modifier
             .padding(start = 4.dp, end = 4.dp, bottom = 24.dp), // Отступы по бокам и снизу
@@ -444,12 +433,7 @@ private fun CalculatorButtonGrid(
                         menuExpanded = true
                     }, // Передаем клик напрямую
                     modifier = Modifier
-                        .aspectRatio(1f) // Все кнопки квадратные
-                        /*.combinedClickable( // Добавляем Cюда ТОЛЬКО долгое нажатие, если оно есть
-                            enabled = onLongClick != null,
-                            onLongClick = onLongClick,
-                            onClick = onClick // Передаем основной клик и сюда тоже, чтобы сохранить ripple-эффект
-                        ),*/,
+                        .aspectRatio(1f),
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(containerColor = DarkGray),
                     contentPadding = PaddingValues(0.dp)
@@ -461,11 +445,6 @@ private fun CalculatorButtonGrid(
                         tint = Color.White
                     )
                 }
-
-                /*CalculatorDropdownMenu(
-                    expanded = menuExpanded,
-                    onDismissRequest = { menuExpanded = false } // Закрываем меню
-                )*/
 
                 if (menuExpanded) { // Оборачиваем в if, чтобы Popup корректно исчезал
                     StyledDropdownMenu(
@@ -498,14 +477,6 @@ private fun CalculatorButtonGrid(
                 color = Orange,
                 modifier = Modifier.weight(1f),
                 fontSize = 65.sp,
-                onLongClick = {
-                    if (isInputEmpty) {
-                        // Получаем текст и передаем его в событие
-                        val text = clipboardManager.getText()?.text
-                        onEvent(CalculatorEvent.Paste(text))
-//                        Toast.makeText("Вставлено", Toast.LENGTH_SHORT).show()
-                    }
-                }
             ) {
                 onEvent(CalculatorEvent.Calculate)
             }
@@ -524,13 +495,13 @@ private fun BtnCalculation(
     onClick: () -> Unit
 ) {
     Button(
-        onClick = onClick, // Передаем клик напрямую
+        onClick = onClick,
         modifier = modifier
-            .aspectRatio(1f) // Все кнопки квадратные
-            .combinedClickable( // Добавляем Cюда ТОЛЬКО долгое нажатие, если оно есть
+            .aspectRatio(1f)
+            .combinedClickable(
                 enabled = onLongClick != null,
                 onLongClick = onLongClick,
-                onClick = onClick // Передаем основной клик и сюда тоже, чтобы сохранить ripple-эффект
+                onClick = onClick
             ),
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(containerColor = color),
@@ -550,58 +521,6 @@ private fun BtnCalculation(
 }
 
 @Composable
-fun CalculatorDropdownMenu(
-    expanded: Boolean, // Параметр, отвечающий за видимость меню
-    onDismissRequest: () -> Unit // Функция, которая вызывается, когда меню нужно закрыть
-) {
-    // Состояние для переключателя внутри меню
-    val switchState = remember { mutableStateOf(true) }
-
-    // DropdownMenu — это и есть наш компонент всплывающего меню
-    DropdownMenu(
-        expanded = expanded,
-        onDismissRequest = onDismissRequest,
-        modifier = Modifier.background(DarkGray) // Задаем фон меню
-    ) {
-        // Первый пункт меню
-        DropdownMenuItem(
-            text = { Text("Инженерный", color = Color.White) },
-            onClick = {
-                // TODO: Добавить логику для этого пункта
-                onDismissRequest() // Закрываем меню после нажатия
-            }
-        )
-        // Второй пункт меню
-        DropdownMenuItem(
-            text = { Text("Научный", color = Color.White) },
-            onClick = {
-                // TODO: Добавить логику для этого пункта
-                onDismissRequest() // Закрываем меню после нажатия
-            }
-        )
-
-        // Разделитель для визуального отделения
-        Divider(color = Color.Gray)
-
-        // Пункт меню с переключателем (Switch)
-        DropdownMenuItem(
-            text = { Text("Тёмная тема", color = Color.White) },
-            // В `trailingIcon` мы помещаем наш переключатель
-            trailingIcon = {
-                Switch(
-                    checked = switchState.value,
-                    onCheckedChange = { switchState.value = it }
-                )
-            },
-            onClick = {
-                // Позволяем кликать по всей строке для переключения
-                switchState.value = !switchState.value
-            }
-        )
-    }
-}
-
-@Composable
 fun StyledDropdownMenu(
     expanded: Boolean,
     onDismissRequest: () -> Unit
@@ -612,9 +531,8 @@ fun StyledDropdownMenu(
 
     // Используем Popup для полного контроля над стилем
     Popup(
-        alignment = Alignment.TopStart, // Выравнивание относительно родителя
+        alignment = Alignment.TopStart,
         onDismissRequest = onDismissRequest,
-        // Смещаем меню немного вниз, чтобы оно не перекрывало кнопку
         offset = with(density) {
             IntOffset(x = 0.dp.roundToPx(), y = -100.dp.roundToPx())
         }
@@ -622,34 +540,24 @@ fun StyledDropdownMenu(
         // Внешний вид меню
         Column(
             modifier = Modifier
-                // 1. Тень для эффекта глубины
                 .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
-                // 2. Скругленные углы
                 .clip(androidx.compose.foundation.shape.RoundedCornerShape(20.dp))
-                // 3. Фон
-                .background(Color(0xFF2C2C2E)) // Более светлый серый, как в iOS
-                // 4. Внутренние отступы для "воздуха"
+                .background(Color(0xFF2C2C2E))
                 .padding(vertical = 8.dp)
-                // 5. Задаем ширину, чтобы меню не было слишком узким
                 .width(220.dp)
         ) {
-            // DropdownMenuItem не имеет достаточно настроек, поэтому создадим свой аналог
             StyledMenuItem(text = "Инженерный") {
-                // TODO: Логика
                 onDismissRequest()
             }
             StyledMenuItem(text = "Научный") {
-                // TODO: Логика
                 onDismissRequest()
             }
 
-            // Разделитель
             HorizontalDivider(
                 modifier = Modifier.padding(vertical = 8.dp),
                 thickness = DividerDefaults.Thickness, color = Color.Gray.copy(alpha = 0.5f)
             )
 
-            // Пункт с переключателем
             StyledMenuItemWithSwitch(
                 text = "Тёмная тема",
                 checked = switchState.value,
@@ -659,7 +567,6 @@ fun StyledDropdownMenu(
     }
 }
 
-// Кастомный пункт меню для гибкой настройки
 @Composable
 private fun StyledMenuItem(text: String, onClick: () -> Unit) {
     Row(
@@ -687,13 +594,13 @@ private fun StyledMenuItemWithSwitch(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onCheckedChange(!checked) } // Клик по всей строке
+            .clickable { onCheckedChange(!checked) }
             .padding(
                 horizontal = 16.dp,
                 vertical = 4.dp
-            ), // Уменьшенный вертикальный отступ для Switch
+            ),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween // Разносим текст и Switch по краям
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
             text = text,

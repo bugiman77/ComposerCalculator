@@ -16,24 +16,20 @@ import com.example.composercalculator.view.settings.SettingsScreen
 
 @Composable
 fun AppNavigation() {
-    // 1. Создаем NavController - он управляет навигацией
     val navController = rememberNavController()
 
     var showHistoryButton by remember { mutableStateOf(true) }
 
-    // 2. NavHost - это контейнер, который будет отображать нужный экран
     NavHost(
         navController = navController,
-        startDestination = Routes.CALCULATOR // Указываем, какой экран будет стартовым
+        startDestination = Routes.CALCULATOR
     ) {
-        // 3. Определяем каждый экран
         composable(route = Routes.CALCULATOR) {
             val viewModel: CalculatorViewModel = viewModel()
             CalculatorScreen(
                 uiState = viewModel.uiState,
                 onEvent = viewModel::onEvent,
                 onNavigateToSettings = { navController.navigate(Routes.SETTINGS) },
-                // Раскомментируйте и укажите, куда переходить
                 onNavigateToHistory = { navController.navigate(Routes.HISTORY) },
                 showHistoryButton = showHistoryButton
             )
@@ -48,15 +44,11 @@ fun AppNavigation() {
             )
         }
 
-        composable(route = Routes.HISTORY) {
-            // Здесь будет ваш экран истории
-            // Например, Text("Экран истории")
-        }
-
         composable(route = Routes.ABOUT) {
             AboutScreen(
                 onNavigateBack = { navController.popBackStack() }
             )
         }
+
     }
 }

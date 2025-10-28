@@ -16,7 +16,6 @@ class CalculatorViewModel : ViewModel() {
     var uiState by mutableStateOf(CalculatorState())
         private set
 
-    // Единая точка входа для всех событий из UI
     fun onEvent(event: CalculatorEvent) {
         when (event) {
             is CalculatorEvent.NumberClick -> enterNumber(event.number)
@@ -27,13 +26,9 @@ class CalculatorViewModel : ViewModel() {
             is CalculatorEvent.LongClear -> resetState()
             is CalculatorEvent.Calculate -> performCalculation()
             is CalculatorEvent.Paste -> handlePaste(event.text)
-            else -> {}
         }
     }
 
-    // --- Реализация НОВОЙ, правильной логики ---
-
-    // ИСПРАВЛЕНО: Убрана ошибочная логика
     private fun enterNumber(number: String) {
         // Логика для первого числа
         if (uiState.operation == null) {
@@ -49,7 +44,7 @@ class CalculatorViewModel : ViewModel() {
             return
         }
 
-        // Логика для второго числа (аналогично)
+        // Логика для второго числа
         if (uiState.number2 == "0" && number == "0") return
         if (uiState.number2 == "0" && number != ".") {
             uiState = uiState.copy(number2 = number)

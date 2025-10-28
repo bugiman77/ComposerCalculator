@@ -1,7 +1,6 @@
 package com.example.composercalculator.calculator
 
 data class CalculatorState(
-//    val displayText: String = "0",
     val number1: String = "",        // Первое число
     val number2: String = "",        // Второе число
     val operation: String? = null

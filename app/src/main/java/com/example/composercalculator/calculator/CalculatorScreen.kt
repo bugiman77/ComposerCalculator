@@ -15,9 +15,12 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,14 +28,19 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -49,6 +57,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
@@ -79,6 +88,8 @@ fun CalculatorScreen(
         text.ifEmpty { "0" }
     }
 
+    var showHistorySheet by remember { mutableStateOf(false) }
+
     Scaffold(
         containerColor = Color.Black
     ) { innerPadding ->
@@ -100,16 +111,8 @@ fun CalculatorScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    /*Icon(
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .size(40.dp),
-                        painter = painterResource(id = R.drawable.ic_outline_list),
-                        contentDescription = null,
-                        tint = Orange
-                    )*/
 
-                    IconButton(onClick = onNavigateToHistory) { // <-- Сделали кликабельной
+                    IconButton(onClick = { showHistorySheet = true }) { // <-- Сделали кликабельной
                         Icon(
                             modifier = Modifier.size(40.dp),
                             painter = painterResource(id = R.drawable.ic_outline_list),
@@ -117,20 +120,6 @@ fun CalculatorScreen(
                             tint = Orange
                         )
                     }
-
-                    /*Spacer(
-                        modifier = Modifier
-                            .weight(1f)
-                    )*/
-
-                    /*Icon(
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .size(40.dp),
-                        painter = painterResource(id = R.drawable.ic_settings),
-                        contentDescription = null,
-                        tint = Orange
-                    )*/
 
                     IconButton(onClick = onNavigateToSettings) { // <-- Сделали кликабельной
                         Icon(
@@ -164,8 +153,72 @@ fun CalculatorScreen(
                 )
             }
         }
+
+        if (showHistorySheet) {
+            HistoryBottomSheet(
+                // Пока что передаем пустой список для примера
+                history = listOf("2+2 = 4", "100-50 = 50", "10*10 = 100", "99/3 = 33"),
+                onDismiss = { showHistorySheet = false }
+            )
+        }
+
     }
 
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HistoryBottomSheet(
+    history: List<String>, // Список с историей вычислений
+    onDismiss: () -> Unit
+) {
+    val sheetState = rememberModalBottomSheetState()
+
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        containerColor = Color(0xFF2C2C2E), // Цвет фона в стиле iOS
+        dragHandle = {
+            // "Ручка" для перетаскивания вверху
+            Box(
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .width(40.dp)
+                    .height(4.dp)
+                    .clip(CircleShape)
+                    .background(Color.Gray)
+            )
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 24.dp)
+        ) {
+            Text(
+                text = "История",
+                color = Color.White,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+            // LazyColumn используется для отображения списков, особенно длинных
+            LazyColumn(modifier = Modifier.fillMaxHeight(0.5f)) {
+                items(history) { calculation ->
+                    Text(
+                        text = calculation,
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                    )
+                    HorizontalDivider(color = Color.Gray.copy(alpha = 0.5f))
+                }
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -556,7 +609,7 @@ fun StyledDropdownMenu(
         onDismissRequest = onDismissRequest,
         // Смещаем меню немного вниз, чтобы оно не перекрывало кнопку
         offset = with(density) {
-            IntOffset(x = 0.dp.roundToPx(), y = 8.dp.roundToPx())
+            IntOffset(x = 0.dp.roundToPx(), y = -100.dp.roundToPx())
         }
     ) {
         // Внешний вид меню
@@ -584,9 +637,9 @@ fun StyledDropdownMenu(
             }
 
             // Разделитель
-            Divider(
-                color = Color.Gray.copy(alpha = 0.5f),
-                modifier = Modifier.padding(vertical = 8.dp)
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = 8.dp),
+                thickness = DividerDefaults.Thickness, color = Color.Gray.copy(alpha = 0.5f)
             )
 
             // Пункт с переключателем

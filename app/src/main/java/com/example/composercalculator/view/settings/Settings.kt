@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -52,7 +53,8 @@ import com.example.composercalculator.ui.theme.Orange
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    onNavigateBack: () -> Unit // Лямбда для возврата на предыдущий экран
+    onNavigateBack: () -> Unit, // Лямбда для возврата на предыдущий экран
+    onNavigateToAbout: () -> Unit
 ) {
     // Локальные состояния для настроек. В реальном приложении их нужно будет
     // получать из ViewModel, которая работает с DataStore или SharedPreferences.
@@ -149,6 +151,26 @@ fun SettingsScreen(
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // --- ДОБАВЛЯЕМ НОВЫЙ БЛОК ---
+            SettingsGroup(title = "ОБЩЕЕ") {
+                SettingsRow(
+                    title = "О приложении",
+                    // Этот modifier можно убрать, если не нужны особые отступы
+                    modifier = Modifier
+                        .clickable { onNavigateToAbout() } // <-- Вся строка становится кликабельной
+                        .padding(vertical = 4.dp)
+                ) {
+                    // В качестве контента передаем иконку стрелки
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        contentDescription = "Перейти",
+                        tint = Color.Gray
+                    )
+                }
+            }
         }
     }
 }
@@ -240,14 +262,5 @@ private fun SettingsRadioRow(
             onClick = onClick,
             colors = RadioButtonDefaults.colors(selectedColor = Orange)
         )
-    }
-}
-
-// --- Preview для удобной разработки ---
-@Preview(showBackground = true, widthDp = 375, heightDp = 812)
-@Composable
-private fun SettingsScreenPreview() {
-    ComposerCalculatorTheme {
-        SettingsScreen(onNavigateBack = {})
     }
 }

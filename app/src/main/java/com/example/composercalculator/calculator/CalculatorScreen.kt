@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -65,7 +66,9 @@ import com.example.composercalculator.ui.theme.Orange
 @Composable
 fun CalculatorScreen(
     uiState: CalculatorState,
-    onEvent: (CalculatorEvent) -> Unit
+    onEvent: (CalculatorEvent) -> Unit,
+    onNavigateToSettings: () -> Unit, // <-- ДОБАВЛЕНО
+    onNavigateToHistory: () -> Unit
 ) {
 
     val clipboardManager = LocalClipboardManager.current
@@ -92,22 +95,51 @@ fun CalculatorScreen(
 
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start,
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Icon(
+                    /*Icon(
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
-                            .padding(
-                                start = 12.dp,
-                                top = 16.dp
-                            )
                             .size(40.dp),
                         painter = painterResource(id = R.drawable.ic_outline_list),
                         contentDescription = null,
                         tint = Orange
-                    )
+                    )*/
+
+                    IconButton(onClick = onNavigateToHistory) { // <-- Сделали кликабельной
+                        Icon(
+                            modifier = Modifier.size(40.dp),
+                            painter = painterResource(id = R.drawable.ic_outline_list),
+                            contentDescription = "История",
+                            tint = Orange
+                        )
+                    }
+
+                    /*Spacer(
+                        modifier = Modifier
+                            .weight(1f)
+                    )*/
+
+                    /*Icon(
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .size(40.dp),
+                        painter = painterResource(id = R.drawable.ic_settings),
+                        contentDescription = null,
+                        tint = Orange
+                    )*/
+
+                    IconButton(onClick = onNavigateToSettings) { // <-- Сделали кликабельной
+                        Icon(
+                            modifier = Modifier.size(40.dp),
+                            painter = painterResource(id = R.drawable.ic_settings),
+                            contentDescription = "Настройки",
+                            tint = Orange
+                        )
+                    }
                 }
 
                 DisplayArea(

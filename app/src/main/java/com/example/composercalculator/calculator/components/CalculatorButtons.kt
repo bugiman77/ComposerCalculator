@@ -32,8 +32,6 @@ fun CalculatorButtonGrid(
     uiState: CalculatorState,
     onEvent: (CalculatorEvent) -> Unit
 ) {
-    val clipboardManager = LocalClipboardManager.current
-//    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -60,7 +58,7 @@ fun CalculatorButtonGrid(
                     }
                 },
                 onLongClick = {
-                    if (!isInputEmpty) { // Долгое нажатие тоже работает только для "C"
+                    if (!isInputEmpty) {
                         onEvent(CalculatorEvent.LongClear)
                     }
                 }
@@ -95,7 +93,7 @@ fun CalculatorButtonGrid(
                 color = DarkGray,
                 modifier = Modifier.weight(1f),
                 onClick = {
-                    onEvent(CalculatorEvent.NumberClick("7")) // <-- Отправляем событие
+                    onEvent(CalculatorEvent.NumberClick("7"))
                 }
             )
             BtnCalculation(text = "8", color = DarkGray, modifier = Modifier.weight(1f)) {
@@ -204,7 +202,7 @@ fun CalculatorButtonGrid(
                     )
                 }
 
-                if (menuExpanded) { // Оборачиваем в if, чтобы Popup корректно исчезал
+                if (menuExpanded) {
                     StyledDropdownMenu(
                         expanded = menuExpanded,
                         onDismissRequest = { menuExpanded = false }

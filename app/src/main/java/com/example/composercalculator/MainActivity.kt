@@ -4,12 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.composercalculator.calculator.CalculatorScreen
 import com.example.composercalculator.navigation.AppNavigation
-//import com.example.composercalculator.calculator.ViewModelFactory
-import com.example.composercalculator.viewmodel.CalculatorViewModel
 import com.example.composercalculator.ui.theme.ComposerCalculatorTheme
 
 class MainActivity : ComponentActivity() {

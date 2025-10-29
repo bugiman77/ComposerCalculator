@@ -54,7 +54,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composercalculator.ui.theme.Orange
 
-// --- Основная Composable-функция экрана настроек ---
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
@@ -63,8 +62,6 @@ fun SettingsScreen(
     showHistoryButton: Boolean, // Текущее состояние переключателя
     onShowHistoryChange: (Boolean) -> Unit
 ) {
-    // Локальные состояния для настроек. В реальном приложении их нужно будет
-    // получать из ViewModel, которая работает с DataStore или SharedPreferences.
     var isDarkTheme by remember { mutableStateOf(true) }
     var displayFontSize by remember { mutableFloatStateOf(80f) }
     var decimalFormat by remember { mutableStateOf("1,234.56") }
@@ -85,7 +82,7 @@ fun SettingsScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState()) // Добавляем прокрутку
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             // --- Блок "Внешний вид" ---
@@ -113,8 +110,8 @@ fun SettingsScreen(
                     modifier = Modifier.padding(vertical = 4.dp)
                 ) {
                     Switch(
-                        checked = showHistoryButton, // Используем новый параметр
-                        onCheckedChange = onShowHistoryChange, // Вызываем лямбду при изменении
+                        checked = showHistoryButton,
+                        onCheckedChange = onShowHistoryChange,
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = Color.White,
                             checkedTrackColor = Orange,
@@ -139,7 +136,7 @@ fun SettingsScreen(
                         value = displayFontSize,
                         onValueChange = { displayFontSize = it },
                         valueRange = 40f..120f, // от 40sp до 120sp
-                        steps = 7, // 8 позиций (120-40)/10 = 8
+                        steps = 7, // 8 позиций
                         colors = SliderDefaults.colors(
                             thumbColor = Color.White,
                             activeTrackColor = Orange,
@@ -174,16 +171,13 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // --- ДОБАВЛЯЕМ НОВЫЙ БЛОК ---
             SettingsGroup(title = "ОБЩЕЕ") {
                 SettingsRow(
                     title = "О приложении",
-                    // Этот modifier можно убрать, если не нужны особые отступы
                     modifier = Modifier
-                        .clickable { onNavigateToAbout() } // <-- Вся строка становится кликабельной
+                        .clickable { onNavigateToAbout() }
                         .padding(vertical = 4.dp)
                 ) {
-                    // В качестве контента передаем иконку стрелки
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         contentDescription = "Перейти",
@@ -254,8 +248,6 @@ fun CustomBackButton(
         }
     }
 }
-
-// --- Вспомогательные Composable-функции для стилизации ---
 
 /**
  * Группа настроек в стиле iOS (блок с закругленными углами).

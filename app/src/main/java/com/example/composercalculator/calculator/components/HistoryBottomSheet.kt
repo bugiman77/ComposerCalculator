@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryBottomSheet(
-    history: List<String>, // Список с историей вычислений
+    history: List<String>,
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -25,9 +25,8 @@ fun HistoryBottomSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        containerColor = Color(0xFF2C2C2E), // Цвет фона в стиле iOS
+        containerColor = Color(0xFF2C2C2E),
         dragHandle = {
-            // "Ручка" для перетаскивания вверху
             Box(
                 modifier = Modifier
                     .padding(vertical = 8.dp)
@@ -51,7 +50,6 @@ fun HistoryBottomSheet(
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
-            // LazyColumn используется для отображения списков, особенно длинных
             LazyColumn(modifier = Modifier.fillMaxHeight(0.5f)) {
                 items(history) { calculation ->
                     Text(

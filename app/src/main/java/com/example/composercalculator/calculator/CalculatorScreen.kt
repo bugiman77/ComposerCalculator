@@ -39,7 +39,7 @@ import com.example.composercalculator.ui.theme.Orange
 fun CalculatorScreen(
     uiState: CalculatorState,
     onEvent: (CalculatorEvent) -> Unit,
-    onNavigateToSettings: () -> Unit, // <-- ДОБАВЛЕНО
+    onNavigateToSettings: () -> Unit,
     onNavigateToHistory: () -> Unit,
     showHistoryButton: Boolean
 ) {

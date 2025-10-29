@@ -1,8 +1,8 @@
 package com.example.composercalculator.model
 
 data class CalculatorState(
-    val number1: String = "",        // Первое число
-    val number2: String = "",        // Второе число
+    val number1: String = "",
+    val number2: String = "",
     val operation: String? = null
 )
 

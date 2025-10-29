@@ -34,7 +34,6 @@ fun StyledDropdownMenu(
             IntOffset(x = 0.dp.roundToPx(), y = -100.dp.roundToPx())
         }
     ) {
-        // Внешний вид меню
         Column(
             modifier = Modifier
                 .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
@@ -76,7 +75,7 @@ private fun StyledMenuItem(text: String, onClick: () -> Unit) {
         Text(
             text = text,
             color = Color.White,
-            fontSize = 18.sp // Увеличенный шрифт
+            fontSize = 18.sp
         )
     }
 }

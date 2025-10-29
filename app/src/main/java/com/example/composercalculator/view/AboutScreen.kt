@@ -99,7 +99,7 @@ private fun AppHeader() {
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Версия 1.3.5",
+            text = "Версия 1.3.7",
             color = Color.Gray,
             fontSize = 16.sp
         )

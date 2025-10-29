@@ -12,8 +12,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.composercalculator.calculator.CalculatorScreen
 import com.example.composercalculator.viewmodel.CalculatorViewModel
-import com.example.composercalculator.view.settings.AboutScreen
-import com.example.composercalculator.view.settings.SettingsScreen
+import com.example.composercalculator.view.AboutScreen
+import com.example.composercalculator.view.SettingsScreen
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.unit.IntOffset
 

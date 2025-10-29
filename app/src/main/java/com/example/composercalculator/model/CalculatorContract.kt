@@ -1,4 +1,4 @@
-package com.example.composercalculator.calculator
+package com.example.composercalculator.model
 
 data class CalculatorState(
     val number1: String = "",        // Первое число

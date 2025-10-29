@@ -18,14 +18,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ComposerCalculatorTheme(darkTheme = true) {
-//                val context = LocalContext.current
-//                val factory = ViewModelFactory(context.applicationContext)
-                /*val viewModel: CalculatorViewModel = viewModel()
-                val uiState = viewModel.uiState
-                CalculatorScreen(
-                    uiState = uiState,
-                    onEvent = viewModel::onEvent // Передаем ссылку на функцию
-                )*/
                 AppNavigation()
             }
         }

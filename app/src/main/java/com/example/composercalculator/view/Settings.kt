@@ -1,4 +1,4 @@
-package com.example.composercalculator.view.settings
+package com.example.composercalculator.view
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background

@@ -145,7 +145,7 @@ private fun InfoLinkRow(title: String, onClick: () -> Unit) {
 @Composable
 private fun AuthorInfo() {
     Text(
-        text = "Разработано в 2025",
+        text = "",
         color = Color.Gray,
         fontSize = 14.sp,
         textAlign = TextAlign.Center,

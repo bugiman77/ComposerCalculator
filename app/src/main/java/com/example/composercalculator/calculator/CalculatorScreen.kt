@@ -1,5 +1,6 @@
 package com.example.composercalculator.calculator
 
+import androidx.activity.result.launch
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,13 +12,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,8 +38,9 @@ import com.example.composercalculator.calculator.components.HistoryBottomSheet
 import com.example.composercalculator.model.CalculatorEvent
 import com.example.composercalculator.model.CalculatorState
 import com.example.composercalculator.ui.theme.Orange
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CalculatorScreen(
     uiState: CalculatorState,
@@ -52,6 +58,22 @@ fun CalculatorScreen(
     }
 
     var showHistorySheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(sheetState.isVisible) {
+        if (!sheetState.isVisible) {
+            showHistorySheet = false
+        }
+    }
+
+    if (showHistorySheet) {
+        HistoryBottomSheet(
+            history = listOf("2+2 = 4", "100-50 = 50", "10*10 = 100", "99/3 = 33"),
+            sheetState = sheetState,
+            onDismiss = { showHistorySheet = false }
+        )
+    }
 
     Scaffold(
         containerColor = Color.Black
@@ -113,12 +135,21 @@ fun CalculatorScreen(
             }
         }
 
-        if (showHistorySheet) {
+/*        if (showHistorySheet) {
             HistoryBottomSheet(
                 // Пока что передаем пустой список для примера
                 history = listOf("2+2 = 4", "100-50 = 50", "10*10 = 100", "99/3 = 33"),
+                sheetState = sheetState,
                 onDismiss = { showHistorySheet = false }
             )
         }
+
+        LaunchedEffect(showHistorySheet) {
+            if (showHistorySheet) {
+                scope.launch { sheetState.show() }
+            } else {
+                scope.launch { sheetState.hide() }
+            }
+        }*/
     }
 }

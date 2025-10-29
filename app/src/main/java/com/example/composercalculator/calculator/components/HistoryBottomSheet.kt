@@ -18,9 +18,10 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun HistoryBottomSheet(
     history: List<String>,
+    sheetState: SheetState,
     onDismiss: () -> Unit
 ) {
-    val sheetState = rememberModalBottomSheetState()
+//    val sheetState = rememberModalBottomSheetState()
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,

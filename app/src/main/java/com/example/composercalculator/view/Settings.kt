@@ -39,6 +39,7 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -52,19 +53,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composercalculator.ui.theme.Orange
+import com.example.composercalculator.viewmodel.SettingsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
+    viewModel: SettingsViewModel = viewModel(),
     onNavigateBack: () -> Unit, // Лямбда для возврата на предыдущий экран
     onNavigateToAbout: () -> Unit,
-    showHistoryButton: Boolean, // Текущее состояние переключателя
-    onShowHistoryChange: (Boolean) -> Unit
 ) {
-    var isDarkTheme by remember { mutableStateOf(true) }
-    var displayFontSize by remember { mutableFloatStateOf(80f) }
-    var decimalFormat by remember { mutableStateOf("1,234.56") }
+    val isDarkTheme by viewModel.isDarkTheme.collectAsState()
+    val showHistoryButton by viewModel.showHistoryButton.collectAsState()
+    val displayFontSize by viewModel.displayFontSize.collectAsState()
+    val decimalFormat by viewModel.decimalFormat.collectAsState()
+    val isSaveDataEnabled by viewModel.isSaveDataEnabled.collectAsState()
 
     Scaffold(
         containerColor = Color(0xFF161616), // Фон всего экрана
@@ -93,7 +97,7 @@ fun SettingsScreen(
                 ) {
                     Switch(
                         checked = isDarkTheme,
-                        onCheckedChange = { isDarkTheme = it },
+                        onCheckedChange = { viewModel.onDarkThemeChange(it) },
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = Color.White,
                             checkedTrackColor = Orange,
@@ -111,7 +115,7 @@ fun SettingsScreen(
                 ) {
                     Switch(
                         checked = showHistoryButton,
-                        onCheckedChange = onShowHistoryChange,
+                        onCheckedChange = { viewModel.onShowHistoryChange(it) },
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = Color.White,
                             checkedTrackColor = Orange,
@@ -134,7 +138,8 @@ fun SettingsScreen(
                 ) {
                     Slider(
                         value = displayFontSize,
-                        onValueChange = { displayFontSize = it },
+                        onValueChangeFinished = { viewModel.onFontSizeChange(displayFontSize) },
+                        onValueChange = {  },
                         valueRange = 40f..120f, // от 40sp до 120sp
                         steps = 7, // 8 позиций
                         colors = SliderDefaults.colors(
@@ -159,12 +164,12 @@ fun SettingsScreen(
                     SettingsRadioRow(
                         title = "1,234.56",
                         isSelected = decimalFormat == "1,234.56",
-                        onClick = { decimalFormat = "1,234.56" }
+                        onClick = { viewModel.onDecimalFormatChange("1,234.56") }
                     )
                     SettingsRadioRow(
                         title = "1 234,56",
                         isSelected = decimalFormat == "1 234,56",
-                        onClick = { decimalFormat = "1 234,56" }
+                        onClick = { viewModel.onDecimalFormatChange("1 234,56") }
                     )
                 }
             }
@@ -172,6 +177,22 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             SettingsGroup(title = "ОБЩЕЕ") {
+                SettingsRow(
+                    title = "Сохранять данные",
+                    subtitle = "Настройки и история",
+                    modifier = Modifier.padding(vertical = 4.dp)
+                ) {
+                    Switch(
+                        checked = isSaveDataEnabled,
+                        onCheckedChange = { viewModel.onSaveDataChange(it) },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            checkedTrackColor = Orange,
+                            uncheckedThumbColor = Color.White,
+                            uncheckedTrackColor = Color.Gray
+                        )
+                    )
+                }
                 SettingsRow(
                     title = "О приложении",
                     modifier = Modifier

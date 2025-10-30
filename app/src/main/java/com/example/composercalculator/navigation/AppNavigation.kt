@@ -17,10 +17,13 @@ import com.example.composercalculator.view.SettingsScreen
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.unit.IntOffset
 import com.example.composercalculator.view.PrivacyPolicyScreen
+import com.example.composercalculator.viewmodel.SettingsViewModel
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
+
+    val settingsViewModel: SettingsViewModel = viewModel()
 
     var showHistoryButton by remember { mutableStateOf(true) }
 
@@ -90,10 +93,9 @@ fun AppNavigation() {
             }
         ) {
             SettingsScreen(
+                viewModel = settingsViewModel,
                 onNavigateBack = { navController.popBackStack() },
                 onNavigateToAbout = { navController.navigate(Routes.ABOUT) },
-                showHistoryButton = showHistoryButton,
-                onShowHistoryChange = { newState -> showHistoryButton = newState }
             )
         }
 

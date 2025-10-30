@@ -2,4 +2,23 @@
 <resources>
 
     <style name="Theme.ComposerCalculator" parent="android:Theme.Material.Light.NoActionBar" />
+
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <!-- 1. Фон сплэш-скрина. Используем системный цвет фона,
+             который автоматически будет белым для светлой темы и черным для темной. -->
+        <item name="windowSplashScreenBackground">?android:attr/colorBackground</item>
+
+        <!-- 2. Иконка в центре. Ссылаемся на иконку вашего приложения.
+             Система сама подгонит ее размер. -->
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
+
+        <!-- 3. Тема, которую нужно применить ПОСЛЕ сплэш-скрина.
+             Это ваша основная тема приложения. -->
+        <item name="postSplashScreenTheme">@style/Theme.ComposerCalculator</item>
+
+        <!-- (Опционально) Настраиваем цвет иконки, если это нужно -->
+        <!-- <item name="windowSplashScreenIconBackgroundColor">#1C1C1E</item> -->
+    </style>
+
 </resources>

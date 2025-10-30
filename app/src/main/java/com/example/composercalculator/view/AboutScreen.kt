@@ -40,7 +40,8 @@ import com.example.composercalculator.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    onNavigateToPrivacy: () -> Unit
 ) {
     Scaffold(
         containerColor = Color(0xFF161616),
@@ -66,7 +67,9 @@ fun AboutScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            InfoLinksGroup()
+            InfoLinksGroup(
+                onNavigateToPrivacy = onNavigateToPrivacy
+            )
 
             Spacer(modifier = Modifier.height(32.dp))
 
@@ -99,7 +102,7 @@ private fun AppHeader() {
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Версия 1.3.7",
+            text = "Версия 1.4.0",
             color = Color.Gray,
             fontSize = 16.sp
         )
@@ -107,18 +110,20 @@ private fun AppHeader() {
 }
 
 @Composable
-private fun InfoLinksGroup() {
+private fun InfoLinksGroup(
+    onNavigateToPrivacy: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .background(Color(0xFF2C2C2E))
     ) {
-        InfoLinkRow(title = "Оценить в Google Play") {  }
+        InfoLinkRow(title = "Оценить в Google Play") { }
         HorizontalDivider(color = Color(0xFF3A3A3C))
-        InfoLinkRow(title = "Политика конфиденциальности") {  }
+        InfoLinkRow(title = "Политика конфиденциальности", onClick = onNavigateToPrivacy)
         HorizontalDivider(color = Color(0xFF3A3A3C))
-        InfoLinkRow(title = "Связаться с нами") {  }
+        InfoLinkRow(title = "Связаться с нами") { }
     }
 }
 

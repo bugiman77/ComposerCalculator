@@ -16,6 +16,7 @@ import com.example.composercalculator.view.AboutScreen
 import com.example.composercalculator.view.SettingsScreen
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.unit.IntOffset
+import com.example.composercalculator.view.PrivacyPolicyScreen
 
 @Composable
 fun AppNavigation() {
@@ -125,6 +126,41 @@ fun AppNavigation() {
 
         ) {
             AboutScreen(
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToPrivacy = { navController.navigate(Routes.PRIVACY_POLICY) }
+            )
+        }
+
+        composable(
+            route = Routes.PRIVACY_POLICY,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec
+                )
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec
+                )
+            }
+        ) {
+            PrivacyPolicyScreen(
+                htmlFileName = "privacy_policy.html",
+                title = "Политика конфиденциальности",
                 onNavigateBack = { navController.popBackStack() }
             )
         }

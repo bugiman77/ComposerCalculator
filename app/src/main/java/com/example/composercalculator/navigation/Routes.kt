@@ -5,4 +5,5 @@ object Routes {
     const val SETTINGS = "settings"
     const val ABOUT = "about"
     const val HISTORY = "history"
+    const val PRIVACY_POLICY = "privacy_policy"
 }

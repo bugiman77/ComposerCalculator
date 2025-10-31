@@ -38,7 +38,9 @@ import com.example.composercalculator.calculator.components.HistoryBottomSheet
 import com.example.composercalculator.model.CalculatorEvent
 import com.example.composercalculator.model.CalculatorState
 import com.example.composercalculator.ui.theme.Orange
+import com.example.composercalculator.viewmodel.CalculatorViewModel
 import kotlinx.coroutines.launch
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -47,7 +49,8 @@ fun CalculatorScreen(
     onEvent: (CalculatorEvent) -> Unit,
     onNavigateToSettings: () -> Unit,
     onNavigateToHistory: () -> Unit,
-    showHistoryButton: Boolean
+    showHistoryButton: Boolean,
+    viewModel: CalculatorViewModel = viewModel()
 ) {
 
     val clipboardManager = LocalClipboardManager.current
@@ -59,7 +62,11 @@ fun CalculatorScreen(
 
     var showHistorySheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val scope = rememberCoroutineScope()
+
+    val uiState = viewModel.uiState
+    val onEvent = viewModel::onEvent
+
+    val history = viewModel.history
 
     LaunchedEffect(sheetState.isVisible) {
         if (!sheetState.isVisible) {
@@ -69,8 +76,9 @@ fun CalculatorScreen(
 
     if (showHistorySheet) {
         HistoryBottomSheet(
-            history = listOf("2+2 = 4", "100-50 = 50", "10*10 = 100", "99/3 = 33"),
+            history = history,
             sheetState = sheetState,
+            onAction = viewModel::onEvent,
             onDismiss = { showHistorySheet = false }
         )
     }
@@ -135,21 +143,5 @@ fun CalculatorScreen(
             }
         }
 
-/*        if (showHistorySheet) {
-            HistoryBottomSheet(
-                // Пока что передаем пустой список для примера
-                history = listOf("2+2 = 4", "100-50 = 50", "10*10 = 100", "99/3 = 33"),
-                sheetState = sheetState,
-                onDismiss = { showHistorySheet = false }
-            )
-        }
-
-        LaunchedEffect(showHistorySheet) {
-            if (showHistorySheet) {
-                scope.launch { sheetState.show() }
-            } else {
-                scope.launch { sheetState.hide() }
-            }
-        }*/
     }
 }

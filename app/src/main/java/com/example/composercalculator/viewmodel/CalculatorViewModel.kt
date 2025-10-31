@@ -6,6 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.composercalculator.model.CalculatorEvent
 import com.example.composercalculator.model.CalculatorState
+import androidx.compose.runtime.mutableStateListOf
+import com.example.composercalculator.model.CalculationHistoryItem
 
 class CalculatorViewModel : ViewModel() {
 
@@ -15,6 +17,11 @@ class CalculatorViewModel : ViewModel() {
 
     var uiState by mutableStateOf(CalculatorState())
         private set
+
+    private val _history = mutableStateListOf<CalculationHistoryItem>()
+    val history: List<CalculationHistoryItem> = _history
+
+    private var nextHistoryId = 1L
 
     fun onEvent(event: CalculatorEvent) {
         when (event) {
@@ -26,6 +33,8 @@ class CalculatorViewModel : ViewModel() {
             is CalculatorEvent.LongClear -> resetState()
             is CalculatorEvent.Calculate -> performCalculation()
             is CalculatorEvent.Paste -> handlePaste(event.text)
+            is CalculatorEvent.DeleteHistoryItem -> deleteHistoryItem(event.id)
+            is CalculatorEvent.ClearHistory -> clearHistory()
         }
     }
 
@@ -105,16 +114,17 @@ class CalculatorViewModel : ViewModel() {
     }
 
     private fun performCalculation() {
-        val number1 = uiState.number1.toDoubleOrNull()
-        val number2 = uiState.number2.toDoubleOrNull()
+        val number1 = uiState.number1
+        val number2 = uiState.number2
 
-        if (number1 != null && number2 != null) {
+        if (number1.isNotBlank() && number2.isNotBlank()) {
             val result = when (uiState.operation) {
-                "+" -> number1 + number2
-                "-" -> number1 - number2
-                "×" -> number1 * number2
-                "÷" -> if (number2 != 0.0) number1 / number2 else Double.NaN
-                "%" -> (number1 / 100) * number2
+                // ... (ваша логика when)
+                "+" -> number1.toDouble() + number2.toDouble()
+                "-" -> number1.toDouble() - number2.toDouble()
+                "×" -> number1.toDouble() * number2.toDouble()
+                "÷" -> if (number2.toDouble() != 0.0) number1.toDouble() / number2.toDouble() else Double.NaN
+                "%" -> (number1.toDouble() / 100) * number2.toDouble()
                 else -> return
             }
 
@@ -123,6 +133,16 @@ class CalculatorViewModel : ViewModel() {
             } else {
                 result.toString()
             }.take(MAX_NUM_LENGTH)
+
+            if (!result.isNaN()) {
+                val expression = "$number1 ${uiState.operation} $number2"
+                val historyItem = CalculationHistoryItem(
+                    id = nextHistoryId++, // Используем счетчик
+                    expression = expression,
+                    result = resultString
+                )
+                _history.add(0, historyItem)
+            }
 
             uiState = CalculatorState(number1 = resultString)
         }
@@ -134,10 +154,10 @@ class CalculatorViewModel : ViewModel() {
 
     private fun handlePaste(pasteText: String?) {
         if (!pasteText.isNullOrEmpty() && pasteText.toDoubleOrNull() != null) {
-            if (uiState.operation == null) {
-                uiState = uiState.copy(number1 = pasteText.take(MAX_NUM_LENGTH))
+            uiState = if (uiState.operation == null) {
+                uiState.copy(number1 = pasteText.take(MAX_NUM_LENGTH))
             } else {
-                uiState = uiState.copy(number2 = pasteText.take(MAX_NUM_LENGTH))
+                uiState.copy(number2 = pasteText.take(MAX_NUM_LENGTH))
             }
         }
     }
@@ -149,4 +169,17 @@ class CalculatorViewModel : ViewModel() {
             "-$number"
         }
     }
+
+    private fun deleteHistoryItem(id: Long) {
+        // Находим и удаляем элемент из списка по его id
+        _history.removeIf { it.id == id }
+    }
+
+    private fun clearHistory() {
+        // Просто очищаем весь список
+        _history.clear()
+        // Можно также сбросить счетчик ID, если это необходимо
+        nextHistoryId = 1L
+    }
+
 }

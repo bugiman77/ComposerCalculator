@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.composercalculator"
-    compileSdk = 34
+    compileSdk = 36
 
 
     defaultConfig {
@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.mediation.test.suite)
+    implementation(libs.androidx.compose.adaptive)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -71,5 +72,16 @@ dependencies {
 
     // ViewModel для Compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
+
+    implementation("androidx.compose.material:material:1.6.8")
+//    implementation("androidx.compose.material3:material3-adaptive:1.0.0-alpha11")
+
+    // Kotlin (build.gradle.kts)
+    val adaptive_version = "1.2.0" // As of October 2025, 1.2.0 is a stable version [7, 12]
+
+    implementation("androidx.compose.material3.adaptive:adaptive:$adaptive_version")
+    implementation("androidx.compose.material3.adaptive:adaptive-layout:$adaptive_version")
+    implementation("androidx.compose.material3.adaptive:adaptive-navigation:$adaptive_version")
+
 
 }

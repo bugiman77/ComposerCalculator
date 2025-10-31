@@ -15,4 +15,6 @@ sealed interface CalculatorEvent {
     object LongClear : CalculatorEvent
     object DecimalClick : CalculatorEvent
     object Delete : CalculatorEvent
+    data class DeleteHistoryItem(val id: Long) : CalculatorEvent
+    object ClearHistory : CalculatorEvent
 }

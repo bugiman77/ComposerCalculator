@@ -16,7 +16,7 @@ data class CalculationHistoryItem(
     val id: Long,
     val expression: String,
     val result: String,
-    val timestamp: Long = System.currentTimeMillis() // Автоматически устанавливаем текущее время
+    val timestamp: Long = System.currentTimeMillis()
 ) {
     /**
      * Вспомогательная функция для форматирования timestamp в удобный для чтения вид.
@@ -24,7 +24,7 @@ data class CalculationHistoryItem(
      */
     fun getFormattedTime(): String {
         val date = Date(timestamp)
-        val format = SimpleDateFormat("HH:mm", Locale.getDefault())
+        val format = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
         return format.format(date)
     }
 

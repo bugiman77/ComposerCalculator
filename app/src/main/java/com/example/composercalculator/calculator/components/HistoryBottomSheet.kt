@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.sp
 import com.example.composercalculator.model.CalculationHistoryItem
 import com.example.composercalculator.model.CalculatorEvent
 import androidx.compose.runtime.getValue
-import com.example.composercalculator.ui.theme.Orange
 
 @OptIn(
     ExperimentalMaterial3AdaptiveApi::class,
@@ -124,7 +123,7 @@ fun HistoryBottomSheet(
                         confirmStateChange = {
                             if (it == DismissValue.DismissedToStart) {
                                 onAction(CalculatorEvent.DeleteHistoryItem(item.id))
-                                return@rememberDismissState true // Подтверждаем удаление
+                                return@rememberDismissState true
                             }
                             false
                         }
@@ -132,7 +131,7 @@ fun HistoryBottomSheet(
 
                     SwipeToDismiss(
                         state = dismissState,
-                        directions = setOf(DismissDirection.EndToStart), // Свайп только влево
+                        directions = setOf(DismissDirection.EndToStart),
                         background = {
                             val color by animateColorAsState(
                                 when (dismissState.targetValue) {
@@ -182,55 +181,66 @@ fun HistoryBottomSheet(
 }
 
 @Composable
-private fun HistoryItemRow(
-    item: CalculationHistoryItem,
-    onAction: (CalculatorEvent) -> Unit
+private fun HistoryItemRow(    item: CalculationHistoryItem,
+                               onAction: (CalculatorEvent) -> Unit
 ) {
-    Row(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFF1C1C1E))
-            .padding(vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
-        // Блок с выражением и результатом
+        Text(
+            text = item.getFormattedTime(),
+            color = Color.Gray,
+            fontSize = 12.sp,
+            modifier = Modifier.align(Alignment.BottomStart)
+        )
+
         Column(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.End
         ) {
-            Text(
-                text = item.expression,
-                color = Color.Gray,
-                fontSize = 16.sp
-            )
-            Text(
-                text = "= ${item.result}",
-                color = Color.White,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Medium
-            )
-        }
-
-        // Кнопки действий
-        Row(
-            modifier = Modifier
-                .padding(start = 16.dp)
-        ) {
-            // Кнопка "Редактировать"
-            IconButton(onClick = { /* TODO: Логика редактирования */ }) {
-                Icon(
-                    Icons.Default.Edit,
-                    contentDescription = "Редактировать",
-                    tint = Color(0xFFFF9800)
+            Column(
+                horizontalAlignment = Alignment.End
+            ) {
+                Text(
+                    text = item.expression,
+                    color = Color.Gray,
+                    fontSize = 16.sp
+                )
+                Text(
+                    text = "= ${item.result}",
+                    color = Color.White,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Medium
                 )
             }
-            // Кнопка "Удалить"
-            IconButton(onClick = { onAction(CalculatorEvent.DeleteHistoryItem(item.id)) }) {
-                Icon(
-                    Icons.Default.Delete,
-                    contentDescription = "Удалить",
-                    tint = Color(0xFFF8665B)
-                )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row {
+                IconButton(
+                    onClick = { /* TODO: Логика редактирования */ },
+                    modifier = Modifier.size(24.dp) // Уменьшаем размер кнопок
+                ) {
+                    Icon(
+                        Icons.Default.Edit,
+                        contentDescription = "Редактировать",
+                        tint = Color(0xFFFF9800)
+                    )
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+
+                IconButton(
+                    onClick = { onAction(CalculatorEvent.DeleteHistoryItem(item.id)) },
+                    modifier = Modifier.size(24.dp) // Уменьшаем размер кнопок
+                ) {
+                    Icon(
+                        Icons.Default.Delete,
+                        contentDescription = "Удалить",
+                        tint = Color(0xFFF8665B)
+                    )
+                }
             }
         }
     }

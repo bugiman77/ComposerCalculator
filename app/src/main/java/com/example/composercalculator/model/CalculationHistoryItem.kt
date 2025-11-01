@@ -18,6 +18,17 @@ data class CalculationHistoryItem(
     val result: String,
     val timestamp: Long = System.currentTimeMillis()
 ) {
+
+    /**
+     * Возвращает дату в виде строки, удобной для группировки.
+     * Например, "2025-10-31".
+     */
+    fun getFormattedDate(): String {
+        val date = Date(timestamp)
+        val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return format.format(date)
+    }
+
     /**
      * Вспомогательная функция для форматирования timestamp в удобный для чтения вид.
      * @return Строка с временем, например, "14:35".

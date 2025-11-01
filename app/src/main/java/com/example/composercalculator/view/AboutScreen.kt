@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.composercalculator.BuildConfig
 import com.example.composercalculator.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,25 +57,30 @@ fun AboutScreen(
             )
         }
     ) { innerPadding ->
-        Column(
+        Box(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+//                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+//            horizontalAlignment = Alignment.CenterHorizontally
+            contentAlignment = Alignment.Center
         ) {
-            AppHeader()
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                AppHeader()
 
-            Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
-            InfoLinksGroup(
-                onNavigateToPrivacy = onNavigateToPrivacy
-            )
+                InfoLinksGroup(
+                    onNavigateToPrivacy = onNavigateToPrivacy
+                )
 
-            Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
-            AuthorInfo()
+                AuthorInfo()
+            }
         }
     }
 }
@@ -102,7 +109,7 @@ private fun AppHeader() {
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Версия 1.4.0",
+            text = "Версия ${BuildConfig.VERSION_NAME}",
             color = Color.Gray,
             fontSize = 16.sp
         )

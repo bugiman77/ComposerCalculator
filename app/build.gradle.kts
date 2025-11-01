@@ -1,8 +1,24 @@
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
+fun generateVersionCode(): Int {
+    val simpleDateFormat = SimpleDateFormat("yyMMddHH", Locale.US)
+    return simpleDateFormat.format(Date()).toInt()
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
+
+fun generateVersionName(baseVersion: String): String {
+    return "$baseVersion.${generateVersionCode()}"
+}
+
+// Базовая версия вашего приложения (меняйте ее вручную при крупных релизах)
+val appVersionNameBase = "1.4"
 
 android {
     namespace = "com.example.composercalculator"
@@ -14,9 +30,20 @@ android {
         minSdk = 29
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+//        versionName = "1.0"
+
+        versionCode = generateVersionCode()
+        versionName = generateVersionName(appVersionNameBase)
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        vectorDrawables {
+            useSupportLibrary = true
+        }
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {

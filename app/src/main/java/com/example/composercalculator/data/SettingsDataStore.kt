@@ -25,6 +25,8 @@ class SettingsDataStore(context: Context) {
         val FONT_SIZE_KEY = floatPreferencesKey("display_font_size")
         val DECIMAL_FORMAT_KEY = stringPreferencesKey("decimal_format")
         val SAVE_DATA_KEY = booleanPreferencesKey("save_data_enabled")
+        val SWIPE_TO_DELETE_KEY = booleanPreferencesKey("swipe_to_delete_enabled")
+        val NOTE_ITEM = booleanPreferencesKey("note_enable")
     }
 
     // --- Функции для получения настроек ---
@@ -32,27 +34,37 @@ class SettingsDataStore(context: Context) {
     // Получаем Flow, который будет автоматически обновляться при изменении настроек
     val getDarkTheme: Flow<Boolean> = dataStore.data
         .map { preferences ->
-            preferences[DARK_THEME_KEY] ?: true // Значение по умолчанию: true
+            preferences[DARK_THEME_KEY] ?: true
         }
 
     val getShowHistoryButton: Flow<Boolean> = dataStore.data
         .map { preferences ->
-            preferences[SHOW_HISTORY_KEY] ?: true // Значение по умолчанию: true
+            preferences[SHOW_HISTORY_KEY] ?: true
         }
 
     val getFontSize: Flow<Float> = dataStore.data
         .map { preferences ->
-            preferences[FONT_SIZE_KEY] ?: 80f // Значение по умолчанию: 80f
+            preferences[FONT_SIZE_KEY] ?: 80f
         }
 
     val getDecimalFormat: Flow<String> = dataStore.data
         .map { preferences ->
-            preferences[DECIMAL_FORMAT_KEY] ?: "1,234.56" // Значение по умолчанию
+            preferences[DECIMAL_FORMAT_KEY] ?: "1,234.56"
         }
 
     val getSaveDataEnabled: Flow<Boolean> = dataStore.data
         .map { preferences ->
-            preferences[SAVE_DATA_KEY] ?: true // По умолчанию сохранение включено
+            preferences[SAVE_DATA_KEY] ?: true
+        }
+
+    val getSwipeItem: Flow<Boolean> = dataStore.data
+        .map { preferences ->
+            preferences[SWIPE_TO_DELETE_KEY] ?: true
+        }
+
+    val getNoteItem: Flow<Boolean> = dataStore.data
+        .map { preferences ->
+            preferences[NOTE_ITEM] ?: true
         }
 
     // --- Функции для сохранения настроек ---
@@ -84,6 +96,18 @@ class SettingsDataStore(context: Context) {
     suspend fun saveSaveDataEnabled(isEnabled: Boolean) {
         dataStore.edit { preferences ->
             preferences[SAVE_DATA_KEY] = isEnabled
+        }
+    }
+
+    suspend fun saveSwipeItem(isEnabled: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[SWIPE_TO_DELETE_KEY] = isEnabled
+        }
+    }
+
+    suspend fun saveNoteItem(isEnabled: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[NOTE_ITEM] = isEnabled
         }
     }
 

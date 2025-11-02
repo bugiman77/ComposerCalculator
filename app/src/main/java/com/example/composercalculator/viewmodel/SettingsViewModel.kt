@@ -30,6 +30,14 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     val isSaveDataEnabled: StateFlow<Boolean> = settingsDataStore.getSaveDataEnabled
         .stateIn(viewModelScope, SharingStarted.Eagerly, true)
 
+    val isSwipeEnabled: StateFlow<Boolean> = settingsDataStore.getSwipeItem
+        .stateIn(viewModelScope, SharingStarted.Eagerly, true)
+
+    val isNoteEnabled: StateFlow<Boolean> = settingsDataStore.getNoteItem
+        .stateIn(viewModelScope, SharingStarted.Eagerly, true)
+
+
+
     // --- Функции, которые будет вызывать UI для сохранения настроек ---
 
     fun onDarkThemeChange(isDark: Boolean) {
@@ -59,6 +67,18 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     fun onSaveDataChange(isEnabled: Boolean) {
         viewModelScope.launch {
             settingsDataStore.saveSaveDataEnabled(isEnabled)
+        }
+    }
+
+    fun onSaveSwipeDeleteItem(isEnabled: Boolean) {
+        viewModelScope.launch {
+            settingsDataStore.saveSwipeItem(isEnabled)
+        }
+    }
+
+    fun onSaveNoteItem(isEnabled: Boolean) {
+        viewModelScope.launch {
+            settingsDataStore.saveNoteItem(isEnabled)
         }
     }
 

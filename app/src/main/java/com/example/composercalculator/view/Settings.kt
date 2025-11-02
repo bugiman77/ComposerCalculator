@@ -69,6 +69,9 @@ fun SettingsScreen(
     val displayFontSize by viewModel.displayFontSize.collectAsState()
     val decimalFormat by viewModel.decimalFormat.collectAsState()
     val isSaveDataEnabled by viewModel.isSaveDataEnabled.collectAsState()
+    val isSwipeEnabled by viewModel.isSwipeEnabled.collectAsState()
+    val isNoteEnabled by viewModel.isNoteEnabled.collectAsState()
+
 
     Scaffold(
         containerColor = Color(0xFF161616), // Фон всего экрана
@@ -116,6 +119,42 @@ fun SettingsScreen(
                     Switch(
                         checked = showHistoryButton,
                         onCheckedChange = { viewModel.onShowHistoryChange(it) },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            checkedTrackColor = Orange,
+                            uncheckedThumbColor = Color.White,
+                            uncheckedTrackColor = Color.Gray
+                        )
+                    )
+                }
+
+                HorizontalDivider(color = Color(0xFF3A3A3C))
+
+                SettingsRow(
+                    title = "Отключиитть свайп",
+                    modifier = Modifier.padding(vertical = 4.dp)
+                ) {
+                    Switch(
+                        checked = isSwipeEnabled,
+                        onCheckedChange = { viewModel.onSaveSwipeDeleteItem(it) },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            checkedTrackColor = Orange,
+                            uncheckedThumbColor = Color.White,
+                            uncheckedTrackColor = Color.Gray
+                        )
+                    )
+                }
+
+                HorizontalDivider(color = Color(0xFF3A3A3C))
+
+                SettingsRow(
+                    title = "Поле для заметки",
+                    modifier = Modifier.padding(vertical = 4.dp)
+                ) {
+                    Switch(
+                        checked = isNoteEnabled,
+                        onCheckedChange = { viewModel.onSaveNoteItem(it) },
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = Color.White,
                             checkedTrackColor = Orange,

@@ -16,6 +16,7 @@ data class CalculationHistoryItem(
     val id: Long,
     val expression: String,
     val result: String,
+    var label: String? = null,
     val timestamp: Long = System.currentTimeMillis()
 ) {
 

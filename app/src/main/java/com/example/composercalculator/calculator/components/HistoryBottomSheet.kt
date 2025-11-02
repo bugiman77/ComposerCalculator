@@ -4,7 +4,6 @@ package com.example.composercalculator.calculator.components
 //noinspection UsingMaterialAndMaterial3Libraries
 //noinspection UsingMaterialAndMaterial3Libraries
 //noinspection UsingMaterialAndMaterial3Libraries
-//import androidx.compose.ui.text.intl.Locale
 import android.icu.util.Calendar
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
@@ -30,7 +29,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -56,6 +54,12 @@ import com.example.composercalculator.model.CalculationHistoryItem
 import com.example.composercalculator.model.CalculatorEvent
 import java.text.SimpleDateFormat
 import java.util.Locale
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.runtime.saveable.rememberSaveable
+import com.example.composercalculator.ui.theme.Orange
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -126,7 +130,7 @@ fun HistoryBottomSheet(
                     HistoryGroup(
                         date = date,
                         items = items,
-                        onAction = onAction
+                        onAction = onAction,
                     )
                 }
             }
@@ -135,10 +139,53 @@ fun HistoryBottomSheet(
 }
 
 @Composable
+private fun EditLabelDialog(
+    item: CalculationHistoryItem,
+    onDismiss: () -> Unit,
+    onConfirm: (id: Long, label: String) -> Unit
+) {
+    // rememberSaveable, чтобы текст не пропадал при повороте экрана
+    var text by rememberSaveable { mutableStateOf(item.label ?: "") }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Добавить метку", color = Color.White) },
+        text = {
+            OutlinedTextField(
+                value = text,
+                onValueChange = { text = it },
+                label = { Text("Например, 'Ужин в кафе'") },
+                singleLine = true,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Orange,
+                    unfocusedBorderColor = Color.Gray,
+                    cursorColor = Orange,
+                    focusedLabelColor = Orange,
+                    unfocusedLabelColor = Color.Gray,
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White
+                )
+            )
+        },
+        confirmButton = {
+            TextButton(onClick = { onConfirm(item.id, text) }) {
+                Text("Сохранить", color = Orange)
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Отмена", color = Color.Gray)
+            }
+        },
+        containerColor = Color(0xFF2C2C2E)
+    )
+}
+
+@Composable
 private fun HistoryGroup(
     date: String,
     items: List<CalculationHistoryItem>,
-    onAction: (CalculatorEvent) -> Unit
+    onAction: (CalculatorEvent) -> Unit,
 ) {
     var isExpanded by remember { mutableStateOf(true) } // Состояние "свернуто/развернуто"
 
@@ -162,7 +209,7 @@ private fun HistoryGroup(
                         item = item,
                         onAction = onAction
                     )
-                    Divider(color = Color.Gray.copy(alpha = 0.3f))
+                    HorizontalDivider(color = Color.Gray.copy(alpha = 0.3f))
                 }
             }
         }
@@ -222,19 +269,22 @@ private fun formatDateForHeader(dateString: String): String {
 @Composable
 private fun HistoryItemRow(
     item: CalculationHistoryItem,
-    onAction: (CalculatorEvent) -> Unit
+    onAction: (CalculatorEvent) -> Unit,
 ) {
-    Box(
+
+    var labelText by remember(item.id) { mutableStateOf(item.label ?: "") }
+
+/*    Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 12.dp)
-    ) {
-        Text(
+    ) {*/
+        /*Text(
             text = item.getFormattedTime(),
             color = Color.Gray,
             fontSize = 12.sp,
             modifier = Modifier.align(Alignment.BottomStart)
-        )
+        )*/
 
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -243,6 +293,7 @@ private fun HistoryItemRow(
             Column(
                 horizontalAlignment = Alignment.End
             ) {
+
                 Text(
                     text = item.expression,
                     color = Color.Gray,
@@ -260,7 +311,7 @@ private fun HistoryItemRow(
 
             Row {
                 IconButton(
-                    onClick = { /* TODO: Логика редактирования */ },
+                    onClick = { onAction(CalculatorEvent.RecallCalculation(item.expression)) },
                     modifier = Modifier.size(24.dp) // Уменьшаем размер кнопок
                 ) {
                     Icon(
@@ -282,6 +333,41 @@ private fun HistoryItemRow(
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // --- Поле для ввода метки ---
+            OutlinedTextField(
+                value = labelText,
+                onValueChange = { newText ->
+                    labelText = newText
+                    // Отправляем событие для сохранения в ViewModel
+                    onAction(CalculatorEvent.UpdateHistoryLabel(item.id, newText))
+                },
+                placeholder = { Text("Добавить заметку...", color = Color.Gray) },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedBorderColor = Orange.copy(alpha = 0.5f),
+                    unfocusedBorderColor = Color.Gray.copy(alpha = 0.3f),
+                    cursorColor = Orange,
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                    focusedPlaceholderColor = Color.Gray,
+                    unfocusedPlaceholderColor = Color.Gray
+                ),
+                shape = RoundedCornerShape(12.dp)
+            )
+
+            Text(
+                text = item.getFormattedTime(),
+                color = Color.Gray,
+                fontSize = 12.sp,
+                modifier = Modifier
+            )
+
         }
-    }
+//    }
 }

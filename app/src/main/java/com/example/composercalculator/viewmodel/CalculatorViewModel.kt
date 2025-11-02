@@ -35,6 +35,8 @@ class CalculatorViewModel : ViewModel() {
             is CalculatorEvent.Paste -> handlePaste(event.text)
             is CalculatorEvent.DeleteHistoryItem -> deleteHistoryItem(event.id)
             is CalculatorEvent.ClearHistory -> clearHistory()
+            is CalculatorEvent.UpdateHistoryLabel -> updateHistoryLabel(event.id, event.label)
+            is CalculatorEvent.RecallCalculation -> recallCalculation(event.expression)
         }
     }
 
@@ -119,7 +121,6 @@ class CalculatorViewModel : ViewModel() {
 
         if (number1.isNotBlank() && number2.isNotBlank()) {
             val result = when (uiState.operation) {
-                // ... (ваша логика when)
                 "+" -> number1.toDouble() + number2.toDouble()
                 "-" -> number1.toDouble() - number2.toDouble()
                 "×" -> number1.toDouble() * number2.toDouble()
@@ -180,6 +181,28 @@ class CalculatorViewModel : ViewModel() {
         _history.clear()
         // Можно также сбросить счетчик ID, если это необходимо
         nextHistoryId = 1L
+    }
+
+    private fun recallCalculation(expression: String) {
+        // Очищаем текущее состояние калькулятора
+        resetState()
+        // Вставляем старое выражение как первое число.
+        // Это упрощенный подход. Он предполагает, что выражение не содержит операторов.
+        // Для более сложной логики (парсинга выражения) потребуется дополнительный код.
+        uiState = uiState.copy(number1 = expression)
+    }
+
+    private fun updateHistoryLabel(id: Long, label: String) {
+        // Находим индекс элемента в списке
+        val itemIndex = _history.indexOfFirst { it.id == id }
+        if (itemIndex != -1) {
+            // Получаем текущий элемент
+            val currentItem = _history[itemIndex]
+            // Создаем копию с новой меткой
+            val updatedItem = currentItem.copy(label = label)
+            // Заменяем старый элемент на новый в списке
+            _history[itemIndex] = updatedItem
+        }
     }
 
 }

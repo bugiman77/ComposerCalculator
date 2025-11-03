@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+//    id 'io.realm.kotlin'
 }
 
 fun generateVersionName(baseVersion: String): String {
@@ -18,7 +19,7 @@ fun generateVersionName(baseVersion: String): String {
 }
 
 // Базовая версия вашего приложения (меняйте ее вручную при крупных релизах)
-val appVersionNameBase = "1.4"
+val appVersionNameBase = "1.5"
 
 android {
     namespace = "com.example.composercalculator"
@@ -30,7 +31,6 @@ android {
         minSdk = 29
         targetSdk = 34
         versionCode = 1
-//        versionName = "1.0"
 
         versionCode = generateVersionCode()
         versionName = generateVersionName(appVersionNameBase)
@@ -110,5 +110,10 @@ dependencies {
     implementation("androidx.compose.material3.adaptive:adaptive-layout:$adaptive_version")
     implementation("androidx.compose.material3.adaptive:adaptive-navigation:$adaptive_version")
 
+//    implementation("io.realm:realm-gradle-plugin:10.19.0")
+//    implementation("io.realm.kotlin:realm-library:1.15.0")
+//    implementation("io.realm:realm-kotlin:1.0.0")
+    implementation("io.realm.kotlin:library-base:1.6.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
 }

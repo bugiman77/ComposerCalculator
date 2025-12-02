@@ -116,4 +116,7 @@ dependencies {
     implementation("io.realm.kotlin:library-base:1.6.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.12.0")
+
+
 }

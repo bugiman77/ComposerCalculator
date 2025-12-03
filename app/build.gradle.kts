@@ -1,25 +1,26 @@
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.time.LocalTime
 
-fun generateVersionCode(): Int {
-    val simpleDateFormat = SimpleDateFormat("yyMMddHH", Locale.US)
-    return simpleDateFormat.format(Date()).toInt()
+private fun generateVersionCode(): String {
+    val versionAppFromDateCreate = SimpleDateFormat("yyyy.MM.dd.HH", Locale.US)
+    return versionAppFromDateCreate.format(Date())
+}
+
+fun generateVersionName(): String {
+    val currentTime = LocalTime.now()
+    val minutes = currentTime.minute
+    val seconds = currentTime.second
+    val sumMinutesAndSeconds = minutes + seconds
+    return generateVersionCode() + ".$sumMinutesAndSeconds"
 }
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-//    id 'io.realm.kotlin'
 }
-
-fun generateVersionName(baseVersion: String): String {
-    return "$baseVersion.${generateVersionCode()}"
-}
-
-// Базовая версия вашего приложения (меняйте ее вручную при крупных релизах)
-val appVersionNameBase = "1.5"
 
 android {
     namespace = "com.example.composercalculator"
@@ -32,8 +33,7 @@ android {
         targetSdk = 34
         versionCode = 1
 
-        versionCode = generateVersionCode()
-        versionName = generateVersionName(appVersionNameBase)
+        versionName = generateVersionName()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -85,38 +85,19 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
-
     implementation("com.google.android.gms:play-services-ads:24.7.0")
-
     implementation("androidx.navigation:navigation-compose:2.7.7")
-
     implementation("androidx.core:core-splashscreen:1.0.1")
-
-    // DataStore Preferences
     implementation("androidx.datastore:datastore-preferences:1.1.1")
-
-    // ViewModel для Compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
-
     implementation("androidx.compose.material:material:1.6.8")
-//    implementation("androidx.compose.material3:material3-adaptive:1.0.0-alpha11")
-
-    // Kotlin (build.gradle.kts)
-    val adaptive_version = "1.2.0" // As of October 2025, 1.2.0 is a stable version [7, 12]
-
-    implementation("androidx.compose.material3.adaptive:adaptive:$adaptive_version")
-    implementation("androidx.compose.material3.adaptive:adaptive-layout:$adaptive_version")
-    implementation("androidx.compose.material3.adaptive:adaptive-navigation:$adaptive_version")
-
-//    implementation("io.realm:realm-gradle-plugin:10.19.0")
-//    implementation("io.realm.kotlin:realm-library:1.15.0")
-//    implementation("io.realm:realm-kotlin:1.0.0")
+    implementation("androidx.compose.material3.adaptive:adaptive:1.2.0")
+    implementation("androidx.compose.material3.adaptive:adaptive-layout:1.2.0")
+    implementation("androidx.compose.material3.adaptive:adaptive-navigation:1.2.0")
     implementation("io.realm.kotlin:library-base:1.6.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
-
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.12.0")
-
-
+    implementation("androidx.room:room-runtime:2.5.0")
+    implementation("androidx.room:room-ktx:2.5.0")
 }

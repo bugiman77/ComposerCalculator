@@ -392,21 +392,20 @@ private fun generatePrivacyPolice(): String = createHTML().html {
     }
 }
 
-@SuppressLint("SetJavaScriptEnabled")
+@SuppressLint("SetJavaScriptDisable")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PrivacyPolicyScreen(
     title: String,
     onNavigateBack: () -> Unit
 ) {
-
     Scaffold(
-        containerColor = Color(0xFF1C1C1E), // Фон, подходящий под HTML
+        containerColor = Color(color = 0xFF1C1C1E),
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        title,
+                        text = title,
                         color = Color.White,
                         fontWeight = FontWeight.Bold
                     )
@@ -425,12 +424,10 @@ fun PrivacyPolicyScreen(
         ) {
             val htmlContent = generatePrivacyPolice()
             AndroidView(
-//            modifier = Modifier.padding(innerPadding),
                 factory = { context ->
                     WebView(context).apply {
                         webViewClient = WebViewClient()
                         settings.javaScriptEnabled = false
-//                    setBackgroundColor(0x00000000)
                         loadDataWithBaseURL(null, htmlContent, "text/html", "utf-8", null)
                     }
                 },
@@ -439,7 +436,6 @@ fun PrivacyPolicyScreen(
                 },
             )
         }
-
     }
 }
 

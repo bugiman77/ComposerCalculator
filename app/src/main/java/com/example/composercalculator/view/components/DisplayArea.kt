@@ -1,4 +1,4 @@
-package com.example.composercalculator.calculator.components
+package com.example.composercalculator.view.components
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue

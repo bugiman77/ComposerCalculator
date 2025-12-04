@@ -1,6 +1,5 @@
-package com.example.composercalculator.calculator
+package com.example.composercalculator.view.screen
 
-import androidx.activity.result.launch
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,16 +30,16 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composercalculator.R
-import com.example.composercalculator.calculator.components.CalculatorButtonGrid
-import com.example.composercalculator.calculator.components.DisplayArea
-import com.example.composercalculator.calculator.components.HistoryBottomSheet
+import com.example.composercalculator.view.components.CalculatorButtonGrid
+import com.example.composercalculator.view.components.DisplayArea
+import com.example.composercalculator.view.components.HistoryBottomSheet
 import com.example.composercalculator.model.CalculatorEvent
 import com.example.composercalculator.model.CalculatorState
 import com.example.composercalculator.ui.theme.Orange
 import com.example.composercalculator.viewmodel.CalculatorViewModel
 import kotlinx.coroutines.launch
-import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -62,11 +61,12 @@ fun CalculatorScreen(
 
     var showHistorySheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
 
     val uiState = viewModel.uiState
     val onEvent = viewModel::onEvent
-
     val history = viewModel.history
+//    val history by viewModel.history.collectAsState()
 
     LaunchedEffect(sheetState.isVisible) {
         if (!sheetState.isVisible) {
@@ -78,8 +78,14 @@ fun CalculatorScreen(
         HistoryBottomSheet(
             history = history,
             sheetState = sheetState,
-            onAction = viewModel::onEvent,
-            onDismiss = { showHistorySheet = false }
+            onAction = onEvent,
+            onDismiss = {
+                scope.launch {
+                    sheetState.hide()
+                }.invokeOnCompletion {
+                    showHistorySheet = false
+                }
+            }
         )
     }
 

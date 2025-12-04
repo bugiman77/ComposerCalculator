@@ -1,4 +1,4 @@
-package com.example.composercalculator.view
+package com.example.composercalculator.view.screen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -40,11 +40,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -64,19 +59,19 @@ fun SettingsScreen(
     onNavigateBack: () -> Unit, // Лямбда для возврата на предыдущий экран
     onNavigateToAbout: () -> Unit,
 ) {
-    val isDarkTheme by viewModel.isDarkTheme.collectAsState()
-    val showHistoryButton by viewModel.showHistoryButton.collectAsState()
-    val displayFontSize by viewModel.displayFontSize.collectAsState()
-    val decimalFormat by viewModel.decimalFormat.collectAsState()
-    val isSaveDataEnabled by viewModel.isSaveDataEnabled.collectAsState()
-    val isSwipeEnabled by viewModel.isSwipeEnabled.collectAsState()
-    val isNoteEnabled by viewModel.isNoteEnabled.collectAsState()
 
+    val isDarkTheme = viewModel.isDarkTheme.collectAsState()
+    val showHistoryButton = viewModel.showHistoryButton.collectAsState()
+    val displayFontSize = viewModel.displayFontSize.collectAsState()
+    val decimalFormat = viewModel.decimalFormat.collectAsState()
+    val isSwipeEnabled = viewModel.isSwipeEnabled.collectAsState()
+    val isNoteEnabled = viewModel.isNoteEnabled.collectAsState()
+    val isSaveDataEnabled = viewModel.isSaveDataEnabled.collectAsState()
 
     Scaffold(
         containerColor = Color(0xFF161616), // Фон всего экрана
         topBar = {
-            CenterAlignedTopAppBar (
+            CenterAlignedTopAppBar(
                 title = { Text("Настройки", color = Color.White, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     CustomBackButton(onClick = onNavigateBack)
@@ -99,7 +94,7 @@ fun SettingsScreen(
                     modifier = Modifier.padding(vertical = 4.dp)
                 ) {
                     Switch(
-                        checked = isDarkTheme,
+                        checked = isDarkTheme.value,
                         onCheckedChange = { viewModel.onDarkThemeChange(it) },
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = Color.White,
@@ -117,7 +112,7 @@ fun SettingsScreen(
                     modifier = Modifier.padding(vertical = 4.dp)
                 ) {
                     Switch(
-                        checked = showHistoryButton,
+                        checked = showHistoryButton.value,
                         onCheckedChange = { viewModel.onShowHistoryChange(it) },
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = Color.White,
@@ -131,11 +126,11 @@ fun SettingsScreen(
                 HorizontalDivider(color = Color(0xFF3A3A3C))
 
                 SettingsRow(
-                    title = "Отключиитть свайп",
+                    title = "Отключить свайп",
                     modifier = Modifier.padding(vertical = 4.dp)
                 ) {
                     Switch(
-                        checked = isSwipeEnabled,
+                        checked = isSwipeEnabled.value,
                         onCheckedChange = { viewModel.onSaveSwipeDeleteItem(it) },
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = Color.White,
@@ -153,8 +148,8 @@ fun SettingsScreen(
                     modifier = Modifier.padding(vertical = 4.dp)
                 ) {
                     Switch(
-                        checked = isNoteEnabled,
-                        onCheckedChange = { viewModel.onSaveNoteItem(it) },
+                        checked = isNoteEnabled.value,
+                        onCheckedChange = { viewModel.onSaveNoteItem(isEnabled = it) },
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = Color.White,
                             checkedTrackColor = Orange,
@@ -173,12 +168,11 @@ fun SettingsScreen(
                 // Настройка размера шрифта
                 SettingsRow(
                     title = "Размер шрифта",
-                    subtitle = "${displayFontSize.toInt()} sp"
                 ) {
                     Slider(
-                        value = displayFontSize,
-                        onValueChangeFinished = { viewModel.onFontSizeChange(displayFontSize) },
-                        onValueChange = {  },
+                        value = displayFontSize.value,
+                        onValueChangeFinished = { viewModel.onFontSizeChange(displayFontSize.value) },
+                        onValueChange = { viewModel.onFontSizeChange(it) },
                         valueRange = 40f..120f, // от 40sp до 120sp
                         steps = 7, // 8 позиций
                         colors = SliderDefaults.colors(
@@ -202,12 +196,12 @@ fun SettingsScreen(
                     )
                     SettingsRadioRow(
                         title = "1,234.56",
-                        isSelected = decimalFormat == "1,234.56",
+                        isSelected = decimalFormat.value == "1,234.56",
                         onClick = { viewModel.onDecimalFormatChange("1,234.56") }
                     )
                     SettingsRadioRow(
                         title = "1 234,56",
-                        isSelected = decimalFormat == "1 234,56",
+                        isSelected = decimalFormat.value == "1 234,56",
                         onClick = { viewModel.onDecimalFormatChange("1 234,56") }
                     )
                 }
@@ -222,8 +216,8 @@ fun SettingsScreen(
                     modifier = Modifier.padding(vertical = 4.dp)
                 ) {
                     Switch(
-                        checked = isSaveDataEnabled,
-                        onCheckedChange = { viewModel.onSaveDataChange(it) },
+                        checked = isSaveDataEnabled.value,
+                        onCheckedChange = { viewModel.onSaveDataChange(isEnabled = it) },
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = Color.White,
                             checkedTrackColor = Orange,

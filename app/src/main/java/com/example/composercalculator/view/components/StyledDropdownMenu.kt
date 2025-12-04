@@ -1,4 +1,4 @@
-package com.example.composercalculator.calculator.components
+package com.example.composercalculator.view.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,6 +16,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.composercalculator.viewmodel.CalculatorViewModel
+import com.example.composercalculator.viewmodel.SettingsViewModel
 
 @Composable
 fun StyledDropdownMenu(
@@ -85,7 +88,7 @@ private fun StyledMenuItem(text: String, onClick: () -> Unit) {
 private fun StyledMenuItemWithSwitch(
     text: String,
     checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit,
 ) {
     Row(
         modifier = Modifier

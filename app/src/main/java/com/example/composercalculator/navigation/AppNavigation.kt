@@ -10,13 +10,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.composercalculator.calculator.CalculatorScreen
+import com.example.composercalculator.view.screen.CalculatorScreen
 import com.example.composercalculator.viewmodel.CalculatorViewModel
-import com.example.composercalculator.view.AboutScreen
-import com.example.composercalculator.view.SettingsScreen
+import com.example.composercalculator.view.screen.AboutScreen
+import com.example.composercalculator.view.screen.SettingsScreen
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.unit.IntOffset
-import com.example.composercalculator.view.PrivacyPolicyScreen
+import com.example.composercalculator.view.screen.PrivacyPolicyScreen
 import com.example.composercalculator.viewmodel.SettingsViewModel
 
 @Composable
@@ -161,7 +161,6 @@ fun AppNavigation() {
             }
         ) {
             PrivacyPolicyScreen(
-                htmlFileName = "privacy_policy.html",
                 title = "Политика конфиденциальности",
                 onNavigateBack = { navController.popBackStack() }
             )

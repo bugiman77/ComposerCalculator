@@ -1,13 +1,15 @@
 package com.example.composercalculator.viewmodel
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.composercalculator.model.CalculationHistoryItem
 import com.example.composercalculator.model.CalculatorEvent
 import com.example.composercalculator.model.CalculatorState
-import androidx.compose.runtime.mutableStateListOf
-import com.example.composercalculator.model.CalculationHistoryItem
+import kotlinx.coroutines.launch
 
 class CalculatorViewModel : ViewModel() {
 
@@ -116,8 +118,12 @@ class CalculatorViewModel : ViewModel() {
     }
 
     private fun performCalculation() {
+//        val currentState = _uiState.value
         val number1 = uiState.number1
         val number2 = uiState.number2
+//        val number1 = currentState.number1.toDoubleOrNull() ?: return
+//        val number2 = currentState.number2.toDoubleOrNull() ?: return
+//        val operation = currentState.operation ?: return
 
         if (number1.isNotBlank() && number2.isNotBlank()) {
             val result = when (uiState.operation) {
@@ -136,16 +142,20 @@ class CalculatorViewModel : ViewModel() {
             }.take(MAX_NUM_LENGTH)
 
             if (!result.isNaN()) {
-                val expression = "$number1 ${uiState.operation} $number2"
+                val expression = "$number1${uiState.operation}$number2"
                 val historyItem = CalculationHistoryItem(
                     id = nextHistoryId++, // Используем счетчик
                     expression = expression,
                     result = resultString
                 )
-                _history.add(0, historyItem)
+//                _history.add(0, historyItem)
+
+                viewModelScope.launch {
+//                    historyRepository.insertItem(historyItem)
+                }
             }
 
-            uiState = CalculatorState(number1 = resultString)
+//            _uiState.value = CalculatorState(number1 = resultString)
         }
     }
 

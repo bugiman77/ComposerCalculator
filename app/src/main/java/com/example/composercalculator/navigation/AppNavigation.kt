@@ -15,6 +15,7 @@ import com.example.composercalculator.viewmodel.CalculatorViewModel
 import com.example.composercalculator.view.screen.AboutScreen
 import com.example.composercalculator.view.screen.SettingsScreen
 import androidx.compose.animation.core.tween
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.unit.IntOffset
 import com.example.composercalculator.view.screen.PrivacyPolicyScreen
 import com.example.composercalculator.viewmodel.SettingsViewModel
@@ -25,7 +26,7 @@ fun AppNavigation() {
 
     val settingsViewModel: SettingsViewModel = viewModel()
 
-    var showHistoryButton by remember { mutableStateOf(true) }
+    val showHistoryButton = settingsViewModel.showHistoryButton.collectAsState()
 
     val animationDuration = 300 // Длительность анимации в миллисекундах
     val animationSpec = tween<IntOffset>(animationDuration)
@@ -57,7 +58,7 @@ fun AppNavigation() {
                 onEvent = viewModel::onEvent,
                 onNavigateToSettings = { navController.navigate(Routes.SETTINGS) },
                 onNavigateToHistory = { navController.navigate(Routes.HISTORY) },
-                showHistoryButton = showHistoryButton
+                showHistoryButton = showHistoryButton.value
             )
         }
 

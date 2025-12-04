@@ -3,83 +3,127 @@ package com.example.composercalculator.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.composercalculator.data.SettingsDataStore
+import com.example.composercalculator.data.local.db.AppDatabase
+import com.example.composercalculator.data.local.db.dao.SettingsDao
+import com.example.composercalculator.model.Settings
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
 
-    // Создаем экземпляр нашего DataStore
-    private val settingsDataStore = SettingsDataStore(application)
+    private val settingsDao: SettingsDao = AppDatabase.getDatabase(application).settingsDao()
 
-    // Преобразуем Flow из DataStore в StateFlow, на который подпишется UI
-    val isDarkTheme: StateFlow<Boolean> = settingsDataStore.getDarkTheme
-        .stateIn(viewModelScope, SharingStarted.Eagerly, true)
+    // Состояния, которые будет наблюдать UI
+    private val _isDarkTheme = MutableStateFlow(true)
+    val isDarkTheme: StateFlow<Boolean> = _isDarkTheme
 
-    val showHistoryButton: StateFlow<Boolean> = settingsDataStore.getShowHistoryButton
-        .stateIn(viewModelScope, SharingStarted.Eagerly, true)
+    private val _showHistoryButton = MutableStateFlow(true)
+    val showHistoryButton: StateFlow<Boolean> = _showHistoryButton
 
-    val displayFontSize: StateFlow<Float> = settingsDataStore.getFontSize
-        .stateIn(viewModelScope, SharingStarted.Eagerly, 80f)
+    private val _displayFontSize = MutableStateFlow(80f)
+    val displayFontSize: StateFlow<Float> = _displayFontSize
 
-    val decimalFormat: StateFlow<String> = settingsDataStore.getDecimalFormat
-        .stateIn(viewModelScope, SharingStarted.Eagerly, "1,234.56")
+    private val _decimalFormat = MutableStateFlow("1,234.56")
+    val decimalFormat: StateFlow<String> = _decimalFormat
 
-    val isSaveDataEnabled: StateFlow<Boolean> = settingsDataStore.getSaveDataEnabled
-        .stateIn(viewModelScope, SharingStarted.Eagerly, true)
+    private val _isSaveDataEnabled = MutableStateFlow(true)
+    val isSaveDataEnabled: StateFlow<Boolean> = _isSaveDataEnabled
 
-    val isSwipeEnabled: StateFlow<Boolean> = settingsDataStore.getSwipeItem
-        .stateIn(viewModelScope, SharingStarted.Eagerly, true)
+    private val _isSwipeEnabled = MutableStateFlow(true)
+    val isSwipeEnabled: StateFlow<Boolean> = _isSwipeEnabled
 
-    val isNoteEnabled: StateFlow<Boolean> = settingsDataStore.getNoteItem
-        .stateIn(viewModelScope, SharingStarted.Eagerly, true)
+    private val _isNoteEnabled = MutableStateFlow(true)
+    val isNoteEnabled: StateFlow<Boolean> = _isNoteEnabled
 
+    init {
+        // Загружаем настройки при старте
+        viewModelScope.launch {
+            loadSettings()
+        }
+    }
 
+    init {
+        // Загружаем текущие настройки при инициализации ViewModel
+        viewModelScope.launch {
+            loadSettings()
+        }
+    }
 
-    // --- Функции, которые будет вызывать UI для сохранения настроек ---
+    private suspend fun loadSettings() {
+        val settings = settingsDao.getSettings()
+        settings?.let {
+            _isDarkTheme.value = it.isDarkTheme
+            _showHistoryButton.value = it.showHistoryButton
+            _displayFontSize.value = it.displayFontSize
+            _decimalFormat.value = it.decimalFormat
+            _isSaveDataEnabled.value = it.isSaveDataEnabled
+            _isSwipeEnabled.value = it.isSwipeEnabled
+            _isNoteEnabled.value = it.isNoteEnabled
+        }
+    }
 
+    // Функции для сохранения изменений
     fun onDarkThemeChange(isDark: Boolean) {
         viewModelScope.launch {
-            settingsDataStore.saveDarkTheme(isDark)
+            saveSetting { _isDarkTheme.value = isDark }
         }
     }
 
     fun onShowHistoryChange(show: Boolean) {
         viewModelScope.launch {
-            settingsDataStore.saveShowHistoryButton(show)
+            saveSetting { _showHistoryButton.value = show }
         }
     }
 
     fun onFontSizeChange(size: Float) {
         viewModelScope.launch {
-            settingsDataStore.saveFontSize(size)
+            saveSetting { _displayFontSize.value = size }
         }
     }
 
     fun onDecimalFormatChange(format: String) {
         viewModelScope.launch {
-            settingsDataStore.saveDecimalFormat(format)
+            saveSetting { _decimalFormat.value = format }
         }
     }
 
     fun onSaveDataChange(isEnabled: Boolean) {
         viewModelScope.launch {
-            settingsDataStore.saveSaveDataEnabled(isEnabled)
+            saveSetting { _isSaveDataEnabled.value = isEnabled }
         }
     }
 
     fun onSaveSwipeDeleteItem(isEnabled: Boolean) {
         viewModelScope.launch {
-            settingsDataStore.saveSwipeItem(isEnabled)
+            saveSetting { _isSwipeEnabled.value = isEnabled }
         }
     }
 
     fun onSaveNoteItem(isEnabled: Boolean) {
         viewModelScope.launch {
-            settingsDataStore.saveNoteItem(isEnabled)
+            saveSetting { _isNoteEnabled.value = isEnabled }
         }
     }
 
+    private suspend fun saveSetting(updateState: suspend () -> Unit) {
+        // Обновляем состояние в UI
+        updateState()
+
+        // Сохраняем изменения в базу данных
+        settingsDao.saveSettings(
+            Settings(
+                id = 0,  // Если у тебя один объект настроек, id можно фиксировать
+                isDarkTheme = _isDarkTheme.value,
+                showHistoryButton = _showHistoryButton.value,
+                displayFontSize = _displayFontSize.value,
+                decimalFormat = _decimalFormat.value,
+                isSaveDataEnabled = _isSaveDataEnabled.value,
+                isSwipeEnabled = _isSwipeEnabled.value,
+                isNoteEnabled = _isNoteEnabled.value
+            )
+        )
+    }
 }
+

@@ -8,7 +8,7 @@ private fun generateVersionCode(): String {
     return versionAppFromDateCreate.format(Date())
 }
 
-fun generateVersionName(): String {
+private fun generateVersionName(): String {
     val currentTime = LocalTime.now()
     val minutes = currentTime.minute
     val seconds = currentTime.second
@@ -20,6 +20,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -98,6 +99,9 @@ dependencies {
     implementation("io.realm.kotlin:library-base:1.6.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.12.0")
-    implementation("androidx.room:room-runtime:2.5.0")
-    implementation("androidx.room:room-ktx:2.5.0")
+
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
+
 }

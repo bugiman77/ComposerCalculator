@@ -1,10 +1,8 @@
-package com.example.composercalculator.data
+package com.example.composercalculator.data.repository
 
-import androidx.room.Room
 import com.example.composercalculator.data.local.db.dao.SettingsDao
 import com.example.composercalculator.model.Settings
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class SettingsRepository(
     private val settingsDao: SettingsDao // Получаем доступ к DAO, который взаимодействует с базой данных

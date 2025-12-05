@@ -107,22 +107,24 @@ fun SettingsScreen(
                     )
                 }
 
-                HorizontalDivider(color = Color(0xFF3A3A3C))
+                if (!isSystemTheme.value) {
+                    HorizontalDivider(color = Color(0xFF3A3A3C))
 
-                SettingsRow(
-                    title = "Тёмная тема",
-                    modifier = Modifier.padding(vertical = 4.dp)
-                ) {
-                    Switch(
-                        checked = isDarkTheme.value,
-                        onCheckedChange = { viewModel.onDarkThemeChange(it) },
-                        colors = SwitchDefaults.colors(
-                            checkedThumbColor = Color.White,
-                            checkedTrackColor = Orange,
-                            uncheckedThumbColor = Color.White,
-                            uncheckedTrackColor = Color.Gray
+                    SettingsRow(
+                        title = "Тёмная тема",
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    ) {
+                        Switch(
+                            checked = isDarkTheme.value,
+                            onCheckedChange = { viewModel.onDarkThemeChange(it) },
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = Color.White,
+                                checkedTrackColor = Orange,
+                                uncheckedThumbColor = Color.White,
+                                uncheckedTrackColor = Color.Gray
+                            )
                         )
-                    )
+                    }
                 }
 
                 Button(
@@ -248,7 +250,7 @@ fun SettingsScreen(
             SettingsGroup(title = "Сохранение данных") {
                 SettingsRow(
                     title = "Сохранять данные",
-                    subtitle = "Настройки и история",
+                    subtitle = "Сохранить настройки приложения в Google Drive",
                     modifier = Modifier.padding(vertical = 4.dp)
                 ) {
                     Switch(

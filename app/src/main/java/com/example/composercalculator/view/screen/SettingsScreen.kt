@@ -163,40 +163,42 @@ fun SettingsScreen(
                     )
                 }
 
-                HorizontalDivider(color = Color(0xFF3A3A3C))
+                if (showHistoryButton.value) {
+                    HorizontalDivider(color = Color(0xFF3A3A3C))
 
-                SettingsRow(
-                    title = "Использовать свайп",
-                    modifier = Modifier.padding(vertical = 4.dp)
-                ) {
-                    Switch(
-                        checked = isSwipeEnabled.value,
-                        onCheckedChange = { viewModel.onSaveSwipeDeleteItem(it) },
-                        colors = SwitchDefaults.colors(
-                            checkedThumbColor = Color.White,
-                            checkedTrackColor = Orange,
-                            uncheckedThumbColor = Color.White,
-                            uncheckedTrackColor = Color.Gray
+                    SettingsRow(
+                        title = "Использовать свайп",
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    ) {
+                        Switch(
+                            checked = isSwipeEnabled.value,
+                            onCheckedChange = { viewModel.onSaveSwipeDeleteItem(it) },
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = Color.White,
+                                checkedTrackColor = Orange,
+                                uncheckedThumbColor = Color.White,
+                                uncheckedTrackColor = Color.Gray
+                            )
                         )
-                    )
-                }
+                    }
 
-                HorizontalDivider(color = Color(0xFF3A3A3C))
+                    HorizontalDivider(color = Color(0xFF3A3A3C))
 
-                SettingsRow(
-                    title = "Поле для заметки",
-                    modifier = Modifier.padding(vertical = 4.dp)
-                ) {
-                    Switch(
-                        checked = isNoteEnabled.value,
-                        onCheckedChange = { viewModel.onSaveNoteItem(isEnabled = it) },
-                        colors = SwitchDefaults.colors(
-                            checkedThumbColor = Color.White,
-                            checkedTrackColor = Orange,
-                            uncheckedThumbColor = Color.White,
-                            uncheckedTrackColor = Color.Gray
+                    SettingsRow(
+                        title = "Поле для заметки",
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    ) {
+                        Switch(
+                            checked = isNoteEnabled.value,
+                            onCheckedChange = { viewModel.onSaveNoteItem(isEnabled = it) },
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = Color.White,
+                                checkedTrackColor = Orange,
+                                uncheckedThumbColor = Color.White,
+                                uncheckedTrackColor = Color.Gray
+                            )
                         )
-                    )
+                    }
                 }
             }
 

@@ -1,5 +1,7 @@
 package com.example.composercalculator.view.screen
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,18 +26,25 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import com.example.composercalculator.BuildConfig
 import com.example.composercalculator.R
+import com.example.composercalculator.telegram.openTelegramChat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -118,6 +127,10 @@ private fun AppHeader() {
 private fun InfoLinksGroup(
     onNavigateToPrivacy: () -> Unit
 ) {
+
+    var showDialog by remember { mutableStateOf(true) }
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -126,9 +139,15 @@ private fun InfoLinksGroup(
     ) {
         InfoLinkRow(title = "Оценить в Google Play") { }
         HorizontalDivider(color = Color(0xFF3A3A3C))
-        InfoLinkRow(title = "Политика конфиденциальности", onClick = onNavigateToPrivacy)
+        InfoLinkRow(
+            title = "Политика конфиденциальности",
+            onClick = onNavigateToPrivacy
+        )
         HorizontalDivider(color = Color(0xFF3A3A3C))
-        InfoLinkRow(title = "Связаться с нами") { }
+        InfoLinkRow(
+            title = "Связаться с автором",
+//            onClick = { openTelegramChat(context, showDialog) { showDialog = !it } }
+        ) { }
     }
 }
 

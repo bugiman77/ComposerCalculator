@@ -21,10 +21,12 @@ import com.example.composercalculator.view.screen.PrivacyPolicyScreen
 import com.example.composercalculator.viewmodel.SettingsViewModel
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(
+    settingsViewModel: SettingsViewModel = viewModel()
+) {
     val navController = rememberNavController()
 
-    val settingsViewModel: SettingsViewModel = viewModel()
+//    val settingsViewModel: SettingsViewModel = viewModel()
 
     val showHistoryButton = settingsViewModel.showHistoryButton.collectAsState()
 
@@ -58,7 +60,8 @@ fun AppNavigation() {
                 onEvent = viewModel::onEvent,
                 onNavigateToSettings = { navController.navigate(Routes.SETTINGS) },
                 onNavigateToHistory = { navController.navigate(Routes.HISTORY) },
-                showHistoryButton = showHistoryButton.value
+                showHistoryButton = showHistoryButton.value,
+                viewModelSettings = settingsViewModel
             )
         }
 

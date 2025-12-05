@@ -39,6 +39,7 @@ import com.example.composercalculator.model.CalculatorEvent
 import com.example.composercalculator.model.CalculatorState
 import com.example.composercalculator.ui.theme.Orange
 import com.example.composercalculator.viewmodel.CalculatorViewModel
+import com.example.composercalculator.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
@@ -49,7 +50,8 @@ fun CalculatorScreen(
     onNavigateToSettings: () -> Unit,
     onNavigateToHistory: () -> Unit,
     showHistoryButton: Boolean,
-    viewModel: CalculatorViewModel = viewModel()
+    viewModelCalculation: CalculatorViewModel = viewModel(),
+    viewModelSettings: SettingsViewModel = viewModel(),
 ) {
 
     val clipboardManager = LocalClipboardManager.current
@@ -63,9 +65,9 @@ fun CalculatorScreen(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
 
-    val uiState = viewModel.uiState
-    val onEvent = viewModel::onEvent
-    val history = viewModel.history
+    val uiState = viewModelCalculation.uiState
+    val onEvent = viewModelCalculation::onEvent
+    val history = viewModelCalculation.history
 //    val history by viewModel.history.collectAsState()
 
     LaunchedEffect(sheetState.isVisible) {
@@ -144,6 +146,7 @@ fun CalculatorScreen(
                 // Сетка кнопок
                 CalculatorButtonGrid(
                     uiState = uiState,
+                    viewModel = viewModelSettings,
                     onEvent = onEvent
                 )
             }

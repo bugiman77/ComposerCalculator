@@ -19,16 +19,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composercalculator.R
 import com.example.composercalculator.model.CalculatorEvent
 import com.example.composercalculator.model.CalculatorState
 import com.example.composercalculator.ui.theme.DarkGray
 import com.example.composercalculator.ui.theme.LightGray
 import com.example.composercalculator.ui.theme.Orange
+import com.example.composercalculator.viewmodel.SettingsViewModel
 
 @Composable
 fun CalculatorButtonGrid(
     uiState: CalculatorState,
+    viewModel: SettingsViewModel = viewModel(),
     onEvent: (CalculatorEvent) -> Unit
 ) {
 
@@ -204,6 +207,7 @@ fun CalculatorButtonGrid(
                 if (menuExpanded) {
                     StyledDropdownMenu(
                         expanded = menuExpanded,
+                        viewModel = viewModel,
                         onDismissRequest = { menuExpanded = false }
                     )
                 }

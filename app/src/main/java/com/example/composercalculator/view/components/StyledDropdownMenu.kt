@@ -23,18 +23,21 @@ import com.example.composercalculator.viewmodel.SettingsViewModel
 @Composable
 fun StyledDropdownMenu(
     expanded: Boolean,
+    viewModel: SettingsViewModel = viewModel(),
     onDismissRequest: () -> Unit
 ) {
-    // Состояние для переключателя
-    val switchState = remember { mutableStateOf(true) }
+
     val density = LocalDensity.current
+
+    val isDarkTheme = viewModel.isDarkTheme.collectAsState()
+    val isSystemTheme = viewModel.isSystemTheme.collectAsState()
 
     // Используем Popup для полного контроля над стилем
     Popup(
         alignment = Alignment.TopStart,
         onDismissRequest = onDismissRequest,
         offset = with(density) {
-            IntOffset(x = 0.dp.roundToPx(), y = -100.dp.roundToPx())
+            IntOffset(x = 0.dp.roundToPx(), y = -90.dp.roundToPx())
         }
     ) {
         Column(
@@ -52,16 +55,19 @@ fun StyledDropdownMenu(
                 onDismissRequest()
             }
 
-            HorizontalDivider(
-                modifier = Modifier.padding(vertical = 8.dp),
-                thickness = DividerDefaults.Thickness, color = Color.Gray.copy(alpha = 0.5f)
-            )
+            if (!isSystemTheme.value) {
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    thickness = DividerDefaults.Thickness, color = Color.Gray.copy(alpha = 0.5f)
+                )
 
-            StyledMenuItemWithSwitch(
-                text = "Тёмная тема",
-                checked = switchState.value,
-                onCheckedChange = { switchState.value = it }
-            )
+                StyledMenuItemWithSwitch(
+                    text = "Тёмная тема",
+                    checked = isDarkTheme.value,
+                    onCheckedChange = { viewModel.onDarkThemeChange(it) }
+                )
+            }
+
         }
     }
 }

@@ -107,13 +107,13 @@ private fun AppHeader() {
                 .clip(RoundedCornerShape(24.dp))
                 .background(Color.DarkGray)
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        /*Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Composer Calculator",
             color = Color.White,
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold
-        )
+        )*/
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = "Версия ${BuildConfig.VERSION_NAME}",

@@ -29,6 +29,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
@@ -61,6 +62,7 @@ fun SettingsScreen(
 ) {
 
     val isDarkTheme = viewModel.isDarkTheme.collectAsState()
+    val isSystemTheme = viewModel.isSystemTheme.collectAsState()
     val showHistoryButton = viewModel.showHistoryButton.collectAsState()
     val displayFontSize = viewModel.displayFontSize.collectAsState()
     val decimalFormat = viewModel.decimalFormat.collectAsState()
@@ -87,8 +89,25 @@ fun SettingsScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            // --- Блок "Внешний вид" ---
-            SettingsGroup(title = "ВНЕШНИЙ ВИД") {
+            SettingsGroup(title = "Тема приложения") {
+                SettingsRow(
+                    title = "Системная тема",
+                    modifier = Modifier.padding(vertical = 4.dp)
+                ) {
+                    Switch(
+                        checked = isSystemTheme.value,
+                        onCheckedChange = { viewModel.onSystemThemeChange(it) },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            checkedTrackColor = Orange,
+                            uncheckedThumbColor = Color.White,
+                            uncheckedTrackColor = Color.Gray
+                        )
+                    )
+                }
+
+                HorizontalDivider(color = Color(0xFF3A3A3C))
+
                 SettingsRow(
                     title = "Тёмная тема",
                     modifier = Modifier.padding(vertical = 4.dp)
@@ -105,8 +124,25 @@ fun SettingsScreen(
                     )
                 }
 
-                HorizontalDivider(color = Color(0xFF3A3A3C))
+                Button(
+                    onClick = { /* Handle click */ },
+                    modifier = Modifier
+                        .fillMaxWidth() // Кнопка на всю ширину
+                        .padding(16.dp), // Отступы по краям
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF007AFF), // Синий цвет в стиле iOS
+                        contentColor = Color.White // Белый текст
+                    ),
+                    shape = MaterialTheme.shapes.medium // Округлые углы
+                ) {
+                    Text(text = "Создать тему")
+                }
 
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            SettingsGroup(title = "История вычислений") {
                 SettingsRow(
                     title = "Кнопка истории",
                     modifier = Modifier.padding(vertical = 4.dp)
@@ -126,7 +162,7 @@ fun SettingsScreen(
                 HorizontalDivider(color = Color(0xFF3A3A3C))
 
                 SettingsRow(
-                    title = "Отключить свайп",
+                    title = "Использовать свайп",
                     modifier = Modifier.padding(vertical = 4.dp)
                 ) {
                     Switch(
@@ -158,13 +194,12 @@ fun SettingsScreen(
                         )
                     )
                 }
-
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
             // --- Блок "Дисплей" ---
-            SettingsGroup(title = "ДИСПЛЕЙ") {
+            SettingsGroup(title = "Дисплей") {
                 // Настройка размера шрифта
                 SettingsRow(
                     title = "Размер шрифта",
@@ -209,7 +244,7 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            SettingsGroup(title = "ОБЩЕЕ") {
+            SettingsGroup(title = "Сохранение данных") {
                 SettingsRow(
                     title = "Сохранять данные",
                     subtitle = "Настройки и история",
@@ -226,6 +261,11 @@ fun SettingsScreen(
                         )
                     )
                 }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            SettingsGroup(title = "Приложение") {
                 SettingsRow(
                     title = "О приложении",
                     modifier = Modifier
@@ -313,17 +353,20 @@ private fun SettingsGroup(
     title: String,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    Column {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text(
             text = title,
             color = Color.Gray,
             fontSize = 13.sp,
-            modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
+            modifier = Modifier
+                .padding(start = 16.dp, bottom = 8.dp)
         )
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(24.dp))
                 .background(Color(0xFF2C2C2E))
         ) {
             content()

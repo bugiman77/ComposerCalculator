@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class Settings(
     @PrimaryKey var id: Int,
     var isDarkTheme: Boolean = true,
+    var isSystemTheme: Boolean = false,
     var showHistoryButton: Boolean = true,
     var displayFontSize: Float = 80f,
     var decimalFormat: String = "1,234.56",

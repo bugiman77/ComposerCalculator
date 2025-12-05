@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class Settings(
     @PrimaryKey val id: Int = 0,
     val isDarkTheme: Boolean = true,
+    val isSystemTheme: Boolean = false,
     val showHistoryButton: Boolean = true,
     val displayFontSize: Float = 80f,
     val decimalFormat: String = "1,234.56",

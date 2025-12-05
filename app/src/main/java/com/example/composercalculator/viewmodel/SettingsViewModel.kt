@@ -7,7 +7,6 @@ import com.example.composercalculator.data.local.db.AppDatabase
 import com.example.composercalculator.data.local.db.dao.SettingsDao
 import com.example.composercalculator.model.Settings
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -18,6 +17,9 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     // Состояния, которые будет наблюдать UI
     private val _isDarkTheme = MutableStateFlow(true)
     val isDarkTheme: StateFlow<Boolean> = _isDarkTheme
+
+    private val _isSystemTheme = MutableStateFlow(true)
+    val isSystemTheme: StateFlow<Boolean> = _isSystemTheme
 
     private val _showHistoryButton = MutableStateFlow(true)
     val showHistoryButton: StateFlow<Boolean> = _showHistoryButton
@@ -55,6 +57,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         val settings = settingsDao.getSettings()
         settings?.let {
             _isDarkTheme.value = it.isDarkTheme
+            _isSystemTheme.value = it.isSystemTheme
             _showHistoryButton.value = it.showHistoryButton
             _displayFontSize.value = it.displayFontSize
             _decimalFormat.value = it.decimalFormat
@@ -68,6 +71,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     fun onDarkThemeChange(isDark: Boolean) {
         viewModelScope.launch {
             saveSetting { _isDarkTheme.value = isDark }
+        }
+    }
+
+    fun onSystemThemeChange(isSystem: Boolean) {
+        viewModelScope.launch {
+            saveSetting { _isSystemTheme.value = isSystem }
         }
     }
 
@@ -116,6 +125,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             Settings(
                 id = 0,  // Если у тебя один объект настроек, id можно фиксировать
                 isDarkTheme = _isDarkTheme.value,
+                isSystemTheme = _isSystemTheme.value,
                 showHistoryButton = _showHistoryButton.value,
                 displayFontSize = _displayFontSize.value,
                 decimalFormat = _decimalFormat.value,

@@ -24,6 +24,9 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val _showHistoryButton = MutableStateFlow(true)
     val showHistoryButton: StateFlow<Boolean> = _showHistoryButton
 
+    private val _systemFontSize = MutableStateFlow(true)
+    val systemFontSize: StateFlow<Boolean> = _systemFontSize
+
     private val _displayFontSize = MutableStateFlow(80f)
     val displayFontSize: StateFlow<Float> = _displayFontSize
 
@@ -59,6 +62,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             _isDarkTheme.value = it.isDarkTheme
             _isSystemTheme.value = it.isSystemTheme
             _showHistoryButton.value = it.showHistoryButton
+            _systemFontSize.value = it.systemFontSize
             _displayFontSize.value = it.displayFontSize
             _decimalFormat.value = it.decimalFormat
             _isSaveDataEnabled.value = it.isSaveDataEnabled
@@ -83,6 +87,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     fun onShowHistoryChange(show: Boolean) {
         viewModelScope.launch {
             saveSetting { _showHistoryButton.value = show }
+        }
+    }
+
+    fun onSystemFontSizeChange(isEnable: Boolean) {
+        viewModelScope.launch {
+            saveSetting { _systemFontSize.value = isEnable }
         }
     }
 
@@ -127,6 +137,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
                 isDarkTheme = _isDarkTheme.value,
                 isSystemTheme = _isSystemTheme.value,
                 showHistoryButton = _showHistoryButton.value,
+                systemFontSize = _systemFontSize.value,
                 displayFontSize = _displayFontSize.value,
                 decimalFormat = _decimalFormat.value,
                 isSaveDataEnabled = _isSaveDataEnabled.value,

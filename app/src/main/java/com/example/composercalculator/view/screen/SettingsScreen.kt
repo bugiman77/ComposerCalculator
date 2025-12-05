@@ -65,6 +65,7 @@ fun SettingsScreen(
     val isDarkTheme = viewModel.isDarkTheme.collectAsState()
     val isSystemTheme = viewModel.isSystemTheme.collectAsState()
     val showHistoryButton = viewModel.showHistoryButton.collectAsState()
+    val isSystemFontSize = viewModel.systemFontSize.collectAsState()
     val displayFontSize = viewModel.displayFontSize.collectAsState()
     val decimalFormat = viewModel.decimalFormat.collectAsState()
     val isSwipeEnabled = viewModel.isSwipeEnabled.collectAsState()
@@ -205,21 +206,42 @@ fun SettingsScreen(
             SettingsGroup(title = "Дисплей") {
                 // Настройка размера шрифта
                 SettingsRow(
-                    title = "Размер шрифта",
+                    title = "Системный размер шрифта",
+                    modifier = Modifier.padding(vertical = 4.dp)
                 ) {
-                    Slider(
-                        value = displayFontSize.value,
-                        onValueChangeFinished = { viewModel.onFontSizeChange(displayFontSize.value) },
-                        onValueChange = { viewModel.onFontSizeChange(it) },
-                        valueRange = 40f..120f, // от 40sp до 120sp
-                        steps = 7, // 8 позиций
-                        colors = SliderDefaults.colors(
-                            thumbColor = Color.White,
-                            activeTrackColor = Orange,
-                            inactiveTrackColor = Color.Gray
-                        ),
-                        modifier = Modifier.weight(1f)
+                    Switch(
+                        checked = isSystemFontSize.value,
+                        onCheckedChange = { viewModel.onSystemFontSizeChange(it) },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            checkedTrackColor = Orange,
+                            uncheckedThumbColor = Color.White,
+                            uncheckedTrackColor = Color.Gray
+                        )
                     )
+                }
+
+                if (!isSystemFontSize.value) {
+
+                    HorizontalDivider(color = Color(0xFF3A3A3C))
+
+                    SettingsRow(
+                        title = "Размер шрифта",
+                    ) {
+                        Slider(
+                            value = displayFontSize.value,
+                            onValueChangeFinished = { viewModel.onFontSizeChange(displayFontSize.value) },
+                            onValueChange = { viewModel.onFontSizeChange(it) },
+                            valueRange = 40f..120f,
+                            steps = 7, // 8 позиций
+                            colors = SliderDefaults.colors(
+                                thumbColor = Color.White,
+                                activeTrackColor = Orange,
+                                inactiveTrackColor = Color.Gray
+                            ),
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
                 }
 
                 HorizontalDivider(color = Color(0xFF3A3A3C))

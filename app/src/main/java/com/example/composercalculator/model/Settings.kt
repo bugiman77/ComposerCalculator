@@ -9,6 +9,7 @@ data class Settings(
     var isDarkTheme: Boolean = true,
     var isSystemTheme: Boolean = false,
     var showHistoryButton: Boolean = true,
+    var systemFontSize: Boolean = true,
     var displayFontSize: Float = 80f,
     var decimalFormat: String = "1,234.56",
     var isSaveDataEnabled: Boolean = true,

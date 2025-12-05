@@ -9,6 +9,7 @@ data class Settings(
     val isDarkTheme: Boolean = true,
     val isSystemTheme: Boolean = false,
     val showHistoryButton: Boolean = true,
+    val systemFontSize: Float = 80f,
     val displayFontSize: Float = 80f,
     val decimalFormat: String = "1,234.56",
     val isSaveDataEnabled: Boolean = true,

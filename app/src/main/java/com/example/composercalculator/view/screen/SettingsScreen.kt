@@ -70,7 +70,8 @@ fun SettingsScreen(
     val decimalFormat = viewModel.decimalFormat.collectAsState()
     val isSwipeEnabled = viewModel.isSwipeEnabled.collectAsState()
     val isNoteEnabled = viewModel.isNoteEnabled.collectAsState()
-    val isSaveDataEnabled = viewModel.isSaveDataEnabled.collectAsState()
+    val isSaveHistoryData = viewModel.isSaveHistoryData.collectAsState()
+    val isSaveSettingsData = viewModel.isSaveSettingsData.collectAsState()
 
     Scaffold(
         containerColor = Color(0xFF161616), // Фон всего экрана
@@ -273,13 +274,32 @@ fun SettingsScreen(
 
             SettingsGroup(title = "Сохранение данных") {
                 SettingsRow(
-                    title = "Сохранять данные",
+                    title = "Сохранить настройки",
                     subtitle = "Сохранить настройки приложения в Google Drive",
                     modifier = Modifier.padding(vertical = 4.dp)
                 ) {
                     Switch(
-                        checked = isSaveDataEnabled.value,
-                        onCheckedChange = { viewModel.onSaveDataChange(isEnabled = it) },
+                        checked = isSaveSettingsData.value,
+                        onCheckedChange = { viewModel.onSaveSettingsDataChange(isEnabled = it) },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            checkedTrackColor = Orange,
+                            uncheckedThumbColor = Color.White,
+                            uncheckedTrackColor = Color.Gray
+                        )
+                    )
+                }
+
+                HorizontalDivider(color = Color(0xFF3A3A3C))
+
+                SettingsRow(
+                    title = "Сохранить историю",
+                    subtitle = "Сохранить историю вычислений в Google Drive",
+                    modifier = Modifier.padding(vertical = 4.dp)
+                ) {
+                    Switch(
+                        checked = isSaveHistoryData.value,
+                        onCheckedChange = { viewModel.onSaveHistoryDataChange(isEnabled = it) },
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = Color.White,
                             checkedTrackColor = Orange,

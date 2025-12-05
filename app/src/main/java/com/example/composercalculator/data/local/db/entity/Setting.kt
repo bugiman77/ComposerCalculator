@@ -12,7 +12,8 @@ data class Settings(
     val systemFontSize: Float = 80f,
     val displayFontSize: Float = 80f,
     val decimalFormat: String = "1,234.56",
-    val isSaveDataEnabled: Boolean = true,
+    val isSaveHistoryEnabled: Boolean = true,
+    val isSaveSettingsEnabled: Boolean = true,
     val isSwipeEnabled: Boolean = true,
     val isNoteEnabled: Boolean = true
 )

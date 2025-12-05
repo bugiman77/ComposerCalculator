@@ -33,8 +33,11 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val _decimalFormat = MutableStateFlow("1,234.56")
     val decimalFormat: StateFlow<String> = _decimalFormat
 
-    private val _isSaveDataEnabled = MutableStateFlow(true)
-    val isSaveDataEnabled: StateFlow<Boolean> = _isSaveDataEnabled
+    private val _isSaveHistoryData = MutableStateFlow(true)
+    val isSaveHistoryData: StateFlow<Boolean> = _isSaveHistoryData
+
+    private val _isSaveSettingsData = MutableStateFlow(true)
+    val isSaveSettingsData: StateFlow<Boolean> = _isSaveSettingsData
 
     private val _isSwipeEnabled = MutableStateFlow(true)
     val isSwipeEnabled: StateFlow<Boolean> = _isSwipeEnabled
@@ -65,7 +68,8 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             _systemFontSize.value = it.systemFontSize
             _displayFontSize.value = it.displayFontSize
             _decimalFormat.value = it.decimalFormat
-            _isSaveDataEnabled.value = it.isSaveDataEnabled
+            _isSaveHistoryData.value = it.isSaveHistoryData
+            _isSaveSettingsData.value = it.isSaveSettingsData
             _isSwipeEnabled.value = it.isSwipeEnabled
             _isNoteEnabled.value = it.isNoteEnabled
         }
@@ -108,9 +112,15 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun onSaveDataChange(isEnabled: Boolean) {
+    fun onSaveHistoryDataChange(isEnabled: Boolean) {
         viewModelScope.launch {
-            saveSetting { _isSaveDataEnabled.value = isEnabled }
+            saveSetting { _isSaveHistoryData.value = isEnabled }
+        }
+    }
+
+    fun onSaveSettingsDataChange(isEnabled: Boolean) {
+        viewModelScope.launch {
+            saveSetting { _isSaveSettingsData.value = isEnabled }
         }
     }
 
@@ -140,7 +150,8 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
                 systemFontSize = _systemFontSize.value,
                 displayFontSize = _displayFontSize.value,
                 decimalFormat = _decimalFormat.value,
-                isSaveDataEnabled = _isSaveDataEnabled.value,
+                isSaveHistoryData = _isSaveHistoryData.value,
+                isSaveSettingsData = _isSaveSettingsData.value,
                 isSwipeEnabled = _isSwipeEnabled.value,
                 isNoteEnabled = _isNoteEnabled.value
             )

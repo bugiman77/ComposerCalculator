@@ -50,6 +50,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.composercalculator.ui.theme.DarkGray
 import com.example.composercalculator.ui.theme.Orange
 import com.example.composercalculator.viewmodel.SettingsViewModel
 
@@ -296,8 +297,8 @@ fun CustomBackButton(
     // Создаем едва заметный вертикальный градиент для фона
     val backgroundBrush = Brush.verticalGradient(
         colors = listOf(
-            Orange.copy(alpha = 0.9f),
-            Orange
+            DarkGray,
+            DarkGray
         )
     )
 

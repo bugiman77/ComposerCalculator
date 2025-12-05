@@ -114,7 +114,7 @@ private fun AppHeader() {
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold
         )*/
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = "Версия ${BuildConfig.VERSION_NAME}",
             color = Color.Gray,

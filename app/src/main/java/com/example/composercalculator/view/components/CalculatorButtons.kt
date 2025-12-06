@@ -1,9 +1,11 @@
 package com.example.composercalculator.view.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -14,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.TextUnit
@@ -253,6 +256,23 @@ private fun BtnCalculation(
     onLongClick: (() -> Unit)? = null,
     onClick: () -> Unit
 ) {
+
+    // Создаем едва заметный вертикальный градиент для фона
+    val backgroundBrush = Brush.verticalGradient(
+        colors = listOf(
+            color,
+            color
+        )
+    )
+
+    // Создаем границу, которая имитирует внутреннюю тень
+    val borderBrush = Brush.verticalGradient(
+        colors = listOf(
+            Color.White.copy(alpha = 0.2f),
+            Color.Transparent
+        )
+    )
+
     Button(
         onClick = onClick,
         modifier = modifier
@@ -263,11 +283,14 @@ private fun BtnCalculation(
                 onClick = onClick
             ),
         shape = CircleShape,
-        colors = ButtonDefaults.buttonColors(containerColor = color),
-        contentPadding = PaddingValues(0.dp)
+//        colors = ButtonDefaults.buttonColors(containerColor = color),
+        contentPadding = PaddingValues(0.dp),
+        border = BorderStroke(1.dp, borderBrush),
     ) {
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundBrush, shape = CircleShape),
             contentAlignment = Alignment.Center
         ) {
             Text(

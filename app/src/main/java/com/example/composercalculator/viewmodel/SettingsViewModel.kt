@@ -45,6 +45,9 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val _isNoteEnabled = MutableStateFlow(true)
     val isNoteEnabled: StateFlow<Boolean> = _isNoteEnabled
 
+    private val _showIconButton = MutableStateFlow(true)
+    val showIconButton: StateFlow<Boolean> = _showIconButton
+
     init {
         // Загружаем настройки при старте
         viewModelScope.launch {
@@ -72,6 +75,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             _isSaveSettingsData.value = it.isSaveSettingsData
             _isSwipeEnabled.value = it.isSwipeEnabled
             _isNoteEnabled.value = it.isNoteEnabled
+            _showIconButton.value = it.showIconButton
         }
     }
 
@@ -136,6 +140,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    fun switchIconButton(switch: Boolean) {
+        viewModelScope.launch {
+            saveSetting { _showIconButton.value = switch }
+        }
+    }
+
     private suspend fun saveSetting(updateState: suspend () -> Unit) {
         // Обновляем состояние в UI
         updateState()
@@ -153,7 +163,8 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
                 isSaveHistoryData = _isSaveHistoryData.value,
                 isSaveSettingsData = _isSaveSettingsData.value,
                 isSwipeEnabled = _isSwipeEnabled.value,
-                isNoteEnabled = _isNoteEnabled.value
+                isNoteEnabled = _isNoteEnabled.value,
+                showIconButton = _showIconButton.value
             )
         )
     }

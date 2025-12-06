@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,6 +33,7 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composercalculator.R
 import com.example.composercalculator.view.components.CalculatorButtonGrid
@@ -41,6 +45,9 @@ import com.example.composercalculator.ui.theme.Orange
 import com.example.composercalculator.viewmodel.CalculatorViewModel
 import com.example.composercalculator.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
+import androidx.compose.material3.Text
+import androidx.compose.runtime.collectAsState
+import com.example.composercalculator.ui.theme.DarkGray
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -69,6 +76,9 @@ fun CalculatorScreen(
     val onEvent = viewModelCalculation::onEvent
     val history = viewModelCalculation.history
 //    val history by viewModel.history.collectAsState()
+
+//    val showHistoryButton = viewModelSettings.showHistoryButton.collectAsState().value
+    val showIconButton = viewModelSettings.showIconButton.collectAsState().value
 
     LaunchedEffect(sheetState.isVisible) {
         if (!sheetState.isVisible) {
@@ -114,25 +124,51 @@ fun CalculatorScreen(
                 ) {
 
                     if (showHistoryButton) {
-                        IconButton(onClick = { showHistorySheet = true }) {
-                            Icon(
-                                modifier = Modifier.size(40.dp),
-                                painter = painterResource(id = R.drawable.ic_outline_list),
-                                contentDescription = "История вычислений",
-                                tint = Orange
-                            )
+                        if (showIconButton) {
+                            IconButton(onClick = { showHistorySheet = true }) {
+                                Icon(
+                                    modifier = Modifier.size(40.dp),
+                                    painter = painterResource(id = R.drawable.ic_outline_list),
+                                    contentDescription = "История вычислений",
+                                    tint = Orange
+                                )
+                            }
+                        } else {
+                            Button(
+                                onClick = { showHistorySheet = true },
+                                colors = ButtonDefaults.buttonColors(containerColor = DarkGray)
+                            ) {
+                                Text(
+                                    text = "История",
+                                    fontSize = 14.sp, // Уменьшаем размер шрифта для компактности
+                                    color = MaterialTheme.colors.onPrimary // Цвет текста
+                                )
+                            }
                         }
                     } else {
                         Spacer(modifier = Modifier.size(40.dp))
                     }
 
-                    IconButton(onClick = onNavigateToSettings) {
-                        Icon(
-                            modifier = Modifier.size(40.dp),
-                            painter = painterResource(id = R.drawable.ic_settings),
-                            contentDescription = "Настройки приложения",
-                            tint = Orange
-                        )
+                    if (showIconButton) {
+                        IconButton(onClick = onNavigateToSettings) {
+                            Icon(
+                                modifier = Modifier.size(40.dp),
+                                painter = painterResource(id = R.drawable.ic_settings),
+                                contentDescription = "Настройки приложения",
+                                tint = Orange
+                            )
+                        }
+                    } else {
+                        Button(
+                            onClick = onNavigateToSettings,
+                            colors = ButtonDefaults.buttonColors(containerColor = DarkGray)
+                        ) {
+                            Text(
+                                text = "Настройки",
+                                fontSize = 14.sp,
+                                color = MaterialTheme.colors.onPrimary // Цвет текста
+                            )
+                        }
                     }
                 }
 

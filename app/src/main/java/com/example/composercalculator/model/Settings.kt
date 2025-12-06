@@ -16,4 +16,5 @@ data class Settings(
     var isSaveSettingsData: Boolean = true,
     var isSwipeEnabled: Boolean = true,
     var isNoteEnabled: Boolean = true,
+    var showIconButton: Boolean = true,
 )

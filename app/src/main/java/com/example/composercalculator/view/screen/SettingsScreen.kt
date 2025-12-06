@@ -72,6 +72,7 @@ fun SettingsScreen(
     val isNoteEnabled = viewModel.isNoteEnabled.collectAsState()
     val isSaveHistoryData = viewModel.isSaveHistoryData.collectAsState()
     val isSaveSettingsData = viewModel.isSaveSettingsData.collectAsState()
+    val showIconButton = viewModel.showIconButton.collectAsState()
 
     Scaffold(
         containerColor = Color(0xFF161616), // Фон всего экрана
@@ -143,6 +144,27 @@ fun SettingsScreen(
                     Text(text = "Создать тему")
                 }
 
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            SettingsGroup(title = "Внешний вид") {
+                SettingsRow(
+                    title = "Отображать иконки",
+                    subtitle = "Вместо кнопок-иконок будут отображаться кнопки с текстом",
+                    modifier = Modifier.padding(vertical = 4.dp)
+                ) {
+                    Switch(
+                        checked = showIconButton.value,
+                        onCheckedChange = { viewModel.switchIconButton(it) },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            checkedTrackColor = Orange,
+                            uncheckedThumbColor = Color.White,
+                            uncheckedTrackColor = Color.Gray
+                        )
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(24.dp))

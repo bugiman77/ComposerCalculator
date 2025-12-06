@@ -15,5 +15,6 @@ data class Settings(
     val isSaveHistoryEnabled: Boolean = true,
     val isSaveSettingsEnabled: Boolean = true,
     val isSwipeEnabled: Boolean = true,
-    val isNoteEnabled: Boolean = true
+    val isNoteEnabled: Boolean = true,
+    var showIconButton: Boolean = true,
 )

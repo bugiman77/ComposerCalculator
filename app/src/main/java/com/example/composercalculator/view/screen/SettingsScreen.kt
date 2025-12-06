@@ -130,15 +130,15 @@ fun SettingsScreen(
                 }
 
                 Button(
-                    onClick = { /* Handle click */ },
+                    onClick = { },
                     modifier = Modifier
                         .fillMaxWidth() // Кнопка на всю ширину
-                        .padding(16.dp), // Отступы по краям
+                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp), // Отступы по краям
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF007AFF), // Синий цвет в стиле iOS
                         contentColor = Color.White // Белый текст
                     ),
-                    shape = MaterialTheme.shapes.medium // Округлые углы
+                    shape = MaterialTheme.shapes.large // Округлые углы
                 ) {
                     Text(text = "Создать тему")
                 }
@@ -250,7 +250,7 @@ fun SettingsScreen(
                 HorizontalDivider(color = Color(0xFF3A3A3C))
 
                 // Настройка формата чисел
-                Column(modifier = Modifier.padding(top = 8.dp)) {
+                /*Column(modifier = Modifier.padding(top = 8.dp)) {
                     Text(
                         text = "Формат чисел",
                         color = Color.White,
@@ -267,7 +267,7 @@ fun SettingsScreen(
                         isSelected = decimalFormat.value == "1 234,56",
                         onClick = { viewModel.onDecimalFormatChange("1 234,56") }
                     )
-                }
+                }*/
             }
 
             Spacer(modifier = Modifier.height(24.dp))

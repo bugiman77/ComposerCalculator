@@ -17,7 +17,9 @@ data class CalculationHistoryItem(
     val expression: String,
     val result: String,
     var label: String? = null,
-    val timestamp: Long = System.currentTimeMillis()
+    val timestamp: Long = System.currentTimeMillis(),
+    val isEditedExpression: Boolean = false,
+    val timestampEditedExpression: Long? = null
 ) {
 
     /**

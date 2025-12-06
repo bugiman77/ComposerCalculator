@@ -118,7 +118,7 @@ fun CalculatorScreen(
                             Icon(
                                 modifier = Modifier.size(40.dp),
                                 painter = painterResource(id = R.drawable.ic_outline_list),
-                                contentDescription = "История",
+                                contentDescription = "История вычислений",
                                 tint = Orange
                             )
                         }
@@ -130,7 +130,7 @@ fun CalculatorScreen(
                         Icon(
                             modifier = Modifier.size(40.dp),
                             painter = painterResource(id = R.drawable.ic_settings),
-                            contentDescription = "Настройки",
+                            contentDescription = "Настройки приложения",
                             tint = Orange
                         )
                     }

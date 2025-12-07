@@ -1,7 +1,5 @@
 package com.example.composercalculator.view.screen
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,10 +39,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
 import com.example.composercalculator.BuildConfig
 import com.example.composercalculator.R
-import com.example.composercalculator.telegram.openTelegramChat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,14 +103,9 @@ private fun AppHeader() {
                 .clip(RoundedCornerShape(24.dp))
                 .background(Color.DarkGray)
         )
-        /*Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "Composer Calculator",
-            color = Color.White,
-            fontSize = 22.sp,
-            fontWeight = FontWeight.Bold
-        )*/
+
         Spacer(modifier = Modifier.height(24.dp))
+
         Text(
             text = "Версия ${BuildConfig.VERSION_NAME}",
             color = Color.Gray,

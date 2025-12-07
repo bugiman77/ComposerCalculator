@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.example.composercalculator.model.Settings
+import com.example.composercalculator.data.local.db.entity.Settings
 import kotlinx.coroutines.flow.Flow
 
 @Dao

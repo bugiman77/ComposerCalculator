@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.composercalculator.data.local.db.AppDatabase
 import com.example.composercalculator.data.local.db.dao.SettingsDao
-import com.example.composercalculator.model.Settings
+import com.example.composercalculator.data.local.db.entity.Settings
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -169,4 +169,3 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         )
     }
 }
-

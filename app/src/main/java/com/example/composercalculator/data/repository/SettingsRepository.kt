@@ -1,7 +1,7 @@
 package com.example.composercalculator.data.repository
 
 import com.example.composercalculator.data.local.db.dao.SettingsDao
-import com.example.composercalculator.model.Settings
+import com.example.composercalculator.data.local.db.entity.Settings
 import kotlinx.coroutines.flow.Flow
 
 class SettingsRepository(

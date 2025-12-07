@@ -5,16 +5,16 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "settings")
 data class Settings(
-    @PrimaryKey val id: Int = 0,
-    val isDarkTheme: Boolean = true,
-    val isSystemTheme: Boolean = false,
-    val showHistoryButton: Boolean = true,
-    val systemFontSize: Float = 80f,
-    val displayFontSize: Float = 80f,
-    val decimalFormat: String = "1,234.56",
-    val isSaveHistoryEnabled: Boolean = true,
-    val isSaveSettingsEnabled: Boolean = true,
-    val isSwipeEnabled: Boolean = true,
-    val isNoteEnabled: Boolean = true,
+    @PrimaryKey var id: Int,
+    var isDarkTheme: Boolean = true,
+    var isSystemTheme: Boolean = false,
+    var showHistoryButton: Boolean = true,
+    var systemFontSize: Boolean = true,
+    var displayFontSize: Float = 80f,
+    var decimalFormat: String = "1,234.56",
+    var isSaveHistoryData: Boolean = true,
+    var isSaveSettingsData: Boolean = true,
+    var isSwipeEnabled: Boolean = true,
+    var isNoteEnabled: Boolean = true,
     var showIconButton: Boolean = true,
 )

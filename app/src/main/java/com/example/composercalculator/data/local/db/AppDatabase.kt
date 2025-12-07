@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.composercalculator.data.local.db.dao.SettingsDao
-import com.example.composercalculator.model.Settings
+import com.example.composercalculator.data.local.db.entity.Settings
 
 @Database(entities = [Settings::class], version = 5)
 abstract class AppDatabase : RoomDatabase() {

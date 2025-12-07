@@ -96,6 +96,7 @@ fun SettingsScreen(
             SettingsGroup(title = "Тема приложения") {
                 SettingsRow(
                     title = "Системная тема",
+                    subtitle = "Использовать тему Вашей операционной системы",
                     modifier = Modifier.padding(vertical = 4.dp)
                 ) {
                     Switch(
@@ -115,6 +116,7 @@ fun SettingsScreen(
 
                     SettingsRow(
                         title = "Тёмная тема",
+                        subtitle = "Принудительное включение темного оформления",
                         modifier = Modifier.padding(vertical = 4.dp)
                     ) {
                         Switch(
@@ -172,6 +174,7 @@ fun SettingsScreen(
             SettingsGroup(title = "История вычислений") {
                 SettingsRow(
                     title = "Кнопка истории",
+                    subtitle = "Отображать кнопку истории вычислений в левом верхнем углу главного экрана",
                     modifier = Modifier.padding(vertical = 4.dp)
                 ) {
                     Switch(
@@ -191,6 +194,7 @@ fun SettingsScreen(
 
                     SettingsRow(
                         title = "Использовать свайп",
+                        subtitle = "Для удаления элемента истории можно включить использование свайпа",
                         modifier = Modifier.padding(vertical = 4.dp)
                     ) {
                         Switch(
@@ -209,6 +213,7 @@ fun SettingsScreen(
 
                     SettingsRow(
                         title = "Поле для заметки",
+                        subtitle = "Для пометок к вычисленному выражению",
                         modifier = Modifier.padding(vertical = 4.dp)
                     ) {
                         Switch(
@@ -232,6 +237,7 @@ fun SettingsScreen(
                 // Настройка размера шрифта
                 SettingsRow(
                     title = "Системный размер шрифта",
+                    subtitle = "Использовать размер шрифта операционной системы",
                     modifier = Modifier.padding(vertical = 4.dp)
                 ) {
                     Switch(
@@ -252,6 +258,7 @@ fun SettingsScreen(
 
                     SettingsRow(
                         title = "Размер шрифта",
+                        subtitle = "Настройка изменения размера шрифта в приложении"
                     ) {
                         Slider(
                             value = displayFontSize.value,
@@ -337,6 +344,7 @@ fun SettingsScreen(
             SettingsGroup(title = "Приложение") {
                 SettingsRow(
                     title = "О приложении",
+                    subtitle = "Информация о приложении",
                     modifier = Modifier
                         .clickable { onNavigateToAbout() }
                         .padding(vertical = 4.dp)

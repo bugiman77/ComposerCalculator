@@ -21,6 +21,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
+    id("com.chaquo.python")
 }
 
 android {
@@ -40,6 +41,17 @@ android {
 
         vectorDrawables {
             useSupportLibrary = true
+        }
+
+        ndk {
+            abiFilters.addAll(
+                listOf(
+                    "armeabi-v7a",
+                    "arm64-v8a",
+                    "x86",
+                    "x86_64"
+                )
+            )
         }
     }
 
@@ -65,6 +77,14 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+}
+
+chaquopy {
+    defaultConfig {
+        pip {
+            install("simpleeval")
+        }
     }
 }
 

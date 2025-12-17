@@ -4,6 +4,7 @@ import com.example.composercalculator.data.local.db.dao.SettingsDao
 import com.example.composercalculator.data.local.db.entity.Settings
 import kotlinx.coroutines.flow.Flow
 
+/*
 class SettingsRepository(
     private val settingsDao: SettingsDao // Получаем доступ к DAO, который взаимодействует с базой данных
 ) {
@@ -30,4 +31,4 @@ class SettingsRepository(
             settingsDao.insertSettings(settings) // Сохраняем в базе
         }
     }
-}
+}*/

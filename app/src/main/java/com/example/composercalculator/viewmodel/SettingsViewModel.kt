@@ -5,7 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.composercalculator.data.local.db.AppDatabase
 import com.example.composercalculator.data.local.db.dao.SettingsDao
+//import com.example.composercalculator.data.local.db.dao.ThemeAppBuiltInDao
 import com.example.composercalculator.data.local.db.entity.Settings
+//import com.example.composercalculator.data.local.db.entity.ThemeAppBuiltIn
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -13,6 +15,7 @@ import kotlinx.coroutines.launch
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
 
     private val settingsDao: SettingsDao = AppDatabase.getDatabase(application).settingsDao()
+//    private val themeAppBuiltInDao: ThemeAppBuiltInDao = AppDatabase.getDatabase(application).themeAppBuiltInDao()
 
     // Состояния, которые будет наблюдать UI
     // SETTINGS

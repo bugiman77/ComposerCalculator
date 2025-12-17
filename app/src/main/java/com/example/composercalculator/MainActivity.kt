@@ -7,12 +7,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.composercalculator.navigation.AppNavigation
 import com.example.composercalculator.ui.theme.ComposerCalculatorTheme
+import com.example.composercalculator.viewmodel.CalculatorViewModel
 import com.example.composercalculator.viewmodel.SettingsViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         val viewModelSettings = SettingsViewModel(application = application)
+        val viewModelCalculation = CalculatorViewModel(application = application)
 
         installSplashScreen()
 
@@ -21,7 +23,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             ComposerCalculatorTheme {
                 AppNavigation(
-                    settingsViewModel = viewModelSettings
+                    settingsViewModel = viewModelSettings,
+                    calculatorViewModel = viewModelCalculation
                 )
             }
         }

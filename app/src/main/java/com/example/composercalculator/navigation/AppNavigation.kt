@@ -2,10 +2,6 @@ package com.example.composercalculator.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,16 +18,15 @@ import com.example.composercalculator.viewmodel.SettingsViewModel
 
 @Composable
 fun AppNavigation(
-    settingsViewModel: SettingsViewModel = viewModel()
+    settingsViewModel: SettingsViewModel = viewModel(),
+    calculatorViewModel: CalculatorViewModel = viewModel()
 ) {
     val navController = rememberNavController()
-
-//    val settingsViewModel: SettingsViewModel = viewModel()
 
     val showHistoryButton = settingsViewModel.showHistoryButton.collectAsState()
 
     val animationDuration = 300 // Длительность анимации в миллисекундах
-    val animationSpec = tween<IntOffset>(animationDuration)
+    val animationSpec = tween<IntOffset>(durationMillis = animationDuration)
 
     NavHost(
         navController = navController,
@@ -42,26 +37,24 @@ fun AppNavigation(
             // Анимация исчезновения (уезжает влево при переходе на Настройки)
             exitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
                     animationSpec
                 )
             },
             // Анимация появления при возврате с Настроек
             popEnterTransition = {
                 slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec
                 )
             }
         ) {
-            val viewModel: CalculatorViewModel = viewModel()
             CalculatorScreen(
-                uiState = viewModel.uiState,
-                onEvent = viewModel::onEvent,
                 onNavigateToSettings = { navController.navigate(Routes.SETTINGS) },
                 onNavigateToHistory = { navController.navigate(Routes.HISTORY) },
                 showHistoryButton = showHistoryButton.value,
-                viewModelSettings = settingsViewModel
+                viewModelSettings = settingsViewModel,
+                viewModelCalculation = calculatorViewModel
             )
         }
 
@@ -70,34 +63,34 @@ fun AppNavigation(
             // Анимация появления (экран въезжает слева)
             enterTransition = {
                 slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
                     animationSpec
                 )
             },
             // Анимация исчезновения (уезжает влево при переходе на "О приложении")
             exitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
                     animationSpec
                 )
             },
             // Анимация появления при возврате назад с "О приложении"
             popEnterTransition = {
                 slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec
                 )
             },
             // Анимация исчезновения при возврате на главный экран
             popExitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec
                 )
             }
         ) {
             SettingsScreen(
-                viewModel = settingsViewModel,
+                viewModelSettings = settingsViewModel,
                 onNavigateBack = { navController.popBackStack() },
                 onNavigateToAbout = { navController.navigate(Routes.ABOUT) },
             )
@@ -107,25 +100,25 @@ fun AppNavigation(
             route = Routes.ABOUT,
             enterTransition = {
                 slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
                     animationSpec
                 )
             },
             exitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
                     animationSpec
                 )
             },
             popEnterTransition = {
                 slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec
                 )
             },
             popExitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec
                 )
             }
@@ -141,25 +134,25 @@ fun AppNavigation(
             route = Routes.PRIVACY_POLICY,
             enterTransition = {
                 slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
                     animationSpec
                 )
             },
             exitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
                     animationSpec
                 )
             },
             popEnterTransition = {
                 slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec
                 )
             },
             popExitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec
                 )
             }

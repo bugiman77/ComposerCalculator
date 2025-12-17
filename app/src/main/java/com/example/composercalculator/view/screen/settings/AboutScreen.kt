@@ -1,4 +1,4 @@
-package com.example.composercalculator.view.screen
+package com.example.composercalculator.view.screen.settings
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,16 +24,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -64,9 +59,7 @@ fun AboutScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-//                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp),
-//            horizontalAlignment = Alignment.CenterHorizontally
             contentAlignment = Alignment.Center
         ) {
             Column(
@@ -95,16 +88,17 @@ private fun AppHeader() {
         modifier = Modifier.padding(top = 24.dp, bottom = 16.dp)
     ) {
         Image(
+//            TODO исправить на xml файл
             painter = painterResource(id = R.drawable.ic_launcher_foreground),
             contentDescription = "Иконка приложения",
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(120.dp)
-                .clip(RoundedCornerShape(24.dp))
+                .clip(RoundedCornerShape(size = 24.dp))
                 .background(Color.DarkGray)
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(height = 24.dp))
 
         Text(
             text = "Версия ${BuildConfig.VERSION_NAME}",
@@ -119,25 +113,21 @@ private fun InfoLinksGroup(
     onNavigateToPrivacy: () -> Unit
 ) {
 
-    var showDialog by remember { mutableStateOf(true) }
-    val context = LocalContext.current
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(Color(0xFF2C2C2E))
+            .clip(shape = RoundedCornerShape(size = 12.dp))
+            .background(Color(color = 0xFF2C2C2E))
     ) {
         InfoLinkRow(title = "Оценить в Google Play") { }
-        HorizontalDivider(color = Color(0xFF3A3A3C))
+        HorizontalDivider(color = Color(color = 0xFF3A3A3C))
         InfoLinkRow(
             title = "Политика конфиденциальности",
             onClick = onNavigateToPrivacy
         )
-        HorizontalDivider(color = Color(0xFF3A3A3C))
+        HorizontalDivider(color = Color(color = 0xFF3A3A3C))
         InfoLinkRow(
             title = "Связаться с автором",
-//            onClick = { openTelegramChat(context, showDialog) { showDialog = !it } }
         ) { }
     }
 }
@@ -157,7 +147,7 @@ private fun InfoLinkRow(title: String, onClick: () -> Unit) {
             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
             contentDescription = null,
             tint = Color.Gray,
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier.size(size = 20.dp)
         )
     }
 }

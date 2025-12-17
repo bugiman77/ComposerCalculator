@@ -10,14 +10,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.composercalculator.view.screen.CalculatorScreen
+import com.example.composercalculator.view.screen.main.CalculatorScreen
 import com.example.composercalculator.viewmodel.CalculatorViewModel
-import com.example.composercalculator.view.screen.AboutScreen
-import com.example.composercalculator.view.screen.SettingsScreen
+import com.example.composercalculator.view.screen.settings.AboutScreen
+import com.example.composercalculator.view.screen.settings.SettingsScreen
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.unit.IntOffset
-import com.example.composercalculator.view.screen.PrivacyPolicyScreen
+import com.example.composercalculator.view.screen.settings.PrivacyPolicyScreen
 import com.example.composercalculator.viewmodel.SettingsViewModel
 
 @Composable

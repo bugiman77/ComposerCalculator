@@ -5,7 +5,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.composercalculator.model.CalculationHistoryItem
+import com.example.composercalculator.data.local.db.entity.History
 
 @Dao
 interface HistoryDao {

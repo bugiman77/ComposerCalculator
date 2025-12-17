@@ -1,4 +1,4 @@
-package com.example.composercalculator.view.screen
+package com.example.composercalculator.view.screen.main
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -29,18 +29,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composercalculator.R
-import com.example.composercalculator.view.components.CalculatorButtonGrid
-import com.example.composercalculator.view.components.DisplayArea
-import com.example.composercalculator.view.components.HistoryBottomSheet
-import com.example.composercalculator.model.CalculatorEvent
-import com.example.composercalculator.model.CalculatorState
+import com.example.composercalculator.view.components.calculation.CalculatorButtonGrid
+import com.example.composercalculator.view.components.calculation.DisplayArea
+import com.example.composercalculator.view.components.calculation.HistoryBottomSheet
 import com.example.composercalculator.ui.theme.Orange
 import com.example.composercalculator.viewmodel.CalculatorViewModel
 import com.example.composercalculator.viewmodel.SettingsViewModel
@@ -52,8 +48,6 @@ import com.example.composercalculator.ui.theme.DarkGray
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CalculatorScreen(
-    uiState: CalculatorState,
-    onEvent: (CalculatorEvent) -> Unit,
     onNavigateToSettings: () -> Unit,
     onNavigateToHistory: () -> Unit,
     showHistoryButton: Boolean,
@@ -61,26 +55,13 @@ fun CalculatorScreen(
     viewModelSettings: SettingsViewModel = viewModel(),
 ) {
 
-    val clipboardManager = LocalClipboardManager.current
-
-    val displayText = remember(uiState) {
-        val text = uiState.number1 + (uiState.operation ?: "") + uiState.number2
-        text.ifEmpty { "0" }
-    }
-
-    var showHistorySheet by remember { mutableStateOf(false) }
+    var showHistorySheet by remember { mutableStateOf(value = false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
 
-    val uiState = viewModelCalculation.uiState
-    val onEvent = viewModelCalculation::onEvent
-    val history = viewModelCalculation.history
-//    val history by viewModel.history.collectAsState()
-
-//    val showHistoryButton = viewModelSettings.showHistoryButton.collectAsState().value
     val showIconButton = viewModelSettings.showIconButton.collectAsState().value
 
-    LaunchedEffect(sheetState.isVisible) {
+    LaunchedEffect(key1 = sheetState.isVisible) {
         if (!sheetState.isVisible) {
             showHistorySheet = false
         }
@@ -88,9 +69,9 @@ fun CalculatorScreen(
 
     if (showHistorySheet) {
         HistoryBottomSheet(
-            history = history,
+//            history = history,
             sheetState = sheetState,
-            onAction = onEvent,
+//            onAction = onEvent,
             onDismiss = {
                 scope.launch {
                     sheetState.hide()
@@ -127,8 +108,8 @@ fun CalculatorScreen(
                         if (showIconButton) {
                             IconButton(onClick = { showHistorySheet = true }) {
                                 Icon(
-                                    modifier = Modifier.size(40.dp),
-                                    painter = painterResource(id = R.drawable.ic_outline_list),
+                                    modifier = Modifier.size(size = 32.dp),
+                                    painter = painterResource(id = R.drawable.list),
                                     contentDescription = "История вычислений",
                                     tint = Orange
                                 )
@@ -146,14 +127,14 @@ fun CalculatorScreen(
                             }
                         }
                     } else {
-                        Spacer(modifier = Modifier.size(40.dp))
+                        Spacer(modifier = Modifier.size(size = 40.dp))
                     }
 
                     if (showIconButton) {
                         IconButton(onClick = onNavigateToSettings) {
                             Icon(
-                                modifier = Modifier.size(40.dp),
-                                painter = painterResource(id = R.drawable.ic_settings),
+                                modifier = Modifier.size(size = 32.dp),
+                                painter = painterResource(id = R.drawable.gear),
                                 contentDescription = "Настройки приложения",
                                 tint = Orange
                             )
@@ -173,17 +154,13 @@ fun CalculatorScreen(
                 }
 
                 DisplayArea(
-                    displayText = displayText,
-                    onCopy = { textToCopy ->
-                        clipboardManager.setText(AnnotatedString(textToCopy))
-                    }
+                    viewModelCalculation = viewModelCalculation
                 )
 
                 // Сетка кнопок
                 CalculatorButtonGrid(
-                    uiState = uiState,
-                    viewModel = viewModelSettings,
-                    onEvent = onEvent
+                    viewModelSetting = viewModelSettings,
+                    viewModelCalculation = viewModelCalculation
                 )
             }
         }

@@ -1,4 +1,4 @@
-package com.example.composercalculator.view.screen
+package com.example.composercalculator.view.screen.settings
 
 import android.annotation.SuppressLint
 import android.webkit.WebView

@@ -1,11 +1,21 @@
-package com.example.composercalculator.view.components
+package com.example.composercalculator.view.components.calculation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.DividerDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.composercalculator.viewmodel.CalculatorViewModel
 import com.example.composercalculator.viewmodel.SettingsViewModel
 
 @Composable
@@ -36,17 +45,17 @@ fun StyledDropdownMenu(
     Popup(
         alignment = Alignment.TopStart,
         onDismissRequest = onDismissRequest,
-        offset = with(density) {
+        offset = with(receiver = density) {
             IntOffset(x = 0.dp.roundToPx(), y = -90.dp.roundToPx())
         }
     ) {
         Column(
             modifier = Modifier
-                .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
-                .clip(androidx.compose.foundation.shape.RoundedCornerShape(20.dp))
+                .shadow(elevation = 8.dp, shape = RoundedCornerShape(size = 20.dp))
+                .clip(shape = RoundedCornerShape(size = 20.dp))
                 .background(Color(0xFF2C2C2E))
                 .padding(vertical = 8.dp)
-                .width(220.dp)
+                .width(width = 220.dp)
         ) {
             StyledMenuItem(text = "Инженерный") {
                 onDismissRequest()
@@ -64,7 +73,7 @@ fun StyledDropdownMenu(
                 StyledMenuItemWithSwitch(
                     text = "Тёмная тема",
                     checked = isDarkTheme.value,
-                    onCheckedChange = { viewModel.onDarkThemeChange(it) }
+                    onCheckedChange = { viewModel.onDarkThemeChange(isDark = it) }
                 )
             }
 
@@ -117,7 +126,7 @@ private fun StyledMenuItemWithSwitch(
             onCheckedChange = onCheckedChange,
             colors = SwitchDefaults.colors( // Стилизуем переключатель
                 checkedThumbColor = Color.White,
-                checkedTrackColor = Color(0xFF34C759), // Зеленый цвет iOS
+                checkedTrackColor = Color(color = 0xFF34C759), // Зеленый цвет iOS
                 uncheckedThumbColor = Color.White,
                 uncheckedTrackColor = Color.Gray.copy(alpha = 0.5f),
                 uncheckedBorderColor = Color.Transparent

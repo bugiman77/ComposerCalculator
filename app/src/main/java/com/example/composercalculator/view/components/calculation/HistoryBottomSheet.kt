@@ -1,9 +1,5 @@
-package com.example.composercalculator.view.components
+package com.example.composercalculator.view.components.calculation
 
-//noinspection UsingMaterialAndMaterial3Libraries
-//noinspection UsingMaterialAndMaterial3Libraries
-//noinspection UsingMaterialAndMaterial3Libraries
-//noinspection UsingMaterialAndMaterial3Libraries
 import android.icu.util.Calendar
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
@@ -43,7 +39,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composercalculator.model.CalculationHistoryItem
@@ -60,25 +55,25 @@ import com.example.composercalculator.ui.theme.Orange
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryBottomSheet(
-    history: List<CalculationHistoryItem>,
-    onAction: (CalculatorEvent) -> Unit,
+//    history: List<CalculationHistoryItem>,
+    onAction: (CalculatorEvent) -> Unit = {},
     sheetState: SheetState,
     onDismiss: () -> Unit
 ) {
-    val groupedHistory = remember(history) {
+/*    val groupedHistory = remember(history) {
         history.groupBy { it.getFormattedDate() }
-    }
+    }*/
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        containerColor = Color(0xFF1C1C1E),
+        containerColor = Color(color = 0xFF1C1C1E),
         dragHandle = {
             Box(
                 modifier = Modifier
                     .padding(vertical = 8.dp)
-                    .width(40.dp)
-                    .height(4.dp)
+                    .width(width = 40.dp)
+                    .height(height = 4.dp)
                     .clip(CircleShape)
                     .background(Color.Gray)
             )
@@ -98,16 +93,16 @@ fun HistoryBottomSheet(
                 fontWeight = FontWeight.Bold
             )
             TextButton(onClick = { onAction(CalculatorEvent.ClearHistory) }) {
-                Text("Очистить", color = Color.Red, fontSize = 16.sp)
+                Text(text = "Очистить", color = Color.Red, fontSize = 16.sp)
             }
         }
 
         LazyColumn(
-            modifier = Modifier.fillMaxHeight(0.7f), // Увеличим высоту
+            modifier = Modifier.fillMaxHeight(fraction = 0.6f), // Увеличим высоту
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp) // Расстояние между группами
+            verticalArrangement = Arrangement.spacedBy(space = 16.dp) // Расстояние между группами
         ) {
-            if (groupedHistory.isEmpty()) {
+            /*if (groupedHistory.isEmpty()) {
                 item {
                     Text(
                         text = "История вычислений пуста",
@@ -129,7 +124,7 @@ fun HistoryBottomSheet(
                         onAction = onAction,
                     )
                 }
-            }
+            }*/
         }
     }
 }
@@ -145,8 +140,8 @@ private fun HistoryGroup(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFF2C2C2E))
+            .clip(shape = RoundedCornerShape(size = 16.dp))
+            .background(Color(color = 0xFF2C2C2E))
             .animateContentSize() // Анимация изменения размера
     ) {
         GroupHeader(
@@ -186,7 +181,7 @@ private fun GroupHeader(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = formatDateForHeader(date), // Преобразуем "2025-10-31" в "Сегодня" или "31 октября"
+            text = formatDateForHeader(dateString = date), // Преобразуем "2025-10-31" в "Сегодня" или "31 октября"
             color = Color.White,
             fontSize = 17.sp,
             fontWeight = FontWeight.SemiBold
@@ -195,7 +190,7 @@ private fun GroupHeader(
             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
             contentDescription = "Свернуть/Развернуть",
             tint = Color.Gray,
-            modifier = Modifier.rotate(rotationAngle)
+            modifier = Modifier.rotate(degrees = rotationAngle)
         )
     }
 }
@@ -226,7 +221,7 @@ private fun HistoryItemRow(
     isNoteEnabled: Boolean = true
 ) {
 
-    var labelText by remember(item.id) { mutableStateOf(item.label ?: "") }
+    var labelText by remember(key1 = item.id) { mutableStateOf(value = item.label ?: "") }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -257,10 +252,10 @@ private fun HistoryItemRow(
 
             Button(
                 onClick = { onAction(CalculatorEvent.RecallCalculation(item.expression)) },
-                modifier = Modifier.weight(1f), // Занимает 1 долю (половину)
-                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.weight(weight = 1f), // Занимает 1 долю (половину)
+                shape = RoundedCornerShape(size = 12.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFDEAA45) // Синий цвет
+                    containerColor = Color(color = 0xFFDEAA45) // Синий цвет
                 ),
                 contentPadding = PaddingValues(vertical = 8.dp)
             ) {
@@ -268,15 +263,15 @@ private fun HistoryItemRow(
             }
 
             Spacer(
-                modifier = Modifier.width(8.dp)
+                modifier = Modifier.width(width = 8.dp)
             )
 
             Button(
                 onClick = { onAction(CalculatorEvent.DeleteHistoryItem(item.id)) },
-                modifier = Modifier.weight(1f), // Занимает 1 долю (половину)
-                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.weight(weight = 1f), // Занимает 1 долю (половину)
+                shape = RoundedCornerShape(size = 12.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFEE4848) // Синий цвет
+                    containerColor = Color(color = 0xFFEE4848) // Синий цвет
                 ),
                 contentPadding = PaddingValues(vertical = 8.dp)
             ) {
@@ -293,7 +288,7 @@ private fun HistoryItemRow(
                 onValueChange = { newText ->
                     labelText = newText
                     // Отправляем событие для сохранения в ViewModel
-                    onAction(CalculatorEvent.UpdateHistoryLabel(item.id, newText))
+                    onAction(CalculatorEvent.UpdateHistoryLabel(item.id, label = newText))
                 },
                 placeholder = { Text("Добавить заметку...", color = Color.Gray) },
                 modifier = Modifier.fillMaxWidth(),
@@ -309,7 +304,7 @@ private fun HistoryItemRow(
                     focusedPlaceholderColor = Color.Gray,
                     unfocusedPlaceholderColor = Color.Gray
                 ),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(size = 12.dp)
             )
         }
 

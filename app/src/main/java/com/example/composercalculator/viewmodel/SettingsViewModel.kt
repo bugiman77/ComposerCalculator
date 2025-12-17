@@ -15,37 +15,38 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val settingsDao: SettingsDao = AppDatabase.getDatabase(application).settingsDao()
 
     // Состояния, которые будет наблюдать UI
-    private val _isDarkTheme = MutableStateFlow(true)
+    // SETTINGS
+    private val _isDarkTheme = MutableStateFlow(value = true)
     val isDarkTheme: StateFlow<Boolean> = _isDarkTheme
 
-    private val _isSystemTheme = MutableStateFlow(true)
+    private val _isSystemTheme = MutableStateFlow(value = true)
     val isSystemTheme: StateFlow<Boolean> = _isSystemTheme
 
-    private val _showHistoryButton = MutableStateFlow(true)
+    private val _showHistoryButton = MutableStateFlow(value = true)
     val showHistoryButton: StateFlow<Boolean> = _showHistoryButton
 
-    private val _systemFontSize = MutableStateFlow(true)
+    private val _systemFontSize = MutableStateFlow(value = true)
     val systemFontSize: StateFlow<Boolean> = _systemFontSize
 
-    private val _displayFontSize = MutableStateFlow(80f)
+    private val _displayFontSize = MutableStateFlow(value = 80f)
     val displayFontSize: StateFlow<Float> = _displayFontSize
 
-    private val _decimalFormat = MutableStateFlow("1,234.56")
+    private val _decimalFormat = MutableStateFlow(value = "1,234.56")
     val decimalFormat: StateFlow<String> = _decimalFormat
 
-    private val _isSaveHistoryData = MutableStateFlow(true)
+    private val _isSaveHistoryData = MutableStateFlow(value = true)
     val isSaveHistoryData: StateFlow<Boolean> = _isSaveHistoryData
 
-    private val _isSaveSettingsData = MutableStateFlow(true)
+    private val _isSaveSettingsData = MutableStateFlow(value = true)
     val isSaveSettingsData: StateFlow<Boolean> = _isSaveSettingsData
 
-    private val _isSwipeEnabled = MutableStateFlow(true)
+    private val _isSwipeEnabled = MutableStateFlow(value = true)
     val isSwipeEnabled: StateFlow<Boolean> = _isSwipeEnabled
 
-    private val _isNoteEnabled = MutableStateFlow(true)
+    private val _isNoteEnabled = MutableStateFlow(value = true)
     val isNoteEnabled: StateFlow<Boolean> = _isNoteEnabled
 
-    private val _showIconButton = MutableStateFlow(true)
+    private val _showIconButton = MutableStateFlow(value = true)
     val showIconButton: StateFlow<Boolean> = _showIconButton
 
     init {

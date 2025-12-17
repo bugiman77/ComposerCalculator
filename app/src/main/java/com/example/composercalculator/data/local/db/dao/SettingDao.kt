@@ -13,11 +13,11 @@ interface SettingsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveSettings(settings: Settings)
 
-    @Query("SELECT * FROM settings LIMIT 1")
+    @Query(value = "SELECT * FROM settings LIMIT 1")
     suspend fun getSettings(): Settings?
 
     // Получаем настройки как Flow
-    @Query("SELECT * FROM settings LIMIT 1")
+    @Query(value = "SELECT * FROM settings LIMIT 1")
     fun getSettingsFlow(): Flow<Settings>
 
     // Вставка новых настроек

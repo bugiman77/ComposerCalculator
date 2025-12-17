@@ -1,0 +1,86 @@
+package com.example.composercalculator.view.components.settings.SettingsBlock
+
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import com.example.composercalculator.ui.theme.Orange
+import com.example.composercalculator.view.components.calculation.SettingsGroup
+import com.example.composercalculator.view.components.calculation.SettingsRow
+import com.example.composercalculator.viewmodel.SettingsViewModel
+
+@Composable
+fun HistoryComputing(
+    modifier: Modifier = Modifier,
+    viewModelSettings: SettingsViewModel
+) {
+
+    val isSwipeEnabled = viewModelSettings.isSwipeEnabled.collectAsState()
+    val isNoteEnabled = viewModelSettings.isNoteEnabled.collectAsState()
+    val showHistoryButton = viewModelSettings.showHistoryButton.collectAsState()
+
+    SettingsGroup(title = "История вычислений") {
+        SettingsRow(
+            title = "Кнопка истории",
+            subtitle = "Отображать кнопку истории вычислений в левом верхнем углу главного экрана",
+            modifier = modifier.padding(vertical = 4.dp)
+        ) {
+            Switch(
+                checked = showHistoryButton.value,
+                onCheckedChange = { viewModelSettings.onShowHistoryChange(show = it) },
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = Color.White,
+                    checkedTrackColor = Orange,
+                    uncheckedThumbColor = Color.White,
+                    uncheckedTrackColor = Color.Gray
+                )
+            )
+        }
+
+        if (showHistoryButton.value) {
+            HorizontalDivider(color = Color(color = 0xFF3A3A3C))
+
+            SettingsRow(
+                title = "Использовать свайп",
+                subtitle = "Для удаления элемента истории можно включить использование свайпа",
+                modifier = Modifier.padding(vertical = 4.dp)
+            ) {
+                Switch(
+                    checked = isSwipeEnabled.value,
+                    onCheckedChange = { viewModelSettings.onSaveSwipeDeleteItem(isEnabled = it) },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = Orange,
+                        uncheckedThumbColor = Color.White,
+                        uncheckedTrackColor = Color.Gray
+                    )
+                )
+            }
+
+            HorizontalDivider(color = Color(color = 0xFF3A3A3C))
+
+            SettingsRow(
+                title = "Поле для заметки",
+                subtitle = "Для пометок к вычисленному выражению",
+                modifier = Modifier.padding(vertical = 4.dp)
+            ) {
+                Switch(
+                    checked = isNoteEnabled.value,
+                    onCheckedChange = { viewModelSettings.onSaveNoteItem(isEnabled = it) },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = Orange,
+                        uncheckedThumbColor = Color.White,
+                        uncheckedTrackColor = Color.Gray
+                    )
+                )
+            }
+        }
+    }
+
+}

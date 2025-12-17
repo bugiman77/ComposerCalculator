@@ -1,4 +1,4 @@
-package com.example.composercalculator.view.components
+package com.example.composercalculator.view.components.calculation
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -19,18 +19,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.composercalculator.viewmodel.CalculatorViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ColumnScope.DisplayArea(
-    displayText: String,
-    onCopy: (String) -> Unit
+fun DisplayArea(
+    viewModelCalculation: CalculatorViewModel = viewModel(),
 ) {
-    var fontSize by remember { mutableStateOf(80.sp) }
-    val minFontSize = 28.sp
+    var fontSize by remember { mutableStateOf(value = 80.sp) }
+    val minFontSize = 45.sp
     val scrollState = rememberScrollState()
+    val displayText = viewModelCalculation.expression.collectAsState().value
 
-    LaunchedEffect(displayText) {
+    LaunchedEffect(key1 = displayText) {
         scrollState.animateScrollTo(scrollState.maxValue)
         // Сбрасываем размер шрифта при коротком тексте
         if (displayText.length < 10) {
@@ -41,7 +43,7 @@ fun ColumnScope.DisplayArea(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.27f)
+            .fillMaxHeight(fraction = 0.27f)
             .padding(
                 start = 8.dp,
                 end = 8.dp,
@@ -54,14 +56,15 @@ fun ColumnScope.DisplayArea(
                 .verticalScroll(scrollState)
                 .combinedClickable(
                     onClick = {},
-                    onLongClick = { onCopy(displayText) }
+                    onLongClick = {},
+                    hapticFeedbackEnabled = false,
                 ),
             text = displayText,
             color = Color.White,
             textAlign = TextAlign.End,
             fontSize = fontSize,
-            maxLines = Int.MAX_VALUE,
-            softWrap = true,
+            maxLines = 1,
+            softWrap = false,
             onTextLayout = { textLayoutResult ->
                 if (textLayoutResult.hasVisualOverflow && fontSize > minFontSize) {
                     fontSize *= 0.95f

@@ -1,6 +1,5 @@
 package com.example.composercalculator.data.local.db.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -10,11 +9,11 @@ import com.example.composercalculator.data.local.db.entity.History
 @Dao
 interface HistoryDao {
     @Insert
-    suspend fun insertItem(item: CalculationHistoryItem)
+    suspend fun insertItem(item: History)
 
-    @Query("SELECT * FROM history ORDER BY timestamp DESC")
-    fun getHistory(): LiveData<List<CalculationHistoryItem>>
+    @Query(value = "SELECT * FROM history ORDER BY timestamp DESC")
+    fun getHistory(): History?
 
     @Delete
-    suspend fun deleteItem(item: CalculationHistoryItem)
+    suspend fun deleteItem(item: History)
 }

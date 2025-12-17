@@ -59,13 +59,6 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    init {
-        // Загружаем текущие настройки при инициализации ViewModel
-        viewModelScope.launch {
-            loadSettings()
-        }
-    }
-
     private suspend fun loadSettings() {
         val settings = settingsDao.getSettings()
         settings?.let {
@@ -157,7 +150,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         // Сохраняем изменения в базу данных
         settingsDao.saveSettings(
             Settings(
-                id = 0,  // Если у тебя один объект настроек, id можно фиксировать
+                id = 0,
                 isDarkTheme = _isDarkTheme.value,
                 isSystemTheme = _isSystemTheme.value,
                 showHistoryButton = _showHistoryButton.value,

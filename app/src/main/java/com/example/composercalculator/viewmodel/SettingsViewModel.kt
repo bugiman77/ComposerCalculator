@@ -3,7 +3,7 @@ package com.example.composercalculator.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.composercalculator.data.local.db.AppDatabase
+import com.example.composercalculator.data.local.db.AppDatabaseSetting
 import com.example.composercalculator.data.local.db.dao.SettingsDao
 //import com.example.composercalculator.data.local.db.dao.ThemeAppBuiltInDao
 import com.example.composercalculator.data.local.db.entity.Settings
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val settingsDao: SettingsDao = AppDatabase.getDatabase(application).settingsDao()
+    private val settingsDao: SettingsDao = AppDatabaseSetting.getDatabase(application).settingsDao()
 //    private val themeAppBuiltInDao: ThemeAppBuiltInDao = AppDatabase.getDatabase(application).themeAppBuiltInDao()
 
     // Состояния, которые будет наблюдать UI

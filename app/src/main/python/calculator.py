@@ -1,12 +1,8 @@
-def evaluate_expression(expression_string):
-    """
-    Принимает строку выражения и вычисляет ее с помощью eval.
-    В реальном приложении eval() использовать опасно,
-    но для заглушки подойдет.
-    """
+from simpleeval import simple_eval
+
+
+def evaluate_expression(expression_string: str):
     try:
-        # Используем simpleeval для безопасной оценки выражения
-        result = simpleeval(expr)
-        return result
+        return simple_eval(expression_string)
     except Exception as e:
         return f"Ошибка при оценке выражения: {e}"

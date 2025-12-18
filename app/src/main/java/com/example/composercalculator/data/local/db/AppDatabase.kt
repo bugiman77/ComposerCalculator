@@ -9,7 +9,7 @@ import com.example.composercalculator.data.local.db.dao.SettingsDao
 import com.example.composercalculator.data.local.db.entity.History
 import com.example.composercalculator.data.local.db.entity.Settings
 
-@Database(entities = [Settings::class], version = 7)
+@Database(entities = [Settings::class], version = 8)
 abstract class AppDatabaseSetting : RoomDatabase() {
     abstract fun settingsDao(): SettingsDao
 //    abstract fun historyDao(): HistoryDao
@@ -39,7 +39,7 @@ abstract class AppDatabaseSetting : RoomDatabase() {
 
 }
 
-@Database(entities = [History::class], version = 1)
+@Database(entities = [History::class], version = 2)
 abstract class AppDatabaseHistory : RoomDatabase() {
     abstract fun historyDao(): HistoryDao
 

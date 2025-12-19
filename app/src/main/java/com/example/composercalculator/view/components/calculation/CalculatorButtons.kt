@@ -79,7 +79,7 @@ fun CalculatorButtonGrid(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun BtnCalculation(
+private fun BtnCalculationText(
     modifier: Modifier = Modifier,
     text: String,
     color: Color,
@@ -151,7 +151,7 @@ private fun LineCalculation1(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp) // Расстояние между кнопками
     ) {
-        BtnCalculation(
+        BtnCalculationText(
             text = if (isInputEmpty) "AC" else "C",
             color = LightGray,
             modifier = Modifier.weight(weight = 1f),
@@ -162,7 +162,7 @@ private fun LineCalculation1(
         ) {
             viewModelCalculation.removeLastCharacter()
         }
-        BtnCalculation(
+        BtnCalculationText(
             text = "+/-",
             color = LightGray,
             modifier = Modifier.weight(weight = 1f),
@@ -170,7 +170,7 @@ private fun LineCalculation1(
         ) {
 
         }
-        BtnCalculation(
+        BtnCalculationText(
             text = "%",
             color = LightGray,
             modifier = Modifier.weight(weight = 1f),
@@ -178,7 +178,7 @@ private fun LineCalculation1(
         ) {
             viewModelCalculation.onInput(input = "%")
         }
-        BtnCalculation(
+        BtnCalculationText(
             text = "÷",
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
@@ -199,7 +199,7 @@ private fun LineCalculation2(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
     ) {
-        BtnCalculation(
+        BtnCalculationText(
             text = "7",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
@@ -207,21 +207,21 @@ private fun LineCalculation2(
                 viewModelCalculation.onInput(input = "7")
             }
         )
-        BtnCalculation(
+        BtnCalculationText(
             text = "8",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f)
         ) {
             viewModelCalculation.onInput(input = "8")
         }
-        BtnCalculation(
+        BtnCalculationText(
             text = "9",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f)
         ) {
             viewModelCalculation.onInput(input = "9")
         }
-        BtnCalculation(
+        BtnCalculationText(
             text = "×",
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
@@ -241,28 +241,28 @@ private fun LineCalculation3(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
     ) {
-        BtnCalculation(
+        BtnCalculationText(
             text = "4",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f)
         ) {
             viewModelCalculation.onInput(input = "4")
         }
-        BtnCalculation(
+        BtnCalculationText(
             text = "5",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f)
         ) {
             viewModelCalculation.onInput(input = "5")
         }
-        BtnCalculation(
+        BtnCalculationText(
             text = "6",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f)
         ) {
             viewModelCalculation.onInput(input = "6")
         }
-        BtnCalculation(
+        BtnCalculationText(
             text = "-",
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
@@ -282,28 +282,28 @@ private fun LineCalculation4(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
     ) {
-        BtnCalculation(
+        BtnCalculationText(
             text = "1",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f)
         ) {
             viewModelCalculation.onInput(input = "1")
         }
-        BtnCalculation(
+        BtnCalculationText(
             text = "2",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f)
         ) {
             viewModelCalculation.onInput(input = "2")
         }
-        BtnCalculation(
+        BtnCalculationText(
             text = "3",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f)
         ) {
             viewModelCalculation.onInput(input = "3")
         }
-        BtnCalculation(
+        BtnCalculationText(
             text = "+",
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
@@ -359,7 +359,7 @@ private fun LineCalculation5(
             }
         }
 
-        BtnCalculation(
+        BtnCalculationText(
             text = "0",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
@@ -367,7 +367,7 @@ private fun LineCalculation5(
         ) {
             viewModelCalculation.onInput(input = "0")
         }
-        BtnCalculation(
+        BtnCalculationText(
             text = ",",
             color = DarkGray,
             modifier = Modifier
@@ -375,7 +375,7 @@ private fun LineCalculation5(
         ) {
             viewModelCalculation.onInput(input = ".")
         }
-        BtnCalculation(
+        BtnCalculationText(
             text = "=",
             color = Orange,
             modifier = Modifier.weight(weight = 1f),

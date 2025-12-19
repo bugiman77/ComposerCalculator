@@ -41,7 +41,7 @@ fun SettingsGroup(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(shape = RoundedCornerShape(size = 24.dp))
+                .clip(shape = RoundedCornerShape(size = 32.dp))
                 .background(Color(color = 0xFF2C2C2E))
         ) {
             content()

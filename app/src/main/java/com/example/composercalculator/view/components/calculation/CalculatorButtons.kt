@@ -44,6 +44,7 @@ import com.example.composercalculator.viewmodel.CalculatorViewModel
 import com.example.composercalculator.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.ui.unit.Dp
 
 @Composable
 fun CalculatorButtonGrid(
@@ -134,6 +135,64 @@ private fun BtnCalculationText(
                 text = text,
                 fontSize = fontSize,
                 color = Color.White
+            )
+        }
+    }
+}
+
+@Composable
+private fun BtnCalculationIcon(
+    modifier: Modifier = Modifier,
+    iconId: Int,
+    color: Color,
+    iconSize: Dp = 40.dp,
+    onLongClick: () -> Unit = {},
+    onClick: () -> Unit,
+) {
+
+// Создаем едва заметный вертикальный градиент для фона
+    val backgroundBrush = Brush.verticalGradient(
+        colors = listOf(
+            color,
+            color
+        )
+    )
+
+// Создаем границу, которая имитирует внутреннюю тень
+    val borderBrush = Brush.verticalGradient(
+        colors = listOf(
+            Color.White.copy(alpha = 0.2f),
+            Color.Transparent
+        )
+    )
+
+    Button(
+        onClick = { },
+        modifier = modifier
+            .aspectRatio(ratio = 1f),
+        shape = CircleShape,
+        contentPadding = PaddingValues(all = 0.dp),
+        border = BorderStroke(width = 1.dp, borderBrush),
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundBrush, shape = CircleShape)
+                .combinedClickable(
+                    onClick = {
+                        onClick()
+                    },
+                    onLongClick = {
+                        onLongClick()
+                    }
+                ),
+
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(iconId),
+                contentDescription = null,
+                modifier = Modifier.size(iconSize)
             )
         }
     }

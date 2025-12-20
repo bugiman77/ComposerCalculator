@@ -63,9 +63,9 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    fun onInputDigit(input: String) {
+    fun onInputDigit(inputDigit: String) {
         viewModelScope.launch {
-            _expression.value += input
+            _expression.value += inputDigit
         }
     }
 

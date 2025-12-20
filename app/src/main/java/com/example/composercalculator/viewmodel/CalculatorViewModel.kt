@@ -69,6 +69,15 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
+    fun onInputMathematicalOperations(inputOperation: String) {
+        viewModelScope.launch {
+            val currentExpression = _expression.value
+            if (currentExpression.lastOrNull() !in listOf('+', '-', '/', '*', '.', '%')) {
+                _expression.value += inputOperation
+            }
+        }
+    }
+
     fun removeLastCharacter() {
         if (_expression.value.isNotEmpty()) {
             _expression.value = _expression.value.dropLast(n = 1)

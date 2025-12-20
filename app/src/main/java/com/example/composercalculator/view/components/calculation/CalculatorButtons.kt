@@ -235,7 +235,7 @@ private fun LineCalculation1(
             modifier = Modifier.weight(weight = 1f),
             fontSize = 45.sp
         ) {
-            viewModelCalculation.onInputDigit(input = "%")
+            viewModelCalculation.onInputMathematicalOperations(inputOperation = "%")
         }
         BtnCalculationText(
             text = "÷",
@@ -243,7 +243,7 @@ private fun LineCalculation1(
             modifier = Modifier.weight(weight = 1f),
             fontSize = 60.sp
         ) {
-            viewModelCalculation.onInputDigit(input = "/")
+            viewModelCalculation.onInputMathematicalOperations(inputOperation = "/")
         }
     }
 
@@ -263,7 +263,7 @@ private fun LineCalculation2(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
-                viewModelCalculation.onInputDigit(input = "7")
+                viewModelCalculation.onInputDigit(inputDigit = "7")
             }
         )
         BtnCalculationText(
@@ -271,14 +271,14 @@ private fun LineCalculation2(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f)
         ) {
-            viewModelCalculation.onInputDigit(input = "8")
+            viewModelCalculation.onInputDigit(inputDigit = "8")
         }
         BtnCalculationText(
             text = "9",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f)
         ) {
-            viewModelCalculation.onInputDigit(input = "9")
+            viewModelCalculation.onInputDigit(inputDigit = "9")
         }
         BtnCalculationText(
             text = "×",
@@ -286,7 +286,7 @@ private fun LineCalculation2(
             modifier = Modifier.weight(weight = 1f),
             fontSize = 50.sp
         ) {
-            viewModelCalculation.onInputDigit(input = "*")
+            viewModelCalculation.onInputMathematicalOperations(inputOperation = "*")
         }
     }
 }
@@ -305,21 +305,21 @@ private fun LineCalculation3(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f)
         ) {
-            viewModelCalculation.onInputDigit(input = "4")
+            viewModelCalculation.onInputDigit(inputDigit = "4")
         }
         BtnCalculationText(
             text = "5",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f)
         ) {
-            viewModelCalculation.onInputDigit(input = "5")
+            viewModelCalculation.onInputDigit(inputDigit = "5")
         }
         BtnCalculationText(
             text = "6",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f)
         ) {
-            viewModelCalculation.onInputDigit(input = "6")
+            viewModelCalculation.onInputDigit(inputDigit = "6")
         }
         BtnCalculationText(
             text = "-",
@@ -327,7 +327,7 @@ private fun LineCalculation3(
             modifier = Modifier.weight(weight = 1f),
             fontSize = 70.sp
         ) {
-            viewModelCalculation.onInputDigit(input = "-")
+            viewModelCalculation.onInputMathematicalOperations(inputOperation = "-")
         }
     }
 }
@@ -346,21 +346,21 @@ private fun LineCalculation4(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f)
         ) {
-            viewModelCalculation.onInputDigit(input = "1")
+            viewModelCalculation.onInputDigit(inputDigit = "1")
         }
         BtnCalculationText(
             text = "2",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f)
         ) {
-            viewModelCalculation.onInputDigit(input = "2")
+            viewModelCalculation.onInputDigit(inputDigit = "2")
         }
         BtnCalculationText(
             text = "3",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f)
         ) {
-            viewModelCalculation.onInputDigit(input = "3")
+            viewModelCalculation.onInputDigit(inputDigit = "3")
         }
         BtnCalculationText(
             text = "+",
@@ -368,7 +368,7 @@ private fun LineCalculation4(
             modifier = Modifier.weight(weight = 1f),
             fontSize = 60.sp
         ) {
-            viewModelCalculation.onInputDigit(input = "+")
+            viewModelCalculation.onInputMathematicalOperations(inputOperation = "+")
         }
     }
 }
@@ -424,7 +424,7 @@ private fun LineCalculation5(
             modifier = Modifier.weight(weight = 1f),
             fontSize = 45.sp
         ) {
-            viewModelCalculation.onInputDigit(input = "0")
+            viewModelCalculation.onInputDigit(inputDigit = "0")
         }
         BtnCalculationText(
             text = ",",
@@ -432,7 +432,7 @@ private fun LineCalculation5(
             modifier = Modifier
                 .weight(weight = 1f)
         ) {
-            viewModelCalculation.onInputDigit(input = ".")
+            viewModelCalculation.onInputMathematicalOperations(inputOperation = ".")
         }
         BtnCalculationText(
             text = "=",

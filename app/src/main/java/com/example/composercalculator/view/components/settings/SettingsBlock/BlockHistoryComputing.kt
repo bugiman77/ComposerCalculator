@@ -80,6 +80,24 @@ fun HistoryComputing(
                     )
                 )
             }
+
+            SettingsRow(
+                title = "Удалять историю",
+                subtitle = "При включении переключателя, история будет удаляться при закрытии приложения",
+                modifier = Modifier.padding(vertical = 4.dp)
+            ) {
+                Switch(
+                    checked = false,
+                    onCheckedChange = { },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = Orange,
+                        uncheckedThumbColor = Color.White,
+                        uncheckedTrackColor = Color.Gray
+                    )
+                )
+            }
+
         }
     }
 

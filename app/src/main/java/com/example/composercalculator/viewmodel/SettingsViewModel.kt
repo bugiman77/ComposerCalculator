@@ -52,6 +52,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val _showIconButton = MutableStateFlow(value = true)
     val showIconButton: StateFlow<Boolean> = _showIconButton
 
+    private val _playSound = MutableStateFlow(value = false)
+    val playSound: StateFlow<Boolean> = _playSound
+
+    private val _playVibration = MutableStateFlow(value = false)
+    val playVibration: StateFlow<Boolean> = _playVibration
+
     init {
         // Загружаем настройки при старте
         viewModelScope.launch {
@@ -73,6 +79,8 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             _isSwipeEnabled.value = it.isSwipeEnabled
             _isNoteEnabled.value = it.isNoteEnabled
             _showIconButton.value = it.showIconButton
+            _playSound.value = it.playSound
+            _playVibration.value = it.playVibration
         }
     }
 
@@ -143,6 +151,18 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    fun onClickPlaySound(isPlay: Boolean) {
+        viewModelScope.launch {
+            saveSetting { _playSound.value = isPlay }
+        }
+    }
+
+    fun onClickPlayVibration(isPlay: Boolean) {
+        viewModelScope.launch {
+            saveSetting { _playVibration.value = isPlay }
+        }
+    }
+
     private suspend fun saveSetting(updateState: suspend () -> Unit) {
         // Обновляем состояние в UI
         updateState()
@@ -161,7 +181,9 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
                 isSaveSettingsData = _isSaveSettingsData.value,
                 isSwipeEnabled = _isSwipeEnabled.value,
                 isNoteEnabled = _isNoteEnabled.value,
-                showIconButton = _showIconButton.value
+                showIconButton = _showIconButton.value,
+                playSound = _playSound.value,
+                playVibration = _playVibration.value,
             )
         )
     }

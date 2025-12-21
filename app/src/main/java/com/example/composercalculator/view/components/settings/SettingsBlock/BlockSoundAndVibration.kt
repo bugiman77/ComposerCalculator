@@ -5,6 +5,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -18,6 +19,10 @@ fun SoundAndVibration(
     modifier: Modifier = Modifier,
     viewModelSettings: SettingsViewModel,
 ) {
+
+    val isPlaySound = viewModelSettings.playSound.collectAsState()
+    val isPlayVibration = viewModelSettings.playVibration.collectAsState()
+
     SettingsGroup(title = "Звук и вибрация") {
         SettingsRow(
             title = "Звук",
@@ -25,8 +30,8 @@ fun SoundAndVibration(
             modifier = modifier.padding(vertical = 4.dp)
         ) {
             Switch(
-                checked = false,
-                onCheckedChange = { },
+                checked = isPlaySound.value,
+                onCheckedChange = { viewModelSettings.onClickPlaySound(isPlay = it) },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
                     checkedTrackColor = Orange,
@@ -44,8 +49,8 @@ fun SoundAndVibration(
             modifier = Modifier.padding(vertical = 4.dp)
         ) {
             Switch(
-                checked = false,
-                onCheckedChange = { },
+                checked = isPlayVibration.value,
+                onCheckedChange = { viewModelSettings.onClickPlayVibration(isPlay = it) },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
                     checkedTrackColor = Orange,

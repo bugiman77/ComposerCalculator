@@ -17,4 +17,6 @@ data class Settings(
     var isSwipeEnabled: Boolean = true,
     var isNoteEnabled: Boolean = true,
     var showIconButton: Boolean = true,
+    var playSound: Boolean = false,
+    var playVibration: Boolean = false,
 )

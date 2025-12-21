@@ -69,14 +69,23 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    fun onInputMathematicalOperations(inputOperation: String) {
-        viewModelScope.launch {
-            val currentExpression = _expression.value
-            if (currentExpression.lastOrNull() !in listOf('+', '-', '/', '*', '.', '%')) {
-                _expression.value += inputOperation
-            }
+fun onInputMathematicalOperations(inputOperation: String) {
+    viewModelScope.launch {
+        val currentExpression = _expression.value
+        if (currentExpression.isEmpty()) return@launch // Проверка на пустую строку
+
+        val lastChar = currentExpression.last()
+        val operators = listOf('+', '-', '/', '*', '.', '%')
+
+        if (lastChar in operators) {
+            // Если последний символ — оператор, заменяем его на новый
+            _expression.value = currentExpression.dropLast(1) + inputOperation
+        } else {
+            // Если последний символ — цифра, просто добавляем оператор
+            _expression.value += inputOperation
         }
     }
+}
 
     fun removeLastCharacter() {
         if (_expression.value.isNotEmpty()) {
@@ -90,7 +99,7 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
 
     suspend fun calculateAndSave() {
         val currentExpression = _expression.value
-        if (currentExpression.isBlank()) return
+        if (currentExpression.isBlank() || currentExpression.last() in listOf('+', '-', '/', '*', '.', '%')) return
 
         val calculationResult = evaluateExpressionWithPython(expressionStr = currentExpression)
         _result.value = calculationResult

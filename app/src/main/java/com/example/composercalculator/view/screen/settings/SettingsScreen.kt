@@ -72,7 +72,13 @@ fun SettingsScreen(
                         scrollState.animateScrollTo(value = 0)
                     }
                 },
-                title = { Text(text = "Настройки", color = Color.White, fontWeight = FontWeight.Bold) },
+                title = {
+                    Text(
+                        text = "Настройки",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
                 navigationIcon = {
                     CustomBackButton(onClick = onNavigateBack)
                 },

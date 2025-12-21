@@ -16,12 +16,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
@@ -49,8 +53,8 @@ import com.example.composercalculator.view.components.settings.SettingsBlock.His
 import com.example.composercalculator.view.components.settings.SettingsBlock.SavingData
 import com.example.composercalculator.view.components.settings.SettingsBlock.SoundAndVibration
 import com.example.composercalculator.viewmodel.SettingsViewModel
-import kotlinx.coroutines.launch
 import com.example.composercalculator.R
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,6 +88,7 @@ fun SettingsScreen(
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
             )
+//            CustomTopBar()
         }
     ) { innerPadding ->
         Column(
@@ -125,6 +130,54 @@ fun SettingsScreen(
             App(onNavigateToAbout = onNavigateToAbout)
 
             Spacer(modifier = Modifier.height(height = 24.dp))
+        }
+    }
+}
+
+@Composable
+fun CustomTopBar(
+//    onNavigateBack: () -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 10.dp),
+        // Выравниваем все дочерние элементы по вертикали
+        contentAlignment = Alignment.Center
+    ) {
+        Card(
+            shape = CircleShape,
+            modifier = Modifier
+                .size(size = 48.dp)
+                .align(Alignment.CenterStart), // <-- Явно указываем выравнивание
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            border = BorderStroke(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        ) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                Icon(painterResource(R.drawable.back_ios), contentDescription = "Назад")
+            }
+//            CustomBackButton(onClick = onNavigateBack)
+        }
+
+        Card(
+            shape = RoundedCornerShape(size = 24.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            border = BorderStroke(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        ) {
+            Row(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "Настройки", fontWeight = FontWeight.Bold)
+            }
         }
     }
 }

@@ -31,12 +31,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composercalculator.BuildConfig
 import com.example.composercalculator.R
+import com.example.composercalculator.model.DeviceInfo
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,7 +76,7 @@ fun AboutScreen(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                AuthorInfo()
+                DeviceInfoApp()
             }
         }
     }
@@ -84,6 +84,7 @@ fun AboutScreen(
 
 @Composable
 private fun AppHeader() {
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(top = 24.dp, bottom = 16.dp)
@@ -105,6 +106,7 @@ private fun AppHeader() {
             color = Color.Gray,
             fontSize = 16.sp
         )
+
     }
 }
 
@@ -153,13 +155,13 @@ private fun InfoLinkRow(title: String, onClick: () -> Unit) {
 }
 
 @Composable
-private fun AuthorInfo() {
+private fun DeviceInfoApp() {
+
+    val infoDevice = DeviceInfo()
+
     Text(
-        text = "",
+        text = "${infoDevice.deviceName} ${infoDevice.androidVersion} (${infoDevice.apiLevel})",
         color = Color.Gray,
-        fontSize = 14.sp,
-        textAlign = TextAlign.Center,
-        lineHeight = 20.sp,
-        modifier = Modifier.padding(vertical = 24.dp)
+        fontSize = 16.sp
     )
 }

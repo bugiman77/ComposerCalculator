@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composercalculator.ui.theme.DarkGray
 import com.example.composercalculator.ui.theme.Orange
+import com.example.composercalculator.view.components.settings.SettingsBlock.Animations
 import com.example.composercalculator.view.components.settings.SettingsBlock.App
 import com.example.composercalculator.view.components.settings.SettingsBlock.AppTheme
 import com.example.composercalculator.view.components.settings.SettingsBlock.Appearance
@@ -104,6 +105,10 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(height = 24.dp))
 
             Display(viewModelSettings = viewModelSettings)
+
+            Spacer(modifier = Modifier.height(height = 24.dp))
+
+            Animations(viewModelSettings = viewModelSettings)
 
             Spacer(modifier = Modifier.height(height = 24.dp))
 

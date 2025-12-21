@@ -47,6 +47,7 @@ import com.example.composercalculator.view.components.settings.SettingsBlock.App
 import com.example.composercalculator.view.components.settings.SettingsBlock.Display
 import com.example.composercalculator.view.components.settings.SettingsBlock.HistoryComputing
 import com.example.composercalculator.view.components.settings.SettingsBlock.SavingData
+import com.example.composercalculator.view.components.settings.SettingsBlock.SoundAndVibration
 import com.example.composercalculator.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
 
@@ -87,6 +88,10 @@ fun SettingsScreen(
         ) {
 
             AppTheme(viewModelSettings = viewModelSettings)
+
+            Spacer(modifier = Modifier.height(height = 24.dp))
+
+            SoundAndVibration(viewModelSettings = viewModelSettings)
 
             Spacer(modifier = Modifier.height(height = 24.dp))
 

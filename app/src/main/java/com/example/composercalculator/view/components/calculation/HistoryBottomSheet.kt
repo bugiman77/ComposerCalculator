@@ -51,18 +51,16 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import com.example.composercalculator.ui.theme.Orange
+import com.example.composercalculator.viewmodel.CalculatorViewModel
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryBottomSheet(
-//    history: List<CalculationHistoryItem>,
+    calculatorViewModel: CalculatorViewModel,
     onAction: (CalculatorEvent) -> Unit = {},
     sheetState: SheetState,
     onDismiss: () -> Unit
 ) {
-/*    val groupedHistory = remember(history) {
-        history.groupBy { it.getFormattedDate() }
-    }*/
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,

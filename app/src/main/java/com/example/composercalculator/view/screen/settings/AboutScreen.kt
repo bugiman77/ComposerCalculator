@@ -32,6 +32,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composercalculator.BuildConfig
@@ -88,10 +89,9 @@ private fun AppHeader() {
         modifier = Modifier.padding(top = 24.dp, bottom = 16.dp)
     ) {
         Image(
-//            TODO исправить на xml файл
-            painter = painterResource(id = R.drawable.ic_launcher_foreground),
+            painter = painterResource(id = R.drawable.ic_launcher),
             contentDescription = "Иконка приложения",
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.FillWidth,
             modifier = Modifier
                 .size(120.dp)
                 .clip(RoundedCornerShape(size = 24.dp))

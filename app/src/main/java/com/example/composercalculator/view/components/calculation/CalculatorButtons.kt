@@ -210,6 +210,7 @@ private fun LineCalculation1(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp) // Расстояние между кнопками
     ) {
+
         BtnCalculationText(
             text = if (isInputEmpty) "AC" else "C",
             color = LightGray,
@@ -221,6 +222,7 @@ private fun LineCalculation1(
         ) {
             viewModelCalculation.removeLastCharacter()
         }
+
         BtnCalculationText(
             text = "+/-",
             color = LightGray,
@@ -229,6 +231,7 @@ private fun LineCalculation1(
         ) {
 
         }
+
         BtnCalculationText(
             text = "%",
             color = LightGray,
@@ -237,6 +240,7 @@ private fun LineCalculation1(
         ) {
             viewModelCalculation.onInputMathematicalOperations(inputOperation = "%")
         }
+
         BtnCalculationText(
             text = "÷",
             color = Orange,
@@ -258,6 +262,7 @@ private fun LineCalculation2(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
     ) {
+
         BtnCalculationText(
             text = "7",
             color = DarkGray,
@@ -266,6 +271,7 @@ private fun LineCalculation2(
                 viewModelCalculation.onInputDigit(inputDigit = "7")
             }
         )
+
         BtnCalculationText(
             text = "8",
             color = DarkGray,
@@ -273,6 +279,7 @@ private fun LineCalculation2(
         ) {
             viewModelCalculation.onInputDigit(inputDigit = "8")
         }
+
         BtnCalculationText(
             text = "9",
             color = DarkGray,
@@ -280,6 +287,7 @@ private fun LineCalculation2(
         ) {
             viewModelCalculation.onInputDigit(inputDigit = "9")
         }
+
         BtnCalculationText(
             text = "×",
             color = Orange,
@@ -288,6 +296,7 @@ private fun LineCalculation2(
         ) {
             viewModelCalculation.onInputMathematicalOperations(inputOperation = "*")
         }
+
     }
 }
 
@@ -300,6 +309,7 @@ private fun LineCalculation3(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
     ) {
+
         BtnCalculationText(
             text = "4",
             color = DarkGray,
@@ -307,6 +317,7 @@ private fun LineCalculation3(
         ) {
             viewModelCalculation.onInputDigit(inputDigit = "4")
         }
+
         BtnCalculationText(
             text = "5",
             color = DarkGray,
@@ -314,6 +325,7 @@ private fun LineCalculation3(
         ) {
             viewModelCalculation.onInputDigit(inputDigit = "5")
         }
+
         BtnCalculationText(
             text = "6",
             color = DarkGray,
@@ -321,6 +333,7 @@ private fun LineCalculation3(
         ) {
             viewModelCalculation.onInputDigit(inputDigit = "6")
         }
+
         BtnCalculationText(
             text = "-",
             color = Orange,
@@ -329,6 +342,7 @@ private fun LineCalculation3(
         ) {
             viewModelCalculation.onInputMathematicalOperations(inputOperation = "-")
         }
+
     }
 }
 
@@ -341,6 +355,7 @@ private fun LineCalculation4(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
     ) {
+
         BtnCalculationText(
             text = "1",
             color = DarkGray,
@@ -348,6 +363,7 @@ private fun LineCalculation4(
         ) {
             viewModelCalculation.onInputDigit(inputDigit = "1")
         }
+
         BtnCalculationText(
             text = "2",
             color = DarkGray,
@@ -355,6 +371,7 @@ private fun LineCalculation4(
         ) {
             viewModelCalculation.onInputDigit(inputDigit = "2")
         }
+
         BtnCalculationText(
             text = "3",
             color = DarkGray,
@@ -362,6 +379,7 @@ private fun LineCalculation4(
         ) {
             viewModelCalculation.onInputDigit(inputDigit = "3")
         }
+
         BtnCalculationText(
             text = "+",
             color = Orange,
@@ -370,6 +388,7 @@ private fun LineCalculation4(
         ) {
             viewModelCalculation.onInputMathematicalOperations(inputOperation = "+")
         }
+
     }
 }
 
@@ -426,6 +445,7 @@ private fun LineCalculation5(
         ) {
             viewModelCalculation.onInputDigit(inputDigit = "0")
         }
+
         BtnCalculationText(
             text = ",",
             color = DarkGray,
@@ -434,6 +454,7 @@ private fun LineCalculation5(
         ) {
             viewModelCalculation.onInputMathematicalOperations(inputOperation = ".")
         }
+
         BtnCalculationText(
             text = "=",
             color = Orange,

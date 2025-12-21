@@ -56,8 +56,8 @@ fun Display(
                     value = displayFontSize.value,
                     onValueChangeFinished = { viewModelSettings.onFontSizeChange(size = displayFontSize.value) },
                     onValueChange = { viewModelSettings.onFontSizeChange(size = it) },
-                    valueRange = 40f..120f,
-                    steps = 7, // 8 позиций
+                    valueRange = 12f..24f,
+                    steps = 5,
                     colors = SliderDefaults.colors(
                         thumbColor = Color.White,
                         activeTrackColor = Orange,
@@ -69,6 +69,23 @@ fun Display(
         }
 
         HorizontalDivider(color = Color(color = 0xFF3A3A3C))
+
+        SettingsRow(
+            title = "Отключать экран",
+            subtitle = "При использовании приложения экран не будет отключаться при долгих паузах",
+            modifier = modifier.padding(vertical = 4.dp)
+        ) {
+            Switch(
+                checked = false,
+                onCheckedChange = {  },
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = Color.White,
+                    checkedTrackColor = Orange,
+                    uncheckedThumbColor = Color.White,
+                    uncheckedTrackColor = Color.Gray
+                )
+            )
+        }
 
     }
 

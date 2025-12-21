@@ -98,6 +98,23 @@ fun HistoryComputing(
                 )
             }
 
+            SettingsRow(
+                title = "Последнее вычисление",
+                subtitle = "Отображать последнее вычисление при запуске приложения",
+                modifier = Modifier.padding(vertical = 4.dp)
+            ) {
+                Switch(
+                    checked = false,
+                    onCheckedChange = { },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = Orange,
+                        uncheckedThumbColor = Color.White,
+                        uncheckedTrackColor = Color.Gray
+                    )
+                )
+            }
+
         }
     }
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.collectAsState
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.composercalculator.navigation.AppNavigation
 import com.example.composercalculator.ui.theme.ComposerCalculatorTheme
@@ -21,7 +22,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            ComposerCalculatorTheme {
+            val isDarkTheme = viewModelSettings.isDarkTheme.collectAsState().value
+            ComposerCalculatorTheme(
+                darkTheme = isDarkTheme,
+                dynamicColor = false
+            ) {
                 AppNavigation(
                     settingsViewModel = viewModelSettings,
                     calculatorViewModel = viewModelCalculation

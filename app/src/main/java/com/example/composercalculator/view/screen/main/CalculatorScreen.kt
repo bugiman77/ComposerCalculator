@@ -133,7 +133,7 @@ fun CalculatorScreen(
                         IconButton(onClick = onNavigateToSettings) {
                             Icon(
                                 modifier = Modifier.size(size = 32.dp),
-                                painter = painterResource(id = R.drawable.gear),
+                                painter = painterResource(id = R.drawable.ic_more),
                                 contentDescription = "Настройки приложения",
                                 tint = Orange
                             )

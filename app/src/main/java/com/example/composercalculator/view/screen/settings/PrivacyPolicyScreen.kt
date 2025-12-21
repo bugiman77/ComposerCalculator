@@ -1,3 +1,5 @@
+@file:Suppress("COMPOSE_APPLIER_CALL_MISMATCH")
+
 package com.example.composercalculator.view.screen.settings
 
 import android.annotation.SuppressLint
@@ -17,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.viewinterop.AndroidView
+import kotlinx.html.a
 import kotlinx.html.body
 import kotlinx.html.div
 import kotlinx.html.h3
@@ -384,7 +387,12 @@ private fun generatePrivacyPolice(): String = createHTML().html {
                 +"11.2. В данном документе будут отражены любые изменения политики обработки персональных данных Оператором. Политика действует бессрочно до замены ее новой версией."
             }
             p {
-                +"11.3. Актуальная версия Политики в свободном доступе расположена в сети Интернет по адресу https://thismywebsite.com/privacy/."
+                +"11.3. Актуальная версия Политики в свободном доступе расположена в сети Интернет по адресу "
+                a(href = "https://thismywebsite.com/privacy/") {
+                    style = "color: inherit; text-decoration: none;"
+                    +"https://thismywebsite.com/privacy/"
+                }
+                +"."
             }
         }
 
@@ -418,8 +426,8 @@ fun PrivacyPolicyScreen(
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
+                .padding(paddingValues = innerPadding)
+                .verticalScroll(state = rememberScrollState())
         ) {
             val htmlContent = generatePrivacyPolice()
             AndroidView(
@@ -427,21 +435,25 @@ fun PrivacyPolicyScreen(
                     WebView(context).apply {
                         webViewClient = WebViewClient()
                         settings.javaScriptEnabled = false
-                        loadDataWithBaseURL(null, htmlContent, "text/html", "utf-8", null)
+                        loadDataWithBaseURL(
+                            /* baseUrl = */ null,
+                            /* data = */ htmlContent,
+                            /* mimeType = */ "text/html",
+                            /* encoding = */ "utf-8",
+                            /* historyUrl = */ null
+                        )
                     }
                 },
                 update = { webView ->
-                    webView.loadDataWithBaseURL(null, htmlContent, "text/html", "utf-8", null)
+                    webView.loadDataWithBaseURL(
+                        /* baseUrl = */ null,
+                        /* data = */ htmlContent,
+                        /* mimeType = */ "text/html",
+                        /* encoding = */ "utf-8",
+                        /* historyUrl = */ null
+                    )
                 },
             )
         }
     }
-}
-
-private fun getPriveciPolityFromCache(): String? {
-    return null
-}
-
-private fun getPriveciPolityFromGenerateString(): String? {
-    return null
 }

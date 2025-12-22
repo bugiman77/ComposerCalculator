@@ -108,7 +108,7 @@ fun CalculatorScreen(
                             IconButton(onClick = { showHistorySheet = true }) {
                                 Icon(
                                     modifier = Modifier.size(size = 32.dp),
-                                    painter = painterResource(id = R.drawable.list),
+                                    painter = painterResource(id = R.drawable.ic_history),
                                     contentDescription = "История вычислений",
                                     tint = Orange
                                 )

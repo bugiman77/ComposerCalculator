@@ -69,23 +69,42 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-fun onInputMathematicalOperations(inputOperation: String) {
-    viewModelScope.launch {
+    fun onInputMathematicalOperations(inputOperation: String) {
         val currentExpression = _expression.value
-        if (currentExpression.isEmpty()) return@launch // Проверка на пустую строку
+        if (currentExpression.isEmpty()) return
 
+        val operators = setOf('+', '-', '/', '*', '%') // Выносим операторы в Set для быстрого поиска
         val lastChar = currentExpression.last()
-        val operators = listOf('+', '-', '/', '*', '.', '%')
 
-        if (lastChar in operators) {
-            // Если последний символ — оператор, заменяем его на новый
-            _expression.value = currentExpression.dropLast(1) + inputOperation
-        } else {
-            // Если последний символ — цифра, просто добавляем оператор
-            _expression.value += inputOperation
+        // 1. Обработка ввода точки
+        if (inputOperation == ".") {
+            // Находим часть строки после последнего оператора (текущее число)
+            val lastNumber = currentExpression.split('+', '-', '*', '/', '%').last()
+
+            // Если в текущем числе уже есть точка или последний символ — оператор, игнорируем ввод
+            if (lastNumber.contains('.') || lastChar in operators) {
+                return
+            }
+            _expression.value += "."
+            return
+        }
+
+        // 2. Обработка ввода математических операторов
+        if (inputOperation.first() in operators) {
+            if (lastChar == '.') {
+                // Не позволяем ставить оператор сразу после точки (например, "12.+")
+                return
+            }
+
+            if (lastChar in operators) {
+                // Если последний символ — оператор, заменяем его
+                _expression.value = currentExpression.dropLast(1) + inputOperation
+            } else {
+                // Если последний символ — цифра, добавляем оператор
+                _expression.value += inputOperation
+            }
         }
     }
-}
 
     fun removeLastCharacter() {
         if (_expression.value.isNotEmpty()) {

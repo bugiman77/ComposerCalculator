@@ -19,7 +19,8 @@ import kotlinx.coroutines.withContext
 
 class CalculatorViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val historyDao: HistoryDao = AppDatabaseHistory.getDatabase(context = application).historyDao()
+    private val historyDao: HistoryDao =
+        AppDatabaseHistory.getDatabase(context = application).historyDao()
 
     private val _id = MutableStateFlow(value = "")
     val id: StateFlow<String> = _id.asStateFlow()
@@ -118,7 +119,15 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
 
     suspend fun calculateAndSave() {
         val currentExpression = _expression.value
-        if (currentExpression.isBlank() || currentExpression.last() in listOf('+', '-', '/', '*', '.', '%')) return
+        if (currentExpression.isBlank() || currentExpression.last() in listOf(
+                '+',
+                '-',
+                '/',
+                '*',
+                '.',
+                '%'
+            )
+        ) return
 
         val calculationResult = evaluateExpressionWithPython(expressionStr = currentExpression)
         _result.value = calculationResult

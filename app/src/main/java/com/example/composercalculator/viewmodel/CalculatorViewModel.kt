@@ -114,7 +114,9 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun clearExpression() {
-        _expression.value = ""
+        if (_expression.value.isNotEmpty()) {
+            _expression.value = ""
+        }
     }
 
     suspend fun calculateAndSave() {

@@ -230,7 +230,7 @@ private fun LineCalculation1(
             modifier = Modifier.weight(weight = 1f),
             fontSize = 30.sp
         ) {
-
+            viewModelCalculation.onToggleSign()
         }
 
         BtnCalculationIcon(
@@ -380,15 +380,6 @@ private fun LineCalculation4(
         ) {
             viewModelCalculation.onInputDigit(inputDigit = "3")
         }
-
-/*        BtnCalculationText(
-            text = "+",
-            color = Orange,
-            modifier = Modifier.weight(weight = 1f),
-            fontSize = 60.sp
-        ) {
-            viewModelCalculation.onInputMathematicalOperations(inputOperation = "+")
-        }*/
 
         BtnCalculationIcon(
             iconId = painterResource(id = R.drawable.ic_plus),

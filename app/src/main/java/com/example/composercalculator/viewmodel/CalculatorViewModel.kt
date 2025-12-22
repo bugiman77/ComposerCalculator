@@ -107,6 +107,32 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
+    fun onToggleSign() {
+        val currentExpression = _expression.value
+        if (currentExpression.isEmpty()) return
+
+        // Регулярное выражение находит последнее число, включая отрицательные в скобках
+        // Ищет либо (-число), либо просто число в конце строки
+        val lastTokenRegex = Regex("""(\(-\d+\.?\d*\)|(?<!\d)\d+\.?\d*)$""")
+        val matchResult = lastTokenRegex.find(currentExpression)
+
+        if (matchResult != null) {
+            val lastToken = matchResult.value
+            val prefix = currentExpression.substring(0, matchResult.range.first)
+
+            val updatedToken = if (lastToken.startsWith("(-")) {
+                // Если число уже отрицательное (в скобках), убираем скобки и минус
+                lastToken.removeSurrounding("(-", ")")
+            } else {
+                // Если число положительное, оборачиваем в (-...)
+                "(-$lastToken)"
+            }
+
+            _expression.value = prefix + updatedToken
+        }
+    }
+
+
     fun removeLastCharacter() {
         if (_expression.value.isNotEmpty()) {
             _expression.value = _expression.value.dropLast(n = 1)

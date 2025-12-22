@@ -86,6 +86,7 @@ private fun BtnCalculationText(
     text: String,
     color: Color,
     fontSize: TextUnit = 40.sp,
+    isButtonEnabled: Boolean = true,
     onLongClick: () -> Unit = {},
     onClick: () -> Unit,
 ) {
@@ -115,6 +116,7 @@ private fun BtnCalculationText(
         shape = CircleShape,
         contentPadding = PaddingValues(all = 0.dp),
         border = BorderStroke(width = 1.dp, borderBrush),
+        enabled = isButtonEnabled
     ) {
         Box(
             modifier = Modifier
@@ -147,6 +149,7 @@ private fun BtnCalculationIcon(
     iconId: Painter,
     color: Color,
     iconSize: Dp = 40.dp,
+    isButtonEnabled: Boolean = true,
     onLongClick: () -> Unit = {},
     onClick: () -> Unit,
 ) {
@@ -174,6 +177,7 @@ private fun BtnCalculationIcon(
         shape = CircleShape,
         contentPadding = PaddingValues(all = 0.dp),
         border = BorderStroke(width = 1.dp, borderBrush),
+        enabled = isButtonEnabled
     ) {
         Box(
             modifier = Modifier
@@ -217,6 +221,7 @@ private fun LineCalculation1(
             color = LightGray,
             modifier = Modifier.weight(weight = 1f),
             fontSize = 30.sp,
+            isButtonEnabled = !isInputEmpty,
             onLongClick = {
                 viewModelCalculation.clearExpression()
             }
@@ -228,7 +233,8 @@ private fun LineCalculation1(
             text = "+/-",
             color = LightGray,
             modifier = Modifier.weight(weight = 1f),
-            fontSize = 30.sp
+            fontSize = 30.sp,
+            isButtonEnabled = !isInputEmpty,
         ) {
             viewModelCalculation.onToggleSign()
         }
@@ -237,7 +243,8 @@ private fun LineCalculation1(
             iconId = painterResource(id = R.drawable.ic_percent),
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
-            iconSize = 50.dp
+            iconSize = 50.dp,
+            isButtonEnabled = !isInputEmpty,
         ) {
 //            viewModelCalculation.onInputMathematicalOperations(inputOperation = "%")
         }
@@ -246,7 +253,8 @@ private fun LineCalculation1(
             text = "/",
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
-            fontSize = 50.sp
+            fontSize = 50.sp,
+            isButtonEnabled = !isInputEmpty,
         ) {
             viewModelCalculation.onInputMathematicalOperations(inputOperation = "/")
         }
@@ -259,6 +267,9 @@ private fun LineCalculation2(
     modifier: Modifier = Modifier,
     viewModelCalculation: CalculatorViewModel,
 ) {
+
+    val isInputEmpty = viewModelCalculation.expression.collectAsState().value.isEmpty()
+
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
@@ -293,7 +304,8 @@ private fun LineCalculation2(
             iconId = painterResource(id = R.drawable.ic_multiply),
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
-            iconSize = 50.dp
+            iconSize = 50.dp,
+            isButtonEnabled = !isInputEmpty,
         ) {
             viewModelCalculation.onInputMathematicalOperations(inputOperation = "*")
         }
@@ -306,6 +318,9 @@ private fun LineCalculation3(
     modifier: Modifier = Modifier,
     viewModelCalculation: CalculatorViewModel,
 ) {
+
+    val isInputEmpty = viewModelCalculation.expression.collectAsState().value.isEmpty()
+
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
@@ -339,7 +354,8 @@ private fun LineCalculation3(
             iconId = painterResource(id = R.drawable.ic_minus),
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
-            iconSize = 70.dp
+            iconSize = 70.dp,
+            isButtonEnabled = !isInputEmpty,
         ) {
             viewModelCalculation.onInputMathematicalOperations(inputOperation = "-")
         }
@@ -352,6 +368,9 @@ private fun LineCalculation4(
     modifier: Modifier = Modifier,
     viewModelCalculation: CalculatorViewModel,
 ) {
+
+    val isInputEmpty = viewModelCalculation.expression.collectAsState().value.isEmpty()
+
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
@@ -385,7 +404,8 @@ private fun LineCalculation4(
             iconId = painterResource(id = R.drawable.ic_plus),
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
-            iconSize = 50.dp
+            iconSize = 50.dp,
+            isButtonEnabled = !isInputEmpty,
         ) {
             viewModelCalculation.onInputMathematicalOperations(inputOperation = "+")
         }
@@ -399,6 +419,9 @@ private fun LineCalculation5(
     viewModelCalculation: CalculatorViewModel,
     viewModelSetting: SettingsViewModel
 ) {
+
+    val isInputEmpty = viewModelCalculation.expression.collectAsState().value.isEmpty()
+
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
@@ -451,7 +474,8 @@ private fun LineCalculation5(
             text = ",",
             color = DarkGray,
             modifier = Modifier
-                .weight(weight = 1f)
+                .weight(weight = 1f),
+            isButtonEnabled = !isInputEmpty,
         ) {
             viewModelCalculation.onInputMathematicalOperations(inputOperation = ".")
         }
@@ -460,7 +484,8 @@ private fun LineCalculation5(
             iconId = painterResource(id = R.drawable.ic_equal),
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
-            iconSize = 55.dp
+            iconSize = 55.dp,
+            isButtonEnabled = !isInputEmpty,
         ) {
             scope.launch {
                 viewModelCalculation.calculateAndSave()

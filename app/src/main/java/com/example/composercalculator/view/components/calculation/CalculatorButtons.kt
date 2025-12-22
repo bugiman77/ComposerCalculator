@@ -44,6 +44,7 @@ import com.example.composercalculator.viewmodel.CalculatorViewModel
 import com.example.composercalculator.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.Dp
 
 @Composable
@@ -143,7 +144,7 @@ private fun BtnCalculationText(
 @Composable
 private fun BtnCalculationIcon(
     modifier: Modifier = Modifier,
-    iconId: Int,
+    iconId: Painter,
     color: Color,
     iconSize: Dp = 40.dp,
     onLongClick: () -> Unit = {},
@@ -190,7 +191,7 @@ private fun BtnCalculationIcon(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                painter = painterResource(iconId),
+                painter = iconId,
                 contentDescription = null,
                 modifier = Modifier.size(iconSize)
             )
@@ -232,20 +233,20 @@ private fun LineCalculation1(
 
         }
 
-        BtnCalculationText(
-            text = "%",
-            color = LightGray,
+        BtnCalculationIcon(
+            iconId = painterResource(id = R.drawable.ic_percent),
+            color = Orange,
             modifier = Modifier.weight(weight = 1f),
-            fontSize = 45.sp
+            iconSize = 50.dp
         ) {
-            viewModelCalculation.onInputMathematicalOperations(inputOperation = "%")
+//            viewModelCalculation.onInputMathematicalOperations(inputOperation = "%")
         }
 
         BtnCalculationText(
-            text = "÷",
+            text = "/",
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
-            fontSize = 60.sp
+            fontSize = 50.sp
         ) {
             viewModelCalculation.onInputMathematicalOperations(inputOperation = "/")
         }
@@ -288,11 +289,11 @@ private fun LineCalculation2(
             viewModelCalculation.onInputDigit(inputDigit = "9")
         }
 
-        BtnCalculationText(
-            text = "×",
+        BtnCalculationIcon(
+            iconId = painterResource(id = R.drawable.ic_multiply),
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
-            fontSize = 50.sp
+            iconSize = 50.dp
         ) {
             viewModelCalculation.onInputMathematicalOperations(inputOperation = "*")
         }
@@ -334,11 +335,11 @@ private fun LineCalculation3(
             viewModelCalculation.onInputDigit(inputDigit = "6")
         }
 
-        BtnCalculationText(
-            text = "-",
+        BtnCalculationIcon(
+            iconId = painterResource(id = R.drawable.ic_minus),
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
-            fontSize = 70.sp
+            iconSize = 70.dp
         ) {
             viewModelCalculation.onInputMathematicalOperations(inputOperation = "-")
         }
@@ -380,11 +381,20 @@ private fun LineCalculation4(
             viewModelCalculation.onInputDigit(inputDigit = "3")
         }
 
-        BtnCalculationText(
+/*        BtnCalculationText(
             text = "+",
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
             fontSize = 60.sp
+        ) {
+            viewModelCalculation.onInputMathematicalOperations(inputOperation = "+")
+        }*/
+
+        BtnCalculationIcon(
+            iconId = painterResource(id = R.drawable.ic_plus),
+            color = Orange,
+            modifier = Modifier.weight(weight = 1f),
+            iconSize = 50.dp
         ) {
             viewModelCalculation.onInputMathematicalOperations(inputOperation = "+")
         }
@@ -455,15 +465,16 @@ private fun LineCalculation5(
             viewModelCalculation.onInputMathematicalOperations(inputOperation = ".")
         }
 
-        BtnCalculationText(
-            text = "=",
+        BtnCalculationIcon(
+            iconId = painterResource(id = R.drawable.ic_equal),
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
-            fontSize = 65.sp,
+            iconSize = 55.dp
         ) {
             scope.launch {
                 viewModelCalculation.calculateAndSave()
             }
         }
+
     }
 }

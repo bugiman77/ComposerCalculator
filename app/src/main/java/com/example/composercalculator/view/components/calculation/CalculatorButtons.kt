@@ -221,7 +221,6 @@ private fun LineCalculation1(
             color = LightGray,
             modifier = Modifier.weight(weight = 1f),
             fontSize = 30.sp,
-            isButtonEnabled = !isInputEmpty,
             onLongClick = {
                 viewModelCalculation.clearExpression()
             }
@@ -234,7 +233,6 @@ private fun LineCalculation1(
             color = LightGray,
             modifier = Modifier.weight(weight = 1f),
             fontSize = 30.sp,
-            isButtonEnabled = !isInputEmpty,
         ) {
             viewModelCalculation.onToggleSign()
         }
@@ -244,7 +242,6 @@ private fun LineCalculation1(
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
             iconSize = 50.dp,
-            isButtonEnabled = !isInputEmpty,
         ) {
 //            viewModelCalculation.onInputMathematicalOperations(inputOperation = "%")
         }
@@ -254,7 +251,6 @@ private fun LineCalculation1(
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
             fontSize = 50.sp,
-            isButtonEnabled = !isInputEmpty,
         ) {
             viewModelCalculation.onInputMathematicalOperations(inputOperation = "/")
         }
@@ -305,7 +301,6 @@ private fun LineCalculation2(
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
             iconSize = 50.dp,
-            isButtonEnabled = !isInputEmpty,
         ) {
             viewModelCalculation.onInputMathematicalOperations(inputOperation = "*")
         }
@@ -355,7 +350,6 @@ private fun LineCalculation3(
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
             iconSize = 70.dp,
-            isButtonEnabled = !isInputEmpty,
         ) {
             viewModelCalculation.onInputMathematicalOperations(inputOperation = "-")
         }
@@ -405,7 +399,6 @@ private fun LineCalculation4(
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
             iconSize = 50.dp,
-            isButtonEnabled = !isInputEmpty,
         ) {
             viewModelCalculation.onInputMathematicalOperations(inputOperation = "+")
         }
@@ -475,7 +468,6 @@ private fun LineCalculation5(
             color = DarkGray,
             modifier = Modifier
                 .weight(weight = 1f),
-            isButtonEnabled = !isInputEmpty,
         ) {
             viewModelCalculation.onInputMathematicalOperations(inputOperation = ".")
         }
@@ -485,7 +477,6 @@ private fun LineCalculation5(
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
             iconSize = 55.dp,
-            isButtonEnabled = !isInputEmpty,
         ) {
             scope.launch {
                 viewModelCalculation.calculateAndSave()

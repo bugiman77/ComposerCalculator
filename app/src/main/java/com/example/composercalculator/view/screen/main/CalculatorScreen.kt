@@ -44,6 +44,7 @@ import kotlinx.coroutines.launch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import com.example.composercalculator.ui.theme.DarkGray
+import com.example.composercalculator.ui.theme.Gray
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -110,7 +111,7 @@ fun CalculatorScreen(
                                     modifier = Modifier.size(size = 32.dp),
                                     painter = painterResource(id = R.drawable.ic_history),
                                     contentDescription = "История вычислений",
-                                    tint = Orange
+                                    tint = Gray
                                 )
                             }
                         } else {
@@ -135,7 +136,7 @@ fun CalculatorScreen(
                                 modifier = Modifier.size(size = 32.dp),
                                 painter = painterResource(id = R.drawable.ic_more),
                                 contentDescription = "Настройки приложения",
-                                tint = Orange
+                                tint = Gray
                             )
                         }
                     } else {

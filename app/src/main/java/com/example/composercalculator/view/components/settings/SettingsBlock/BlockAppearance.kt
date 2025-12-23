@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.composercalculator.ui.theme.Orange
+import com.example.composercalculator.ui.theme.iOSGray
+import com.example.composercalculator.ui.theme.iOSGreen
 import com.example.composercalculator.view.components.calculation.SettingsGroup
 import com.example.composercalculator.view.components.calculation.SettingsRow
 import com.example.composercalculator.viewmodel.SettingsViewModel
@@ -34,9 +36,10 @@ fun Appearance(
                 onCheckedChange = { viewModelSettings.switchIconButton(switch = it) },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
-                    checkedTrackColor = Orange,
+                    checkedTrackColor = iOSGreen,
                     uncheckedThumbColor = Color.White,
-                    uncheckedTrackColor = Color.Gray
+                    uncheckedTrackColor = iOSGray,
+                    uncheckedBorderColor = Color.Transparent
                 )
             )
         }

@@ -148,6 +148,7 @@ private fun BtnCalculationIcon(
     modifier: Modifier = Modifier,
     iconId: Painter,
     color: Color,
+    tint: Color,
     iconSize: Dp = 40.dp,
     isButtonEnabled: Boolean = true,
     onLongClick: () -> Unit = {},
@@ -197,7 +198,8 @@ private fun BtnCalculationIcon(
             Icon(
                 painter = iconId,
                 contentDescription = null,
-                modifier = Modifier.size(iconSize)
+                modifier = Modifier.size(iconSize),
+                tint = tint
             )
         }
     }
@@ -240,6 +242,7 @@ private fun LineCalculation1(
         BtnCalculationIcon(
             iconId = painterResource(id = R.drawable.ic_percent),
             color = Orange,
+            tint = Color.White,
             modifier = Modifier.weight(weight = 1f),
             iconSize = 50.dp,
         ) {
@@ -299,6 +302,7 @@ private fun LineCalculation2(
         BtnCalculationIcon(
             iconId = painterResource(id = R.drawable.ic_multiply),
             color = Orange,
+            tint = Color.White,
             modifier = Modifier.weight(weight = 1f),
             iconSize = 50.dp,
         ) {
@@ -348,6 +352,7 @@ private fun LineCalculation3(
         BtnCalculationIcon(
             iconId = painterResource(id = R.drawable.ic_minus),
             color = Orange,
+            tint = Color.White,
             modifier = Modifier.weight(weight = 1f),
             iconSize = 70.dp,
         ) {
@@ -397,6 +402,7 @@ private fun LineCalculation4(
         BtnCalculationIcon(
             iconId = painterResource(id = R.drawable.ic_plus),
             color = Orange,
+            tint = Color.White,
             modifier = Modifier.weight(weight = 1f),
             iconSize = 50.dp,
         ) {
@@ -475,6 +481,7 @@ private fun LineCalculation5(
         BtnCalculationIcon(
             iconId = painterResource(id = R.drawable.ic_equal),
             color = Orange,
+            tint = Color.White,
             modifier = Modifier.weight(weight = 1f),
             iconSize = 55.dp,
         ) {

@@ -1,12 +1,15 @@
 package com.example.composercalculator.viewmodel
 
 import android.app.Application
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import com.chaquo.python.PyException
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
+import com.example.composercalculator.core.managers.SoundManager
+import com.example.composercalculator.core.managers.VibrationManager
 import com.example.composercalculator.data.local.db.AppDatabaseHistory
 import com.example.composercalculator.data.local.db.dao.HistoryDao
 import com.example.composercalculator.data.local.db.entity.History
@@ -17,7 +20,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class CalculatorViewModel(application: Application) : AndroidViewModel(application) {
+class CalculatorViewModel(
+    application: Application,
+    private val settingsViewModel: SettingsViewModel,
+    private val soundManager: SoundManager,
+    private val vibrationManager: VibrationManager
+) : AndroidViewModel(application) {
 
     private val historyDao: HistoryDao =
         AppDatabaseHistory.getDatabase(context = application).historyDao()
@@ -67,6 +75,12 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
     fun onInputDigit(inputDigit: String) {
         viewModelScope.launch {
             _expression.value += inputDigit
+        }
+        if (settingsViewModel.playSound.value){
+            soundManager.playClick()
+        }
+        if (settingsViewModel.playVibration.value) {
+            vibrationManager.vibrateClick()
         }
     }
 

@@ -85,6 +85,14 @@ class CalculatorViewModel(
     }
 
     fun onInputMathematicalOperations(inputOperation: String) {
+
+        if (settingsViewModel.playSound.value){
+            soundManager.playClick()
+        }
+        if (settingsViewModel.playVibration.value) {
+            vibrationManager.vibrateClick()
+        }
+
         val currentExpression = _expression.value
         if (currentExpression.isEmpty()) return
 
@@ -144,6 +152,14 @@ class CalculatorViewModel(
 
             _expression.value = prefix + updatedToken
         }
+
+        if (settingsViewModel.playSound.value){
+            soundManager.playClick()
+        }
+        if (settingsViewModel.playVibration.value) {
+            vibrationManager.vibrateClick()
+        }
+
     }
 
 
@@ -151,6 +167,14 @@ class CalculatorViewModel(
         if (_expression.value.isNotEmpty()) {
             _expression.value = _expression.value.dropLast(n = 1)
         }
+
+        if (settingsViewModel.playSound.value){
+            soundManager.playClick()
+        }
+        if (settingsViewModel.playVibration.value) {
+            vibrationManager.vibrateClick()
+        }
+
     }
 
     fun clearExpression() {
@@ -175,6 +199,13 @@ class CalculatorViewModel(
         _result.value = calculationResult
 
         _expression.value = calculationResult
+
+        if (settingsViewModel.playSound.value){
+            soundManager.playClick()
+        }
+        if (settingsViewModel.playVibration.value) {
+            vibrationManager.vibrateClick()
+        }
 
         saveToDatabase(currentExpression, calculationResult)
     }

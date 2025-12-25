@@ -420,6 +420,7 @@ private fun LineCalculation5(
 ) {
 
     val isInputEmpty = viewModelCalculation.expression.collectAsState().value.isEmpty()
+    val isSwitchEnableDarkMode = !viewModelSetting.isSystemTheme.collectAsState().value
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -453,7 +454,8 @@ private fun LineCalculation5(
 
             if (menuExpanded) {
                 StyledDropdownMenu(
-                    expanded = menuExpanded,
+                    expanded = true,
+                    isEnableSwitchDarkMode = isSwitchEnableDarkMode,
                     viewModel = viewModelSetting,
                     onDismissRequest = { menuExpanded = false }
                 )

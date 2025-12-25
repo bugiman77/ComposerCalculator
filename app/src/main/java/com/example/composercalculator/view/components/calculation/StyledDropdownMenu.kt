@@ -32,6 +32,7 @@ import com.example.composercalculator.viewmodel.SettingsViewModel
 @Composable
 fun StyledDropdownMenu(
     expanded: Boolean,
+    isEnableSwitchDarkMode: Boolean = true,
     viewModel: SettingsViewModel = viewModel(),
     onDismissRequest: () -> Unit
 ) {
@@ -39,7 +40,6 @@ fun StyledDropdownMenu(
     val density = LocalDensity.current
 
     val isDarkTheme = viewModel.isDarkTheme.collectAsState()
-    val isSystemTheme = viewModel.isSystemTheme.collectAsState()
 
     // Используем Popup для полного контроля над стилем
     Popup(
@@ -64,18 +64,17 @@ fun StyledDropdownMenu(
                 onDismissRequest()
             }
 
-            if (!isSystemTheme.value) {
-                HorizontalDivider(
-                    modifier = Modifier.padding(vertical = 8.dp),
-                    thickness = DividerDefaults.Thickness, color = Color.Gray.copy(alpha = 0.5f)
-                )
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = 8.dp),
+                thickness = DividerDefaults.Thickness, color = Color.Gray.copy(alpha = 0.5f)
+            )
 
-                StyledMenuItemWithSwitch(
-                    text = "Тёмная тема",
-                    checked = isDarkTheme.value,
-                    onCheckedChange = { viewModel.onDarkThemeChange(isDark = it) }
-                )
-            }
+            StyledMenuItemWithSwitch(
+                text = "Тёмная тема",
+                checked = if (isEnableSwitchDarkMode) isDarkTheme.value else false,
+                isEnableSwitchDarkMode = isEnableSwitchDarkMode,
+                onCheckedChange = { viewModel.onDarkThemeChange(isDark = it) }
+            )
 
         }
     }
@@ -103,6 +102,7 @@ private fun StyledMenuItem(text: String, onClick: () -> Unit) {
 private fun StyledMenuItemWithSwitch(
     text: String,
     checked: Boolean,
+    isEnableSwitchDarkMode: Boolean = true,
     onCheckedChange: (Boolean) -> Unit,
 ) {
     Row(
@@ -124,6 +124,7 @@ private fun StyledMenuItemWithSwitch(
         Switch(
             checked = checked,
             onCheckedChange = onCheckedChange,
+            enabled = isEnableSwitchDarkMode,
             colors = SwitchDefaults.colors( // Стилизуем переключатель
                 checkedThumbColor = Color.White,
                 checkedTrackColor = Color(color = 0xFF34C759), // Зеленый цвет iOS

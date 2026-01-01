@@ -16,8 +16,8 @@ import com.example.composercalculator.viewmodel.SettingsViewModel
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        val managerSound = SoundManager(application)
-        val managerVibration = VibrationManager(application)
+        val managerSound = SoundManager(context = application)
+        val managerVibration = VibrationManager(context = application)
 
         val viewModelSettings = SettingsViewModel(application = application)
         val viewModelCalculation = CalculatorViewModel(

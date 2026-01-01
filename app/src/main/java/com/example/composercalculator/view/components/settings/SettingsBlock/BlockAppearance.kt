@@ -24,6 +24,7 @@ fun Appearance(
 ) {
 
     val showIconButton = viewModelSettings.showIconButton.collectAsState()
+    val bottomSpacer = viewModelSettings.bottomSpacer.collectAsState()
 
     SettingsGroup(title = "Внешний вид") {
         SettingsRow(
@@ -50,14 +51,11 @@ fun Appearance(
             modifier = modifier.padding(vertical = 4.dp)
         ) {
             Slider(
-//                value = displayFontSize.value,
-                value = 0f,
-//                onValueChangeFinished = { viewModelSettings.onFontSizeChange(displayFontSize.value) },
-                onValueChangeFinished = {  },
-//                onValueChange = { viewModelSettings.onFontSizeChange(it) },
-                onValueChange = {  },
-                valueRange = 40f..120f,
-                steps = 7, // 8 позиций
+                value = bottomSpacer.value.toFloat(),
+                onValueChangeFinished = { viewModelSettings.onBottomChangeChange(spacer = bottomSpacer.value) },
+                onValueChange = { viewModelSettings.onBottomChangeChange(spacer = it.toInt()) },
+                valueRange = 0f..30f,
+                steps = 30,
                 colors = SliderDefaults.colors(
                     thumbColor = Color.White,
                     activeTrackColor = Orange,

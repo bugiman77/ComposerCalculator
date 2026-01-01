@@ -19,4 +19,5 @@ data class Settings(
     var showIconButton: Boolean = true,
     var playSound: Boolean = false,
     var playVibration: Boolean = false,
+    var bottomSpacer: Int = 24,
 )

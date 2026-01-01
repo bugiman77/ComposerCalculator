@@ -58,6 +58,9 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val _playVibration = MutableStateFlow(value = false)
     val playVibration: StateFlow<Boolean> = _playVibration
 
+    private val _bottomSpacer = MutableStateFlow(value = 24)
+    val bottomSpacer: StateFlow<Int> = _bottomSpacer
+
     init {
         // Загружаем настройки при старте
         viewModelScope.launch {
@@ -81,6 +84,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             _showIconButton.value = it.showIconButton
             _playSound.value = it.playSound
             _playVibration.value = it.playVibration
+            _bottomSpacer.value = it.bottomSpacer
         }
     }
 
@@ -163,6 +167,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    fun onBottomChangeChange(spacer: Int) {
+        viewModelScope.launch {
+            saveSetting { _bottomSpacer.value = spacer }
+        }
+    }
+
     private suspend fun saveSetting(updateState: suspend () -> Unit) {
         // Обновляем состояние в UI
         updateState()
@@ -184,6 +194,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
                 showIconButton = _showIconButton.value,
                 playSound = _playSound.value,
                 playVibration = _playVibration.value,
+                bottomSpacer = _bottomSpacer.value,
             )
         )
     }

@@ -53,6 +53,8 @@ fun CalculatorButtonGrid(
     viewModelCalculation: CalculatorViewModel = viewModel()
 ) {
 
+    val bottomSpacer = viewModelSetting.bottomSpacer.collectAsState()
+
     Column(
         modifier = Modifier
             .padding(start = 4.dp, end = 4.dp, bottom = 24.dp),

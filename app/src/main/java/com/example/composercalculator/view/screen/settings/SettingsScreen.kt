@@ -9,11 +9,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,15 +24,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -42,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.composercalculator.R
 import com.example.composercalculator.ui.theme.DarkGray
 import com.example.composercalculator.ui.theme.Orange
 import com.example.composercalculator.view.components.settings.SettingsBlock.Animations
@@ -53,14 +53,13 @@ import com.example.composercalculator.view.components.settings.SettingsBlock.His
 import com.example.composercalculator.view.components.settings.SettingsBlock.SavingData
 import com.example.composercalculator.view.components.settings.SettingsBlock.SoundAndVibration
 import com.example.composercalculator.viewmodel.SettingsViewModel
-import com.example.composercalculator.R
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     viewModelSettings: SettingsViewModel = viewModel(),
-    onNavigateBack: () -> Unit, // Лямбда для возврата на предыдущий экран
+    onNavigateBack: () -> Unit,
     onNavigateToAbout: () -> Unit,
 ) {
 
@@ -69,32 +68,20 @@ fun SettingsScreen(
 
     Scaffold(
         containerColor = Color(color = 0xFF161616), // Фон всего экрана
+        contentWindowInsets = WindowInsets(left = 0, top = 0, right = 0, bottom = 0),
         topBar = {
-            CenterAlignedTopAppBar(
-                modifier = Modifier.clickable {
-                    coroutineScope.launch {
-                        scrollState.animateScrollTo(value = 0)
-                    }
-                },
-                title = {
-                    Text(
-                        text = "Настройки",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                },
-                navigationIcon = {
-                    CustomBackButton(onClick = onNavigateBack)
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+            CustomTopBar(
+                onNavigateBack = onNavigateBack,
+                onScrollToTop = {
+                    coroutineScope.launch { scrollState.animateScrollTo(value = 0) }
+                }
             )
-//            CustomTopBar()
         }
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .padding(paddingValues = innerPadding)
                 .fillMaxSize()
+                .padding(top = innerPadding.calculateTopPadding())
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .verticalScroll(scrollState)
         ) {
@@ -136,47 +123,52 @@ fun SettingsScreen(
 
 @Composable
 fun CustomTopBar(
-//    onNavigateBack: () -> Unit,
+    onNavigateBack: () -> Unit,
+    onScrollToTop: () -> Unit
 ) {
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .statusBarsPadding()
             .padding(horizontal = 16.dp, vertical = 10.dp),
-        // Выравниваем все дочерние элементы по вертикали
         contentAlignment = Alignment.Center
     ) {
         Card(
+            onClick = onNavigateBack,
             shape = CircleShape,
             modifier = Modifier
                 .size(size = 48.dp)
-                .align(Alignment.CenterStart), // <-- Явно указываем выравнивание
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            border = BorderStroke(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
-            ),
+                .align(Alignment.CenterStart),
+            colors = CardDefaults.cardColors(containerColor = Color(color = 0xFF2C2C2E)),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
         ) {
             Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                Icon(painterResource(R.drawable.back_ios), contentDescription = "Назад")
+                Icon(
+                    painter = painterResource(id = R.drawable.back_ios),
+                    contentDescription = "Назад",
+                    tint = Color.White
+                )
             }
-//            CustomBackButton(onClick = onNavigateBack)
         }
 
         Card(
             shape = RoundedCornerShape(size = 24.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            border = BorderStroke(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
-            ),
+            modifier = Modifier
+                .align(Alignment.Center)
+                .clickable { onScrollToTop() },
+            colors = CardDefaults.cardColors(containerColor = Color(color = 0xFF2C2C2E)),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
         ) {
             Row(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Настройки", fontWeight = FontWeight.Bold)
+                Text(
+                    text = "Настройки",
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
             }
         }
     }

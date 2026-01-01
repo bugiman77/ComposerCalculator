@@ -57,22 +57,26 @@ fun CalculatorButtonGrid(
 
     Column(
         modifier = Modifier
-            .padding(start = 4.dp, end = 4.dp, bottom = 24.dp),
+            .padding(start = 4.dp, end = 4.dp),
         verticalArrangement = Arrangement.spacedBy(space = 8.dp)
     ) {
 
         LineCalculation1(
             viewModelCalculation = viewModelCalculation
         )
+
         LineCalculation2(
             viewModelCalculation = viewModelCalculation
         )
+
         LineCalculation3(
             viewModelCalculation = viewModelCalculation
         )
+
         LineCalculation4(
             viewModelCalculation = viewModelCalculation
         )
+
         LineCalculation5(
             viewModelCalculation = viewModelCalculation,
             viewModelSetting = viewModelSetting
@@ -269,8 +273,6 @@ private fun LineCalculation2(
     viewModelCalculation: CalculatorViewModel,
 ) {
 
-    val isInputEmpty = viewModelCalculation.expression.collectAsState().value.isEmpty()
-
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
@@ -319,8 +321,6 @@ private fun LineCalculation3(
     modifier: Modifier = Modifier,
     viewModelCalculation: CalculatorViewModel,
 ) {
-
-    val isInputEmpty = viewModelCalculation.expression.collectAsState().value.isEmpty()
 
     Row(
         modifier = modifier.fillMaxWidth(),

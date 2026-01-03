@@ -1,7 +1,6 @@
 package com.example.composercalculator.viewmodel
 
 import android.app.Application
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
@@ -150,14 +149,14 @@ class CalculatorViewModel(
                 "(-$lastToken)"
             }
 
-            _expression.value = prefix + updatedToken
-        }
+            if (settingsViewModel.playSound.value){
+                soundManager.playClick()
+            }
+            if (settingsViewModel.playVibration.value) {
+                vibrationManager.vibrateClick()
+            }
 
-        if (settingsViewModel.playSound.value){
-            soundManager.playClick()
-        }
-        if (settingsViewModel.playVibration.value) {
-            vibrationManager.vibrateClick()
+            _expression.value = prefix + updatedToken
         }
 
     }
@@ -166,13 +165,14 @@ class CalculatorViewModel(
     fun removeLastCharacter() {
         if (_expression.value.isNotEmpty()) {
             _expression.value = _expression.value.dropLast(n = 1)
-        }
 
-        if (settingsViewModel.playSound.value){
-            soundManager.playClick()
-        }
-        if (settingsViewModel.playVibration.value) {
-            vibrationManager.vibrateClick()
+            if (settingsViewModel.playSound.value){
+                soundManager.playClick()
+            }
+            if (settingsViewModel.playVibration.value) {
+                vibrationManager.vibrateClick()
+            }
+
         }
 
     }

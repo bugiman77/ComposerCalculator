@@ -119,6 +119,7 @@ dependencies {
     implementation("androidx.compose.material3.adaptive:adaptive:1.2.0")
     implementation("androidx.compose.material3.adaptive:adaptive-layout:1.2.0")
     implementation("androidx.compose.material3.adaptive:adaptive-navigation:1.2.0")
+    implementation("androidx.compose.foundation:foundation:1.1.0")
     implementation("io.realm.kotlin:library-base:1.6.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.12.0")
@@ -128,5 +129,7 @@ dependencies {
     ksp("androidx.room:room-compiler:2.6.1")
 
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    implementation("com.google.accompanist:accompanist-drawablepainter:0.34.0")
 
 }

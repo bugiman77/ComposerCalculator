@@ -3,44 +3,63 @@ package com.example.composercalculator.view.screen.settings
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composercalculator.BuildConfig
 import com.example.composercalculator.R
+import com.example.composercalculator.model.AppInfo
 import com.example.composercalculator.model.DeviceInfo
+import com.example.composercalculator.viewmodel.AppListViewModel
+import com.google.accompanist.drawablepainter.rememberDrawablePainter
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(
+    appListViewModel: AppListViewModel,
     onNavigateBack: () -> Unit,
     onNavigateToPrivacy: () -> Unit
 ) {
@@ -66,7 +85,7 @@ fun AboutScreen(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                AppHeader()
+                AppHeader(appListViewModel)
 
                 Spacer(modifier = Modifier.height(32.dp))
 
@@ -82,8 +101,18 @@ fun AboutScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AppHeader() {
+private fun AppHeader(
+    appListViewModel: AppListViewModel
+) {
+
+    val context = LocalContext.current
+    val apps = appListViewModel.apps.collectAsState()
+
+    // Состояние для управления модальным окном
+    var showSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -94,9 +123,16 @@ private fun AppHeader() {
             contentDescription = "Иконка приложения",
             contentScale = ContentScale.FillWidth,
             modifier = Modifier
-                .size(120.dp)
-                .clip(RoundedCornerShape(size = 24.dp))
+                .size(size = 120.dp)
+                .clip(shape = RoundedCornerShape(size = 24.dp))
                 .background(Color.DarkGray)
+                .combinedClickable(
+                    onClick = {},
+                    onLongClick = {
+                        appListViewModel.loadInstalledApps(context) // Загружаем список
+                        showSheet = true // Показываем окно
+                    }
+                )
         )
 
         Spacer(modifier = Modifier.height(height = 24.dp))
@@ -107,6 +143,64 @@ private fun AppHeader() {
             fontSize = 16.sp
         )
 
+        // Само модальное окно
+        if (showSheet) {
+            ModalBottomSheet(
+                onDismissRequest = { showSheet = false },
+                sheetState = sheetState,
+                dragHandle = { BottomSheetDefaults.DragHandle() } // Полоска сверху
+            ) {
+                AppListContent(apps.value)
+            }
+        }
+
+    }
+}
+
+@Composable
+private fun AppListContent(apps: List<AppInfo>) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.6f) // Окно на 60% экрана
+            .padding(horizontal = 16.dp)
+    ) {
+        item {
+            Text(
+                "Выберите приложение",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
+        }
+
+        if (apps.isEmpty()) {
+            item {
+                Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            }
+        }
+
+        items(apps) { app ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = rememberDrawablePainter(drawable = app.icon),
+                    contentDescription = null,
+                    modifier = Modifier.size(40.dp)
+                )
+                Column(modifier = Modifier.padding(start = 16.dp)) {
+                    Text(text = app.name, style = MaterialTheme.typography.bodyLarge)
+                    Text(text = app.packageName, style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+                }
+            }
+        }
+
+        item { Spacer(modifier = Modifier.height(height = 32.dp)) }
     }
 }
 

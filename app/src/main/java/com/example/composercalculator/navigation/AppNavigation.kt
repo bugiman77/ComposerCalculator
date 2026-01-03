@@ -14,12 +14,14 @@ import androidx.compose.animation.core.tween
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.unit.IntOffset
 import com.example.composercalculator.view.screen.settings.PrivacyPolicyScreen
+import com.example.composercalculator.viewmodel.AppListViewModel
 import com.example.composercalculator.viewmodel.SettingsViewModel
 
 @Composable
 fun AppNavigation(
     settingsViewModel: SettingsViewModel = viewModel(),
-    calculatorViewModel: CalculatorViewModel = viewModel()
+    calculatorViewModel: CalculatorViewModel = viewModel(),
+    appListViewModel: AppListViewModel = viewModel()
 ) {
     val navController = rememberNavController()
 
@@ -125,6 +127,7 @@ fun AppNavigation(
 
         ) {
             AboutScreen(
+                appListViewModel = appListViewModel,
                 onNavigateBack = { navController.popBackStack() },
                 onNavigateToPrivacy = { navController.navigate(Routes.PRIVACY_POLICY) }
             )

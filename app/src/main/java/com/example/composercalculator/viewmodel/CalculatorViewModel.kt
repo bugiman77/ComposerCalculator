@@ -75,7 +75,7 @@ class CalculatorViewModel(
         viewModelScope.launch {
             _expression.value += inputDigit
         }
-        if (settingsViewModel.playSound.value){
+        if (settingsViewModel.playSound.value) {
             soundManager.playClick()
         }
         if (settingsViewModel.playVibration.value) {
@@ -85,7 +85,7 @@ class CalculatorViewModel(
 
     fun onInputMathematicalOperations(inputOperation: String) {
 
-        if (settingsViewModel.playSound.value){
+        if (settingsViewModel.playSound.value) {
             soundManager.playClick()
         }
         if (settingsViewModel.playVibration.value) {
@@ -95,7 +95,8 @@ class CalculatorViewModel(
         val currentExpression = _expression.value
         if (currentExpression.isEmpty()) return
 
-        val operators = setOf('+', '-', '/', '*', '%') // Выносим операторы в Set для быстрого поиска
+        val operators =
+            setOf('+', '-', '/', '*', '%') // Выносим операторы в Set для быстрого поиска
         val lastChar = currentExpression.last()
 
         // 1. Обработка ввода точки
@@ -120,7 +121,7 @@ class CalculatorViewModel(
 
             if (lastChar in operators) {
                 // Если последний символ — оператор, заменяем его
-                _expression.value = currentExpression.dropLast(1) + inputOperation
+                _expression.value = currentExpression.dropLast(n = 1) + inputOperation
             } else {
                 // Если последний символ — цифра, добавляем оператор
                 _expression.value += inputOperation
@@ -134,22 +135,22 @@ class CalculatorViewModel(
 
         // Регулярное выражение находит последнее число, включая отрицательные в скобках
         // Ищет либо (-число), либо просто число в конце строки
-        val lastTokenRegex = Regex("""(\(-\d+\.?\d*\)|(?<!\d)\d+\.?\d*)$""")
-        val matchResult = lastTokenRegex.find(currentExpression)
+        val lastTokenRegex = Regex(pattern = """(\(-\d+\.?\d*\)|(?<!\d)\d+\.?\d*)$""")
+        val matchResult = lastTokenRegex.find(input = currentExpression)
 
         if (matchResult != null) {
             val lastToken = matchResult.value
-            val prefix = currentExpression.substring(0, matchResult.range.first)
+            val prefix = currentExpression.take(n = matchResult.range.first)
 
-            val updatedToken = if (lastToken.startsWith("(-")) {
+            val updatedToken = if (lastToken.startsWith(prefix = "(-")) {
                 // Если число уже отрицательное (в скобках), убираем скобки и минус
-                lastToken.removeSurrounding("(-", ")")
+                lastToken.removeSurrounding(prefix = "(-", suffix = ")")
             } else {
                 // Если число положительное, оборачиваем в (-...)
                 "(-$lastToken)"
             }
 
-            if (settingsViewModel.playSound.value){
+            if (settingsViewModel.playSound.value) {
                 soundManager.playClick()
             }
             if (settingsViewModel.playVibration.value) {
@@ -166,7 +167,7 @@ class CalculatorViewModel(
         if (_expression.value.isNotEmpty()) {
             _expression.value = _expression.value.dropLast(n = 1)
 
-            if (settingsViewModel.playSound.value){
+            if (settingsViewModel.playSound.value) {
                 soundManager.playClick()
             }
             if (settingsViewModel.playVibration.value) {
@@ -200,7 +201,7 @@ class CalculatorViewModel(
 
         _expression.value = calculationResult
 
-        if (settingsViewModel.playSound.value){
+        if (settingsViewModel.playSound.value) {
             soundManager.playClick()
         }
         if (settingsViewModel.playVibration.value) {

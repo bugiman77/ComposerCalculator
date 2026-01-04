@@ -229,21 +229,23 @@ private fun LineCalculation1(
             color = LightGray,
             modifier = Modifier.weight(weight = 1f),
             fontSize = 30.sp,
+            onClick = {
+                viewModelCalculation.removeLastCharacter()
+            },
             onLongClick = {
                 viewModelCalculation.clearExpression()
-            }
-        ) {
-            viewModelCalculation.removeLastCharacter()
-        }
+            },
+        )
 
         BtnCalculationText(
             text = "+/-",
             color = LightGray,
             modifier = Modifier.weight(weight = 1f),
             fontSize = 30.sp,
-        ) {
-            viewModelCalculation.onToggleSign()
-        }
+            onClick = {
+                viewModelCalculation.onToggleSign()
+            },
+        )
 
         BtnCalculationIcon(
             iconId = painterResource(id = R.drawable.ic_percent),
@@ -251,18 +253,20 @@ private fun LineCalculation1(
             tint = Color.White,
             modifier = Modifier.weight(weight = 1f),
             iconSize = 50.dp,
-        ) {
-//            viewModelCalculation.onInputMathematicalOperations(inputOperation = "%")
-        }
+            onClick = {
+
+            },
+        )
 
         BtnCalculationText(
             text = "/",
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
             fontSize = 50.sp,
-        ) {
-            viewModelCalculation.onInputMathematicalOperations(inputOperation = "/")
-        }
+            onClick = {
+                viewModelCalculation.onInputMathematicalOperations(inputOperation = "/")
+            },
+        )
     }
 
 }
@@ -284,24 +288,26 @@ private fun LineCalculation2(
             modifier = Modifier.weight(weight = 1f),
             onClick = {
                 viewModelCalculation.onInputDigit(inputDigit = "7")
-            }
+            },
         )
 
         BtnCalculationText(
             text = "8",
             color = DarkGray,
-            modifier = Modifier.weight(weight = 1f)
-        ) {
-            viewModelCalculation.onInputDigit(inputDigit = "8")
-        }
+            modifier = Modifier.weight(weight = 1f),
+            onClick = {
+                viewModelCalculation.onInputDigit(inputDigit = "8")
+            },
+        )
 
         BtnCalculationText(
             text = "9",
             color = DarkGray,
-            modifier = Modifier.weight(weight = 1f)
-        ) {
-            viewModelCalculation.onInputDigit(inputDigit = "9")
-        }
+            modifier = Modifier.weight(weight = 1f),
+            onClick = {
+                viewModelCalculation.onInputDigit(inputDigit = "9")
+            },
+        )
 
         BtnCalculationIcon(
             iconId = painterResource(id = R.drawable.ic_multiply),
@@ -309,9 +315,13 @@ private fun LineCalculation2(
             tint = Color.White,
             modifier = Modifier.weight(weight = 1f),
             iconSize = 50.dp,
-        ) {
-            viewModelCalculation.onInputMathematicalOperations(inputOperation = "*")
-        }
+            onClick = {
+                viewModelCalculation.onInputMathematicalOperations(inputOperation = "*")
+            },
+            onLongClick = {
+//                TODO
+            },
+        )
 
     }
 }
@@ -330,26 +340,29 @@ private fun LineCalculation3(
         BtnCalculationText(
             text = "4",
             color = DarkGray,
-            modifier = Modifier.weight(weight = 1f)
-        ) {
-            viewModelCalculation.onInputDigit(inputDigit = "4")
-        }
+            modifier = Modifier.weight(weight = 1f),
+            onClick = {
+                viewModelCalculation.onInputDigit(inputDigit = "4")
+            },
+        )
 
         BtnCalculationText(
             text = "5",
             color = DarkGray,
-            modifier = Modifier.weight(weight = 1f)
-        ) {
-            viewModelCalculation.onInputDigit(inputDigit = "5")
-        }
+            modifier = Modifier.weight(weight = 1f),
+            onClick = {
+                viewModelCalculation.onInputDigit(inputDigit = "5")
+            },
+        )
 
         BtnCalculationText(
             text = "6",
             color = DarkGray,
-            modifier = Modifier.weight(weight = 1f)
-        ) {
-            viewModelCalculation.onInputDigit(inputDigit = "6")
-        }
+            modifier = Modifier.weight(weight = 1f),
+            onClick = {
+                viewModelCalculation.onInputDigit(inputDigit = "6")
+            }
+        )
 
         BtnCalculationIcon(
             iconId = painterResource(id = R.drawable.ic_minus),
@@ -357,9 +370,10 @@ private fun LineCalculation3(
             tint = Color.White,
             modifier = Modifier.weight(weight = 1f),
             iconSize = 70.dp,
-        ) {
-            viewModelCalculation.onInputMathematicalOperations(inputOperation = "-")
-        }
+            onClick = {
+                viewModelCalculation.onInputMathematicalOperations(inputOperation = "-")
+            },
+        )
 
     }
 }
@@ -380,26 +394,29 @@ private fun LineCalculation4(
         BtnCalculationText(
             text = "1",
             color = DarkGray,
-            modifier = Modifier.weight(weight = 1f)
-        ) {
-            viewModelCalculation.onInputDigit(inputDigit = "1")
-        }
+            modifier = Modifier.weight(weight = 1f),
+            onClick = {
+                viewModelCalculation.onInputDigit(inputDigit = "1")
+            },
+        )
 
         BtnCalculationText(
             text = "2",
             color = DarkGray,
-            modifier = Modifier.weight(weight = 1f)
-        ) {
-            viewModelCalculation.onInputDigit(inputDigit = "2")
-        }
+            modifier = Modifier.weight(weight = 1f),
+            onClick = {
+                viewModelCalculation.onInputDigit(inputDigit = "2")
+            },
+        )
 
         BtnCalculationText(
             text = "3",
             color = DarkGray,
-            modifier = Modifier.weight(weight = 1f)
-        ) {
-            viewModelCalculation.onInputDigit(inputDigit = "3")
-        }
+            modifier = Modifier.weight(weight = 1f),
+            onClick = {
+                viewModelCalculation.onInputDigit(inputDigit = "3")
+            },
+        )
 
         BtnCalculationIcon(
             iconId = painterResource(id = R.drawable.ic_plus),
@@ -407,9 +424,10 @@ private fun LineCalculation4(
             tint = Color.White,
             modifier = Modifier.weight(weight = 1f),
             iconSize = 50.dp,
-        ) {
-            viewModelCalculation.onInputMathematicalOperations(inputOperation = "+")
-        }
+            onClick = {
+                viewModelCalculation.onInputMathematicalOperations(inputOperation = "+")
+            },
+        )
 
     }
 }
@@ -468,19 +486,21 @@ private fun LineCalculation5(
             text = "0",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
-            fontSize = 45.sp
-        ) {
-            viewModelCalculation.onInputDigit(inputDigit = "0")
-        }
+            fontSize = 45.sp,
+            onClick = {
+                viewModelCalculation.onInputDigit(inputDigit = "0")
+            },
+        )
 
         BtnCalculationText(
             text = ",",
             color = DarkGray,
             modifier = Modifier
                 .weight(weight = 1f),
-        ) {
-            viewModelCalculation.onInputMathematicalOperations(inputOperation = ".")
-        }
+            onClick = {
+                viewModelCalculation.onInputMathematicalOperations(inputOperation = ".")
+            },
+        )
 
         BtnCalculationIcon(
             iconId = painterResource(id = R.drawable.ic_equal),
@@ -488,11 +508,12 @@ private fun LineCalculation5(
             tint = Color.White,
             modifier = Modifier.weight(weight = 1f),
             iconSize = 55.dp,
-        ) {
-            scope.launch {
-                viewModelCalculation.calculateAndSave()
-            }
-        }
+            onClick = {
+                scope.launch {
+                    viewModelCalculation.calculateAndSave()
+                }
+            },
+        )
 
     }
 }

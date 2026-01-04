@@ -72,7 +72,15 @@ class CalculatorViewModel(
     }
 
     fun onInputDigit(inputDigit: String) {
-        viewModelScope.launch {
+
+        val currentExpression = _expression.value
+
+        // Проверяем, не является ли последний символ закрывающей скобкой
+        if (currentExpression.isNotEmpty() && currentExpression.last() == ')') {
+            // Если была скобка, добавляем знак умножения перед цифрой
+            _expression.value += "*$inputDigit"
+        } else {
+            // В обычном случае просто добавляем цифру
             _expression.value += inputDigit
         }
         if (settingsViewModel.playSound.value) {

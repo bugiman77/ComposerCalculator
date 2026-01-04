@@ -1,5 +1,6 @@
 package com.example.composercalculator.view.components.calculation
 
+import android.content.ClipData
 import android.icu.util.Calendar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -38,6 +39,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -142,72 +146,6 @@ fun HistoryBottomSheet(
     }
 }
 
-/*@Composable
-private fun HistoryGroup(
-    date: String,
-    items: List<History>,
-    onAction: (CalculatorEvent) -> Unit,
-) {
-    var isExpanded by remember { mutableStateOf(value = true) } // Состояние "свернуто/развернуто"
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(shape = RoundedCornerShape(size = 16.dp))
-            .background(Color(color = 0xFF2C2C2E))
-            .animateContentSize() // Анимация изменения размера
-    ) {
-        GroupHeader(
-            date = date,
-            isExpanded = isExpanded,
-            onClick = { isExpanded = !isExpanded }
-        )
-
-        if (isExpanded) {
-            Column(modifier = Modifier.padding(horizontal = 8.dp)) {
-                items.forEach { item ->
-                    HistoryItemRow(
-                        item = item,
-                        onAction = onAction
-                    )
-                    HorizontalDivider(color = Color.Gray.copy(alpha = 0.3f))
-                }
-            }
-        }
-    }
-}*/
-
-/*@Composable
-private fun GroupHeader(
-    date: String,
-    isExpanded: Boolean,
-    onClick: () -> Unit
-) {
-    val rotationAngle by animateFloatAsState(targetValue = if (isExpanded) 0f else -90f)
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = formatDateForHeader(dateString = date), // Преобразуем "2025-10-31" в "Сегодня" или "31 октября"
-            color = Color.White,
-            fontSize = 17.sp,
-            fontWeight = FontWeight.SemiBold
-        )
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-            contentDescription = "Свернуть/Развернуть",
-            tint = Color.Gray,
-            modifier = Modifier.rotate(degrees = rotationAngle)
-        )
-    }
-}*/
-
 private fun formatDateForHeader(dateString: String): String {
     val parser = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     val date = parser.parse(dateString) ?: return dateString
@@ -236,6 +174,7 @@ private fun HistoryItemRow(
 
     var labelText by remember(key1 = item.id) { mutableStateOf(value = item.note) }
     val scope = rememberCoroutineScope()
+    val clipboard = LocalClipboard.current
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -312,10 +251,10 @@ private fun HistoryItemRow(
                 onClick = {
                     calculatorViewModel.editingExpression(itemHistory = item)
                 },
-                modifier = Modifier.weight(weight = 1f), // Занимает 1 долю (половину)
+                modifier = Modifier.weight(weight = 1f),
                 shape = RoundedCornerShape(size = 12.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(color = 0xFFDEAA45) // Синий цвет
+                    containerColor = Color(color = 0xFFDEAA45)
                 ),
                 contentPadding = PaddingValues(vertical = 8.dp)
             ) {
@@ -328,10 +267,10 @@ private fun HistoryItemRow(
 
             Button(
                 onClick = { calculatorViewModel.deleteHistoryItem(itemHistory = item) },
-                modifier = Modifier.weight(weight = 1f), // Занимает 1 долю (половину)
+                modifier = Modifier.weight(weight = 1f),
                 shape = RoundedCornerShape(size = 12.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(color = 0xFFEE4848) // Синий цвет
+                    containerColor = Color(color = 0xFFEE4848)
                 ),
                 contentPadding = PaddingValues(vertical = 8.dp)
             ) {
@@ -345,7 +284,13 @@ private fun HistoryItemRow(
         ) {
 
             Button(
-                onClick = { },
+                onClick = {
+                    scope.launch {
+                        val clipEntry =
+                            ClipEntry(ClipData.newPlainText("Expression", item.expression))
+                        clipboard.setClipEntry(clipEntry)
+                    }
+                },
                 modifier = Modifier.weight(weight = 1f), // Занимает 1 долю (половину)
                 shape = RoundedCornerShape(size = 12.dp),
                 colors = ButtonDefaults.buttonColors(
@@ -361,7 +306,12 @@ private fun HistoryItemRow(
             )
 
             Button(
-                onClick = { },
+                onClick = {
+                    scope.launch {
+                        val clipEntry = ClipEntry(ClipData.newPlainText("Result", item.result))
+                        clipboard.setClipEntry(clipEntry)
+                    }
+                },
                 modifier = Modifier.weight(weight = 1f), // Занимает 1 долю (половину)
                 shape = RoundedCornerShape(size = 12.dp),
                 colors = ButtonDefaults.buttonColors(

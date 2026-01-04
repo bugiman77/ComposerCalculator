@@ -71,6 +71,7 @@ fun CalculatorScreen(
     if (showHistorySheet) {
         HistoryBottomSheet(
             calculatorViewModel = viewModelCalculation,
+            settingsViewModel = viewModelSettings,
             sheetState = sheetState,
             onDismiss = {
                 scope.launch {

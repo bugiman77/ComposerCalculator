@@ -1,10 +1,7 @@
 package com.example.composercalculator.view.components.calculation
 
 import android.icu.util.Calendar
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,50 +14,56 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.composercalculator.model.CalculationHistoryItem
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.composercalculator.data.local.db.entity.History
 import com.example.composercalculator.model.CalculatorEvent
-import java.text.SimpleDateFormat
-import java.util.Locale
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import com.example.composercalculator.ui.theme.Orange
 import com.example.composercalculator.viewmodel.CalculatorViewModel
+import com.example.composercalculator.viewmodel.SettingsViewModel
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryBottomSheet(
     calculatorViewModel: CalculatorViewModel,
+    settingsViewModel: SettingsViewModel,
     onAction: (CalculatorEvent) -> Unit = {},
     sheetState: SheetState,
     onDismiss: () -> Unit
 ) {
+
+    val historyItems by calculatorViewModel.history.collectAsStateWithLifecycle()
+    val scope = rememberCoroutineScope()
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -90,7 +93,13 @@ fun HistoryBottomSheet(
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold
             )
-            TextButton(onClick = { onAction(CalculatorEvent.ClearHistory) }) {
+            TextButton(
+                onClick = {
+                    scope.launch {
+                        calculatorViewModel.deleteHistoryItemAll()
+                    }
+                }
+            ) {
                 Text(text = "Очистить", color = Color.Red, fontSize = 16.sp)
             }
         }
@@ -100,40 +109,44 @@ fun HistoryBottomSheet(
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(space = 16.dp) // Расстояние между группами
         ) {
-            /*if (groupedHistory.isEmpty()) {
+
+            if (historyItems.isEmpty()) {
                 item {
                     Text(
                         text = "История вычислений пуста",
-                        color = Color.Gray,
-                        fontSize = 18.sp,
-                        textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 32.dp)
+                            .padding(vertical = 32.dp),
+                        textAlign = TextAlign.Center,
+                        color = Color.Gray
+                    )
+                }
+            } else {
+                // Отображаем список записей
+                items(
+                    items = historyItems,
+                    key = { it.id } // Используем ID из Room для оптимизации
+                ) { item ->
+                    HistoryItemRow(
+                        item = item,
+                        isNoteEnabled = settingsViewModel.isNoteEnabled.collectAsState().value,
+                        calculatorViewModel = calculatorViewModel,
+                        onAction = {}
                     )
                 }
             }
 
-            groupedHistory.forEach { (date, items) ->
-                item(key = date) {
-                    HistoryGroup(
-                        date = date,
-                        items = items,
-                        onAction = onAction,
-                    )
-                }
-            }*/
         }
     }
 }
 
-@Composable
+/*@Composable
 private fun HistoryGroup(
     date: String,
-    items: List<CalculationHistoryItem>,
+    items: List<History>,
     onAction: (CalculatorEvent) -> Unit,
 ) {
-    var isExpanded by remember { mutableStateOf(true) } // Состояние "свернуто/развернуто"
+    var isExpanded by remember { mutableStateOf(value = true) } // Состояние "свернуто/развернуто"
 
     Column(
         modifier = Modifier
@@ -160,9 +173,9 @@ private fun HistoryGroup(
             }
         }
     }
-}
+}*/
 
-@Composable
+/*@Composable
 private fun GroupHeader(
     date: String,
     isExpanded: Boolean,
@@ -191,7 +204,7 @@ private fun GroupHeader(
             modifier = Modifier.rotate(degrees = rotationAngle)
         )
     }
-}
+}*/
 
 private fun formatDateForHeader(dateString: String): String {
     val parser = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -214,12 +227,13 @@ private fun formatDateForHeader(dateString: String): String {
 
 @Composable
 private fun HistoryItemRow(
-    item: CalculationHistoryItem,
-    onAction: (CalculatorEvent) -> Unit,
-    isNoteEnabled: Boolean = true
+    item: History,
+    isNoteEnabled: Boolean,
+    calculatorViewModel: CalculatorViewModel,
+    onAction: (CalculatorEvent) -> Unit
 ) {
 
-    var labelText by remember(key1 = item.id) { mutableStateOf(value = item.label ?: "") }
+    var labelText by remember(key1 = item.id) { mutableStateOf(value = item.note) }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -235,48 +249,14 @@ private fun HistoryItemRow(
                 fontSize = 16.sp
             )
             Text(
-                text = "= ${item.result}",
+                text = "=${item.result}",
                 color = Color.White,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Medium
             )
         }
 
-//        Spacer(modifier = Modifier.height(8.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-
-            Button(
-                onClick = { onAction(CalculatorEvent.RecallCalculation(item.expression)) },
-                modifier = Modifier.weight(weight = 1f), // Занимает 1 долю (половину)
-                shape = RoundedCornerShape(size = 12.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(color = 0xFFDEAA45) // Синий цвет
-                ),
-                contentPadding = PaddingValues(vertical = 8.dp)
-            ) {
-                Text(text = "Изменить", color = Color.White, fontSize = 13.sp)
-            }
-
-            Spacer(
-                modifier = Modifier.width(width = 8.dp)
-            )
-
-            Button(
-                onClick = { onAction(CalculatorEvent.DeleteHistoryItem(item.id)) },
-                modifier = Modifier.weight(weight = 1f), // Занимает 1 долю (половину)
-                shape = RoundedCornerShape(size = 12.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(color = 0xFFEE4848) // Синий цвет
-                ),
-                contentPadding = PaddingValues(vertical = 8.dp)
-            ) {
-                Text(text = "Удалить", color = Color.White, fontSize = 13.sp)
-            }
-
-        }
+        Spacer(modifier = Modifier.height(height = 8.dp))
 
         if (isNoteEnabled) {
 
@@ -286,9 +266,10 @@ private fun HistoryItemRow(
                 onValueChange = { newText ->
                     labelText = newText
                     // Отправляем событие для сохранения в ViewModel
-                    onAction(CalculatorEvent.UpdateHistoryLabel(item.id, label = newText))
+//                    onAction(CalculatorEvent.UpdateHistoryLabel(item.id, label = newText))
+
                 },
-                placeholder = { Text("Добавить заметку...", color = Color.Gray) },
+                placeholder = { Text(text = "Добавить заметку...", color = Color.Gray) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
@@ -304,16 +285,91 @@ private fun HistoryItemRow(
                 ),
                 shape = RoundedCornerShape(size = 12.dp)
             )
+
+            Spacer(
+                modifier = Modifier.height(height = 8.dp)
+            )
+
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+
+            Button(
+                onClick = {
+                    calculatorViewModel.editingExpression(itemHistory = item)
+                },
+                modifier = Modifier.weight(weight = 1f), // Занимает 1 долю (половину)
+                shape = RoundedCornerShape(size = 12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(color = 0xFFDEAA45) // Синий цвет
+                ),
+                contentPadding = PaddingValues(vertical = 8.dp)
+            ) {
+                Text(text = "Изменить", color = Color.White, fontSize = 13.sp)
+            }
+
+            Spacer(
+                modifier = Modifier.width(width = 8.dp)
+            )
+
+            Button(
+                onClick = { calculatorViewModel.deleteHistoryItem(itemHistory = item) },
+                modifier = Modifier.weight(weight = 1f), // Занимает 1 долю (половину)
+                shape = RoundedCornerShape(size = 12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(color = 0xFFEE4848) // Синий цвет
+                ),
+                contentPadding = PaddingValues(vertical = 8.dp)
+            ) {
+                Text(text = "Удалить", color = Color.White, fontSize = 13.sp)
+            }
+
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+
+            Button(
+                onClick = { },
+                modifier = Modifier.weight(weight = 1f), // Занимает 1 долю (половину)
+                shape = RoundedCornerShape(size = 12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(color = 0xFFDEAA45) // Синий цвет
+                ),
+                contentPadding = PaddingValues(vertical = 8.dp)
+            ) {
+                Text(text = "Скопировать выражение", color = Color.White, fontSize = 13.sp)
+            }
+
+            Spacer(
+                modifier = Modifier.width(width = 8.dp)
+            )
+
+            Button(
+                onClick = { },
+                modifier = Modifier.weight(weight = 1f), // Занимает 1 долю (половину)
+                shape = RoundedCornerShape(size = 12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(color = 0xFFEE4848) // Синий цвет
+                ),
+                contentPadding = PaddingValues(vertical = 8.dp)
+            ) {
+                Text(text = "Скопировать результат", color = Color.White, fontSize = 13.sp)
+            }
+
         }
 
 //        Spacer(modifier = Modifier.height(12.dp))
 
-        Text(
-            text = item.getFormattedTime(),
-            color = Color.Gray,
-            fontSize = 12.sp,
-            modifier = Modifier
-        )
+        /*        Text(
+                    text = item.getFormattedTime(),
+                    color = Color.Gray,
+                    fontSize = 12.sp,
+                    modifier = Modifier
+                )*/
 
     }
 }

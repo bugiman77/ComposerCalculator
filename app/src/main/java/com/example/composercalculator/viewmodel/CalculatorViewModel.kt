@@ -50,15 +50,19 @@ class CalculatorViewModel(
     private val _timestampEditedExpression = MutableStateFlow(value = "")
     val timestampEditedExpression: StateFlow<String> = _timestampEditedExpression.asStateFlow()
 
+    private val _history = MutableStateFlow<List<History>>(value = emptyList())
+    val history: StateFlow<List<History>> = _history
+
     init {
         viewModelScope.launch {
             loadHistoryLast()
+            loadHistoryAll()
         }
     }
 
     suspend fun loadHistoryLast() {
         val history = withContext(context = Dispatchers.IO) {
-            historyDao.getHistory() // Run the DB query on a background thread
+            historyDao.getHistoryLast() // Run the DB query on a background thread
         }
         history?.let {
             _id.value = it.id.toString()
@@ -68,6 +72,26 @@ class CalculatorViewModel(
             _timestamp.value = it.timestamp.toString()
             _isEditedExpression.value = it.isEditedExpression.toString()
             _timestampEditedExpression.value = it.timestampEditedExpression.toString()
+        }
+    }
+
+    suspend fun loadHistoryAll() {
+        historyDao.getHistoryAll().collect { list ->
+            _history.value = list
+        }
+    }
+
+    fun deleteHistoryItemAll() {
+        viewModelScope.launch {
+            historyDao.deleteAll()
+            loadHistoryAll()
+        }
+    }
+
+    fun deleteHistoryItem(itemHistory: History) {
+        viewModelScope.launch {
+            historyDao.deleteItem(item = itemHistory)
+            loadHistoryAll()
         }
     }
 
@@ -83,6 +107,7 @@ class CalculatorViewModel(
             // В обычном случае просто добавляем цифру
             _expression.value += inputDigit
         }
+
         if (settingsViewModel.playSound.value) {
             soundManager.playClick()
         }
@@ -113,7 +138,7 @@ class CalculatorViewModel(
             val lastNumber = currentExpression.split('+', '-', '*', '/', '%').last()
 
             // Если в текущем числе уже есть точка или последний символ — оператор, игнорируем ввод
-            if (lastNumber.contains('.') || lastChar in operators) {
+            if (lastNumber.contains(char = '.') || lastChar in operators) {
                 return
             }
             _expression.value += "."
@@ -135,6 +160,10 @@ class CalculatorViewModel(
                 _expression.value += inputOperation
             }
         }
+    }
+
+    fun onInputNote(itemHistory: History) {
+
     }
 
     fun onToggleSign() {
@@ -170,7 +199,6 @@ class CalculatorViewModel(
 
     }
 
-
     fun removeLastCharacter() {
         if (_expression.value.isNotEmpty()) {
             _expression.value = _expression.value.dropLast(n = 1)
@@ -183,7 +211,6 @@ class CalculatorViewModel(
             }
 
         }
-
     }
 
     fun clearExpression() {
@@ -198,6 +225,10 @@ class CalculatorViewModel(
             }
 
         }
+    }
+
+    fun editingExpression(itemHistory: History) {
+        _expression.value = itemHistory.expression
     }
 
     suspend fun calculateAndSave() {
@@ -236,9 +267,9 @@ class CalculatorViewModel(
             val pythonFile = python.getModule("calculator")
             val expression = pythonFile.callAttr("evaluate_expression", expressionStr).toString()
             expression
-        } catch (e: PyException) {
+        } catch (_: PyException) {
             "Ошибка вычислений"
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             "Критическая ошибка"
         }
     }

@@ -181,6 +181,14 @@ class CalculatorViewModel(
     fun clearExpression() {
         if (_expression.value.isNotEmpty()) {
             _expression.value = ""
+
+            if (settingsViewModel.playSound.value) {
+                soundManager.playClick()
+            }
+            if (settingsViewModel.playVibration.value) {
+                vibrationManager.vibrateClick()
+            }
+
         }
     }
 

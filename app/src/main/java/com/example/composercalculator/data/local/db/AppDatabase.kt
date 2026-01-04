@@ -39,7 +39,7 @@ abstract class AppDatabaseSetting : RoomDatabase() {
 
 }
 
-@Database(entities = [History::class], version = 2)
+@Database(entities = [History::class], version = 3)
 abstract class AppDatabaseHistory : RoomDatabase() {
     abstract fun historyDao(): HistoryDao
 

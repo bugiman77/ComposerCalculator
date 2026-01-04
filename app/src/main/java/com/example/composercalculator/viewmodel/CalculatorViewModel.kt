@@ -75,7 +75,7 @@ class CalculatorViewModel(
         }
     }
 
-    suspend fun loadHistoryAll() {
+    private suspend fun loadHistoryAll() {
         historyDao.getHistoryAll().collect { list ->
             _history.value = list
         }
@@ -162,8 +162,8 @@ class CalculatorViewModel(
         }
     }
 
-    fun onInputNote(itemHistory: History) {
-
+    suspend fun onInputNote(itemHistory: History, newNote: String) {
+        historyDao.updateNote(itemId = itemHistory.id, newNote = newNote)
     }
 
     fun onToggleSign() {

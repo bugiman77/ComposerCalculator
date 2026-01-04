@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface HistoryDao {
-    @Insert
+    @Insert(entity = History::class)
     suspend fun insertItem(item: History)
 
     @Query(value = "SELECT * FROM history ORDER BY timestamp DESC LIMIT 1")
@@ -24,6 +24,7 @@ interface HistoryDao {
     @Query("DELETE FROM history")
     suspend fun deleteAll()
 
-
+    @Query(value = "UPDATE history SET note = :newNote WHERE id = :itemId")
+    suspend fun updateNote(itemId: Long, newNote: String)
 
 }

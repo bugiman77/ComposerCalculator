@@ -50,6 +50,9 @@ import com.example.composercalculator.viewmodel.CalculatorViewModel
 import com.example.composercalculator.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
@@ -131,7 +134,6 @@ fun HistoryBottomSheet(
                         item = item,
                         isNoteEnabled = settingsViewModel.isNoteEnabled.collectAsState().value,
                         calculatorViewModel = calculatorViewModel,
-                        onAction = {}
                     )
                 }
             }
@@ -230,16 +232,17 @@ private fun HistoryItemRow(
     item: History,
     isNoteEnabled: Boolean,
     calculatorViewModel: CalculatorViewModel,
-    onAction: (CalculatorEvent) -> Unit
 ) {
 
     var labelText by remember(key1 = item.id) { mutableStateOf(value = item.note) }
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.End
+//        horizontalAlignment = Alignment.End
     ) {
         Column(
+            modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.End
         ) {
 
@@ -270,14 +273,13 @@ private fun HistoryItemRow(
 
         if (isNoteEnabled) {
 
-            // --- Поле для ввода метки ---
             OutlinedTextField(
                 value = labelText,
                 onValueChange = { newText ->
                     labelText = newText
-                    // Отправляем событие для сохранения в ViewModel
-//                    onAction(CalculatorEvent.UpdateHistoryLabel(item.id, label = newText))
-
+                    scope.launch {
+                        calculatorViewModel.onInputNote(itemHistory = item, newNote = newText)
+                    }
                 },
                 placeholder = { Text(text = "Добавить заметку...", color = Color.Gray) },
                 modifier = Modifier.fillMaxWidth(),
@@ -371,15 +373,6 @@ private fun HistoryItemRow(
             }
 
         }
-
-//        Spacer(modifier = Modifier.height(12.dp))
-
-        /*        Text(
-                    text = item.getFormattedTime(),
-                    color = Color.Gray,
-                    fontSize = 12.sp,
-                    modifier = Modifier
-                )*/
 
     }
 }

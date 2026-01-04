@@ -6,7 +6,7 @@ import java.util.UUID
 
 @Entity(tableName = "history")
 data class History(
-    @PrimaryKey val id: Int = UUID.randomUUID().hashCode(),
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     var expression: String = "0",
     var result: String = "",
     var note: String = "",

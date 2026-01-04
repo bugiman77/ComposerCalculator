@@ -258,6 +258,16 @@ private fun HistoryItemRow(
 
         Spacer(modifier = Modifier.height(height = 8.dp))
 
+        Text(
+            text = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
+                .withZone(ZoneId.systemDefault()).format(Instant.ofEpochMilli(item.timestamp)),
+            color = Color.Gray,
+            fontSize = 12.sp,
+            modifier = Modifier
+        )
+
+        Spacer(modifier = Modifier.height(height = 8.dp))
+
         if (isNoteEnabled) {
 
             // --- Поле для ввода метки ---

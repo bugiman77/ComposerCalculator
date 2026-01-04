@@ -52,11 +52,11 @@ class CalculatorViewModel(
 
     init {
         viewModelScope.launch {
-            loadHistory()
+            loadHistoryLast()
         }
     }
 
-    suspend fun loadHistory() {
+    suspend fun loadHistoryLast() {
         val history = withContext(context = Dispatchers.IO) {
             historyDao.getHistory() // Run the DB query on a background thread
         }

@@ -349,7 +349,7 @@ private fun HistoryItemRow(
                 modifier = Modifier.weight(weight = 1f), // Занимает 1 долю (половину)
                 shape = RoundedCornerShape(size = 12.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(color = 0xFFDEAA45) // Синий цвет
+                    containerColor = Color(color = 0xFF757575)
                 ),
                 contentPadding = PaddingValues(vertical = 8.dp)
             ) {
@@ -365,7 +365,7 @@ private fun HistoryItemRow(
                 modifier = Modifier.weight(weight = 1f), // Занимает 1 долю (половину)
                 shape = RoundedCornerShape(size = 12.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(color = 0xFFEE4848) // Синий цвет
+                    containerColor = Color(color = 0xFF616161)
                 ),
                 contentPadding = PaddingValues(vertical = 8.dp)
             ) {

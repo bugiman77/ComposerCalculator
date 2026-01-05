@@ -14,7 +14,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,11 +30,13 @@ import com.example.composercalculator.viewmodel.SettingsViewModel
 fun DisplayArea(
     viewModelCalculation: CalculatorViewModel = viewModel(),
     viewModelSettings: SettingsViewModel = viewModel(),
+    onPositioned: (Offset) -> Unit
 ) {
     var fontSize by remember { mutableStateOf(value = 80.sp) }
     val minFontSize = 45.sp
     val scrollState = rememberScrollState()
     val displayText = viewModelCalculation.expression.collectAsState().value
+    var inputPosition by remember { mutableStateOf(value = Offset.Zero) }
 
     LaunchedEffect(key1 = displayText) {
         scrollState.animateScrollTo(scrollState.maxValue)
@@ -49,7 +54,11 @@ fun DisplayArea(
                 start = 8.dp,
                 end = 8.dp,
                 bottom = 12.dp
-            ),
+            )
+            .onGloballyPositioned { coordinates ->
+                // Передаем координаты всего контейнера или текста в родителя
+                onPositioned(coordinates.positionInRoot())
+            },
         contentAlignment = Alignment.BottomEnd
     ) {
 
@@ -71,7 +80,8 @@ fun DisplayArea(
                     onClick = {},
                     onLongClick = {},
                     hapticFeedbackEnabled = false,
-                ),
+                )
+                .onGloballyPositioned { it.positionInRoot() },
             text = displayText,
             color = Color.White,
             textAlign = TextAlign.End,

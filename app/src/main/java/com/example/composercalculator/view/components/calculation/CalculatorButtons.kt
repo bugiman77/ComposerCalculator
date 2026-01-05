@@ -44,13 +44,17 @@ import com.example.composercalculator.viewmodel.CalculatorViewModel
 import com.example.composercalculator.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.unit.Dp
 
 @Composable
 fun CalculatorButtonGrid(
     viewModelSetting: SettingsViewModel = viewModel(),
-    viewModelCalculation: CalculatorViewModel = viewModel()
+    viewModelCalculation: CalculatorViewModel = viewModel(),
+    onDigitClick: (String, Offset) -> Unit
 ) {
 
     val bottomSpacer = viewModelSetting.bottomSpacer.collectAsState()
@@ -62,24 +66,29 @@ fun CalculatorButtonGrid(
     ) {
 
         LineCalculation1(
-            viewModelCalculation = viewModelCalculation
+            viewModelCalculation = viewModelCalculation,
+            onDigitClick = onDigitClick
         )
 
         LineCalculation2(
-            viewModelCalculation = viewModelCalculation
+            viewModelCalculation = viewModelCalculation,
+            onDigitClick = onDigitClick
         )
 
         LineCalculation3(
-            viewModelCalculation = viewModelCalculation
+            viewModelCalculation = viewModelCalculation,
+            onDigitClick = onDigitClick
         )
 
         LineCalculation4(
-            viewModelCalculation = viewModelCalculation
+            viewModelCalculation = viewModelCalculation,
+            onDigitClick = onDigitClick
         )
 
         LineCalculation5(
             viewModelCalculation = viewModelCalculation,
-            viewModelSetting = viewModelSetting
+            viewModelSetting = viewModelSetting,
+            onDigitClick = onDigitClick
         )
 
     }
@@ -94,10 +103,11 @@ private fun BtnCalculationText(
     fontSize: TextUnit = 40.sp,
     isButtonEnabled: Boolean = true,
     onLongClick: () -> Unit = {},
-    onClick: () -> Unit,
+    onClick: (Offset) -> Unit,
 ) {
 
     val scrollState = rememberScrollState()
+    var buttonOffset by remember { mutableStateOf(Offset.Zero) }
 
 // Создаем едва заметный вертикальный градиент для фона
     val backgroundBrush = Brush.verticalGradient(
@@ -118,7 +128,10 @@ private fun BtnCalculationText(
     Button(
         onClick = { },
         modifier = modifier
-            .aspectRatio(ratio = 1f),
+            .aspectRatio(ratio = 1f)
+            .onGloballyPositioned { coordinates ->
+                buttonOffset = coordinates.positionInRoot()
+            },
         shape = CircleShape,
         contentPadding = PaddingValues(all = 0.dp),
         border = BorderStroke(width = 1.dp, borderBrush),
@@ -130,7 +143,7 @@ private fun BtnCalculationText(
                 .background(backgroundBrush, shape = CircleShape)
                 .combinedClickable(
                     onClick = {
-                        onClick()
+                        onClick(buttonOffset)
                     },
                     onLongClick = {
                         onLongClick()
@@ -215,6 +228,7 @@ private fun BtnCalculationIcon(
 private fun LineCalculation1(
     modifier: Modifier = Modifier,
     viewModelCalculation: CalculatorViewModel,
+    onDigitClick: (String, Offset) -> Unit
 ) {
 
     val isInputEmpty = viewModelCalculation.expression.collectAsState().value.isEmpty()
@@ -275,6 +289,7 @@ private fun LineCalculation1(
 private fun LineCalculation2(
     modifier: Modifier = Modifier,
     viewModelCalculation: CalculatorViewModel,
+    onDigitClick: (String, Offset) -> Unit
 ) {
 
     Row(
@@ -286,7 +301,8 @@ private fun LineCalculation2(
             text = "7",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
-            onClick = {
+            onClick = { offset ->
+                onDigitClick("7", offset)
                 viewModelCalculation.onInputDigit(inputDigit = "7")
             },
         )
@@ -295,7 +311,8 @@ private fun LineCalculation2(
             text = "8",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
-            onClick = {
+            onClick = { offset ->
+                onDigitClick("8", offset)
                 viewModelCalculation.onInputDigit(inputDigit = "8")
             },
         )
@@ -304,7 +321,8 @@ private fun LineCalculation2(
             text = "9",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
-            onClick = {
+            onClick = { offset ->
+                onDigitClick("9", offset)
                 viewModelCalculation.onInputDigit(inputDigit = "9")
             },
         )
@@ -330,6 +348,7 @@ private fun LineCalculation2(
 private fun LineCalculation3(
     modifier: Modifier = Modifier,
     viewModelCalculation: CalculatorViewModel,
+    onDigitClick: (String, Offset) -> Unit
 ) {
 
     Row(
@@ -341,7 +360,8 @@ private fun LineCalculation3(
             text = "4",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
-            onClick = {
+            onClick = { offset ->
+                onDigitClick("4", offset)
                 viewModelCalculation.onInputDigit(inputDigit = "4")
             },
         )
@@ -350,7 +370,8 @@ private fun LineCalculation3(
             text = "5",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
-            onClick = {
+            onClick = { offset ->
+                onDigitClick("5", offset)
                 viewModelCalculation.onInputDigit(inputDigit = "5")
             },
         )
@@ -359,7 +380,8 @@ private fun LineCalculation3(
             text = "6",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
-            onClick = {
+            onClick = { offset ->
+                onDigitClick("6", offset)
                 viewModelCalculation.onInputDigit(inputDigit = "6")
             }
         )
@@ -382,6 +404,7 @@ private fun LineCalculation3(
 private fun LineCalculation4(
     modifier: Modifier = Modifier,
     viewModelCalculation: CalculatorViewModel,
+    onDigitClick: (String, Offset) -> Unit
 ) {
 
     val isInputEmpty = viewModelCalculation.expression.collectAsState().value.isEmpty()
@@ -395,7 +418,8 @@ private fun LineCalculation4(
             text = "1",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
-            onClick = {
+            onClick = { offset ->
+                onDigitClick("1", offset)
                 viewModelCalculation.onInputDigit(inputDigit = "1")
             },
         )
@@ -404,7 +428,8 @@ private fun LineCalculation4(
             text = "2",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
-            onClick = {
+            onClick = { offset ->
+                onDigitClick("2", offset)
                 viewModelCalculation.onInputDigit(inputDigit = "2")
             },
         )
@@ -413,7 +438,8 @@ private fun LineCalculation4(
             text = "3",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
-            onClick = {
+            onClick = { offset ->
+                onDigitClick("3", offset)
                 viewModelCalculation.onInputDigit(inputDigit = "3")
             },
         )
@@ -436,7 +462,8 @@ private fun LineCalculation4(
 private fun LineCalculation5(
     modifier: Modifier = Modifier,
     viewModelCalculation: CalculatorViewModel,
-    viewModelSetting: SettingsViewModel
+    viewModelSetting: SettingsViewModel,
+    onDigitClick: (String, Offset) -> Unit
 ) {
 
     val isInputEmpty = viewModelCalculation.expression.collectAsState().value.isEmpty()

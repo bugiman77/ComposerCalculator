@@ -43,8 +43,11 @@ import com.example.composercalculator.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.geometry.Offset
+import com.example.composercalculator.model.FlyingDigit
 import com.example.composercalculator.ui.theme.DarkGray
 import com.example.composercalculator.ui.theme.Gray
+import com.example.composercalculator.view.components.calculation.FlyingDigitAnimation
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -61,6 +64,9 @@ fun CalculatorScreen(
     val scope = rememberCoroutineScope()
 
     val showIconButton = viewModelSettings.showIconButton.collectAsState().value
+
+    var flyingDigits by remember { mutableStateOf(listOf<FlyingDigit>()) }
+    var targetOffset by remember { mutableStateOf(Offset.Zero) }
 
     LaunchedEffect(key1 = sheetState.isVisible) {
         if (!sheetState.isVisible) {
@@ -83,88 +89,113 @@ fun CalculatorScreen(
         )
     }
 
-    Scaffold(
-        containerColor = Color.Black
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .background(color = Color.Black)
-                .fillMaxSize()
-                .padding(paddingValues = innerPadding)
-        ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.End
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
+            containerColor = Color.Black
+        ) { innerPadding ->
+            Box(
+                modifier = Modifier
+                    .background(color = Color.Black)
+                    .fillMaxSize()
+                    .padding(paddingValues = innerPadding)
             ) {
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.End
                 ) {
 
-                    if (showHistoryButton) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+
+                        if (showHistoryButton) {
+                            if (showIconButton) {
+                                IconButton(onClick = { showHistorySheet = true }) {
+                                    Icon(
+                                        modifier = Modifier.size(size = 32.dp),
+                                        painter = painterResource(id = R.drawable.ic_history),
+                                        contentDescription = "История вычислений",
+                                        tint = Gray
+                                    )
+                                }
+                            } else {
+                                Button(
+                                    onClick = { showHistorySheet = true },
+                                    colors = ButtonDefaults.buttonColors(containerColor = DarkGray)
+                                ) {
+                                    Text(
+                                        text = "История",
+                                        fontSize = 14.sp, // Уменьшаем размер шрифта для компактности
+                                        color = MaterialTheme.colors.onPrimary // Цвет текста
+                                    )
+                                }
+                            }
+                        } else {
+                            Spacer(modifier = Modifier.size(size = 40.dp))
+                        }
+
                         if (showIconButton) {
-                            IconButton(onClick = { showHistorySheet = true }) {
+                            IconButton(onClick = onNavigateToSettings) {
                                 Icon(
                                     modifier = Modifier.size(size = 32.dp),
-                                    painter = painterResource(id = R.drawable.ic_history),
-                                    contentDescription = "История вычислений",
+                                    painter = painterResource(id = R.drawable.ic_more),
+                                    contentDescription = "Настройки приложения",
                                     tint = Gray
                                 )
                             }
                         } else {
                             Button(
-                                onClick = { showHistorySheet = true },
+                                onClick = onNavigateToSettings,
                                 colors = ButtonDefaults.buttonColors(containerColor = DarkGray)
                             ) {
                                 Text(
-                                    text = "История",
-                                    fontSize = 14.sp, // Уменьшаем размер шрифта для компактности
+                                    text = "Настройки",
+                                    fontSize = 14.sp,
                                     color = MaterialTheme.colors.onPrimary // Цвет текста
                                 )
                             }
                         }
-                    } else {
-                        Spacer(modifier = Modifier.size(size = 40.dp))
                     }
 
-                    if (showIconButton) {
-                        IconButton(onClick = onNavigateToSettings) {
-                            Icon(
-                                modifier = Modifier.size(size = 32.dp),
-                                painter = painterResource(id = R.drawable.ic_more),
-                                contentDescription = "Настройки приложения",
-                                tint = Gray
+                    DisplayArea(
+                        viewModelCalculation = viewModelCalculation,
+                        viewModelSettings = viewModelSettings,
+                        onPositioned = { offset -> targetOffset = offset },
+                    )
+
+                    // Сетка кнопок
+                    CalculatorButtonGrid(
+                        viewModelSetting = viewModelSettings,
+                        viewModelCalculation = viewModelCalculation,
+                        onDigitClick = { text, offset ->
+                            // Здесь мы добавляем новую летящую цифру в список
+                            val newFlyingDigit = FlyingDigit(
+                                text = text,
+                                startOffset = offset
                             )
+                            flyingDigits = flyingDigits + newFlyingDigit
                         }
-                    } else {
-                        Button(
-                            onClick = onNavigateToSettings,
-                            colors = ButtonDefaults.buttonColors(containerColor = DarkGray)
-                        ) {
-                            Text(
-                                text = "Настройки",
-                                fontSize = 14.sp,
-                                color = MaterialTheme.colors.onPrimary // Цвет текста
-                            )
-                        }
-                    }
+                    )
                 }
-
-                DisplayArea(
-                    viewModelCalculation = viewModelCalculation,
-                    viewModelSettings = viewModelSettings,
-                )
-
-                // Сетка кнопок
-                CalculatorButtonGrid(
-                    viewModelSetting = viewModelSettings,
-                    viewModelCalculation = viewModelCalculation
-                )
             }
+
+        }
+
+        flyingDigits.forEach { digit ->
+            FlyingDigitAnimation(
+                data = digit,
+                targetOffset = targetOffset,
+                onReached = {
+                    // Удаляем анимацию из списка
+                    flyingDigits = flyingDigits.filter { it.id != digit.id }
+                    // В этот момент можно добавить символ в ViewModel,
+                    // если вы хотите, чтобы он появлялся ПОСЛЕ прилета
+                }
+            )
         }
 
     }

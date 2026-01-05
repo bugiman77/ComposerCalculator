@@ -53,8 +53,8 @@ fun DisplayArea(
 
         if (displayText.isEmpty()) {
             Text(
-                text = "0", // Ваш текст плейсхолдера
-                color = Color.White.copy(alpha = 0.5f), // Делаем полупрозрачным
+                text = "0",
+                color = Color.White.copy(alpha = 0.5f),
                 textAlign = TextAlign.End,
                 fontSize = fontSize,
                 maxLines = 1,

@@ -61,6 +61,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val _bottomSpacer = MutableStateFlow(value = 24)
     val bottomSpacer: StateFlow<Int> = _bottomSpacer
 
+    private val _isAnimationAll = MutableStateFlow(value = false)
+    val isAnimationAll: StateFlow<Boolean> = _isAnimationAll
+
+    private val _soundMode = MutableStateFlow(value = repository.getCurrentSoundMode())
+    val soundMode: StateFlow<SoundMode> = _soundMode.asStateFlow()
+
     init {
         // Загружаем настройки при старте
         viewModelScope.launch {
@@ -85,6 +91,8 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             _playSound.value = it.playSound
             _playVibration.value = it.playVibration
             _bottomSpacer.value = it.bottomSpacer
+            _isAnimationAll.value = it.isAnimationAll
+            refreshSoundMode()
         }
     }
 
@@ -171,6 +179,16 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch {
             saveSetting { _bottomSpacer.value = spacer }
         }
+    }
+
+    fun isAnimationAllChange(enable: Boolean) {
+        viewModelScope.launch {
+            saveSetting { _isAnimationAll.value = enable }
+        }
+    }
+
+    fun refreshSoundMode() {
+        _soundMode.value = repository.getCurrentSoundMode()
     }
 
     private suspend fun saveSetting(updateState: suspend () -> Unit) {

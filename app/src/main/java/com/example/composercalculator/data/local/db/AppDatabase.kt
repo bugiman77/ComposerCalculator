@@ -9,10 +9,9 @@ import com.example.composercalculator.data.local.db.dao.SettingsDao
 import com.example.composercalculator.data.local.db.entity.History
 import com.example.composercalculator.data.local.db.entity.Settings
 
-@Database(entities = [Settings::class], version = 10)
+@Database(entities = [Settings::class], version = 11)
 abstract class AppDatabaseSetting : RoomDatabase() {
     abstract fun settingsDao(): SettingsDao
-//    abstract fun historyDao(): HistoryDao
 
     companion object {
         // Волатильная переменная для хранения единственного экземпляра базы данных

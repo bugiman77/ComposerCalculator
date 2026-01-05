@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -26,8 +27,8 @@ fun Animations(
             modifier = modifier.padding(vertical = 4.dp)
         ) {
             Switch(
-                checked = false,
-                onCheckedChange = { },
+                checked = viewModelSettings.isAnimationAll.collectAsState().value,
+                onCheckedChange = { viewModelSettings.isAnimationAllChange(enable = it) },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
                     checkedTrackColor = iOSGreen,

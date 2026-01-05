@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.LocalView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.composercalculator.core.managers.SoundManager
 import com.example.composercalculator.core.managers.VibrationManager
@@ -40,14 +41,19 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
-            val keepScreenOn = viewModelSettings.keepScreenOn.collectAsState()
+            val view = LocalView.current
+            val keepScreenOn = viewModelSettings.keepScreenOn.collectAsState().value
             DisposableEffect(keepScreenOn) {
-                if (keepScreenOn.value) {
+                view.keepScreenOn = keepScreenOn
+                if (keepScreenOn) {
                     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 } else {
                     window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 }
-                onDispose { }
+                onDispose {
+                    view.keepScreenOn = false
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                }
             }
 
             val isDarkTheme = viewModelSettings.isDarkTheme.collectAsState().value

@@ -45,7 +45,7 @@ fun Appearance(
             )
         }
 
-        SettingsRow(
+/*        SettingsRow(
             title = "Отступ снизу",
             subtitle = "Отступ между элементами интерфейса и нижним краем экрана",
             modifier = modifier.padding(vertical = 4.dp)
@@ -63,7 +63,7 @@ fun Appearance(
                 ),
                 modifier = Modifier.weight(weight = 1f)
             )
-        }
+        }*/
 
     }
 }

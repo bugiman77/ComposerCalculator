@@ -21,4 +21,5 @@ data class Settings(
     var playVibration: Boolean = false,
     var bottomSpacer: Int = 24,
     var isAnimationAll: Boolean = false,
+    var keepScreenOn: Boolean = false,
 )

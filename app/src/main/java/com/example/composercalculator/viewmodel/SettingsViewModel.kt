@@ -83,8 +83,8 @@ class SettingsViewModel(
     private val _isAnimationAll = MutableStateFlow(value = false)
     val isAnimationAll: StateFlow<Boolean> = _isAnimationAll
 
-    private val _soundMode = MutableStateFlow(value = repository.getCurrentSoundMode())
-    val soundMode: StateFlow<SoundMode> = _soundMode.asStateFlow()
+    private val _keepScreenOn = MutableStateFlow(value = false)
+    val keepScreenOn: StateFlow<Boolean> = _keepScreenOn
 
     init {
         // Загружаем настройки при старте
@@ -111,7 +111,7 @@ class SettingsViewModel(
             _playVibration.value = it.playVibration
             _bottomSpacer.value = it.bottomSpacer
             _isAnimationAll.value = it.isAnimationAll
-            refreshSoundMode()
+            _keepScreenOn.value = it.keepScreenOn
         }
     }
 
@@ -206,8 +206,10 @@ class SettingsViewModel(
         }
     }
 
-    fun refreshSoundMode() {
-        _soundMode.value = repository.getCurrentSoundMode()
+    fun toggleKeepScreenOn(enabled: Boolean) {
+        viewModelScope.launch {
+            saveSetting { _keepScreenOn.value = enabled }
+        }
     }
 
     private suspend fun saveSetting(updateState: suspend () -> Unit) {
@@ -233,6 +235,7 @@ class SettingsViewModel(
                 playVibration = _playVibration.value,
                 bottomSpacer = _bottomSpacer.value,
                 isAnimationAll = _isAnimationAll.value,
+                keepScreenOn = _keepScreenOn.value,
             )
         )
     }

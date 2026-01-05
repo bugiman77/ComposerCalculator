@@ -1,9 +1,11 @@
 package com.example.composercalculator
 
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.composercalculator.core.managers.SoundManager
@@ -37,6 +39,17 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
+            val keepScreenOn = viewModelSettings.keepScreenOn.collectAsState()
+            DisposableEffect(keepScreenOn) {
+                if (keepScreenOn.value) {
+                    window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                } else {
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                }
+                onDispose { }
+            }
+
             val isDarkTheme = viewModelSettings.isDarkTheme.collectAsState().value
             ComposerCalculatorTheme(
                 darkTheme = isDarkTheme,

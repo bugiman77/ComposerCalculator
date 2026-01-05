@@ -26,6 +26,7 @@ fun Display(
 
     val isSystemFontSize = viewModelSettings.systemFontSize.collectAsState()
     val displayFontSize = viewModelSettings.displayFontSize.collectAsState()
+    val keepScreenOn = viewModelSettings.keepScreenOn.collectAsState()
 
     SettingsGroup(title = "Дисплей") {
         // Настройка размера шрифта
@@ -74,13 +75,13 @@ fun Display(
         HorizontalDivider(color = Color(color = 0xFF3A3A3C))
 
         SettingsRow(
-            title = "Отключать экран",
+            title = "Не отключать экран",
             subtitle = "При использовании приложения экран не будет отключаться при долгих паузах",
             modifier = modifier.padding(vertical = 4.dp)
         ) {
             Switch(
-                checked = false,
-                onCheckedChange = {  },
+                checked = keepScreenOn.value,
+                onCheckedChange = { viewModelSettings.toggleKeepScreenOn(enabled = it) },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
                     checkedTrackColor = iOSGreen,

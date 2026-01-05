@@ -20,11 +20,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composercalculator.viewmodel.CalculatorViewModel
+import com.example.composercalculator.viewmodel.SettingsViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DisplayArea(
     viewModelCalculation: CalculatorViewModel = viewModel(),
+    viewModelSettings: SettingsViewModel = viewModel(),
 ) {
     var fontSize by remember { mutableStateOf(value = 80.sp) }
     val minFontSize = 45.sp

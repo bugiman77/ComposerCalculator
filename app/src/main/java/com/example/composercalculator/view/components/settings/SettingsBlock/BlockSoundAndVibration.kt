@@ -48,9 +48,9 @@ fun SoundAndVibration(
                 )
             )
 //            }
-
-            HorizontalDivider(color = Color(color = 0xFF3A3A3C))
         }
+
+        HorizontalDivider(color = Color(color = 0xFF3A3A3C))
 
         SettingsRow(
             title = "Вибрация",

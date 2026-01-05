@@ -155,7 +155,8 @@ fun CalculatorScreen(
                 }
 
                 DisplayArea(
-                    viewModelCalculation = viewModelCalculation
+                    viewModelCalculation = viewModelCalculation,
+                    viewModelSettings = viewModelSettings,
                 )
 
                 // Сетка кнопок

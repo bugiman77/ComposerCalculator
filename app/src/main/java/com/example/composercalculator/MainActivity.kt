@@ -8,6 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.composercalculator.core.managers.SoundManager
 import com.example.composercalculator.core.managers.VibrationManager
+import com.example.composercalculator.data.repository.DeviceSettingsRepository
 import com.example.composercalculator.navigation.AppNavigation
 import com.example.composercalculator.ui.theme.ComposerCalculatorTheme
 import com.example.composercalculator.viewmodel.CalculatorViewModel
@@ -18,8 +19,12 @@ class MainActivity : ComponentActivity() {
 
         val managerSound = SoundManager(context = application)
         val managerVibration = VibrationManager(context = application)
+        val deviceSettingsRepository = DeviceSettingsRepository(context = application)
 
-        val viewModelSettings = SettingsViewModel(application = application)
+        val viewModelSettings = SettingsViewModel(
+            application = application,
+            repository = deviceSettingsRepository,
+        )
         val viewModelCalculation = CalculatorViewModel(
             settingsViewModel = viewModelSettings,
             soundManager = managerSound,

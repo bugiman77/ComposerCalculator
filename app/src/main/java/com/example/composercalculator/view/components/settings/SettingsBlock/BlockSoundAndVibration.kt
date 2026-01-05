@@ -6,9 +6,11 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.composercalculator.data.repository.SoundMode
 import com.example.composercalculator.ui.theme.Orange
 import com.example.composercalculator.ui.theme.iOSGray
 import com.example.composercalculator.ui.theme.iOSGreen
@@ -24,8 +26,11 @@ fun SoundAndVibration(
 
     val isPlaySound = viewModelSettings.playSound.collectAsState()
     val isPlayVibration = viewModelSettings.playVibration.collectAsState()
+    val mode = viewModelSettings.soundMode.collectAsState().value
 
     SettingsGroup(title = "Звук и вибрация") {
+
+//        if (mode != SoundMode.SILENT || mode != SoundMode.VIBRATE) {
         SettingsRow(
             title = "Звук",
             subtitle = "Воспроизводить звук при нажатии кнопок",
@@ -42,9 +47,10 @@ fun SoundAndVibration(
                     uncheckedBorderColor = Color.Transparent
                 )
             )
-        }
+//            }
 
-        HorizontalDivider(color = Color(color = 0xFF3A3A3C))
+            HorizontalDivider(color = Color(color = 0xFF3A3A3C))
+        }
 
         SettingsRow(
             title = "Вибрация",
@@ -63,5 +69,7 @@ fun SoundAndVibration(
                 )
             )
         }
+
+
     }
 }

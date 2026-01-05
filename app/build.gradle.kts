@@ -77,9 +77,16 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    dependenciesInfo {
+        includeInApk = true
+        includeInBundle = true
+    }
+    buildToolsVersion = "30.0.3"
+    ndkVersion = "25.1.8937393"
 
     buildFeatures {
         compose = true
+        viewBinding = true
     }
 }
 

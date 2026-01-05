@@ -39,9 +39,10 @@ fun Display(
                 onCheckedChange = { viewModelSettings.onSystemFontSizeChange(isEnable = it) },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
-                    checkedTrackColor = Orange,
+                    checkedTrackColor = iOSGreen,
                     uncheckedThumbColor = Color.White,
-                    uncheckedTrackColor = Color.Gray
+                    uncheckedTrackColor = iOSGray,
+                    uncheckedBorderColor = Color.Transparent
                 )
             )
         }

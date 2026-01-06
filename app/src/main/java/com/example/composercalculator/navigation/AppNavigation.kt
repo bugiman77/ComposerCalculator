@@ -1,23 +1,6 @@
 package com.example.composercalculator.navigation
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.example.composercalculator.view.screen.main.CalculatorScreen
-import com.example.composercalculator.viewmodel.CalculatorViewModel
-import com.example.composercalculator.view.screen.settings.AboutScreen
-import com.example.composercalculator.view.screen.settings.SettingsScreen
-import androidx.compose.animation.core.tween
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.unit.IntOffset
-import com.example.composercalculator.view.screen.settings.PrivacyPolicyScreen
-import com.example.composercalculator.viewmodel.AppListViewModel
-import com.example.composercalculator.viewmodel.SettingsViewModel
-
-@Composable
+/*@Composable
 fun AppNavigation(
     settingsViewModel: SettingsViewModel = viewModel(),
     calculatorViewModel: CalculatorViewModel = viewModel(),
@@ -166,5 +149,182 @@ fun AppNavigation(
             )
         }
 
+    }
+}*/
+
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.createGraph
+import com.example.composercalculator.view.screen.main.CalculatorScreen
+import com.example.composercalculator.view.screen.settings.AboutScreen
+import com.example.composercalculator.view.screen.settings.PrivacyPolicyScreen
+import com.example.composercalculator.view.screen.settings.SettingsScreen
+import com.example.composercalculator.viewmodel.AppListViewModel
+import com.example.composercalculator.viewmodel.CalculatorViewModel
+import com.example.composercalculator.viewmodel.SettingsViewModel
+import kotlin.math.roundToInt
+
+@Composable
+fun AppNavigation(
+    settingsViewModel: SettingsViewModel = viewModel(),
+    calculatorViewModel: CalculatorViewModel = viewModel(),
+    appListViewModel: AppListViewModel = viewModel()
+) {
+    val navController = rememberNavController()
+    val showHistoryButton = settingsViewModel.showHistoryButton.collectAsState()
+
+    LaunchedEffect(Unit) {
+        if (navController.currentDestination == null) {
+            navController.graph = navController.createGraph(startDestination = Routes.CALCULATOR) {
+                composable(Routes.CALCULATOR) { }
+                composable(Routes.SETTINGS) { }
+                composable(Routes.ABOUT) { }
+                composable(Routes.PRIVACY_POLICY) { }
+            }
+        }
+    }
+
+    val visibleEntries by navController.visibleEntries.collectAsState()
+    val currentEntry = visibleEntries.lastOrNull()
+    val previousEntry = if (visibleEntries.size > 1) visibleEntries[visibleEntries.size - 2] else null
+
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp.value * 3
+
+    var offsetX by remember { mutableStateOf(0f) }
+    val animatedOffset by animateFloatAsState(targetValue = offsetX)
+
+    Surface(modifier = Modifier.fillMaxSize(), color = Color.Black) {
+        Box(modifier = Modifier.fillMaxSize()) {
+
+            // Отрисовка ПРЕДЫДУЩЕГО экрана
+            previousEntry?.let { entry ->
+                val parallaxOffset = -(screenWidth / 4) + (animatedOffset / 4)
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .offset { IntOffset(parallaxOffset.roundToInt(), 0) }
+                ) {
+                    ScreenContent(entry, settingsViewModel, calculatorViewModel, appListViewModel, showHistoryButton.value, navController)
+                    // Затемнение
+                    Box(modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = (0.4f - (offsetX / screenWidth) * 0.4f).coerceIn(0f, 0.4f)))
+                    )
+                }
+            }
+
+            // ТЕНЬ
+            if (previousEntry != null && offsetX > 0) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(20.dp)
+                        .offset { IntOffset(animatedOffset.roundToInt() - 20.dp.value.toInt() * 3, 0) }
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.3f))
+                            )
+                        )
+                )
+            }
+
+            // ТЕКУЩИЙ ЭКРАН
+            currentEntry?.let { entry ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .offset { IntOffset(animatedOffset.roundToInt(), 0) }
+                        .pointerInput(Unit) {
+                            detectHorizontalDragGestures(
+                                onDragStart = { /* Проверка края экрана */ },
+                                onHorizontalDrag = { change, dragAmount ->
+                                    if (navController.previousBackStackEntry != null) {
+                                        offsetX = (offsetX + dragAmount).coerceAtLeast(0f)
+                                        change.consume()
+                                    }
+                                },
+                                onDragEnd = {
+                                    if (offsetX > screenWidth / 5) {
+                                        navController.popBackStack()
+                                    }
+                                    offsetX = 0f
+                                }
+                            )
+                        }
+                ) {
+                    ScreenContent(entry, settingsViewModel, calculatorViewModel, appListViewModel, showHistoryButton.value, navController)
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Вспомогательная функция для отрисовки контента экрана по его Route
+ */
+@Composable
+private fun ScreenContent(
+    entry: NavBackStackEntry,
+    settingsViewModel: SettingsViewModel,
+    calculatorViewModel: CalculatorViewModel,
+    appListViewModel: AppListViewModel,
+    showHistoryButton: Boolean,
+    navController: androidx.navigation.NavHostController
+) {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = Color(color = 0xFFF5F5F5)
+    ) {
+        when (entry.destination.route) {
+            Routes.CALCULATOR -> CalculatorScreen(
+                onNavigateToSettings = { navController.navigate(Routes.SETTINGS) },
+                onNavigateToHistory = { navController.navigate(Routes.HISTORY) },
+                showHistoryButton = showHistoryButton,
+                viewModelSettings = settingsViewModel,
+                viewModelCalculation = calculatorViewModel
+            )
+
+            Routes.SETTINGS -> SettingsScreen(
+                viewModelSettings = settingsViewModel,
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToAbout = { navController.navigate(Routes.ABOUT) },
+            )
+
+            Routes.ABOUT -> AboutScreen(
+                appListViewModel = appListViewModel,
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToPrivacy = { navController.navigate(Routes.PRIVACY_POLICY) }
+            )
+
+            Routes.PRIVACY_POLICY -> PrivacyPolicyScreen(
+                title = "Политика конфиденциальности",
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
     }
 }

@@ -195,7 +195,11 @@ private fun AppListContent(apps: List<AppInfo>) {
                 )
                 Column(modifier = Modifier.padding(start = 16.dp)) {
                     Text(text = app.name, style = MaterialTheme.typography.bodyLarge)
-                    Text(text = app.packageName, style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+                    Text(
+                        text = app.packageName,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Gray
+                    )
                 }
             }
         }

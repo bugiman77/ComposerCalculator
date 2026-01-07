@@ -62,10 +62,10 @@ fun DisplayArea(
         contentAlignment = Alignment.BottomEnd
     ) {
 
-        if (displayText.isEmpty()) {
+        if (displayText.isEmpty() && viewModelSettings.showPlaceholderInput.collectAsState().value) {
             Text(
                 text = "0",
-                color = Color.White.copy(alpha = 0.5f),
+                color = Color.White.copy(alpha = 0.4f),
                 textAlign = TextAlign.End,
                 fontSize = fontSize,
                 maxLines = 1,

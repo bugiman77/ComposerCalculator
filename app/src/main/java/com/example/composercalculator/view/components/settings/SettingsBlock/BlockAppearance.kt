@@ -25,6 +25,7 @@ fun Appearance(
 
     val showIconButton = viewModelSettings.showIconButton.collectAsState()
     val bottomSpacer = viewModelSettings.bottomSpacer.collectAsState()
+    val showPlaceholderInput = viewModelSettings.showPlaceholderInput.collectAsState()
 
     SettingsGroup(title = "Внешний вид") {
         SettingsRow(
@@ -35,6 +36,24 @@ fun Appearance(
             Switch(
                 checked = showIconButton.value,
                 onCheckedChange = { viewModelSettings.switchIconButton(switch = it) },
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = Color.White,
+                    checkedTrackColor = iOSGreen,
+                    uncheckedThumbColor = Color.White,
+                    uncheckedTrackColor = iOSGray,
+                    uncheckedBorderColor = Color.Transparent
+                )
+            )
+        }
+
+        SettingsRow(
+            title = "Отображать плейсхолдер",
+            subtitle = "Отображать плейсхолдер в пустом поле ввода выражения",
+            modifier = modifier.padding(vertical = 4.dp)
+        ) {
+            Switch(
+                checked = showPlaceholderInput.value,
+                onCheckedChange = { viewModelSettings.toggleShowPlaceholderInput(enabled = it) },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
                     checkedTrackColor = iOSGreen,

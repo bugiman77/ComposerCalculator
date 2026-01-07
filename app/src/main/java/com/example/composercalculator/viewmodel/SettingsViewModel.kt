@@ -66,6 +66,9 @@ class SettingsViewModel(
     private val _keepScreenOn = MutableStateFlow(value = false)
     val keepScreenOn: StateFlow<Boolean> = _keepScreenOn
 
+    private val _showPlaceholderInput = MutableStateFlow(value = true)
+    val showPlaceholderInput: StateFlow<Boolean> = _showPlaceholderInput
+
     init {
         viewModelScope.launch {
             loadSettings()
@@ -91,6 +94,7 @@ class SettingsViewModel(
             _bottomSpacer.value = it.bottomSpacer
             _isAnimationAll.value = it.isAnimationAll
             _keepScreenOn.value = it.keepScreenOn
+            _showPlaceholderInput.value = it.showPlaceholderInput
         }
     }
 
@@ -191,6 +195,12 @@ class SettingsViewModel(
         }
     }
 
+    fun toggleShowPlaceholderInput(enabled: Boolean) {
+        viewModelScope.launch {
+            saveSetting { _showPlaceholderInput.value = enabled }
+        }
+    }
+
     private suspend fun saveSetting(updateState: suspend () -> Unit) {
         // Обновляем состояние в UI
         updateState()
@@ -215,6 +225,7 @@ class SettingsViewModel(
                 bottomSpacer = _bottomSpacer.value,
                 isAnimationAll = _isAnimationAll.value,
                 keepScreenOn = _keepScreenOn.value,
+                showPlaceholderInput = _showPlaceholderInput.value
             )
         )
     }

@@ -22,4 +22,5 @@ data class Settings(
     var bottomSpacer: Int = 24,
     var isAnimationAll: Boolean = false,
     var keepScreenOn: Boolean = false,
+    var showPlaceholderInput: Boolean = true,
 )

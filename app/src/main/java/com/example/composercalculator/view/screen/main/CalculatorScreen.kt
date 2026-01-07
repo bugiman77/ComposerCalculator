@@ -18,6 +18,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -59,13 +60,20 @@ fun CalculatorScreen(
 ) {
 
     var showHistorySheet by remember { mutableStateOf(value = false) }
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+//    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var canCloseProgrammatically by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true,
+        confirmValueChange = { sheetValue ->
+            if (canCloseProgrammatically) true else sheetValue != SheetValue.Hidden
+        }
+    )
     val scope = rememberCoroutineScope()
 
     val showIconButton = viewModelSettings.showIconButton.collectAsState().value
 
-    var flyingDigits by remember { mutableStateOf(listOf<FlyingDigit>()) }
-    var targetOffset by remember { mutableStateOf(Offset.Zero) }
+    var flyingDigits by remember { mutableStateOf(value = listOf<FlyingDigit>()) }
+    var targetOffset by remember { mutableStateOf(value = Offset.Zero) }
 
     LaunchedEffect(key1 = sheetState.isVisible) {
         if (!sheetState.isVisible) {
@@ -78,11 +86,15 @@ fun CalculatorScreen(
             calculatorViewModel = viewModelCalculation,
             settingsViewModel = viewModelSettings,
             sheetState = sheetState,
-            onDismiss = {
+            onDismiss = { showHistorySheet = false },
+            onCloseClick = {
                 scope.launch {
-                    sheetState.hide()
+                    canCloseProgrammatically = true // Разрешаем анимацию скрытия
+                    sheetState.hide() // Запускаем анимацию
                 }.invokeOnCompletion {
-                    showHistorySheet = false
+                    if (!sheetState.isVisible) {
+                        showHistorySheet = false // Удаляем окно из композиции
+                    }
                 }
             }
         )

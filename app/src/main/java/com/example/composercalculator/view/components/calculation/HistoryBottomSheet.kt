@@ -1,7 +1,7 @@
 package com.example.composercalculator.view.components.calculation
 
 import android.content.ClipData
-import android.icu.util.Calendar
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,11 +9,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,12 +25,16 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.SheetState
@@ -49,7 +57,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -69,9 +76,9 @@ import java.time.format.DateTimeFormatter
 fun HistoryBottomSheet(
     calculatorViewModel: CalculatorViewModel,
     settingsViewModel: SettingsViewModel,
-    onAction: (CalculatorEvent) -> Unit = {},
     sheetState: SheetState,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onCloseClick: () -> Unit
 ) {
 
     val historyItems by calculatorViewModel.history.collectAsStateWithLifecycle()
@@ -90,7 +97,7 @@ fun HistoryBottomSheet(
                     .clip(CircleShape)
                     .background(Color.Gray)
             )
-        }
+        },
     ) {
         Row(
             modifier = Modifier
@@ -99,13 +106,23 @@ fun HistoryBottomSheet(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = "История",
-                color = Color.White,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold
-            )
-            TextButton(
+            OutlinedButton(
+                onClick = onCloseClick,
+                shape = CircleShape,
+                modifier = Modifier.size(size = 40.dp),
+                contentPadding = PaddingValues(0.dp),
+                border = BorderStroke(1.dp, Color.White),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.White
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "Закрыть",
+                    tint = Color.White
+                )
+            }
+            OutlinedButton(
                 onClick = {
                     scope.launch {
                         calculatorViewModel.deleteHistoryItemAll()
@@ -117,7 +134,7 @@ fun HistoryBottomSheet(
         }
 
         LazyColumn(
-            modifier = Modifier.fillMaxHeight(fraction = 0.6f), // Увеличим высоту
+            modifier = Modifier.fillMaxHeight(fraction = 0.92f),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(space = 16.dp) // Расстояние между группами
         ) {
@@ -239,7 +256,7 @@ private fun HistoryItemRow(
                         fontSize = 16.sp
                     )
                     Text(
-                        text = "=${item.result}",
+                        text = item.result,
                         color = Color.White,
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Medium
@@ -272,7 +289,7 @@ private fun HistoryItemRow(
                                 )
                             }
                         },
-                        placeholder = { Text(text = "Добавить заметку...", color = Color.Gray) },
+                        placeholder = { Text(text = "Заметка", color = Color.Gray) },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
                         colors = OutlinedTextFieldDefaults.colors(
@@ -380,4 +397,9 @@ private fun HistoryItemRow(
             }
         }
     }
+
+    Spacer(Modifier.height(height = 4.dp))
+
+    HorizontalDivider()
+
 }

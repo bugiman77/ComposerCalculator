@@ -1,6 +1,5 @@
 package com.example.composercalculator.view.components.calculation
 
-import android.R
 import android.content.ClipData
 import android.icu.util.Calendar
 import androidx.compose.foundation.background
@@ -57,16 +56,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.composercalculator.data.local.db.entity.History
-import com.example.composercalculator.model.CalculatorEvent
 import com.example.composercalculator.ui.theme.Orange
 import com.example.composercalculator.viewmodel.CalculatorViewModel
 import com.example.composercalculator.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable

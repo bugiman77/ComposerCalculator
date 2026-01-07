@@ -37,7 +37,6 @@ import com.example.composercalculator.R
 import com.example.composercalculator.view.components.calculation.CalculatorButtonGrid
 import com.example.composercalculator.view.components.calculation.DisplayArea
 import com.example.composercalculator.view.components.calculation.HistoryBottomSheet
-import com.example.composercalculator.ui.theme.Orange
 import com.example.composercalculator.viewmodel.CalculatorViewModel
 import com.example.composercalculator.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch

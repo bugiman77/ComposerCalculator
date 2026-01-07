@@ -11,11 +11,14 @@ import com.example.composercalculator.core.managers.SoundManager
 import com.example.composercalculator.core.managers.VibrationManager
 import com.example.composercalculator.data.local.db.AppDatabaseHistory
 import com.example.composercalculator.data.local.db.dao.HistoryDao
+import com.example.composercalculator.data.local.db.dao.InputStateDao
 import com.example.composercalculator.data.local.db.entity.History
+import com.example.composercalculator.data.local.db.entity.InputState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -29,8 +32,14 @@ class CalculatorViewModel(
     private val historyDao: HistoryDao =
         AppDatabaseHistory.getDatabase(context = application).historyDao()
 
+    private val inputStateDao: InputStateDao =
+        AppDatabaseHistory.getDatabase(context = application).inputStateDao()
+
     private val _id = MutableStateFlow(value = "")
     val id: StateFlow<String> = _id.asStateFlow()
+
+    private val _lastValue = MutableStateFlow(value = "0")
+    val lastValue: StateFlow<String> = _lastValue.asStateFlow()
 
     private val _expression = MutableStateFlow(value = "")
     val expression: StateFlow<String> = _expression.asStateFlow()
@@ -57,10 +66,11 @@ class CalculatorViewModel(
         viewModelScope.launch {
             loadHistoryLast()
             loadHistoryAll()
+            loadLastValue()
         }
     }
 
-    suspend fun loadHistoryLast() {
+    private suspend fun loadHistoryLast() {
         val history = withContext(context = Dispatchers.IO) {
             historyDao.getHistoryLast() // Run the DB query on a background thread
         }
@@ -78,6 +88,14 @@ class CalculatorViewModel(
     private suspend fun loadHistoryAll() {
         historyDao.getHistoryAll().collect { list ->
             _history.value = list
+        }
+    }
+
+    private suspend fun loadLastValue() {
+        val savedState = inputStateDao.getInputState().firstOrNull()
+        savedState?.let {
+            _expression.value = it.currentText
+            _lastValue.value = it.currentText
         }
     }
 
@@ -107,6 +125,8 @@ class CalculatorViewModel(
             // В обычном случае просто добавляем цифру
             _expression.value += inputDigit
         }
+
+        updateExpression(newExpression = _expression.value)
 
         if (settingsViewModel.playSound.value) {
             soundManager.playClick()
@@ -160,6 +180,8 @@ class CalculatorViewModel(
                 _expression.value += inputOperation
             }
         }
+
+        updateExpression(newExpression = _expression.value)
     }
 
     suspend fun onInputNote(itemHistory: History, newNote: String) {
@@ -168,6 +190,7 @@ class CalculatorViewModel(
 
     fun onToggleSign() {
         val currentExpression = _expression.value
+
         if (currentExpression.isEmpty()) return
 
         // Регулярное выражение находит последнее число, включая отрицательные в скобках
@@ -195,6 +218,9 @@ class CalculatorViewModel(
             }
 
             _expression.value = prefix + updatedToken
+
+            updateExpression(newExpression = _expression.value)
+
         }
 
     }
@@ -202,6 +228,8 @@ class CalculatorViewModel(
     fun removeLastCharacter() {
         if (_expression.value.isNotEmpty()) {
             _expression.value = _expression.value.dropLast(n = 1)
+
+            updateExpression(newExpression = _expression.value)
 
             if (settingsViewModel.playSound.value) {
                 soundManager.playClick()
@@ -217,6 +245,8 @@ class CalculatorViewModel(
         if (_expression.value.isNotEmpty()) {
             _expression.value = ""
 
+            updateExpression(newExpression = _expression.value)
+
             if (settingsViewModel.playSound.value) {
                 soundManager.playClick()
             }
@@ -229,6 +259,9 @@ class CalculatorViewModel(
 
     fun editingExpression(itemHistory: History) {
         _expression.value = itemHistory.expression
+
+        updateExpression(newExpression = _expression.value)
+
     }
 
     suspend fun calculateAndSave() {
@@ -256,6 +289,16 @@ class CalculatorViewModel(
         }
 
         saveToDatabase(currentExpression, calculationResult)
+
+        updateExpression(newExpression = _expression.value)
+
+    }
+
+    private fun updateExpression(newExpression: String) {
+        _expression.value = newExpression
+        viewModelScope.launch(context = Dispatchers.IO) {
+            inputStateDao.saveInput(state = InputState(currentText = newExpression))
+        }
     }
 
     private fun evaluateExpressionWithPython(expressionStr: String): String {

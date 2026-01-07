@@ -5,8 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.composercalculator.data.local.db.dao.HistoryDao
+import com.example.composercalculator.data.local.db.dao.InputStateDao
 import com.example.composercalculator.data.local.db.dao.SettingsDao
 import com.example.composercalculator.data.local.db.entity.History
+import com.example.composercalculator.data.local.db.entity.InputState
 import com.example.composercalculator.data.local.db.entity.Settings
 
 @Database(entities = [Settings::class], version = 12)
@@ -35,12 +37,12 @@ abstract class AppDatabaseSetting : RoomDatabase() {
             }
         }
     }
-
 }
 
-@Database(entities = [History::class], version = 3)
+@Database(entities = [History::class, InputState::class], version = 4)
 abstract class AppDatabaseHistory : RoomDatabase() {
     abstract fun historyDao(): HistoryDao
+    abstract fun inputStateDao(): InputStateDao
 
     companion object {
         // Волатильная переменная для хранения единственного экземпляра базы данных
@@ -64,5 +66,4 @@ abstract class AppDatabaseHistory : RoomDatabase() {
             }
         }
     }
-
 }

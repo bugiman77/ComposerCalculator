@@ -64,8 +64,9 @@ class CalculatorViewModel(
 
     init {
         viewModelScope.launch {
-            loadHistoryLast()
             loadHistoryAll()
+        }
+        viewModelScope.launch(Dispatchers.IO) {
             loadLastValue()
         }
     }
@@ -92,10 +93,10 @@ class CalculatorViewModel(
     }
 
     private suspend fun loadLastValue() {
-        val savedState = inputStateDao.getInputState().firstOrNull()
-        savedState?.let {
-            _expression.value = it.currentText
-            _lastValue.value = it.currentText
+        inputStateDao.getInputState().collect { savedState ->
+            savedState?.let {
+                _expression.value = it.currentText
+            }
         }
     }
 

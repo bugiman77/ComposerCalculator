@@ -85,23 +85,34 @@ class CalculatorViewModel(
     }
 
     fun onInputDigit(inputDigit: String) {
-
         val currentExpression = _expression.value
 
         if (currentExpression.isNotEmpty() && currentExpression.last() == ')') {
             _expression.value += "*$inputDigit"
-        } else {
-            _expression.value += inputDigit
+            updateExpression(newExpression = _expression.value)
+            triggerFeedback()
+            return
         }
 
+        if (currentExpression.isNotEmpty()) {
+            val lastChar = currentExpression.last()
+
+            if (lastChar == '0') {
+                val parts = currentExpression.split('+', '-', '*', '/', '%', '(')
+                val lastNumber = parts.last()
+
+                if (lastNumber == "0") {
+                    _expression.value += ".$inputDigit"
+                    updateExpression(newExpression = _expression.value)
+                    triggerFeedback()
+                    return
+                }
+            }
+        }
+
+        _expression.value += inputDigit
         updateExpression(newExpression = _expression.value)
-
-        if (settingsViewModel.playSound.value) {
-            soundManager.playClick()
-        }
-        if (settingsViewModel.playVibration.value) {
-            vibrationManager.vibrateClick()
-        }
+        triggerFeedback()
     }
 
     fun onInputMathematicalOperations(inputOperation: String) {
@@ -254,6 +265,15 @@ class CalculatorViewModel(
         _expression.value = newExpression
         viewModelScope.launch(context = Dispatchers.IO) {
             inputStateDao.saveInput(state = InputState(currentText = newExpression))
+        }
+    }
+
+    private fun triggerFeedback() {
+        if (settingsViewModel.playSound.value) {
+            soundManager.playClick()
+        }
+        if (settingsViewModel.playVibration.value) {
+            vibrationManager.vibrateClick()
         }
     }
 

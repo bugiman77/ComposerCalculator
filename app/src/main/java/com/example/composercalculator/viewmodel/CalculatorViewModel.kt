@@ -317,8 +317,6 @@ class CalculatorViewModel(
                 result = result,
                 note = "",
                 timestamp = System.currentTimeMillis(),
-                isEditedExpression = false,
-                timestampEditedExpression = null
             )
         )
     }

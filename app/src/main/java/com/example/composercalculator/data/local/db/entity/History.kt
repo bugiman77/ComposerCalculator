@@ -11,6 +11,4 @@ data class History(
     var result: String = "",
     var note: String = "",
     var timestamp: Long = System.currentTimeMillis(),
-    var isEditedExpression: Boolean = false,
-    var timestampEditedExpression: Long? = null
 )

@@ -4,7 +4,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -33,7 +35,7 @@ fun DisplayArea(
     onPositioned: (Offset) -> Unit
 ) {
     var fontSize by remember { mutableStateOf(value = 80.sp) }
-    val minFontSize = 45.sp
+    val minFontSize = 40.sp
     val scrollState = rememberScrollState()
     val displayText = viewModelCalculation.expression.collectAsState().value
     var inputPosition by remember { mutableStateOf(value = Offset.Zero) }
@@ -46,21 +48,21 @@ fun DisplayArea(
         }
     }
 
-    Box(
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(fraction = 0.27f)
+            .fillMaxHeight(fraction = 0.29f)
             .padding(
                 start = 8.dp,
                 end = 8.dp,
                 bottom = 12.dp
             )
             .onGloballyPositioned { coordinates ->
-                // Передаем координаты всего контейнера или текста в родителя
                 onPositioned(coordinates.positionInRoot())
             },
-        contentAlignment = Alignment.BottomEnd
+        contentAlignment = Alignment.BottomEnd,
     ) {
+        val containerWidth = constraints.maxWidth
 
         if (displayText.isEmpty() && viewModelSettings.showPlaceholderInput.collectAsState().value) {
             Text(
@@ -68,14 +70,12 @@ fun DisplayArea(
                 color = Color.White.copy(alpha = 0.4f),
                 textAlign = TextAlign.End,
                 fontSize = fontSize,
-                maxLines = 1,
-                softWrap = false
             )
         }
 
         Text(
             modifier = Modifier
-                .verticalScroll(scrollState)
+                .horizontalScroll(scrollState)
                 .combinedClickable(
                     onClick = {},
                     onLongClick = {},
@@ -89,7 +89,7 @@ fun DisplayArea(
             maxLines = 1,
             softWrap = false,
             onTextLayout = { textLayoutResult ->
-                if (textLayoutResult.hasVisualOverflow && fontSize > minFontSize) {
+                if (textLayoutResult.size.width > containerWidth && fontSize > minFontSize) {
                     fontSize *= 0.95f
                 }
             }

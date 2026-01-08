@@ -38,26 +38,11 @@ class CalculatorViewModel(
     private val _id = MutableStateFlow(value = "")
     val id: StateFlow<String> = _id.asStateFlow()
 
-    private val _lastValue = MutableStateFlow(value = "0")
-    val lastValue: StateFlow<String> = _lastValue.asStateFlow()
-
     private val _expression = MutableStateFlow(value = "")
     val expression: StateFlow<String> = _expression.asStateFlow()
 
-    private val _result = MutableStateFlow(value = "")
-    val result: StateFlow<String> = _result.asStateFlow()
-
     private val _note = MutableStateFlow(value = "")
     val note: StateFlow<String> = _note.asStateFlow()
-
-    private val _timestamp = MutableStateFlow(value = "")
-    val timestamp: StateFlow<String> = _timestamp.asStateFlow()
-
-    private val _isEditedExpression = MutableStateFlow(value = "")
-    val isEditedExpression: StateFlow<String> = _isEditedExpression.asStateFlow()
-
-    private val _timestampEditedExpression = MutableStateFlow(value = "")
-    val timestampEditedExpression: StateFlow<String> = _timestampEditedExpression.asStateFlow()
 
     private val _history = MutableStateFlow<List<History>>(value = emptyList())
     val history: StateFlow<List<History>> = _history
@@ -68,21 +53,6 @@ class CalculatorViewModel(
         }
         viewModelScope.launch(Dispatchers.IO) {
             loadLastValue()
-        }
-    }
-
-    private suspend fun loadHistoryLast() {
-        val history = withContext(context = Dispatchers.IO) {
-            historyDao.getHistoryLast() // Run the DB query on a background thread
-        }
-        history?.let {
-            _id.value = it.id.toString()
-            _expression.value = it.expression
-            _result.value = it.result
-            _note.value = it.note
-            _timestamp.value = it.timestamp.toString()
-            _isEditedExpression.value = it.isEditedExpression.toString()
-            _timestampEditedExpression.value = it.timestampEditedExpression.toString()
         }
     }
 
@@ -118,12 +88,9 @@ class CalculatorViewModel(
 
         val currentExpression = _expression.value
 
-        // Проверяем, не является ли последний символ закрывающей скобкой
         if (currentExpression.isNotEmpty() && currentExpression.last() == ')') {
-            // Если была скобка, добавляем знак умножения перед цифрой
             _expression.value += "*$inputDigit"
         } else {
-            // В обычном случае просто добавляем цифру
             _expression.value += inputDigit
         }
 
@@ -153,12 +120,9 @@ class CalculatorViewModel(
             setOf('+', '-', '/', '*', '%') // Выносим операторы в Set для быстрого поиска
         val lastChar = currentExpression.last()
 
-        // 1. Обработка ввода точки
         if (inputOperation == ".") {
-            // Находим часть строки после последнего оператора (текущее число)
             val lastNumber = currentExpression.split('+', '-', '*', '/', '%').last()
 
-            // Если в текущем числе уже есть точка или последний символ — оператор, игнорируем ввод
             if (lastNumber.contains(char = '.') || lastChar in operators) {
                 return
             }
@@ -166,18 +130,14 @@ class CalculatorViewModel(
             return
         }
 
-        // 2. Обработка ввода математических операторов
         if (inputOperation.first() in operators) {
             if (lastChar == '.') {
-                // Не позволяем ставить оператор сразу после точки (например, "12.+")
                 return
             }
 
             if (lastChar in operators) {
-                // Если последний символ — оператор, заменяем его
                 _expression.value = currentExpression.dropLast(n = 1) + inputOperation
             } else {
-                // Если последний символ — цифра, добавляем оператор
                 _expression.value += inputOperation
             }
         }
@@ -194,8 +154,6 @@ class CalculatorViewModel(
 
         if (currentExpression.isEmpty()) return
 
-        // Регулярное выражение находит последнее число, включая отрицательные в скобках
-        // Ищет либо (-число), либо просто число в конце строки
         val lastTokenRegex = Regex(pattern = """(\(-\d+\.?\d*\)|(?<!\d)\d+\.?\d*)$""")
         val matchResult = lastTokenRegex.find(input = currentExpression)
 
@@ -204,10 +162,8 @@ class CalculatorViewModel(
             val prefix = currentExpression.take(n = matchResult.range.first)
 
             val updatedToken = if (lastToken.startsWith(prefix = "(-")) {
-                // Если число уже отрицательное (в скобках), убираем скобки и минус
                 lastToken.removeSurrounding(prefix = "(-", suffix = ")")
             } else {
-                // Если число положительное, оборачиваем в (-...)
                 "(-$lastToken)"
             }
 
@@ -278,7 +234,6 @@ class CalculatorViewModel(
         ) return
 
         val calculationResult = evaluateExpressionWithPython(expressionStr = currentExpression)
-        _result.value = calculationResult
 
         _expression.value = calculationResult
 

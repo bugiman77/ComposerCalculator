@@ -127,13 +127,11 @@ class CalculatorViewModel(
         val currentExpression = _expression.value
         if (currentExpression.isEmpty()) return
 
-        val operators =
-            setOf('+', '-', '/', '*', '%') // Выносим операторы в Set для быстрого поиска
+        val operators = setOf('+', '-', '/', '*', '%')
         val lastChar = currentExpression.last()
 
         if (inputOperation == ".") {
             val lastNumber = currentExpression.split('+', '-', '*', '/', '%').last()
-
             if (lastNumber.contains(char = '.') || lastChar in operators) {
                 return
             }
@@ -149,7 +147,9 @@ class CalculatorViewModel(
             if (lastChar in operators) {
                 _expression.value = currentExpression.dropLast(n = 1) + inputOperation
             } else {
-                _expression.value += inputOperation
+                // Если последний символ — цифра, сначала "причесываем" число
+                val trimmedExpression = trimTrailingZerosFromLastNumber(currentExpression)
+                _expression.value = trimmedExpression + inputOperation
             }
         }
 
@@ -259,6 +259,23 @@ class CalculatorViewModel(
 
         updateExpression(newExpression = _expression.value)
 
+    }
+
+    private fun trimTrailingZerosFromLastNumber(expression: String): String {
+        // Находим последнее число в строке
+        val operators = charArrayOf('+', '-', '*', '/', '%')
+        val lastOperatorIndex = expression.lastIndexOfAny(operators)
+
+        val prefix = if (lastOperatorIndex != -1) expression.substring(0, lastOperatorIndex + 1) else ""
+        var lastNumber = if (lastOperatorIndex != -1) expression.substring(lastOperatorIndex + 1) else expression
+
+        // Удаляем нули только если в числе есть точка
+        if (lastNumber.contains('.')) {
+            // Удаляем все нули с конца, а затем саму точку, если она осталась в конце
+            lastNumber = lastNumber.trimEnd('0').trimEnd('.')
+        }
+
+        return prefix + lastNumber
     }
 
     private fun updateExpression(newExpression: String) {

@@ -1,6 +1,7 @@
 package com.example.composercalculator.view.components.settings.SettingsBlock
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Switch
@@ -45,6 +46,8 @@ fun Appearance(
                 )
             )
         }
+
+        HorizontalDivider(color = Color(color = 0xFF3A3A3C))
 
         SettingsRow(
             title = "Отображать плейсхолдер",

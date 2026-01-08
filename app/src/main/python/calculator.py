@@ -1,14 +1,16 @@
 from simpleeval import simple_eval
+from decimal import Decimal
 
 
 def evaluate_expression(expression_string: str):
-    def expressionProcessing(expression_string: str) -> str:
-        return (expression_string
-                .replace("^", "**")
-                )
-
     try:
-        processedExpression = expressionProcessing(expression_string=expression_string)
-        return simple_eval(processedExpression)
-    except Exception as e:
-        return f"Ошибка при оценке выражения: {e}"
+        expr = expression_string.replace("^", "**")
+        result = simple_eval(expr)
+
+        if isinstance(result, (float, int)):
+            final_res = Decimal(str(round(result, 12))).normalize()
+            return format(final_res, 'f')
+
+        return str(result)
+    except Exception:
+        return "Ошибка"

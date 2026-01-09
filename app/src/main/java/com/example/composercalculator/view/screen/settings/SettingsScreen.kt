@@ -127,8 +127,9 @@ fun SettingsScreen(
 
 @Composable
 fun CustomTopBar(
+    screenTitle: String,
     onNavigateBack: () -> Unit,
-    onScrollToTop: () -> Unit
+    onScrollToTop: () -> Unit,
 ) {
 
     Box(

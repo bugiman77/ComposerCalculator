@@ -152,6 +152,7 @@ fun AppNavigation(
     }
 }*/
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
@@ -164,6 +165,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -177,11 +179,13 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.createGraph
 import com.example.composercalculator.view.screen.main.CalculatorScreen
 import com.example.composercalculator.view.screen.settings.AboutScreen
+import com.example.composercalculator.view.screen.settings.CreateThemeAppUser
 import com.example.composercalculator.view.screen.settings.PrivacyPolicyScreen
 import com.example.composercalculator.view.screen.settings.SettingsScreen
 import com.example.composercalculator.viewmodel.AppListViewModel
@@ -198,13 +202,13 @@ fun AppNavigation(
     val navController = rememberNavController()
     val showHistoryButton = settingsViewModel.showHistoryButton.collectAsState()
 
-    LaunchedEffect(Unit) {
     val canGoBack = navController.previousBackStackEntry != null
 
     BackHandler(enabled = canGoBack) {
         navController.popBackStack()
     }
 
+    LaunchedEffect(key1 = Unit) {
         if (navController.currentDestination == null) {
             navController.graph = navController.createGraph(startDestination = Routes.CALCULATOR) {
                 composable(Routes.CALCULATOR) { }
@@ -217,12 +221,13 @@ fun AppNavigation(
 
     val visibleEntries by navController.visibleEntries.collectAsState()
     val currentEntry = visibleEntries.lastOrNull()
-    val previousEntry = if (visibleEntries.size > 1) visibleEntries[visibleEntries.size - 2] else null
+    val previousEntry =
+        if (visibleEntries.size > 1) visibleEntries[visibleEntries.size - 2] else null
 
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp.value * 3
 
-    var offsetX by remember { mutableStateOf(0f) }
+    var offsetX by remember { mutableStateOf(value = 0f) }
     val animatedOffset by animateFloatAsState(targetValue = offsetX)
 
     Surface(modifier = Modifier.fillMaxSize(), color = Color.Black) {
@@ -231,15 +236,31 @@ fun AppNavigation(
             // Отрисовка ПРЕДЫДУЩЕГО экрана
             previousEntry?.let { entry ->
                 val parallaxOffset = -(screenWidth / 4) + (animatedOffset / 4)
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .offset { IntOffset(parallaxOffset.roundToInt(), 0) }
-                ) {
-                    ScreenContent(entry, settingsViewModel, calculatorViewModel, appListViewModel, showHistoryButton.value, navController)
-                    // Затемнение
-                    Box(modifier = Modifier
+                Box(
+                    modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.Black.copy(alpha = (0.4f - (offsetX / screenWidth) * 0.4f).coerceIn(0f, 0.4f)))
+                        .offset { IntOffset(x = parallaxOffset.roundToInt(), y = 0) }
+                ) {
+                    ScreenContent(
+                        entry,
+                        settingsViewModel,
+                        calculatorViewModel,
+                        appListViewModel,
+                        showHistoryButton.value,
+                        navController
+                    )
+                    // Затемнение
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(
+                                Color.Black.copy(
+                                    alpha = (0.4f - (offsetX / screenWidth) * 0.4f).coerceIn(
+                                        0f,
+                                        0.4f
+                                    )
+                                )
+                            )
                     )
                 }
             }
@@ -249,8 +270,13 @@ fun AppNavigation(
                 Box(
                     modifier = Modifier
                         .fillMaxHeight()
-                        .width(20.dp)
-                        .offset { IntOffset(animatedOffset.roundToInt() - 20.dp.value.toInt() * 3, 0) }
+                        .width(width = 20.dp)
+                        .offset {
+                            IntOffset(
+                                x = animatedOffset.roundToInt() - 20.dp.value.toInt() * 3,
+                                y = 0
+                            )
+                        }
                         .background(
                             brush = Brush.horizontalGradient(
                                 colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.3f))
@@ -264,13 +290,13 @@ fun AppNavigation(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .offset { IntOffset(animatedOffset.roundToInt(), 0) }
-                        .pointerInput(Unit) {
+                        .offset { IntOffset(x = animatedOffset.roundToInt(), y = 0) }
+                        .pointerInput(key1 = Unit) {
                             detectHorizontalDragGestures(
                                 onDragStart = { /* Проверка края экрана */ },
                                 onHorizontalDrag = { change, dragAmount ->
                                     if (navController.previousBackStackEntry != null) {
-                                        offsetX = (offsetX + dragAmount).coerceAtLeast(0f)
+                                        offsetX = (offsetX + dragAmount).coerceAtLeast(minimumValue = 0f)
                                         change.consume()
                                     }
                                 },
@@ -283,7 +309,14 @@ fun AppNavigation(
                             )
                         }
                 ) {
-                    ScreenContent(entry, settingsViewModel, calculatorViewModel, appListViewModel, showHistoryButton.value, navController)
+                    ScreenContent(
+                        entry,
+                        settingsViewModel,
+                        calculatorViewModel,
+                        appListViewModel,
+                        showHistoryButton.value,
+                        navController
+                    )
                 }
             }
         }
@@ -300,7 +333,7 @@ private fun ScreenContent(
     calculatorViewModel: CalculatorViewModel,
     appListViewModel: AppListViewModel,
     showHistoryButton: Boolean,
-    navController: androidx.navigation.NavHostController
+    navController: NavHostController
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),

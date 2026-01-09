@@ -171,7 +171,7 @@ fun CustomTopBar(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Настройки",
+                    text = screenTitle,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )

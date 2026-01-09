@@ -72,6 +72,7 @@ fun SettingsScreen(
         contentWindowInsets = WindowInsets(left = 0, top = 0, right = 0, bottom = 0),
         topBar = {
             CustomTopBar(
+                screenTitle = "Настройки",
                 onNavigateBack = onNavigateBack,
                 onScrollToTop = {
                     coroutineScope.launch { scrollState.animateScrollTo(value = 0) }

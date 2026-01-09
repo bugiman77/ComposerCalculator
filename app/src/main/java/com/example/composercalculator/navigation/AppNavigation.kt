@@ -199,6 +199,12 @@ fun AppNavigation(
     val showHistoryButton = settingsViewModel.showHistoryButton.collectAsState()
 
     LaunchedEffect(Unit) {
+    val canGoBack = navController.previousBackStackEntry != null
+
+    BackHandler(enabled = canGoBack) {
+        navController.popBackStack()
+    }
+
         if (navController.currentDestination == null) {
             navController.graph = navController.createGraph(startDestination = Routes.CALCULATOR) {
                 composable(Routes.CALCULATOR) { }

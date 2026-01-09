@@ -23,7 +23,8 @@ import com.example.composercalculator.viewmodel.SettingsViewModel
 @Composable
 fun AppTheme(
     modifier: Modifier = Modifier,
-    viewModelSettings: SettingsViewModel
+    viewModelSettings: SettingsViewModel,
+    onNavigateToCreateThemes: () -> Unit,
 ) {
 
     val isDarkTheme = viewModelSettings.isDarkTheme.collectAsState()
@@ -73,7 +74,7 @@ fun AppTheme(
         }
 
         Button(
-            onClick = { },
+            onClick = { onNavigateToCreateThemes() },
             modifier = Modifier
                 .fillMaxWidth() // Кнопка на всю ширину
                 .padding(start = 16.dp, end = 16.dp, bottom = 16.dp), // Отступы по краям

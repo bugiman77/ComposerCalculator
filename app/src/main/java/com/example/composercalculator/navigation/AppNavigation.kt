@@ -165,7 +165,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -191,13 +190,15 @@ import com.example.composercalculator.view.screen.settings.SettingsScreen
 import com.example.composercalculator.viewmodel.AppListViewModel
 import com.example.composercalculator.viewmodel.CalculatorViewModel
 import com.example.composercalculator.viewmodel.SettingsViewModel
+import com.example.composercalculator.viewmodel.ThemesViewModel
 import kotlin.math.roundToInt
 
 @Composable
 fun AppNavigation(
     settingsViewModel: SettingsViewModel = viewModel(),
     calculatorViewModel: CalculatorViewModel = viewModel(),
-    appListViewModel: AppListViewModel = viewModel()
+    appListViewModel: AppListViewModel = viewModel(),
+    themesUserViewModel: ThemesViewModel = viewModel(),
 ) {
     val navController = rememberNavController()
     val showHistoryButton = settingsViewModel.showHistoryButton.collectAsState()
@@ -215,6 +216,7 @@ fun AppNavigation(
                 composable(Routes.SETTINGS) { }
                 composable(Routes.ABOUT) { }
                 composable(Routes.PRIVACY_POLICY) { }
+                composable(Routes.CREATE_THEME_USER) {  }
             }
         }
     }
@@ -242,12 +244,13 @@ fun AppNavigation(
                         .offset { IntOffset(x = parallaxOffset.roundToInt(), y = 0) }
                 ) {
                     ScreenContent(
-                        entry,
-                        settingsViewModel,
-                        calculatorViewModel,
-                        appListViewModel,
-                        showHistoryButton.value,
-                        navController
+                        entry = entry,
+                        settingsViewModel = settingsViewModel,
+                        calculatorViewModel = calculatorViewModel,
+                        themesUserViewModel = themesUserViewModel,
+                        appListViewModel = appListViewModel,
+                        showHistoryButton = showHistoryButton.value,
+                        navController = navController
                     )
                     // Затемнение
                     Box(
@@ -296,7 +299,8 @@ fun AppNavigation(
                                 onDragStart = { /* Проверка края экрана */ },
                                 onHorizontalDrag = { change, dragAmount ->
                                     if (navController.previousBackStackEntry != null) {
-                                        offsetX = (offsetX + dragAmount).coerceAtLeast(minimumValue = 0f)
+                                        offsetX =
+                                            (offsetX + dragAmount).coerceAtLeast(minimumValue = 0f)
                                         change.consume()
                                     }
                                 },
@@ -310,12 +314,13 @@ fun AppNavigation(
                         }
                 ) {
                     ScreenContent(
-                        entry,
-                        settingsViewModel,
-                        calculatorViewModel,
-                        appListViewModel,
-                        showHistoryButton.value,
-                        navController
+                        entry = entry,
+                        settingsViewModel = settingsViewModel,
+                        calculatorViewModel = calculatorViewModel,
+                        themesUserViewModel = themesUserViewModel,
+                        appListViewModel = appListViewModel,
+                        showHistoryButton = showHistoryButton.value,
+                        navController = navController
                     )
                 }
             }
@@ -331,6 +336,7 @@ private fun ScreenContent(
     entry: NavBackStackEntry,
     settingsViewModel: SettingsViewModel,
     calculatorViewModel: CalculatorViewModel,
+    themesUserViewModel: ThemesViewModel,
     appListViewModel: AppListViewModel,
     showHistoryButton: Boolean,
     navController: NavHostController
@@ -352,6 +358,7 @@ private fun ScreenContent(
                 viewModelSettings = settingsViewModel,
                 onNavigateBack = { navController.popBackStack() },
                 onNavigateToAbout = { navController.navigate(Routes.ABOUT) },
+                onNavigateToCreateThemes = { navController.navigate(Routes.CREATE_THEME_USER) }
             )
 
             Routes.ABOUT -> AboutScreen(
@@ -364,6 +371,12 @@ private fun ScreenContent(
                 title = "Политика конфиденциальности",
                 onNavigateBack = { navController.popBackStack() }
             )
+
+            Routes.CREATE_THEME_USER -> CreateThemeAppUser(
+                viewModelThemes = themesUserViewModel,
+                onNavigateBack = { navController.popBackStack() }
+            )
+
         }
     }
 }

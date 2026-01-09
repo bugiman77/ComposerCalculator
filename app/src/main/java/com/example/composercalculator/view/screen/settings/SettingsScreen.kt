@@ -61,6 +61,7 @@ fun SettingsScreen(
     viewModelSettings: SettingsViewModel = viewModel(),
     onNavigateBack: () -> Unit,
     onNavigateToAbout: () -> Unit,
+    onNavigateToCreateThemes: () -> Unit,
 ) {
 
     val coroutineScope = rememberCoroutineScope()
@@ -86,7 +87,10 @@ fun SettingsScreen(
                 .verticalScroll(scrollState)
         ) {
 
-            AppTheme(viewModelSettings = viewModelSettings)
+            AppTheme(
+                viewModelSettings = viewModelSettings,
+                onNavigateToCreateThemes = onNavigateToCreateThemes
+            )
 
             Spacer(modifier = Modifier.height(height = 24.dp))
 

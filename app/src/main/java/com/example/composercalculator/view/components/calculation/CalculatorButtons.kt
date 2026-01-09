@@ -129,9 +129,9 @@ private fun BtnCalculationText(
         onClick = { },
         modifier = modifier
             .aspectRatio(ratio = 1f)
-            .onGloballyPositioned { coordinates ->
+            /*.onGloballyPositioned { coordinates ->
                 buttonOffset = coordinates.positionInRoot()
-            },
+            }*/,
         shape = CircleShape,
         contentPadding = PaddingValues(all = 0.dp),
         border = BorderStroke(width = 1.dp, borderBrush),

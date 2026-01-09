@@ -72,8 +72,8 @@ fun CalculatorScreen(
 
     val showIconButton = viewModelSettings.showIconButton.collectAsState().value
 
-    var flyingDigits by remember { mutableStateOf(value = listOf<FlyingDigit>()) }
-    var targetOffset by remember { mutableStateOf(value = Offset.Zero) }
+//    var flyingDigits by remember { mutableStateOf(value = listOf<FlyingDigit>()) }
+//    var targetOffset by remember { mutableStateOf(value = Offset.Zero) }
 
     LaunchedEffect(key1 = sheetState.isVisible) {
         if (!sheetState.isVisible) {
@@ -175,7 +175,7 @@ fun CalculatorScreen(
                     DisplayArea(
                         viewModelCalculation = viewModelCalculation,
                         viewModelSettings = viewModelSettings,
-                        onPositioned = { offset -> targetOffset = offset },
+                        onPositioned = { /*offset -> targetOffset = offset*/ },
                     )
 
                     // Сетка кнопок
@@ -188,7 +188,7 @@ fun CalculatorScreen(
                                 text = text,
                                 startOffset = offset
                             )
-                            flyingDigits = flyingDigits + newFlyingDigit
+//                            flyingDigits = flyingDigits + newFlyingDigit
                         }
                     )
                 }
@@ -196,18 +196,17 @@ fun CalculatorScreen(
 
         }
 
-        flyingDigits.forEach { digit ->
+       /* flyingDigits.forEach { digit ->
             FlyingDigitAnimation(
                 data = digit,
                 targetOffset = targetOffset,
                 onReached = {
-                    // Удаляем анимацию из списка
                     flyingDigits = flyingDigits.filter { it.id != digit.id }
                     // В этот момент можно добавить символ в ViewModel,
                     // если вы хотите, чтобы он появлялся ПОСЛЕ прилета
                 }
             )
-        }
+        }*/
 
     }
 }

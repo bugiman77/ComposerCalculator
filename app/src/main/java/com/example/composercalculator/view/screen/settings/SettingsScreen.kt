@@ -109,9 +109,9 @@ fun SettingsScreen(
 
             Display(viewModelSettings = viewModelSettings)
 
-            Spacer(modifier = Modifier.height(height = 24.dp))
+            /*Spacer(modifier = Modifier.height(height = 24.dp))
 
-            Animations(viewModelSettings = viewModelSettings)
+            Animations(viewModelSettings = viewModelSettings)*/
 
             Spacer(modifier = Modifier.height(height = 24.dp))
 

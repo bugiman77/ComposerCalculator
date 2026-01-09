@@ -16,6 +16,7 @@ import com.example.composercalculator.navigation.AppNavigation
 import com.example.composercalculator.ui.theme.ComposerCalculatorTheme
 import com.example.composercalculator.viewmodel.CalculatorViewModel
 import com.example.composercalculator.viewmodel.SettingsViewModel
+import com.example.composercalculator.viewmodel.ThemesViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,11 +29,16 @@ class MainActivity : ComponentActivity() {
             application = application,
             repository = deviceSettingsRepository,
         )
+
         val viewModelCalculation = CalculatorViewModel(
+            application = application,
             settingsViewModel = viewModelSettings,
             soundManager = managerSound,
             vibrationManager = managerVibration,
-            application = application
+        )
+
+        val viewModelThemes = ThemesViewModel(
+            application = application,
         )
 
         installSplashScreen()
@@ -43,7 +49,7 @@ class MainActivity : ComponentActivity() {
 
             val view = LocalView.current
             val keepScreenOn = viewModelSettings.keepScreenOn.collectAsState().value
-            DisposableEffect(keepScreenOn) {
+            DisposableEffect(key1 = keepScreenOn) {
                 view.keepScreenOn = keepScreenOn
                 if (keepScreenOn) {
                     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -59,11 +65,12 @@ class MainActivity : ComponentActivity() {
             val isDarkTheme = viewModelSettings.isDarkTheme.collectAsState().value
             ComposerCalculatorTheme(
                 darkTheme = isDarkTheme,
-                dynamicColor = false
+                dynamicColor = false,
             ) {
                 AppNavigation(
                     settingsViewModel = viewModelSettings,
-                    calculatorViewModel = viewModelCalculation
+                    calculatorViewModel = viewModelCalculation,
+                    themesUserViewModel = viewModelThemes,
                 )
             }
         }

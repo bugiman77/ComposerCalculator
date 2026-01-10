@@ -17,16 +17,16 @@
   <tbody>
   <tr>
     <td rowspan="3">
-        <img alt="Screen main" src="screenshots/Screenshot_20260108_213042.png" title="Main" width="200"/>
+        <img alt="Screen setting" src="screenshots/Screenshot_20260108_212758.png" title="Setting" width="200"/>
     </td>
-    <td>456</td>
+    <td></td>
     <td rowspan="2">
-        <img alt="Screen main" src="screenshots/Screenshot_20260109_221800.png" title="Main" width="200"/>
+        <img alt="Screen main" src="screenshots/Screenshot_20260109_221800.png" title="Main" width="120"/>
     </td>
   </tr>
   <tr>
     <td rowspan="3">
-        <img alt="Screen setting" src="screenshots/Screenshot_20260108_212758.png" title="Setting" width="200"/>
+     <img alt="Screen main" src="screenshots/Screenshot_20260108_213042.png" title="Main" width="300"/>
     </td>
   </tr>
   <tr>
@@ -36,7 +36,7 @@
   </tr>
   <tr>
     <td rowspan="2">
-        <img alt="Screen history" src="screenshots/Screenshot_20260109_122307.png" title="History" width="200"/>
+        <img alt="Screen history" src="screenshots/Screenshot_20260109_122307.png" title="History" width="120"/>
     </td>
   </tr>
   <tr>

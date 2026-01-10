@@ -94,6 +94,7 @@ chaquopy {
     defaultConfig {
         pip {
             install("simpleeval")
+            install("requests")
         }
     }
 }

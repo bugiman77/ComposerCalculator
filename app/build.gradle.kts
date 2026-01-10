@@ -95,6 +95,7 @@ chaquopy {
         pip {
             install("simpleeval")
             install("requests")
+            install("sympy")
         }
     }
 }

@@ -1,4 +1,5 @@
 # 🧮 Composer Calculator
+
 ### Современный калькулятор на Jetpack Compose с интеграцией Python
 
 ![Kotlin](https://img.shields.io/badge/kotlin-2.0.21-blue.svg)
@@ -12,14 +13,45 @@
 |:--------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------:|
 | <img alt="Screen main" src="screenshots/Screenshot_20260108_213042.png" title="Main" width="200"/> | <img alt="Screen setting" src="screenshots/Screenshot_20260108_212758.png" title="Setting" width="200"/> | <img alt="Screen history" src="screenshots/Screenshot_20260108_213020.png" title="History" width="200"/> | <img alt="Screen about app" src="screenshots/Screenshot_20260109_122307.png" title="About app" width="200"/> |
 
+<table>
+  <tbody>
+  <tr>
+    <td rowspan="3">
+        <img alt="Screen main" src="screenshots/Screenshot_20260108_213042.png" title="Main" width="200"/>
+    </td>
+    <td>456</td>
+    <td rowspan="2">789</td>
+  </tr>
+  <tr>
+    <td rowspan="3">
+        <img alt="Screen setting" src="screenshots/Screenshot_20260108_212758.png" title="Setting" width="200"/>
+    </td>
+  </tr>
+  <tr>
+    <td rowspan="3">
+        <img alt="Screen history" src="screenshots/Screenshot_20260108_213020.png" title="History" width="200"/>
+    </td>
+  </tr>
+  <tr>
+    <td rowspan="2">123</td>
+  </tr>
+  <tr>
+    <td>456</td>
+  </tr>
+  </tbody>
+</table>
+
 ## ✨ Особенности
-* **Точные вычисления:** Использование Python скриптов для обхода проблем с плавающей точкой (`0.1 + 0.2 = 0.3`).
+
+* **Точные вычисления:** Использование Python скриптов для обхода проблем с плавающей точкой (
+  `0.1 + 0.2 = 0.3`).
 * **Умный ввод:** Автоматическая подстановка точек после нуля и корректная обработка знаков.
 * **Динамический UI:** Адаптивный размер шрифта и горизонтальная прокрутка в стиле iOS 18.
 * **Темы:** Поддержка встроенных и пользовательских тем с хранением в Room.
 * **История:** Сохранение всех вычислений с возможностью добавления заметок.
 
 ## 🛠 Технологии
+
 - **UI:** Jetpack Compose (Declarative UI)
 - **Архитектура:** MVVM + Clean Architecture (Use Cases)
 - **База данных:** Room (хранение истории и состояний)

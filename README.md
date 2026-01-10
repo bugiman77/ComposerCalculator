@@ -20,7 +20,9 @@
         <img alt="Screen main" src="screenshots/Screenshot_20260108_213042.png" title="Main" width="200"/>
     </td>
     <td>456</td>
-    <td rowspan="2">789</td>
+    <td rowspan="2">
+        <img alt="Screen main" src="screenshots/Screenshot_20260109_221800.png" title="Main" width="200"/>
+    </td>
   </tr>
   <tr>
     <td rowspan="3">
@@ -33,10 +35,12 @@
     </td>
   </tr>
   <tr>
-    <td rowspan="2">123</td>
+    <td rowspan="2">
+        <img alt="Screen history" src="screenshots/Screenshot_20260109_122307.png" title="History" width="200"/>
+    </td>
   </tr>
   <tr>
-    <td>456</td>
+    <td></td>
   </tr>
   </tbody>
 </table>

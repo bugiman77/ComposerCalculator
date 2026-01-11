@@ -1,0 +1,17 @@
+.gradle
+gradle
+.gitignore
+app/src/main/AndroidManifest.xml
+local.properties
+app/src/main/res/mipmap-*
+app/src/main/res/xml
+app/src/test
+build.gradle.kts
+gradle.properties
+gradlew.bat
+gradlew
+app/src/main/java/com/example/composercalculator/img.png
+settings.gradle.kts
+.idea/
+/app/src/main/java/com/example/composercalculator/features/
+/app/src/androidTest/

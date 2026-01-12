@@ -57,6 +57,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -108,9 +109,11 @@ fun HistoryBottomSheet(
         ) {
 
             OutlinedButton(
+                modifier = Modifier
+                    .size(size = 40.dp)
+                    .testTag(tag = "sheet_close"),
                 onClick = onCloseClick,
                 shape = CircleShape,
-                modifier = Modifier.size(size = 40.dp),
                 contentPadding = PaddingValues(0.dp),
                 border = BorderStroke(1.dp, Color.White),
                 colors = ButtonDefaults.outlinedButtonColors(
@@ -126,6 +129,7 @@ fun HistoryBottomSheet(
 
             if (historyItems.isNotEmpty()) {
                 OutlinedButton(
+                    modifier = Modifier.testTag(tag = "sheet_clear_history_calculate"),
                     onClick = {
                         scope.launch {
                             calculatorViewModel.deleteHistoryItemAll()

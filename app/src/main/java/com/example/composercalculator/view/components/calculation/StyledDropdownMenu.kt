@@ -69,6 +69,21 @@ fun StyledDropdownMenu(
                 thickness = DividerDefaults.Thickness, color = Color.Gray.copy(alpha = 0.5f)
             )
 
+            StyledMenuItem(
+                text = "Конвертер валют",
+                onClick = onOpenCurrencyConverter
+            )
+
+            StyledMenuItem(
+                text = "Конвертер расстояния",
+                onClick = onOpenDistanceConverter
+            )
+
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = 8.dp),
+                thickness = DividerDefaults.Thickness, color = Color.Gray.copy(alpha = 0.5f)
+            )
+
             StyledMenuItemWithSwitch(
                 text = "Тёмная тема",
                 checked = if (isEnableSwitchDarkMode) isDarkTheme.value else false,

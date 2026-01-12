@@ -61,7 +61,7 @@ fun CalculatorScreen(
 
     var showHistorySheet by remember { mutableStateOf(value = false) }
 //    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var canCloseProgrammatically by remember { mutableStateOf(false) }
+    var canCloseProgrammatically by remember { mutableStateOf(true) }
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
         confirmValueChange = { sheetValue ->

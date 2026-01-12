@@ -61,12 +61,15 @@ fun StyledDropdownMenu(
                 .padding(vertical = 8.dp)
                 .width(width = 220.dp)
         ) {
-            StyledMenuItem(text = "Инженерный") {
-                onDismissRequest()
-            }
-            StyledMenuItem(text = "Научный") {
-                onDismissRequest()
-            }
+            StyledMenuItem(
+                text = "Инженерный",
+                onClick = onOpenEngineeringMode
+            )
+
+            StyledMenuItem(
+                text = "Научный",
+                onClick = onOpenScientificMode
+            )
 
             HorizontalDivider(
                 modifier = Modifier.padding(vertical = 8.dp),

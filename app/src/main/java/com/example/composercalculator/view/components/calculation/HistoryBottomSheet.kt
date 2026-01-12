@@ -106,6 +106,7 @@ fun HistoryBottomSheet(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+
             OutlinedButton(
                 onClick = onCloseClick,
                 shape = CircleShape,
@@ -122,17 +123,19 @@ fun HistoryBottomSheet(
                     tint = Color.White
                 )
             }
-            OutlinedButton(
-                onClick = {
-                    scope.launch {
-                        calculatorViewModel.deleteHistoryItemAll()
+
+            if (historyItems.isNotEmpty()) {
+                OutlinedButton(
+                    onClick = {
+                        scope.launch {
+                            calculatorViewModel.deleteHistoryItemAll()
+                        }
                     }
+                ) {
+                    Text(text = "Очистить", color = Color.Red, fontSize = 16.sp)
                 }
-            ) {
-                Text(text = "Очистить", color = Color.Red, fontSize = 16.sp)
             }
         }
-
         LazyColumn(
             modifier = Modifier.fillMaxHeight(fraction = 0.92f),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),

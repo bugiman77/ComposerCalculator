@@ -34,7 +34,11 @@ fun StyledDropdownMenu(
     expanded: Boolean,
     isEnableSwitchDarkMode: Boolean = true,
     viewModel: SettingsViewModel = viewModel(),
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
+    onOpenEngineeringMode: () -> Unit,
+    onOpenScientificMode: () -> Unit,
+    onOpenCurrencyConverter: () -> Unit,
+    onOpenDistanceConverter: () -> Unit
 ) {
 
     val density = LocalDensity.current

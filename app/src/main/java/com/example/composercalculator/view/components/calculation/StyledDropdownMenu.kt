@@ -50,7 +50,7 @@ fun StyledDropdownMenu(
         alignment = Alignment.TopStart,
         onDismissRequest = onDismissRequest,
         offset = with(receiver = density) {
-            IntOffset(x = 0.dp.roundToPx(), y = -90.dp.roundToPx())
+            IntOffset(x = 0.dp.roundToPx(), y = 0.dp.roundToPx())
         }
     ) {
         Column(

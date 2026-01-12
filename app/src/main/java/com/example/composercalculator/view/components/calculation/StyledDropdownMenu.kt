@@ -59,7 +59,7 @@ fun StyledDropdownMenu(
                 .clip(shape = RoundedCornerShape(size = 20.dp))
                 .background(Color(0xFF2C2C2E))
                 .padding(vertical = 8.dp)
-                .width(width = 220.dp)
+                .width(width = 205.dp)
         ) {
             StyledMenuItem(
                 text = "Инженерный",

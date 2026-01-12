@@ -55,7 +55,7 @@ fun StyledDropdownMenu(
     ) {
         Column(
             modifier = Modifier
-                .shadow(elevation = 8.dp, shape = RoundedCornerShape(size = 20.dp))
+                .shadow(elevation = 8.dp, shape = RoundedCornerShape(size = 32.dp))
                 .clip(shape = RoundedCornerShape(size = 20.dp))
                 .background(Color(0xFF2C2C2E))
                 .padding(vertical = 8.dp)

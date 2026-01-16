@@ -95,78 +95,166 @@ fun HistoryBottomSheet(
             )
         },
     ) {
-        Row(
+
+        if (settingsViewModel.historyHeaderLayout.collectAsState().value == 0) {
+            HistoryHeaderContentCloseClear(
+                calculatorViewModel = calculatorViewModel,
+                onCloseClick = onCloseClick
+            )
+        } else {
+            HistoryHeaderContentClearClose(
+                calculatorViewModel = calculatorViewModel,
+                onCloseClick = onCloseClick
+            )
+        }
+
+        HistorySheetContent(
+            calculatorViewModel = calculatorViewModel,
+            settingsViewModel = settingsViewModel,
+        )
+    }
+}
+
+@Composable
+private fun HistoryHeaderContentCloseClear(
+    calculatorViewModel: CalculatorViewModel,
+    onCloseClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+
+        val historyItems by calculatorViewModel.history.collectAsStateWithLifecycle()
+        val scope = rememberCoroutineScope()
+
+        OutlinedButton(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+                .size(size = 40.dp)
+                .testTag(tag = "sheet_close"),
+            onClick = onCloseClick,
+            shape = CircleShape,
+            contentPadding = PaddingValues(0.dp),
+            border = BorderStroke(1.dp, Color.White),
+            colors = ButtonDefaults.outlinedButtonColors(
+                contentColor = Color.White
+            )
         ) {
+            Icon(
+                imageVector = Icons.Default.Close,
+                contentDescription = "Закрыть",
+                tint = Color.White
+            )
+        }
 
+        if (historyItems.isNotEmpty()) {
             OutlinedButton(
-                modifier = Modifier
-                    .size(size = 40.dp)
-                    .testTag(tag = "sheet_close"),
-                onClick = onCloseClick,
-                shape = CircleShape,
-                contentPadding = PaddingValues(0.dp),
-                border = BorderStroke(1.dp, Color.White),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = Color.White
-                )
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Close,
-                    contentDescription = "Закрыть",
-                    tint = Color.White
-                )
-            }
-
-            if (historyItems.isNotEmpty()) {
-                OutlinedButton(
-                    modifier = Modifier.testTag(tag = "sheet_clear_history_calculate"),
-                    onClick = {
-                        scope.launch {
-                            calculatorViewModel.deleteHistoryItemAll()
-                        }
+                modifier = Modifier.testTag(tag = "sheet_clear_history_calculate"),
+                onClick = {
+                    scope.launch {
+                        calculatorViewModel.deleteHistoryItemAll()
                     }
-                ) {
-                    Text(text = "Очистить", color = Color.Red, fontSize = 16.sp)
                 }
+            ) {
+                Text(text = "Очистить", color = Color.Red, fontSize = 16.sp)
             }
         }
-        LazyColumn(
-            modifier = Modifier.fillMaxHeight(fraction = 0.92f),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(space = 16.dp) // Расстояние между группами
-        ) {
+    }
+}
 
-            if (historyItems.isEmpty()) {
-                item {
-                    Text(
-                        text = "История вычислений пуста",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 32.dp),
-                        textAlign = TextAlign.Center,
-                        color = Color.Gray
-                    )
+@Composable
+private fun HistoryHeaderContentClearClose(
+    calculatorViewModel: CalculatorViewModel,
+    onCloseClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+
+        val historyItems by calculatorViewModel.history.collectAsStateWithLifecycle()
+        val scope = rememberCoroutineScope()
+
+        if (historyItems.isNotEmpty()) {
+            OutlinedButton(
+                modifier = Modifier.testTag(tag = "sheet_clear_history_calculate"),
+                onClick = {
+                    scope.launch {
+                        calculatorViewModel.deleteHistoryItemAll()
+                    }
                 }
-            } else {
-                // Отображаем список записей
-                items(
-                    items = historyItems,
-                    key = { it.id } // Используем ID из Room для оптимизации
-                ) { item ->
-                    HistoryItemRow(
-                        item = item,
-                        isNoteEnabled = settingsViewModel.isNoteEnabled.collectAsState().value,
-                        calculatorViewModel = calculatorViewModel,
-                        settingsViewModel = settingsViewModel,
-                    )
-                }
+            ) {
+                Text(text = "Очистить", color = Color.Red, fontSize = 16.sp)
             }
+        } else {
+            Spacer(modifier = Modifier)
+        }
 
+        OutlinedButton(
+            modifier = Modifier
+                .size(size = 40.dp)
+                .testTag(tag = "sheet_close"),
+            onClick = onCloseClick,
+            shape = CircleShape,
+            contentPadding = PaddingValues(0.dp),
+            border = BorderStroke(1.dp, Color.White),
+            colors = ButtonDefaults.outlinedButtonColors(
+                contentColor = Color.White
+            )
+        ) {
+            Icon(
+                imageVector = Icons.Default.Close,
+                contentDescription = "Закрыть",
+                tint = Color.White
+            )
+        }
+
+    }
+}
+
+@Composable
+private fun HistorySheetContent(
+    calculatorViewModel: CalculatorViewModel,
+    settingsViewModel: SettingsViewModel,
+) {
+
+    val historyItems by calculatorViewModel.history.collectAsStateWithLifecycle()
+
+    LazyColumn(
+        modifier = Modifier.fillMaxHeight(fraction = 0.92f),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(space = 16.dp) // Расстояние между группами
+    ) {
+
+        if (historyItems.isEmpty()) {
+            item {
+                Text(
+                    text = "История вычислений пуста",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 32.dp),
+                    textAlign = TextAlign.Center,
+                    color = Color.Gray
+                )
+            }
+        } else {
+            items(
+                items = historyItems,
+                key = { it.id }
+            ) { item ->
+                HistoryItemRow(
+                    item = item,
+                    isNoteEnabled = settingsViewModel.isNoteEnabled.collectAsState().value,
+                    calculatorViewModel = calculatorViewModel,
+                    settingsViewModel = settingsViewModel,
+                )
+            }
         }
     }
 }

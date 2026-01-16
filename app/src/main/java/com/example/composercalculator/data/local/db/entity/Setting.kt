@@ -23,4 +23,5 @@ data class Settings(
     var isAnimationAll: Boolean = false,
     var keepScreenOn: Boolean = false,
     var showPlaceholderInput: Boolean = true,
+    var historyHeaderLayout : Int = 0,
 )

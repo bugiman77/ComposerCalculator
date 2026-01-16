@@ -136,3 +136,99 @@ fun HistoryComputing(
     }
 
 }
+
+@Composable
+private fun SettingsSelectionRow(
+    settingsViewModel: SettingsViewModel,
+    title: String,
+    subtitle: String,
+    option1Text: String,
+    option2Text: String,
+    selectedOption: Int, // 0 для первого, 1 для второго
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+    ) {
+        // Заголовок и подзаголовок в стиле ваших SettingsRow
+        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+            Text(text = title, color = Color.White, fontSize = 16.sp)
+            Text(text = subtitle, color = Color.Gray, fontSize = 13.sp, lineHeight = 18.sp)
+        }
+
+        Spacer(modifier = Modifier.height(height = 12.dp))
+
+        // Блок выбора вариантов
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(space = 12.dp)
+        ) {
+            SettingsRadioButton(
+                text = option1Text,
+                isSelected = selectedOption == 0,
+                onClick = { settingsViewModel.toggleHistoryHeaderLayout(layout = 0) },
+                modifier = Modifier.weight(weight = 1f)
+            )
+            SettingsRadioButton(
+                text = option2Text,
+                isSelected = selectedOption == 1,
+                onClick = { settingsViewModel.toggleHistoryHeaderLayout(layout = 1) },
+                modifier = Modifier.weight(weight = 1f)
+            )
+        }
+    }
+}
+
+@Composable
+private fun SettingsRadioButton(
+    text: String,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(Color(0xFF1C1C1E))
+            .clickable { onClick() }
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = text,
+            color = if (isSelected) Color.White else Color.Gray,
+            fontSize = 14.sp,
+            maxLines = 1
+        )
+
+        // Индикатор-галочка
+        Box(
+            modifier = Modifier
+                .size(22.dp)
+                .border(
+                    width = 1.dp,
+                    color = if (isSelected) iOSGreen else Color.Gray,
+                    shape = CircleShape
+                )
+                .background(
+                    color = if (isSelected) iOSGreen else Color.Transparent,
+                    shape = CircleShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            if (isSelected) {
+                Icon(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
+        }
+    }
+}
+

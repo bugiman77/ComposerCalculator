@@ -25,6 +25,7 @@ fun HistoryComputing(
     val isSwipeEnabled = viewModelSettings.isSwipeEnabled.collectAsState()
     val isNoteEnabled = viewModelSettings.isNoteEnabled.collectAsState()
     val showHistoryButton = viewModelSettings.showHistoryButton.collectAsState()
+    val currentLayout = viewModelSettings.historyHeaderLayout.collectAsState()
 
     SettingsGroup(title = "История вычислений") {
         SettingsRow(

@@ -13,7 +13,6 @@ import kotlinx.coroutines.launch
 
 class SettingsViewModel(
     application: Application,
-    private val repository: DeviceSettingsRepository
 ) : AndroidViewModel(application) {
 
     private val settingsDao: SettingsDao =

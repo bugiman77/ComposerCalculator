@@ -77,9 +77,6 @@ fun HistoryBottomSheet(
     onCloseClick: () -> Unit
 ) {
 
-    val historyItems by calculatorViewModel.history.collectAsStateWithLifecycle()
-    val scope = rememberCoroutineScope()
-
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,

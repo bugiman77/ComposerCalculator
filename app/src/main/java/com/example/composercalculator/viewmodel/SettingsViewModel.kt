@@ -69,6 +69,9 @@ class SettingsViewModel(
     private val _showPlaceholderInput = MutableStateFlow(value = true)
     val showPlaceholderInput: StateFlow<Boolean> = _showPlaceholderInput
 
+    private val _historyHeaderLayout = MutableStateFlow(value = 0)
+    val historyHeaderLayout: StateFlow<Int> = _historyHeaderLayout
+
     init {
         viewModelScope.launch {
             loadSettings()
@@ -95,6 +98,7 @@ class SettingsViewModel(
             _isAnimationAll.value = it.isAnimationAll
             _keepScreenOn.value = it.keepScreenOn
             _showPlaceholderInput.value = it.showPlaceholderInput
+            _historyHeaderLayout.value = it.historyHeaderLayout
         }
     }
 
@@ -201,6 +205,12 @@ class SettingsViewModel(
         }
     }
 
+    fun toggleHistoryHeaderLayout(layout: Int) {
+        viewModelScope.launch {
+            saveSetting { _historyHeaderLayout.value = layout }
+        }
+    }
+
     private suspend fun saveSetting(updateState: suspend () -> Unit) {
         // Обновляем состояние в UI
         updateState()
@@ -225,7 +235,8 @@ class SettingsViewModel(
                 bottomSpacer = _bottomSpacer.value,
                 isAnimationAll = _isAnimationAll.value,
                 keepScreenOn = _keepScreenOn.value,
-                showPlaceholderInput = _showPlaceholderInput.value
+                showPlaceholderInput = _showPlaceholderInput.value,
+                historyHeaderLayout = _historyHeaderLayout.value
             )
         )
     }

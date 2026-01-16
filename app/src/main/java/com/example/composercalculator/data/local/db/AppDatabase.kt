@@ -16,7 +16,7 @@ import com.example.composercalculator.data.local.db.entity.History
 import com.example.composercalculator.data.local.db.entity.InputState
 import com.example.composercalculator.data.local.db.entity.Settings
 
-@Database(entities = [Settings::class], version = 13)
+@Database(entities = [Settings::class], version = 15)
 abstract class AppDatabaseSetting : RoomDatabase() {
     abstract fun settingsDao(): SettingsDao
 

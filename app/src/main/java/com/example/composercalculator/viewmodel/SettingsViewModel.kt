@@ -16,7 +16,8 @@ class SettingsViewModel(
     private val repository: DeviceSettingsRepository
 ) : AndroidViewModel(application) {
 
-    private val settingsDao: SettingsDao = AppDatabaseSetting.getDatabase(application).settingsDao()
+    private val settingsDao: SettingsDao =
+        AppDatabaseSetting.getDatabase(context = application).settingsDao()
 
     private val _isDarkTheme = MutableStateFlow(value = true)
     val isDarkTheme: StateFlow<Boolean> = _isDarkTheme

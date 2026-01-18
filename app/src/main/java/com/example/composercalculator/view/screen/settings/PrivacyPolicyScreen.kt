@@ -5,19 +5,18 @@ package com.example.composercalculator.view.screen.settings
 import android.annotation.SuppressLint
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.viewinterop.AndroidView
 import kotlinx.html.a
 import kotlinx.html.body
@@ -399,34 +398,42 @@ private fun generatePrivacyPolice(): String = createHTML().html {
     }
 }
 
-@SuppressLint("SetJavaScriptDisable")
+@SuppressLint("SetJavaScriptEnabled")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PrivacyPolicyScreen(
     title: String,
     onNavigateBack: () -> Unit
 ) {
+
+    var webViewReference by remember { mutableStateOf<WebView?>(value = null) }
+
     Scaffold(
         containerColor = Color(color = 0xFF1C1C1E),
         topBar = {
             CustomTopBar(
                 screenTitle = title,
                 onNavigateBack = onNavigateBack,
-                onScrollToTop = {  },
+                onScrollToTop = {
+                    webViewReference?.evaluateJavascript(
+                        "window.scrollTo({top: 0, behavior: 'smooth'});",
+                        null
+                    )
+                },
             )
         }
     ) { innerPadding ->
-        Column(
+        Box(
             modifier = Modifier
                 .padding(paddingValues = innerPadding)
-                .verticalScroll(state = rememberScrollState())
+                .fillMaxSize()
         ) {
             val htmlContent = generatePrivacyPolice()
             AndroidView(
                 factory = { context ->
                     WebView(context).apply {
                         webViewClient = WebViewClient()
-                        settings.javaScriptEnabled = false
+                        settings.javaScriptEnabled = true
                         loadDataWithBaseURL(
                             /* baseUrl = */ null,
                             /* data = */ htmlContent,
@@ -434,6 +441,8 @@ fun PrivacyPolicyScreen(
                             /* encoding = */ "utf-8",
                             /* historyUrl = */ null
                         )
+                        webViewReference = this // Сохраняем ссылку
+                        loadDataWithBaseURL(null, htmlContent, "text/html", "utf-8", null)
                     }
                 },
                 update = { webView ->

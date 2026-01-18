@@ -355,6 +355,7 @@ private fun ScreenContent(
             )
 
             Routes.SETTINGS -> SettingsScreen(
+                title = "Настройки",
                 viewModelSettings = settingsViewModel,
                 onNavigateBack = { navController.popBackStack() },
                 onNavigateToAbout = { navController.navigate(Routes.ABOUT) },
@@ -362,6 +363,7 @@ private fun ScreenContent(
             )
 
             Routes.ABOUT -> AboutScreen(
+                title = "О приложении",
                 appListViewModel = appListViewModel,
                 onNavigateBack = { navController.popBackStack() },
                 onNavigateToPrivacy = { navController.navigate(Routes.PRIVACY_POLICY) }
@@ -373,6 +375,7 @@ private fun ScreenContent(
             )
 
             Routes.CREATE_THEME_USER -> CreateThemeAppUser(
+                title = "Новая тема",
                 viewModelThemes = themesUserViewModel,
                 onNavigateBack = { navController.popBackStack() }
             )

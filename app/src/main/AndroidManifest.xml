@@ -2,11 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <!--Дает приложению право видеть полный список всех установленных программ на устройстве пользователя-->
+    <!--<uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />-->
     <uses-permission
         android:name="android.permission.VIBRATE"
         tools:ignore="QueryAllPackagesPermission" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <!--Приложение могло открывать сетевые сокеты и обмениваться данными с внешним миром через интернет-->
+    <!--<uses-permission android:name="android.permission.INTERNET" />-->
 
     <application
         android:allowBackup="true"
@@ -17,6 +19,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.App.Starting">
+        <!--
+          Комментарии к блоку application выше:
+          - allowBackup: позволяет Google Диску сохранять данные приложения.
+          - dataExtractionRules и fullBackupContent: указывают, какие файлы копировать, а какие нет.
+          - icon и roundIcon: обычная и круглая иконки, которые видны на рабочем столе.
+          - label: имя приложения под иконкой.
+          - supportsRtl: чтобы интерфейс не «поехал» на арабском или иврите.
+          - theme: общий стиль оформления (цвета, шрифты).
+        -->
+        <!-- Описание главного экрана (активности) -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -27,6 +39,7 @@
             </intent-filter>
         </activity>
 
+        <!--Техническая настройка для рекламы AdMob. В значении value сейчас указан тестовый ключ Google-->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713" />

@@ -58,6 +58,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
+    title: String,
     viewModelSettings: SettingsViewModel = viewModel(),
     onNavigateBack: () -> Unit,
     onNavigateToAbout: () -> Unit,
@@ -72,7 +73,7 @@ fun SettingsScreen(
         contentWindowInsets = WindowInsets(left = 0, top = 0, right = 0, bottom = 0),
         topBar = {
             CustomTopBar(
-                screenTitle = "Настройки",
+                screenTitle = title,
                 onNavigateBack = onNavigateBack,
                 onScrollToTop = {
                     coroutineScope.launch { scrollState.animateScrollTo(value = 0) }

@@ -409,18 +409,10 @@ fun PrivacyPolicyScreen(
     Scaffold(
         containerColor = Color(color = 0xFF1C1C1E),
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = title,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                },
-                navigationIcon = {
-                    CustomBackButton(onClick = onNavigateBack)
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+            CustomTopBar(
+                screenTitle = title,
+                onNavigateBack = onNavigateBack,
+                onScrollToTop = {  },
             )
         }
     ) { innerPadding ->

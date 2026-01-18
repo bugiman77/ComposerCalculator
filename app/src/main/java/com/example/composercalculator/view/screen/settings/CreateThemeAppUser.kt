@@ -41,6 +41,7 @@ import com.example.composercalculator.viewmodel.ThemesViewModel
 
 @Composable
 fun CreateThemeAppUser(
+    title: String,
     viewModelThemes: ThemesViewModel = viewModel(),
     onNavigateBack: () -> Unit,
 ) {
@@ -52,7 +53,7 @@ fun CreateThemeAppUser(
         contentWindowInsets = WindowInsets(left = 0, top = 0, right = 0, bottom = 0),
         topBar = {
             CustomTopBar(
-                screenTitle = "Новая тема",
+                screenTitle = title,
                 onNavigateBack = onNavigateBack,
                 onScrollToTop = { },
             )

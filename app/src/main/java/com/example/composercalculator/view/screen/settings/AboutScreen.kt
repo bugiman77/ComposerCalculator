@@ -56,6 +56,7 @@ import com.google.accompanist.drawablepainter.rememberDrawablePainter
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(
+    title: String,
     appListViewModel: AppListViewModel,
     onNavigateBack: () -> Unit,
     onNavigateToPrivacy: () -> Unit
@@ -64,7 +65,7 @@ fun AboutScreen(
         containerColor = Color(0xFF161616),
         topBar = {
             CustomTopBar(
-                screenTitle = "О приложении",
+                screenTitle = title,
                 onNavigateBack = onNavigateBack,
                 onScrollToTop = { },
             )

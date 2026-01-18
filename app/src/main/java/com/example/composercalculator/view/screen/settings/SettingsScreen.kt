@@ -111,11 +111,11 @@ fun SettingsScreen(
 
             /*Spacer(modifier = Modifier.height(height = 24.dp))
 
-            Animations(viewModelSettings = viewModelSettings)*/
+            Animations(viewModelSettings = viewModelSettings)
 
             Spacer(modifier = Modifier.height(height = 24.dp))
 
-            SavingData(viewModelSettings = viewModelSettings)
+            SavingData(viewModelSettings = viewModelSettings)*/
 
             Spacer(modifier = Modifier.height(height = 24.dp))
 

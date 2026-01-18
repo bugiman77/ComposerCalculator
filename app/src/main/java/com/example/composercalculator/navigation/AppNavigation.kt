@@ -368,7 +368,7 @@ private fun ScreenContent(
             )
 
             Routes.PRIVACY_POLICY -> PrivacyPolicyScreen(
-                title = "Политика конфиденциальности",
+                title = "О данных",
                 onNavigateBack = { navController.popBackStack() }
             )
 

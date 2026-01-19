@@ -32,7 +32,7 @@ fun Appearance(
     SettingsGroup(title = "Внешний вид") {
 
         SettingsSelectionRow(
-            title = "Иконки/Кнопки",
+            title = "Кнопки/Иконки",
             subtitle = "Вместо кнопок-иконок будут отображаться кнопки с текстом",
             option1Text = "Кнопки",
             option2Text = "Иконки",

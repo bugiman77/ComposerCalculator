@@ -29,7 +29,7 @@ fun HistoryComputing(
 
     SettingsGroup(title = "История вычислений") {
         SettingsRow(
-            title = "Кнопка истории",
+            title = "История вычислений",
             subtitle = "Отображать кнопку истории вычислений в левом верхнем углу главного экрана",
             modifier = modifier.padding(vertical = 4.dp)
         ) {
@@ -63,7 +63,7 @@ fun HistoryComputing(
             HorizontalDivider(color = Color(color = 0xFF3A3A3C))
 
             SettingsRow(
-                title = "Использовать свайп",
+                title = "Свайп для удаления",
                 subtitle = "Для удаления элемента истории можно включить использование свайпа",
                 modifier = Modifier.padding(vertical = 4.dp)
             ) {
@@ -83,7 +83,7 @@ fun HistoryComputing(
             HorizontalDivider(color = Color(color = 0xFF3A3A3C))
 
             SettingsRow(
-                title = "Поле для заметки",
+                title = "Заметки",
                 subtitle = "Для пометок к вычисленному выражению",
                 modifier = Modifier.padding(vertical = 4.dp)
             ) {

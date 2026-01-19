@@ -16,6 +16,7 @@ import com.example.composercalculator.ui.theme.iOSGray
 import com.example.composercalculator.ui.theme.iOSGreen
 import com.example.composercalculator.view.components.calculation.SettingsGroup
 import com.example.composercalculator.view.components.calculation.SettingsRow
+import com.example.composercalculator.view.components.general.settings.SettingsSelectionRow
 import com.example.composercalculator.viewmodel.SettingsViewModel
 
 @Composable
@@ -29,28 +30,21 @@ fun Appearance(
     val showPlaceholderInput = viewModelSettings.showPlaceholderInput.collectAsState()
 
     SettingsGroup(title = "Внешний вид") {
-        SettingsRow(
-            title = "Отображать иконки",
+
+        SettingsSelectionRow(
+            title = "Иконки/Кнопки",
             subtitle = "Вместо кнопок-иконок будут отображаться кнопки с текстом",
-            modifier = modifier.padding(vertical = 4.dp)
-        ) {
-            Switch(
-                checked = showIconButton.value,
-                onCheckedChange = { viewModelSettings.switchIconButton(switch = it) },
-                colors = SwitchDefaults.colors(
-                    checkedThumbColor = Color.White,
-                    checkedTrackColor = iOSGreen,
-                    uncheckedThumbColor = Color.White,
-                    uncheckedTrackColor = iOSGray,
-                    uncheckedBorderColor = Color.Transparent
-                )
-            )
-        }
+            option1Text = "Кнопки",
+            option2Text = "Иконки",
+            selectedOption = if (showIconButton.value) 1 else 0,
+            onClick1 = { viewModelSettings.switchIconButton(switch = false) },
+            onClick2 = { viewModelSettings.switchIconButton(switch = true) }
+        )
 
         HorizontalDivider(color = Color(color = 0xFF3A3A3C))
 
         SettingsRow(
-            title = "Отображать плейсхолдер",
+            title = "Плейсхолдер",
             subtitle = "Отображать плейсхолдер в пустом поле ввода выражения",
             modifier = modifier.padding(vertical = 4.dp)
         ) {

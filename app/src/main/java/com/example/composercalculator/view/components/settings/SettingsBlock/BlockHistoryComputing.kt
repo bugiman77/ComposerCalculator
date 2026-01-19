@@ -65,16 +65,19 @@ fun HistoryComputing(
             )
         }
 
-        SettingsSelectionRow(
-            settingsViewModel = viewModelSettings,
-            title = "Расположение кнопок",
-            subtitle = "Выберите, с какой стороны будет находиться кнопка закрытия в истории",
-            option1Text = "Слева",
-            option2Text = "Справа",
-            selectedOption = currentLayout.value,
-        )
-
         if (showHistoryButton.value) {
+
+            HorizontalDivider(color = Color(color = 0xFF3A3A3C))
+
+            SettingsSelectionRow(
+                settingsViewModel = viewModelSettings,
+                title = "Кнопка закрытия",
+                subtitle = "Выберите, с какой стороны будет находиться кнопка закрытия в истории",
+                option1Text = "Слева",
+                option2Text = "Справа",
+                selectedOption = currentLayout.value,
+            )
+
             HorizontalDivider(color = Color(color = 0xFF3A3A3C))
 
             SettingsRow(

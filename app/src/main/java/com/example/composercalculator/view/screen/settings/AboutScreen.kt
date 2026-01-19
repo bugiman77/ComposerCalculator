@@ -163,7 +163,7 @@ private fun AppListContent(apps: List<AppInfo>) {
     ) {
         item {
             Text(
-                "Выберите приложение",
+                "Пользовательские приложения",
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(vertical = 16.dp)
             )

@@ -92,35 +92,35 @@ fun SettingsScreen(
                 onNavigateToCreateThemes = onNavigateToCreateThemes
             )
 
-            Spacer(modifier = Modifier.height(height = 24.dp))
+            Spacer(modifier = Modifier.height(height = 18.dp))
 
             SoundAndVibration(viewModelSettings = viewModelSettings)
 
-            Spacer(modifier = Modifier.height(height = 24.dp))
+            Spacer(modifier = Modifier.height(height = 18.dp))
 
             Appearance(viewModelSettings = viewModelSettings)
 
-            Spacer(modifier = Modifier.height(height = 24.dp))
+            Spacer(modifier = Modifier.height(height = 18.dp))
 
             HistoryComputing(viewModelSettings = viewModelSettings)
 
-            Spacer(modifier = Modifier.height(height = 24.dp))
+            Spacer(modifier = Modifier.height(height = 18.dp))
 
             Display(viewModelSettings = viewModelSettings)
 
-            /*Spacer(modifier = Modifier.height(height = 24.dp))
+            /*Spacer(modifier = Modifier.height(height = 18.dp))
 
             Animations(viewModelSettings = viewModelSettings)
 
-            Spacer(modifier = Modifier.height(height = 24.dp))
+            Spacer(modifier = Modifier.height(height = 18.dp))
 
             SavingData(viewModelSettings = viewModelSettings)*/
 
-            Spacer(modifier = Modifier.height(height = 24.dp))
+            Spacer(modifier = Modifier.height(height = 18.dp))
 
             App(onNavigateToAbout = onNavigateToAbout)
 
-            Spacer(modifier = Modifier.height(height = 24.dp))
+            Spacer(modifier = Modifier.height(height = 32.dp))
         }
     }
 }

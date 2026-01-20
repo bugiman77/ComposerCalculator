@@ -526,6 +526,7 @@ private fun LineCalculation5(
             color = DarkGray,
             modifier = Modifier
                 .weight(weight = 1f),
+            fontSize = 60.sp,
             onClick = {
                 viewModelCalculation.onInputMathematicalOperations(inputOperation = ".")
             },

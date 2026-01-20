@@ -24,7 +24,7 @@ fun SoundAndVibration(
     val isPlaySound = viewModelSettings.playSound.collectAsState()
     val isPlayVibration = viewModelSettings.playVibration.collectAsState()
 
-    SettingsGroup(title = "Звук и вибрация") {
+    SettingsGroup(title = "Отклик") {
 
 //        if (mode != SoundMode.SILENT || mode != SoundMode.VIBRATE) {
         SettingsRow(
@@ -65,7 +65,6 @@ fun SoundAndVibration(
                 )
             )
         }
-
 
     }
 }

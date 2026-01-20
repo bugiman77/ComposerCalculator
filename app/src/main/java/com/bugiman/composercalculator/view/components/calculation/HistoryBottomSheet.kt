@@ -131,7 +131,7 @@ private fun HistoryHeaderContentCloseClear(
 
         OutlinedButton(
             modifier = Modifier
-                .size(size = 40.dp)
+                .size(size = 45.dp)
                 .testTag(tag = "sheet_close"),
             onClick = onCloseClick,
             shape = CircleShape,
@@ -220,7 +220,7 @@ private fun HistoryHeaderContentClearClose(
 
         OutlinedButton(
             modifier = Modifier
-                .size(size = 40.dp)
+                .size(size = 45.dp)
                 .testTag(tag = "sheet_close"),
             onClick = onCloseClick,
             shape = CircleShape,

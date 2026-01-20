@@ -103,12 +103,12 @@ private fun AppHeader(
     appListViewModel: AppListViewModel
 ) {
 
-    val context = LocalContext.current
-    val apps = appListViewModel.apps.collectAsState()
+//    val context = LocalContext.current
+//    val apps = appListViewModel.apps.collectAsState()
 
     // Состояние для управления модальным окном
-    var showSheet by remember { mutableStateOf(false) }
-    val sheetState = rememberModalBottomSheetState()
+//    var showSheet by remember { mutableStateOf(false) }
+//    val sheetState = rememberModalBottomSheetState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -140,7 +140,7 @@ private fun AppHeader(
         )
 
         // Само модальное окно
-        if (showSheet) {
+/*        if (showSheet) {
             ModalBottomSheet(
                 onDismissRequest = { showSheet = false },
                 sheetState = sheetState,
@@ -148,7 +148,7 @@ private fun AppHeader(
             ) {
                 AppListContent(apps.value)
             }
-        }
+        }*/
 
     }
 }

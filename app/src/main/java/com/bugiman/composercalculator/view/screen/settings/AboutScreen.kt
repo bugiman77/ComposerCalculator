@@ -62,7 +62,7 @@ fun AboutScreen(
     onNavigateToPrivacy: () -> Unit
 ) {
     Scaffold(
-        containerColor = Color(0xFF161616),
+        containerColor = Color(color = 0xFF161616),
         topBar = {
             CustomTopBar(
                 screenTitle = title,
@@ -73,7 +73,7 @@ fun AboutScreen(
     ) { innerPadding ->
         Box(
             modifier = Modifier
-                .padding(innerPadding)
+                .padding(paddingValues = innerPadding)
                 .fillMaxSize()
                 .padding(horizontal = 16.dp),
             contentAlignment = Alignment.Center
@@ -83,17 +83,30 @@ fun AboutScreen(
             ) {
                 AppHeader(appListViewModel)
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(height = 32.dp))
 
                 InfoLinksGroup(
                     onNavigateToPrivacy = onNavigateToPrivacy
                 )
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(height = 32.dp))
 
                 DeviceInfoApp()
+
+                Spacer(modifier = Modifier.height(height = 60.dp))
+
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.BottomCenter
+                ) {
+                    Text(
+                        text = "Powered by Android Studio",
+                        color = Color.White
+                    )
+                }
             }
         }
+
     }
 }
 

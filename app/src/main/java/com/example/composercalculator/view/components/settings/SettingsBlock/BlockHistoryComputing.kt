@@ -84,7 +84,7 @@ fun HistoryComputing(
 
             SettingsRow(
                 title = "Заметки",
-                subtitle = "Для пометок к вычисленному выражению",
+                subtitle = "Пометка к вычисленному выражению",
                 modifier = Modifier.padding(vertical = 4.dp)
             ) {
                 Switch(

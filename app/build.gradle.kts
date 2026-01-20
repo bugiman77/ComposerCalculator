@@ -4,7 +4,7 @@ import java.util.Locale
 import java.time.LocalTime
 
 private fun generateVersionCode(): String {
-    val versionAppFromDateCreate = SimpleDateFormat("yyyy.MM.dd.HH", Locale.US)
+    val versionAppFromDateCreate = SimpleDateFormat("yy.MM.dd.HH", Locale.US)
     return versionAppFromDateCreate.format(Date())
 }
 

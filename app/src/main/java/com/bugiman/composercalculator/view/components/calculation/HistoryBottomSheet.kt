@@ -24,6 +24,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -149,14 +150,26 @@ private fun HistoryHeaderContentCloseClear(
 
         if (historyItems.isNotEmpty()) {
             OutlinedButton(
-                modifier = Modifier.testTag(tag = "sheet_clear_history_calculate"),
+                modifier = Modifier
+                    .size(size = 45.dp)
+                    .testTag(tag = "sheet_close"),
                 onClick = {
                     scope.launch {
                         calculatorViewModel.deleteHistoryItemAll()
                     }
-                }
+                },
+                shape = CircleShape,
+                contentPadding = PaddingValues(0.dp),
+                border = BorderStroke(1.dp, Color.White),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.White
+                )
             ) {
-                Text(text = "Очистить", color = Color.Red, fontSize = 16.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Delete,
+                    contentDescription = "Удалить все пункты истории вычислений",
+                    tint = Color(color = 0xFFC74E4E)
+                )
             }
         }
     }
@@ -180,14 +193,26 @@ private fun HistoryHeaderContentClearClose(
 
         if (historyItems.isNotEmpty()) {
             OutlinedButton(
-                modifier = Modifier.testTag(tag = "sheet_clear_history_calculate"),
+                modifier = Modifier
+                    .size(size = 45.dp)
+                    .testTag(tag = "sheet_close"),
                 onClick = {
                     scope.launch {
                         calculatorViewModel.deleteHistoryItemAll()
                     }
-                }
+                },
+                shape = CircleShape,
+                contentPadding = PaddingValues(0.dp),
+                border = BorderStroke(1.dp, Color.White),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.White
+                )
             ) {
-                Text(text = "Очистить", color = Color.Red, fontSize = 16.sp)
+                Icon(
+                    imageVector = Icons.Outlined.Delete,
+                    contentDescription = "Удалить все пункты истории вычислений",
+                    tint = Color(color = 0xFFEE4848)
+                )
             }
         } else {
             Spacer(modifier = Modifier)

@@ -100,6 +100,8 @@ fun HistoryComputing(
                 )
             }
 
+            HorizontalDivider(color = Color(color = 0xFF3A3A3C))
+
             SettingsRow(
                 title = "Удалять историю",
                 subtitle = "При включении переключателя, история будет удаляться при закрытии приложения",
@@ -117,6 +119,8 @@ fun HistoryComputing(
                     )
                 )
             }
+
+            HorizontalDivider(color = Color(color = 0xFF3A3A3C))
 
             SettingsRow(
                 title = "Последнее вычисление",

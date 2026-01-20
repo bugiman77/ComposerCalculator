@@ -253,9 +253,20 @@ private fun DeviceInfoApp() {
 
     val infoDevice = DeviceInfo()
 
-    Text(
-        text = "${infoDevice.deviceName} ${infoDevice.androidVersion} (${infoDevice.apiLevel})",
-        color = Color.Gray,
-        fontSize = 16.sp
-    )
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = infoDevice.deviceName,
+            color = Color.Gray,
+            fontSize = 16.sp
+        )
+        Spacer(modifier = Modifier.height(height = 8.dp))
+        Text(
+            text = "Android Version ${infoDevice.androidVersion}",
+            color = Color.Gray,
+            fontSize = 16.sp
+        )
+    }
+
 }

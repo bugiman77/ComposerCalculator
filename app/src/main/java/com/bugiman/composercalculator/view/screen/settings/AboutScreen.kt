@@ -122,13 +122,13 @@ private fun AppHeader(
                 .size(size = 120.dp)
                 .clip(shape = RoundedCornerShape(size = 24.dp))
                 .background(Color.DarkGray)
-                .combinedClickable(
+                /*.combinedClickable(
                     onClick = {},
                     onLongClick = {
                         appListViewModel.loadInstalledApps(context) // Загружаем список
                         showSheet = true // Показываем окно
                     }
-                )
+                )*/
         )
 
         Spacer(modifier = Modifier.height(height = 24.dp))

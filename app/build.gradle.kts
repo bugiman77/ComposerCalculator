@@ -25,7 +25,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.composercalculator"
+    namespace = "com.bugiman.composercalculator"
     compileSdk = 36
 
 

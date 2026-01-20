@@ -222,9 +222,9 @@ private fun InfoLinksGroup(
             onClick = onNavigateToPrivacy
         )
         HorizontalDivider(color = Color(color = 0xFF3A3A3C))
-        InfoLinkRow(
+        /*InfoLinkRow(
             title = "Связаться с автором",
-        ) { }
+        ) { }*/
     }
 }
 

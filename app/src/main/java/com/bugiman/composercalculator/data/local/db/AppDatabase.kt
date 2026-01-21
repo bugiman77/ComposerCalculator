@@ -16,7 +16,7 @@ import com.bugiman.composercalculator.data.local.db.entity.History
 import com.bugiman.composercalculator.data.local.db.entity.InputState
 import com.bugiman.composercalculator.data.local.db.entity.Settings
 
-@Database(entities = [Settings::class], version = 15)
+@Database(entities = [Settings::class], version = 16)
 abstract class AppDatabaseSetting : RoomDatabase() {
     abstract fun settingsDao(): SettingsDao
 

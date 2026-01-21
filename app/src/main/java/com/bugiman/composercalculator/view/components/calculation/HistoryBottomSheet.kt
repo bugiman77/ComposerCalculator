@@ -79,10 +79,11 @@ fun HistoryBottomSheet(
 ) {
 
     ModalBottomSheet(
-        onDismissRequest = onDismiss,
+        onDismissRequest = {},
         sheetState = sheetState,
+        sheetGesturesEnabled = false,
         containerColor = Color(color = 0xFF1C1C1E),
-        dragHandle = {
+        /*dragHandle = {
             Box(
                 modifier = Modifier
                     .padding(vertical = 8.dp)
@@ -91,7 +92,7 @@ fun HistoryBottomSheet(
                     .clip(CircleShape)
                     .background(Color.Gray)
             )
-        },
+        },*/
     ) {
 
         if (settingsViewModel.historyHeaderLayout.collectAsState().value == 0) {

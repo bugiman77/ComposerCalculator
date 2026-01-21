@@ -1,5 +1,6 @@
 package com.bugiman.composercalculator.view.screen.main
 
+import android.app.Activity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -42,7 +43,11 @@ import com.bugiman.composercalculator.viewmodel.CalculatorViewModel
 import com.bugiman.composercalculator.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
 import androidx.compose.material3.Text
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowInsetsControllerCompat
 import com.bugiman.composercalculator.model.FlyingDigit
 import com.bugiman.composercalculator.ui.theme.DarkGray
 import com.bugiman.composercalculator.ui.theme.Gray
@@ -58,12 +63,17 @@ fun CalculatorScreen(
 ) {
 
     var showHistorySheet by remember { mutableStateOf(value = false) }
-    var canCloseProgrammatically by remember { mutableStateOf(true) }
+//    var canCloseProgrammatically by remember { mutableStateOf(true) }
+    var allowHide by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
-        confirmValueChange = { sheetValue ->
-            if (canCloseProgrammatically) true else sheetValue != SheetValue.Hidden
-        }
+/*        confirmValueChange = { newValue ->
+            if (newValue == SheetValue.Hidden) {
+                allowHide // ← свайпом false, кнопкой true
+            } else {
+                true
+            }
+        }*/
     )
     val scope = rememberCoroutineScope()
 
@@ -76,6 +86,12 @@ fun CalculatorScreen(
     }
 
     if (showHistorySheet) {
+
+        SetStatusBarStyle(
+            darkIcons = false, // белые иконки
+            color = Color.Black // цвет шторки
+        )
+
         HistoryBottomSheet(
             calculatorViewModel = viewModelCalculation,
             settingsViewModel = viewModelSettings,
@@ -83,14 +99,17 @@ fun CalculatorScreen(
             onDismiss = { showHistorySheet = false },
             onCloseClick = {
                 scope.launch {
-                    canCloseProgrammatically = true // Разрешаем анимацию скрытия
-                    sheetState.hide() // Запускаем анимацию
-                }.invokeOnCompletion {
-                    if (!sheetState.isVisible) {
-                        showHistorySheet = false // Удаляем окно из композиции
-                    }
+                    allowHide = true
+                    sheetState.hide()
+                    allowHide = false
+                    showHistorySheet = false
                 }
             }
+        )
+    } else {
+        SetStatusBarStyle(
+            darkIcons = false, // например, тёмные иконки
+            color = Color.Black
         )
     }
 
@@ -182,25 +201,28 @@ fun CalculatorScreen(
                                 text = text,
                                 startOffset = offset
                             )
-//                            flyingDigits = flyingDigits + newFlyingDigit
                         }
                     )
                 }
             }
-
         }
+    }
+}
 
-       /* flyingDigits.forEach { digit ->
-            FlyingDigitAnimation(
-                data = digit,
-                targetOffset = targetOffset,
-                onReached = {
-                    flyingDigits = flyingDigits.filter { it.id != digit.id }
-                    // В этот момент можно добавить символ в ViewModel,
-                    // если вы хотите, чтобы он появлялся ПОСЛЕ прилета
-                }
-            )
-        }*/
+@Composable
+fun SetStatusBarStyle(
+    darkIcons: Boolean,
+    color: Color
+) {
+    val view = LocalView.current
+    val context = view.context
+    val window = (context as Activity).window
 
+    SideEffect {
+        window.statusBarColor = color.toArgb()
+        WindowInsetsControllerCompat(
+            window,
+            view
+        ).isAppearanceLightStatusBars = darkIcons
     }
 }

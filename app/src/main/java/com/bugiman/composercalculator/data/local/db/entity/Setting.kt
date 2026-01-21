@@ -23,5 +23,8 @@ data class Settings(
     var isAnimationAll: Boolean = false,
     var keepScreenOn: Boolean = false,
     var showPlaceholderInput: Boolean = true,
-    var historyHeaderLayout : Int = 0,
+    var historyHeaderLayout: Int = 0,
+    var isTitleNote: Boolean = true,
+    var isClearHistoryOnClose: Boolean = false,
+    var isShowHistoryLastCalculation: Boolean = true,
 )

@@ -26,6 +26,10 @@ fun HistoryComputing(
     val isNoteEnabled = viewModelSettings.isNoteEnabled.collectAsState()
     val showHistoryButton = viewModelSettings.showHistoryButton.collectAsState()
     val currentLayout = viewModelSettings.historyHeaderLayout.collectAsState()
+    val isTitleNote = viewModelSettings.isTitleNote.collectAsState()
+    val isClearHistoryOnClose = viewModelSettings.isClearHistoryOnClose.collectAsState()
+    val isShowHistoryLastCalculation =
+        viewModelSettings.isShowHistoryLastCalculation.collectAsState()
 
     SettingsGroup(title = "История вычислений") {
         SettingsRow(
@@ -100,6 +104,28 @@ fun HistoryComputing(
                 )
             }
 
+            if (isNoteEnabled.value) {
+                HorizontalDivider(color = Color(color = 0xFF3A3A3C))
+
+                SettingsRow(
+                    title = "Заглавная для заметки",
+                    subtitle = "Начинать заметку с заглавной буквы",
+                    modifier = Modifier.padding(vertical = 4.dp)
+                ) {
+                    Switch(
+                        checked = isTitleNote.value,
+                        onCheckedChange = { viewModelSettings.toggleIsTitleNote(enabled = it) },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            checkedTrackColor = iOSGreen,
+                            uncheckedThumbColor = Color.White,
+                            uncheckedTrackColor = iOSGray,
+                            uncheckedBorderColor = Color.Transparent
+                        )
+                    )
+                }
+            }
+
             HorizontalDivider(color = Color(color = 0xFF3A3A3C))
 
             SettingsRow(
@@ -108,8 +134,8 @@ fun HistoryComputing(
                 modifier = Modifier.padding(vertical = 4.dp)
             ) {
                 Switch(
-                    checked = false,
-                    onCheckedChange = { },
+                    checked = isClearHistoryOnClose.value,
+                    onCheckedChange = { viewModelSettings.toggleIsClearHistoryOnClose(enabled = it) },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.White,
                         checkedTrackColor = iOSGreen,
@@ -128,8 +154,8 @@ fun HistoryComputing(
                 modifier = Modifier.padding(vertical = 4.dp)
             ) {
                 Switch(
-                    checked = false,
-                    onCheckedChange = { },
+                    checked = isShowHistoryLastCalculation.value,
+                    onCheckedChange = { viewModelSettings.toggleIsShowHistoryLastCalculation(enabled = it) },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.White,
                         checkedTrackColor = iOSGreen,

@@ -71,6 +71,15 @@ class SettingsViewModel(
     private val _historyHeaderLayout = MutableStateFlow(value = 0)
     val historyHeaderLayout: StateFlow<Int> = _historyHeaderLayout
 
+    private val _isTitleNote = MutableStateFlow(value = true)
+    val isTitleNote: StateFlow<Boolean> = _isTitleNote
+
+    private val _isClearHistoryOnClose = MutableStateFlow(value = false)
+    val isClearHistoryOnClose: StateFlow<Boolean> = _isClearHistoryOnClose
+
+    private val _isShowHistoryLastCalculation = MutableStateFlow(value = true)
+    val isShowHistoryLastCalculation: StateFlow<Boolean> = _isShowHistoryLastCalculation
+
     init {
         viewModelScope.launch {
             loadSettings()
@@ -98,6 +107,9 @@ class SettingsViewModel(
             _keepScreenOn.value = it.keepScreenOn
             _showPlaceholderInput.value = it.showPlaceholderInput
             _historyHeaderLayout.value = it.historyHeaderLayout
+            _isTitleNote.value = it.isTitleNote
+            _isClearHistoryOnClose.value = it.isClearHistoryOnClose
+            _isShowHistoryLastCalculation.value = it.isShowHistoryLastCalculation
         }
     }
 
@@ -210,6 +222,24 @@ class SettingsViewModel(
         }
     }
 
+    fun toggleIsTitleNote(enabled: Boolean) {
+        viewModelScope.launch {
+            saveSetting { _isTitleNote.value = enabled }
+        }
+    }
+
+    fun toggleIsClearHistoryOnClose(enabled: Boolean) {
+        viewModelScope.launch {
+            saveSetting { _isClearHistoryOnClose.value = enabled }
+        }
+    }
+
+    fun toggleIsShowHistoryLastCalculation(enabled: Boolean) {
+        viewModelScope.launch {
+            saveSetting { _isShowHistoryLastCalculation.value = enabled }
+        }
+    }
+
     private suspend fun saveSetting(updateState: suspend () -> Unit) {
         // Обновляем состояние в UI
         updateState()
@@ -235,7 +265,10 @@ class SettingsViewModel(
                 isAnimationAll = _isAnimationAll.value,
                 keepScreenOn = _keepScreenOn.value,
                 showPlaceholderInput = _showPlaceholderInput.value,
-                historyHeaderLayout = _historyHeaderLayout.value
+                historyHeaderLayout = _historyHeaderLayout.value,
+                isTitleNote = _isTitleNote.value,
+                isClearHistoryOnClose = _isClearHistoryOnClose.value,
+                isShowHistoryLastCalculation = _isShowHistoryLastCalculation.value
             )
         )
     }

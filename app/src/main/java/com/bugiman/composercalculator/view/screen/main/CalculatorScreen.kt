@@ -58,7 +58,6 @@ fun CalculatorScreen(
 ) {
 
     var showHistorySheet by remember { mutableStateOf(value = false) }
-//    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var canCloseProgrammatically by remember { mutableStateOf(true) }
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
@@ -69,9 +68,6 @@ fun CalculatorScreen(
     val scope = rememberCoroutineScope()
 
     val showIconButton = viewModelSettings.showIconButton.collectAsState().value
-
-//    var flyingDigits by remember { mutableStateOf(value = listOf<FlyingDigit>()) }
-//    var targetOffset by remember { mutableStateOf(value = Offset.Zero) }
 
     LaunchedEffect(key1 = sheetState.isVisible) {
         if (!sheetState.isVisible) {

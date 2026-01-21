@@ -514,4 +514,6 @@ private fun HistoryItemRow(
 
     HorizontalDivider()
 
+    Spacer(Modifier.height(height = 4.dp))
+
 }

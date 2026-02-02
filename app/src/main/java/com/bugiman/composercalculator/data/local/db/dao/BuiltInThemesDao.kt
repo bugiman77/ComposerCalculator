@@ -11,4 +11,7 @@ interface BuiltInThemesDao {
     @Query(value = "SELECT * FROM built_in_themes ORDER BY isPin DESC, name ASC")
     fun getThemesAll(): Flow<List<BuiltInThemes>>
 
+    @Query("UPDATE built_in_themes SET isPin = :isPinned WHERE id = :themeId")
+    suspend fun updatePinStatus(themeId: Long, isPinned: Boolean)
+
 }

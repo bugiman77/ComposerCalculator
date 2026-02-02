@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CustomThemesDao {
 
-    @Query(value = "SELECT * FROM custom_themes")
+    @Query(value = "SELECT * FROM custom_themes ORDER BY isPin DESC, name ASC")
     fun getThemesAll(): Flow<List<CustomThemes>>
 
     @Insert(entity = CustomThemes::class)

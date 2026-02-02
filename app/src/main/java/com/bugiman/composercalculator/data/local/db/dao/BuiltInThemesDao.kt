@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface BuiltInThemesDao {
 
-    @Query(value = "SELECT * FROM built_in_themes")
+    @Query(value = "SELECT * FROM built_in_themes ORDER BY isPin DESC, name ASC")
     fun getThemesAll(): Flow<List<BuiltInThemes>>
 
 }

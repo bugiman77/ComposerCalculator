@@ -14,4 +14,5 @@ data class BuiltInThemes(
     val onPrimaryColor: Long,
     val isDarkMode: Boolean = true,
     val isPin: Boolean = false,
+    val note: String = "",
 )

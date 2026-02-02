@@ -73,7 +73,7 @@ abstract class AppDatabaseHistory : RoomDatabase() {
     }
 }
 
-@Database(entities = [BuiltInThemes::class, CustomThemes::class], version = 1)
+@Database(entities = [BuiltInThemes::class, CustomThemes::class], version = 2)
 abstract class AppDatabaseThemes : RoomDatabase() {
     abstract fun builtInThemes(): BuiltInThemesDao
     abstract fun customThemes(): CustomThemesDao

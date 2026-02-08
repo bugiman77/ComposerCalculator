@@ -416,7 +416,11 @@ private fun HistoryItemRow(
                             focusedPlaceholderColor = Color.Gray,
                             unfocusedPlaceholderColor = Color.Gray
                         ),
-                        shape = RoundedCornerShape(size = 12.dp)
+                        shape = RoundedCornerShape(size = 12.dp),
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = if (isTitleNote) KeyboardCapitalization.Sentences
+                            else KeyboardCapitalization.None // С заглавной буквы в начале предложения
+                        )
                     )
 
                     Spacer(

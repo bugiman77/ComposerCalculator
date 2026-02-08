@@ -123,29 +123,54 @@ class CalculatorViewModel(
         }
 
         val currentExpression = _expression.value
-        if (currentExpression.isEmpty()) return
-
         val operators = setOf('+', '-', '/', '*', '%')
-        val lastChar = currentExpression.last()
 
+        // 1. Обработка ввода точки
         if (inputOperation == ".") {
-            val lastNumber = currentExpression.split('+', '-', '*', '/', '%').last()
-            if (lastNumber.contains(char = '.') || lastChar in operators) {
+            // Если поле пустое — превращаем в "0."
+            if (currentExpression.isEmpty()) {
+                _expression.value = "0."
+                updateExpression(_expression.value)
                 return
             }
-            _expression.value += "."
+
+            val lastChar = currentExpression.last()
+            val lastNumber = currentExpression.split('+', '-', '*', '/', '%').last()
+
+            // Если в последнем числе уже есть точка — игнорируем
+            if (lastNumber.contains('.')) {
+                return
+            }
+
+            // Если последний символ — оператор, добавляем "0."
+            if (lastChar in operators) {
+                _expression.value += "0."
+            } else {
+                // Если последний символ — цифра, просто добавляем точку
+                _expression.value += "."
+            }
+
+            updateExpression(_expression.value)
             return
         }
 
+        // 2. Обработка ввода операторов
+        // Если поле пустое, оператор (кроме, возможно, минуса) обычно не ставится
+        if (currentExpression.isEmpty()) return
+
+        val lastChar = currentExpression.last()
+
         if (inputOperation.first() in operators) {
+            // Не даем ставить оператор сразу после точки
             if (lastChar == '.') {
                 return
             }
 
             if (lastChar in operators) {
-                _expression.value = currentExpression.dropLast(n = 1) + inputOperation
+                // Заменяем старый оператор на новый
+                _expression.value = currentExpression.dropLast(1) + inputOperation
             } else {
-                // Если последний символ — цифра, сначала "причесываем" число
+                // "Причесываем" число и добавляем оператор
                 val trimmedExpression = trimTrailingZerosFromLastNumber(currentExpression)
                 _expression.value = trimmedExpression + inputOperation
             }
@@ -153,6 +178,7 @@ class CalculatorViewModel(
 
         updateExpression(newExpression = _expression.value)
     }
+
 
     suspend fun onInputNote(itemHistory: History, newNote: String) {
         historyDao.updateNote(itemId = itemHistory.id, newNote = newNote)

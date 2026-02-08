@@ -332,8 +332,8 @@ private fun HistoryItemRow(
             // Фоновый слой (иконки/цвета при свайпе)
             val direction = dismissState.dismissDirection
             val color = when (direction) {
-                SwipeToDismissBoxValue.StartToEnd -> Color(color = 0xFF4CAF50) // Зеленый
-                SwipeToDismissBoxValue.EndToStart -> Color(color = 0xFFEE4848) // Красный
+                SwipeToDismissBoxValue.StartToEnd -> Color(color = 0xFFDEAA45)
+                SwipeToDismissBoxValue.EndToStart -> Color(color = 0xFFEE4848)
                 else -> Color.Transparent
             }
 

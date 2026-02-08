@@ -27,7 +27,6 @@ class MainActivity : ComponentActivity() {
 
         val viewModelSettings = SettingsViewModel(
             application = application,
-//            repository = deviceSettingsRepository,
         )
 
         val viewModelCalculation = CalculatorViewModel(

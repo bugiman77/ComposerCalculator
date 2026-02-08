@@ -152,6 +152,7 @@ fun AppNavigation(
     }
 }*/
 
+import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -197,6 +198,7 @@ import com.bugiman.composercalculator.viewmodel.SettingsViewModel
 import com.bugiman.composercalculator.viewmodel.ThemesViewModel
 import kotlin.math.roundToInt
 
+@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun AppNavigation(
     settingsViewModel: SettingsViewModel = viewModel(),
@@ -359,9 +361,9 @@ private fun ScreenContent(
                 viewModelCalculation = calculatorViewModel
             )
 
-            Routes.CURRENCY_CONVERTER -> CurrencyConverter()
+//            Routes.CURRENCY_CONVERTER -> CurrencyConverter()
 
-            Routes.DISTANCE_CONVERTER -> DistanceConverter()
+//            Routes.DISTANCE_CONVERTER -> DistanceConverter()
 
             Routes.ENGINEERING_MODE -> EngineeringMode()
 
@@ -370,6 +372,7 @@ private fun ScreenContent(
             Routes.SETTINGS -> SettingsScreen(
                 title = "Настройки",
                 viewModelSettings = settingsViewModel,
+                viewModelCalculation = calculatorViewModel,
                 onNavigateBack = { navController.popBackStack() },
                 onNavigateToAbout = { navController.navigate(Routes.ABOUT) },
                 onNavigateToCreateThemes = { navController.navigate(Routes.CREATE_THEME_USER) }

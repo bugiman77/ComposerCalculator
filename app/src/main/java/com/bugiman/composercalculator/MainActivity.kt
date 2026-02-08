@@ -73,6 +73,14 @@ class MainActivity : ComponentActivity() {
                     themesUserViewModel = viewModelThemes,
                 )
             }
+
+            val isClearHistoryOnClose =
+                viewModelSettings.isClearHistoryOnClose.collectAsState().value
+
+            if (isClearHistoryOnClose) {
+                viewModelCalculation.deleteHistoryItemAll()
+            }
+
         }
     }
 }

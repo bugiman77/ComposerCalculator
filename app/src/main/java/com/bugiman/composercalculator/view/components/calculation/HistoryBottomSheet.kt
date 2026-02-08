@@ -295,6 +295,7 @@ private fun HistoryItemRow(
     val clipboard = LocalClipboard.current
 
     val isSwipeEnable = settingsViewModel.isSwipeEnabled.collectAsState().value
+    val isTitleNote = settingsViewModel.isTitleNote.collectAsState().value
 
     // Состояние свайпа
     val dismissState = rememberSwipeToDismissBoxState(

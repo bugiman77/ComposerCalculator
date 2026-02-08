@@ -30,7 +30,8 @@ fun Appearance(
 
         SettingsSelectionRow(
             title = "Кнопки/Иконки",
-            subtitle = "Вместо кнопок-иконок будут отображаться кнопки с текстом",
+            subtitle = if (showIconButton.value) "Будут отображаться иконки в верхней части главного экрана"
+                        else "Будут отображаться кнопки в верхней части главного экрана",
             option1Text = "Кнопки",
             option2Text = "Иконки",
             selectedOption = if (showIconButton.value) 1 else 0,

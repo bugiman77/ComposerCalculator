@@ -14,12 +14,14 @@ import com.bugiman.composercalculator.ui.theme.iOSGreen
 import com.bugiman.composercalculator.view.components.calculation.SettingsGroup
 import com.bugiman.composercalculator.view.components.calculation.SettingsRow
 import com.bugiman.composercalculator.view.components.general.settings.SettingsSelectionRow
+import com.bugiman.composercalculator.viewmodel.CalculatorViewModel
 import com.bugiman.composercalculator.viewmodel.SettingsViewModel
 
 @Composable
 fun HistoryComputing(
     modifier: Modifier = Modifier,
-    viewModelSettings: SettingsViewModel
+    viewModelSettings: SettingsViewModel,
+    viewModelCalculation: CalculatorViewModel
 ) {
 
     val isSwipeEnabled = viewModelSettings.isSwipeEnabled.collectAsState()
@@ -155,7 +157,12 @@ fun HistoryComputing(
             ) {
                 Switch(
                     checked = isShowHistoryLastCalculation.value,
-                    onCheckedChange = { viewModelSettings.toggleIsShowHistoryLastCalculation(enabled = it) },
+                    onCheckedChange = {
+                        viewModelSettings.toggleIsShowHistoryLastCalculation(
+                            enabled = it,
+                            expression = viewModelCalculation.expression.value
+                        )
+                    },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.White,
                         checkedTrackColor = iOSGreen,

@@ -26,6 +26,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
@@ -50,6 +51,7 @@ import com.bugiman.composercalculator.view.components.settings.SettingsBlock.App
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.Display
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.HistoryComputing
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.SoundAndVibration
+import com.bugiman.composercalculator.viewmodel.CalculatorViewModel
 import com.bugiman.composercalculator.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
 
@@ -58,6 +60,7 @@ import kotlinx.coroutines.launch
 fun SettingsScreen(
     title: String,
     viewModelSettings: SettingsViewModel = viewModel(),
+    viewModelCalculation: CalculatorViewModel = viewModel(),
     onNavigateBack: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onNavigateToCreateThemes: () -> Unit,
@@ -102,7 +105,10 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.height(height = 18.dp))
 
-            HistoryComputing(viewModelSettings = viewModelSettings)
+            HistoryComputing(
+                viewModelSettings = viewModelSettings,
+                viewModelCalculation = viewModelCalculation,
+            )
 
             Spacer(modifier = Modifier.height(height = 18.dp))
 

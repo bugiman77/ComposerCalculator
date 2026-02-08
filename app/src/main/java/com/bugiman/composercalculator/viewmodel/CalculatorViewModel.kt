@@ -303,9 +303,12 @@ class CalculatorViewModel(
     }
 
     private fun updateExpression(newExpression: String) {
+        val isShowHistoryLastCalculation = settingsViewModel.isShowHistoryLastCalculation.value
         _expression.value = newExpression
-        viewModelScope.launch(context = Dispatchers.IO) {
-            inputStateDao.saveInput(state = InputState(currentText = newExpression))
+        if (isShowHistoryLastCalculation) {
+            viewModelScope.launch(context = Dispatchers.IO) {
+                inputStateDao.saveInput(state = InputState(currentText = newExpression))
+            }
         }
     }
 

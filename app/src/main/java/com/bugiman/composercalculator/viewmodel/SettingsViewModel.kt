@@ -3,12 +3,16 @@ package com.bugiman.composercalculator.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.bugiman.composercalculator.data.local.db.AppDatabaseHistory
 import com.bugiman.composercalculator.data.local.db.AppDatabaseSetting
+import com.bugiman.composercalculator.data.local.db.dao.InputStateDao
 import com.bugiman.composercalculator.data.local.db.dao.SettingsDao
+import com.bugiman.composercalculator.data.local.db.entity.InputState
 import com.bugiman.composercalculator.data.local.db.entity.Settings
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.mongodb.kbson.BsonRegularExpression
 
 class SettingsViewModel(
     application: Application,
@@ -16,6 +20,8 @@ class SettingsViewModel(
 
     private val settingsDao: SettingsDao =
         AppDatabaseSetting.getDatabase(context = application).settingsDao()
+
+    private val inputStateDao: InputStateDao = AppDatabaseHistory.getDatabase(context = application).inputStateDao()
 
     private val _isDarkTheme = MutableStateFlow(value = true)
     val isDarkTheme: StateFlow<Boolean> = _isDarkTheme
@@ -234,9 +240,11 @@ class SettingsViewModel(
         }
     }
 
-    fun toggleIsShowHistoryLastCalculation(enabled: Boolean) {
+    fun toggleIsShowHistoryLastCalculation(enabled: Boolean, expression: String) {
         viewModelScope.launch {
             saveSetting { _isShowHistoryLastCalculation.value = enabled }
+            if (!enabled) inputStateDao.deleteItem()
+            else inputStateDao.saveInput(state = InputState(currentText = expression))
         }
     }
 

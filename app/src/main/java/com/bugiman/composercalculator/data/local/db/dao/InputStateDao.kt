@@ -1,6 +1,7 @@
 package com.bugiman.composercalculator.data.local.db.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -14,4 +15,7 @@ interface InputStateDao {
 
     @Query(value = "SELECT * FROM input_state WHERE id = 1")
     fun getInputState(): Flow<InputState?>
+
+    @Query("DELETE FROM input_state WHERE id = 1")
+    suspend fun deleteItem()
 }

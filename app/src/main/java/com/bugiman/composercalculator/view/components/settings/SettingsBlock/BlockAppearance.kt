@@ -58,25 +58,5 @@ fun Appearance(
             )
         }
 
-/*        SettingsRow(
-            title = "Отступ снизу",
-            subtitle = "Отступ между элементами интерфейса и нижним краем экрана",
-            modifier = modifier.padding(vertical = 4.dp)
-        ) {
-            Slider(
-                value = bottomSpacer.value.toFloat(),
-                onValueChangeFinished = { viewModelSettings.onBottomChangeChange(spacer = bottomSpacer.value) },
-                onValueChange = { viewModelSettings.onBottomChangeChange(spacer = it.toInt()) },
-                valueRange = 0f..30f,
-                steps = 30,
-                colors = SliderDefaults.colors(
-                    thumbColor = Color.White,
-                    activeTrackColor = Orange,
-                    inactiveTrackColor = Color.Gray
-                ),
-                modifier = Modifier.weight(weight = 1f)
-            )
-        }*/
-
     }
 }

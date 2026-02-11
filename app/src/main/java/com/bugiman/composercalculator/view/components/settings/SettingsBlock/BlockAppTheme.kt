@@ -34,7 +34,7 @@ fun AppTheme(
     SettingsGroup(title = "Тема приложения") {
         SettingsRow(
             title = "Системная тема",
-            subtitle = "Использовать тему Вашей операционной системы",
+            subtitle = "Использовать тему операционной системы",
             modifier = modifier.padding(vertical = 4.dp)
         ) {
             Switch(

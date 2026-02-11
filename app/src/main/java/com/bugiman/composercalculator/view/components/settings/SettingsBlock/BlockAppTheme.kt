@@ -25,6 +25,7 @@ fun AppTheme(
     modifier: Modifier = Modifier,
     viewModelSettings: SettingsViewModel,
     onNavigateToCreateThemes: () -> Unit,
+    onNavigateToViewThemes: () -> Unit,
 ) {
 
     val isDarkTheme = viewModelSettings.isDarkTheme.collectAsState()

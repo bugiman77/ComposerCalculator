@@ -52,10 +52,7 @@ fun DisplayArea(
                 start = 8.dp,
                 end = 8.dp,
                 bottom = 12.dp
-            )
-            /*.onGloballyPositioned { coordinates ->
-                onPositioned(coordinates.positionInRoot())
-            }*/,
+            ),
         contentAlignment = Alignment.BottomEnd,
     ) {
         val containerWidth = constraints.maxWidth
@@ -76,8 +73,7 @@ fun DisplayArea(
                     onClick = {},
                     onLongClick = {},
                     hapticFeedbackEnabled = false,
-                )
-                /*.onGloballyPositioned { it.positionInRoot() }*/,
+                ),
             text = displayText,
             color = Color.White,
             textAlign = TextAlign.End,

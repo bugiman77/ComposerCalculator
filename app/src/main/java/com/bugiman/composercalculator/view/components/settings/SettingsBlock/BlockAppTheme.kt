@@ -74,10 +74,6 @@ fun AppTheme(
 
         }
 
-        if (!isSystemTheme.value && !isDarkTheme.value) {
-
-        }
-
         Button(
             onClick = { onNavigateToCreateThemes() },
             modifier = Modifier

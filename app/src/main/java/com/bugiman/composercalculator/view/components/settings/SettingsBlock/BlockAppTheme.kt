@@ -91,5 +91,19 @@ fun AppTheme(
             Text(text = "Создать тему")
         }
 
+        Button(
+            onClick = { onNavigateToViewThemes() },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(color = 0xFF4F703D),
+                contentColor = Color.White
+            ),
+            shape = MaterialTheme.shapes.large
+        ) {
+            Text(text = "Темы приложения")
+        }
+
     }
 }

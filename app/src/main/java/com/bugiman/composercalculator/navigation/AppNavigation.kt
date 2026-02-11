@@ -374,7 +374,8 @@ private fun ScreenContent(
                 viewModelCalculation = calculatorViewModel,
                 onNavigateBack = { navController.popBackStack() },
                 onNavigateToAbout = { navController.navigate(Routes.ABOUT) },
-                onNavigateToCreateThemes = { navController.navigate(Routes.CREATE_THEME_USER) }
+                onNavigateToCreateThemes = { navController.navigate(Routes.CREATE_THEME_USER) },
+                onNavigateToViewThemes = { navController.navigate(Routes.VIEW_THEME) }
             )
 
             Routes.ABOUT -> AboutScreen(

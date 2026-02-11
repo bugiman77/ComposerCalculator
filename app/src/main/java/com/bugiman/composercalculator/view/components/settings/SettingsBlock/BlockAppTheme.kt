@@ -81,13 +81,13 @@ fun AppTheme(
         Button(
             onClick = { onNavigateToCreateThemes() },
             modifier = Modifier
-                .fillMaxWidth() // Кнопка на всю ширину
-                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp), // Отступы по краям
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(color = 0xFF007AFF), // Синий цвет в стиле iOS
-                contentColor = Color.White // Белый текст
+                containerColor = Color(color = 0xFF007AFF),
+                contentColor = Color.White
             ),
-            shape = MaterialTheme.shapes.large // Округлые углы
+            shape = MaterialTheme.shapes.large
         ) {
             Text(text = "Создать тему")
         }

@@ -221,6 +221,7 @@ fun AppNavigation(
                 composable(Routes.ABOUT) { }
                 composable(Routes.PRIVACY_POLICY) { }
                 composable(Routes.CREATE_THEME_USER) {  }
+                composable(Routes.VIEW_THEME) {  }
             }
         }
     }

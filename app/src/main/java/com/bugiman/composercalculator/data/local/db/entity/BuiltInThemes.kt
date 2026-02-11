@@ -15,4 +15,13 @@ data class BuiltInThemes(
     val isDarkMode: Boolean = true,
     val isPin: Boolean = false,
     val note: String = "",
+
+    val digitButtonColor: Long,
+    val digitTextColor: Long,
+    val operationButtonColor: Long,
+    val operationTextColor: Long,
+    val deleteButtonColor: Long,
+    val deleteTextColor: Long,
+    val equalButtonColor: Long,
+    val equalTextColor: Long
 )

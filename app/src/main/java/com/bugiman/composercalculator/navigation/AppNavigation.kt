@@ -184,8 +184,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.createGraph
 import com.bugiman.composercalculator.view.screen.main.CalculatorScreen
-import com.bugiman.composercalculator.view.screen.main.CurrencyConverter
-import com.bugiman.composercalculator.view.screen.main.DistanceConverter
 import com.bugiman.composercalculator.view.screen.main.EngineeringMode
 import com.bugiman.composercalculator.view.screen.main.ScientificMode
 import com.bugiman.composercalculator.view.screen.settings.AboutScreen

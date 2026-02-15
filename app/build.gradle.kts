@@ -115,6 +115,7 @@ dependencies {
     implementation(libs.mediation.test.suite)
     implementation(libs.androidx.compose.adaptive)
     implementation(libs.androidx.compose.foundation.layout)
+    implementation(libs.androidx.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

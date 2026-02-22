@@ -22,6 +22,10 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
     id("com.chaquo.python")
+
+    alias(libs.plugins.hilt.android)
+    kotlin("kapt")
+
 }
 
 android {
@@ -57,6 +61,8 @@ android {
 
     buildFeatures {
         buildConfig = true
+        compose = true
+        viewBinding = true
     }
 
     buildTypes {
@@ -81,13 +87,9 @@ android {
         includeInApk = true
         includeInBundle = true
     }
-    buildToolsVersion = "30.0.3"
+//    buildToolsVersion = "30.0.3"
     ndkVersion = "25.1.8937393"
 
-    buildFeatures {
-        compose = true
-        viewBinding = true
-    }
 }
 
 chaquopy {
@@ -112,7 +114,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation("androidx.compose.material:material-icons-extended")
-    implementation(libs.mediation.test.suite)
+//    implementation(libs.mediation.test.suite)
     implementation(libs.androidx.compose.adaptive)
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.material3)
@@ -136,7 +138,6 @@ dependencies {
     implementation(libs.androidx.compose.material3.adaptive.navigation)
 
     implementation(libs.androidx.compose.foundation)
-    implementation(libs.realm.library.base)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.html.jvm)
 
@@ -144,8 +145,16 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+
     implementation(libs.google.accompanist.drawablepainter)
     implementation(libs.lottie.compose)
+
+    implementation(project(":domain"))
+    implementation(project(":data"))
+
+
 
 }

@@ -37,6 +37,20 @@ object DatabaseModule {
                 super.onCreate(db)
 
                 db.execSQL("""
+                    CREATE TABLE IF NOT EXISTS built_in_themes (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name TEXT NOT NULL,
+                        primary_color INTEGER NOT NULL,
+                        secondary_color INTEGER NOT NULL,
+                        background_color INTEGER NOT NULL,
+                        surface_color INTEGER NOT NULL,
+                        onPrimary_color INTEGER NOT NULL,
+                        is_dark_mode INTEGER NOT NULL,
+                        is_pin INTEGER NOT NULL
+                    )
+                """)
+
+                db.execSQL("""
                     INSERT INTO built_in_themes 
                     (name, primary_color, secondary_color, background_color, surface_color, onPrimary_color, is_dark_mode, is_pin) 
                     VALUES ('Classic Dark', 0xFF212121, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 1, 1)

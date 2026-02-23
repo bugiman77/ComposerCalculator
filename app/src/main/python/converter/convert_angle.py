@@ -12,7 +12,7 @@ CONVERSION_TO_RAD = {
     "microradian": 1e-6,
 }
 
-def convert_angle(value: float, from_unit: str, to_unit: str) -> float:
+def convert(value: float, from_unit: str, to_unit: str) -> float:
     """
     Конвертация угла между различными единицами измерения.
 

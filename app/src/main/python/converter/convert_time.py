@@ -21,7 +21,7 @@ SECONDS_IN = {
 }
 
 
-def convert_time(value: float, from_unit: str, to_unit: str) -> float:
+def convert(value: float, from_unit: str, to_unit: str) -> float:
     """
     Конвертация единиц времени.
 

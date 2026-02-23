@@ -47,7 +47,7 @@ def from_l_per_100km(value: float, unit: str) -> float:
         raise ValueError(f"Неподдерживаемая единица: {unit}")
 
 
-def convert_fuel_consumption(value: float, from_unit: str, to_unit: str) -> float:
+def convert(value: float, from_unit: str, to_unit: str) -> float:
     """
     Конвертация расхода топлива.
 

@@ -25,7 +25,7 @@ CONVERSION_TO_WATT = {
 }
 
 
-def convert_power(value: float, from_unit: str, to_unit: str) -> float:
+def convert(value: float, from_unit: str, to_unit: str) -> float:
     """
     Конвертация единиц мощности.
 

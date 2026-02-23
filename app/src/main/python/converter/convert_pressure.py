@@ -33,7 +33,7 @@ CONVERSION_TO_PASCAL = {
 }
 
 
-def convert_pressure(value: float, from_unit: str, to_unit: str) -> float:
+def convert(value: float, from_unit: str, to_unit: str) -> float:
     """
     Конвертация единиц давления.
 

@@ -2,7 +2,7 @@ import requests
 
 API_KEY = "ВАШ_API_КЛЮЧ"  # <-- вставьте сюда ваш ключ от CurrencyApi.net
 
-def convert_currency(amount: float, from_currency: str, to_currency: str) -> float:
+def convert(amount: float, from_currency: str, to_currency: str) -> float:
     """
     Конвертация валют через CurrencyApi.net.
     

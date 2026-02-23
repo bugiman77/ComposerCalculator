@@ -36,7 +36,7 @@ CONVERSION_TO_CUBIC_METER = {
 }
 
 
-def convert_volume(value: float, from_unit: str, to_unit: str) -> float:
+def convert(value: float, from_unit: str, to_unit: str) -> float:
     """
     Конвертация единиц объёма.
 

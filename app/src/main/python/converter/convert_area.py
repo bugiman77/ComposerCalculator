@@ -16,7 +16,7 @@ CONVERSION_TO_SQ_METER = {
 }
 
 
-def convert_area(value: float, from_unit: str, to_unit: str) -> float:
+def convert(value: float, from_unit: str, to_unit: str) -> float:
     """
     Конвертация площади между различными единицами измерения.
 

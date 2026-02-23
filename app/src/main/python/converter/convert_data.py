@@ -39,7 +39,7 @@ CONVERSION_TO_BIT = {
 }
 
 
-def convert_data(value: float, from_unit: str, to_unit: str) -> float:
+def convert(value: float, from_unit: str, to_unit: str) -> float:
     """
     Конвертация единиц измерения данных.
 

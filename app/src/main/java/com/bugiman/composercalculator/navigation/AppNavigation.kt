@@ -190,10 +190,8 @@ import com.bugiman.composercalculator.view.screen.settings.AboutScreen
 import com.bugiman.composercalculator.view.screen.settings.CreateThemeAppUser
 import com.bugiman.composercalculator.view.screen.settings.PrivacyPolicyScreen
 import com.bugiman.composercalculator.view.screen.settings.SettingsScreen
-import com.bugiman.composercalculator.viewmodel.AppListViewModel
 import com.bugiman.composercalculator.viewmodel.CalculatorViewModel
 import com.bugiman.composercalculator.viewmodel.SettingsViewModel
-import com.bugiman.composercalculator.viewmodel.ThemesViewModel
 import kotlin.math.roundToInt
 
 @SuppressLint("ConfigurationScreenWidthHeight")
@@ -201,8 +199,6 @@ import kotlin.math.roundToInt
 fun AppNavigation(
     settingsViewModel: SettingsViewModel = viewModel(),
     calculatorViewModel: CalculatorViewModel = viewModel(),
-    appListViewModel: AppListViewModel = viewModel(),
-    themesUserViewModel: ThemesViewModel = viewModel(),
 ) {
     val navController = rememberNavController()
     val showHistoryButton = settingsViewModel.showHistoryButton.collectAsState()
@@ -252,8 +248,6 @@ fun AppNavigation(
                         entry = entry,
                         settingsViewModel = settingsViewModel,
                         calculatorViewModel = calculatorViewModel,
-                        themesUserViewModel = themesUserViewModel,
-                        appListViewModel = appListViewModel,
                         showHistoryButton = showHistoryButton.value,
                         navController = navController
                     )
@@ -322,8 +316,6 @@ fun AppNavigation(
                         entry = entry,
                         settingsViewModel = settingsViewModel,
                         calculatorViewModel = calculatorViewModel,
-                        themesUserViewModel = themesUserViewModel,
-                        appListViewModel = appListViewModel,
                         showHistoryButton = showHistoryButton.value,
                         navController = navController
                     )
@@ -341,8 +333,6 @@ private fun ScreenContent(
     entry: NavBackStackEntry,
     settingsViewModel: SettingsViewModel,
     calculatorViewModel: CalculatorViewModel,
-    themesUserViewModel: ThemesViewModel,
-    appListViewModel: AppListViewModel,
     showHistoryButton: Boolean,
     navController: NavHostController
 ) {
@@ -360,10 +350,6 @@ private fun ScreenContent(
                 viewModelCalculation = calculatorViewModel
             )
 
-//            Routes.CURRENCY_CONVERTER -> CurrencyConverter()
-
-//            Routes.DISTANCE_CONVERTER -> DistanceConverter()
-
             Routes.ENGINEERING_MODE -> EngineeringMode()
 
             Routes.SCIENTIFIC_MODE -> ScientificMode()
@@ -380,7 +366,6 @@ private fun ScreenContent(
 
             Routes.ABOUT -> AboutScreen(
                 title = "О приложении",
-                appListViewModel = appListViewModel,
                 onNavigateBack = { navController.popBackStack() },
                 onNavigateToPrivacy = { navController.navigate(Routes.PRIVACY_POLICY) }
             )
@@ -392,7 +377,6 @@ private fun ScreenContent(
 
             Routes.CREATE_THEME_USER -> CreateThemeAppUser(
                 title = "Новая тема",
-                viewModelThemes = themesUserViewModel,
                 onNavigateBack = { navController.popBackStack() }
             )
 

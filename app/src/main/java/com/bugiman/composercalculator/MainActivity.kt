@@ -15,8 +15,9 @@ import com.bugiman.composercalculator.navigation.AppNavigation
 import com.bugiman.composercalculator.ui.theme.ComposerCalculatorTheme
 import com.bugiman.composercalculator.viewmodel.CalculatorViewModel
 import com.bugiman.composercalculator.viewmodel.SettingsViewModel
-import com.bugiman.composercalculator.viewmodel.ThemesViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 

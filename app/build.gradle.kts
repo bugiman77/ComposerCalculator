@@ -98,8 +98,8 @@ chaquopy {
             install("simpleeval")
             install("requests")
             install("sympy")
-            install("matplotlib")
             install("numpy")
+            install("matplotlib")
         }
     }
 }

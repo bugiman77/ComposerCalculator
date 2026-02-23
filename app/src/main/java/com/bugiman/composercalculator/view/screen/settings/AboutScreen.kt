@@ -47,9 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bugiman.composercalculator.BuildConfig
 import com.bugiman.composercalculator.R
-import com.bugiman.composercalculator.model.AppInfo
 import com.bugiman.composercalculator.model.DeviceInfo
-import com.bugiman.composercalculator.viewmodel.AppListViewModel
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 
 
@@ -57,7 +55,6 @@ import com.google.accompanist.drawablepainter.rememberDrawablePainter
 @Composable
 fun AboutScreen(
     title: String,
-    appListViewModel: AppListViewModel,
     onNavigateBack: () -> Unit,
     onNavigateToPrivacy: () -> Unit
 ) {
@@ -81,7 +78,7 @@ fun AboutScreen(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                AppHeader(appListViewModel)
+                AppHeader()
 
                 Spacer(modifier = Modifier.height(height = 32.dp))
 
@@ -112,16 +109,7 @@ fun AboutScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AppHeader(
-    appListViewModel: AppListViewModel
-) {
-
-//    val context = LocalContext.current
-//    val apps = appListViewModel.apps.collectAsState()
-
-    // Состояние для управления модальным окном
-//    var showSheet by remember { mutableStateOf(false) }
-//    val sheetState = rememberModalBottomSheetState()
+private fun AppHeader() {
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -135,13 +123,6 @@ private fun AppHeader(
                 .size(size = 120.dp)
                 .clip(shape = RoundedCornerShape(size = 24.dp))
                 .background(Color.DarkGray)
-                /*.combinedClickable(
-                    onClick = {},
-                    onLongClick = {
-                        appListViewModel.loadInstalledApps(context) // Загружаем список
-                        showSheet = true // Показываем окно
-                    }
-                )*/
         )
 
         Spacer(modifier = Modifier.height(height = 24.dp))
@@ -152,68 +133,6 @@ private fun AppHeader(
             fontSize = 16.sp
         )
 
-        // Само модальное окно
-/*        if (showSheet) {
-            ModalBottomSheet(
-                onDismissRequest = { showSheet = false },
-                sheetState = sheetState,
-                dragHandle = { BottomSheetDefaults.DragHandle() } // Полоска сверху
-            ) {
-                AppListContent(apps.value)
-            }
-        }*/
-
-    }
-}
-
-@Composable
-private fun AppListContent(apps: List<AppInfo>) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.6f) // Окно на 60% экрана
-            .padding(horizontal = 16.dp)
-    ) {
-        item {
-            Text(
-                "Пользовательские приложения",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(vertical = 16.dp)
-            )
-        }
-
-        if (apps.isEmpty()) {
-            item {
-                Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-            }
-        }
-
-        items(apps) { app ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = rememberDrawablePainter(drawable = app.icon),
-                    contentDescription = null,
-                    modifier = Modifier.size(40.dp)
-                )
-                Column(modifier = Modifier.padding(start = 16.dp)) {
-                    Text(text = app.name, style = MaterialTheme.typography.bodyLarge)
-                    Text(
-                        text = app.packageName,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray
-                    )
-                }
-            }
-        }
-
-        item { Spacer(modifier = Modifier.height(height = 32.dp)) }
     }
 }
 
@@ -235,9 +154,6 @@ private fun InfoLinksGroup(
             onClick = onNavigateToPrivacy
         )
         HorizontalDivider(color = Color(color = 0xFF3A3A3C))
-        /*InfoLinkRow(
-            title = "Связаться с автором",
-        ) { }*/
     }
 }
 

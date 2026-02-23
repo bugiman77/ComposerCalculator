@@ -51,8 +51,7 @@ import androidx.compose.ui.unit.Dp
 @Composable
 fun CalculatorButtonGrid(
     viewModelSetting: SettingsViewModel = viewModel(),
-    viewModelCalculation: CalculatorViewModel = viewModel(),
-    onDigitClick: (String, Offset) -> Unit
+    viewModelCalculation: CalculatorViewModel = viewModel()
 ) {
 
     val bottomSpacer = viewModelSetting.bottomSpacer.collectAsState()
@@ -65,28 +64,23 @@ fun CalculatorButtonGrid(
 
         LineCalculation1(
             viewModelCalculation = viewModelCalculation,
-            onDigitClick = onDigitClick
         )
 
         LineCalculation2(
             viewModelCalculation = viewModelCalculation,
-            onDigitClick = onDigitClick
         )
 
         LineCalculation3(
             viewModelCalculation = viewModelCalculation,
-            onDigitClick = onDigitClick
         )
 
         LineCalculation4(
             viewModelCalculation = viewModelCalculation,
-            onDigitClick = onDigitClick
         )
 
         LineCalculation5(
             viewModelCalculation = viewModelCalculation,
             viewModelSetting = viewModelSetting,
-            onDigitClick = onDigitClick
         )
 
     }
@@ -226,7 +220,6 @@ private fun BtnCalculationIcon(
 private fun LineCalculation1(
     modifier: Modifier = Modifier,
     viewModelCalculation: CalculatorViewModel,
-    onDigitClick: (String, Offset) -> Unit
 ) {
 
     val isInputEmpty = viewModelCalculation.expression.collectAsState().value.isEmpty()
@@ -287,7 +280,6 @@ private fun LineCalculation1(
 private fun LineCalculation2(
     modifier: Modifier = Modifier,
     viewModelCalculation: CalculatorViewModel,
-    onDigitClick: (String, Offset) -> Unit
 ) {
 
     Row(
@@ -300,7 +292,6 @@ private fun LineCalculation2(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = { offset ->
-                onDigitClick("7", offset)
                 viewModelCalculation.onInputDigit(inputDigit = "7")
             },
         )
@@ -310,7 +301,6 @@ private fun LineCalculation2(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = { offset ->
-                onDigitClick("8", offset)
                 viewModelCalculation.onInputDigit(inputDigit = "8")
             },
         )
@@ -320,7 +310,6 @@ private fun LineCalculation2(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = { offset ->
-                onDigitClick("9", offset)
                 viewModelCalculation.onInputDigit(inputDigit = "9")
             },
         )
@@ -346,7 +335,6 @@ private fun LineCalculation2(
 private fun LineCalculation3(
     modifier: Modifier = Modifier,
     viewModelCalculation: CalculatorViewModel,
-    onDigitClick: (String, Offset) -> Unit
 ) {
 
     Row(
@@ -359,7 +347,6 @@ private fun LineCalculation3(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = { offset ->
-                onDigitClick("4", offset)
                 viewModelCalculation.onInputDigit(inputDigit = "4")
             },
         )
@@ -369,7 +356,6 @@ private fun LineCalculation3(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = { offset ->
-                onDigitClick("5", offset)
                 viewModelCalculation.onInputDigit(inputDigit = "5")
             },
         )
@@ -379,7 +365,6 @@ private fun LineCalculation3(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = { offset ->
-                onDigitClick("6", offset)
                 viewModelCalculation.onInputDigit(inputDigit = "6")
             }
         )
@@ -402,7 +387,6 @@ private fun LineCalculation3(
 private fun LineCalculation4(
     modifier: Modifier = Modifier,
     viewModelCalculation: CalculatorViewModel,
-    onDigitClick: (String, Offset) -> Unit
 ) {
 
     val isInputEmpty = viewModelCalculation.expression.collectAsState().value.isEmpty()
@@ -417,7 +401,6 @@ private fun LineCalculation4(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = { offset ->
-                onDigitClick("1", offset)
                 viewModelCalculation.onInputDigit(inputDigit = "1")
             },
         )
@@ -427,7 +410,6 @@ private fun LineCalculation4(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = { offset ->
-                onDigitClick("2", offset)
                 viewModelCalculation.onInputDigit(inputDigit = "2")
             },
         )
@@ -437,7 +419,6 @@ private fun LineCalculation4(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = { offset ->
-                onDigitClick("3", offset)
                 viewModelCalculation.onInputDigit(inputDigit = "3")
             },
         )
@@ -461,7 +442,6 @@ private fun LineCalculation5(
     modifier: Modifier = Modifier,
     viewModelCalculation: CalculatorViewModel,
     viewModelSetting: SettingsViewModel,
-    onDigitClick: (String, Offset) -> Unit
 ) {
 
     val isInputEmpty = viewModelCalculation.expression.collectAsState().value.isEmpty()

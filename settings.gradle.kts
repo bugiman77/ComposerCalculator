@@ -25,3 +25,4 @@ rootProject.name = "ComposerCalculator"
 include(":app")
 include(":data")
 include(":domain")
+include(":designsystem")

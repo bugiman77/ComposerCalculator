@@ -11,7 +11,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.bugiman.composercalculator.core.managers.SoundManager
 import com.bugiman.composercalculator.core.managers.VibrationManager
-import com.bugiman.composercalculator.data.repository.DeviceSettingsRepository
 import com.bugiman.composercalculator.navigation.AppNavigation
 import com.bugiman.composercalculator.ui.theme.ComposerCalculatorTheme
 import com.bugiman.composercalculator.viewmodel.CalculatorViewModel
@@ -23,7 +22,6 @@ class MainActivity : ComponentActivity() {
 
         val managerSound = SoundManager(context = application)
         val managerVibration = VibrationManager(context = application)
-        val deviceSettingsRepository = DeviceSettingsRepository(context = application)
 
         val viewModelSettings = SettingsViewModel(
             application = application,
@@ -34,10 +32,6 @@ class MainActivity : ComponentActivity() {
             settingsViewModel = viewModelSettings,
             soundManager = managerSound,
             vibrationManager = managerVibration,
-        )
-
-        val viewModelThemes = ThemesViewModel(
-            application = application,
         )
 
         installSplashScreen()
@@ -69,7 +63,6 @@ class MainActivity : ComponentActivity() {
                 AppNavigation(
                     settingsViewModel = viewModelSettings,
                     calculatorViewModel = viewModelCalculation,
-                    themesUserViewModel = viewModelThemes,
                 )
             }
 

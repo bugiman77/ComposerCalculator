@@ -155,6 +155,12 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
 
+    val voyagerVersion = "1.1.0-beta03" // Текущая стабильная версия
+    implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
+    implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
+    implementation("cafe.adriel.voyager:voyager-hilt:$voyagerVersion")
 
+    implementation("io.github.alexzhirkevich:cupertino-decompose:0.1.0-alpha04")
+    implementation("io.github.alexzhirkevich:cupertino:0.1.0-alpha04")
 
 }

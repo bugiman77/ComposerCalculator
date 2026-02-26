@@ -47,6 +47,8 @@ fun TelegramSwipeContainer(navigator: Navigator) {
     val context = LocalContext.current
     var lastBackPressTime by remember { mutableLongStateOf(0L) }
 
+    val maxCornerRadius = 32.dp
+
     BackHandler(enabled = true) {
         if (navigator.canPop) {
             scope.launch {
@@ -172,17 +174,35 @@ fun TelegramSwipeContainer(navigator: Navigator) {
         Surface(
             modifier = Modifier
                 .fillMaxSize()
-                .graphicsLayer { translationX = offsetX.value },
+                .graphicsLayer {
+                    translationX = offsetX.value
+
+                    // РАСЧЕТ ЗАКРУГЛЕНИЯ:
+                    // Если экран сдвинут хотя бы на 1 пиксель, начинаем скруглять.
+                    // Когда экран полностью на месте (offsetX == 0), радиус 0.
+                    val progress = (offsetX.value / screenWidthPx).coerceIn(0f, 1f)
+
+                    // Если свайп начат, плавно увеличиваем радиус до 32.dp
+                    val currentRadius = if (offsetX.value > 0) {
+                        maxCornerRadius.toPx()
+                    } else 0f
+
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(currentRadius)
+                    clip = offsetX.value > 0 // Обрезаем контент по углам только при свайпе
+                },
             color = MaterialTheme.colorScheme.background,
             tonalElevation = 1.dp
         ) {
             Box(Modifier.fillMaxSize()) {
                 currentScreen.Content()
-                // Защита тапов во время сдвига
+
+                // Защитный слой (тоже должен скругляться, чтобы не вылезать за края)
                 if (offsetX.value > 0) {
-                    Box(modifier = Modifier.fillMaxSize().pointerInput(Unit) {
-                        detectTapGestures { }
-                    })
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .pointerInput(Unit) { detectTapGestures { } }
+                    )
                 }
             }
         }

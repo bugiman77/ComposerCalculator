@@ -12,17 +12,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SheetValue
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,26 +36,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bugiman.composercalculator.R
+import com.bugiman.composercalculator.ui.theme.DarkGray
+import com.bugiman.composercalculator.ui.theme.Gray
 import com.bugiman.composercalculator.view.components.calculation.CalculatorButtonGrid
 import com.bugiman.composercalculator.view.components.calculation.DisplayArea
 import com.bugiman.composercalculator.view.components.calculation.HistoryBottomSheet
 import com.bugiman.composercalculator.viewmodel.CalculatorViewModel
 import com.bugiman.composercalculator.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
-import androidx.compose.material3.Text
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowInsetsControllerCompat
-import com.bugiman.composercalculator.model.FlyingDigit
-import com.bugiman.composercalculator.ui.theme.DarkGray
-import com.bugiman.composercalculator.ui.theme.Gray
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -62,19 +62,15 @@ fun CalculatorScreen(
     viewModelSettings: SettingsViewModel = viewModel(),
 ) {
 
-    var showHistorySheet by remember { mutableStateOf(value = false) }
-//    var canCloseProgrammatically by remember { mutableStateOf(true) }
-    var allowHide by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true,
-/*        confirmValueChange = { newValue ->
-            if (newValue == SheetValue.Hidden) {
-                allowHide // ← свайпом false, кнопкой true
-            } else {
-                true
-            }
-        }*/
+        skipPartiallyExpanded = true
     )
+
+    val isSheetVisible = sheetState.isVisible
+    ForceWhiteStatusBarIcons(trigger = isSheetVisible)
+
+    var showHistorySheet by remember { mutableStateOf(value = false) }
+
     val scope = rememberCoroutineScope()
 
     val showIconButton = viewModelSettings.showIconButton.collectAsState().value
@@ -87,11 +83,6 @@ fun CalculatorScreen(
 
     if (showHistorySheet) {
 
-        SetStatusBarStyle(
-            darkIcons = false, // белые иконки
-            color = Color.Black // цвет шторки
-        )
-
         HistoryBottomSheet(
             calculatorViewModel = viewModelCalculation,
             settingsViewModel = viewModelSettings,
@@ -99,17 +90,10 @@ fun CalculatorScreen(
             onDismiss = { showHistorySheet = false },
             onCloseClick = {
                 scope.launch {
-                    allowHide = true
                     sheetState.hide()
-                    allowHide = false
                     showHistorySheet = false
                 }
             }
-        )
-    } else {
-        SetStatusBarStyle(
-            darkIcons = false, // например, тёмные иконки
-            color = Color.Black
         )
     }
 
@@ -138,13 +122,29 @@ fun CalculatorScreen(
 
                         if (showHistoryButton) {
                             if (showIconButton) {
-                                IconButton(onClick = { showHistorySheet = true }) {
-                                    Icon(
-                                        modifier = Modifier.size(size = 32.dp),
-                                        painter = painterResource(id = R.drawable.ic_history),
-                                        contentDescription = "История вычислений",
-                                        tint = Gray
-                                    )
+                                Card(
+                                    onClick = { showHistorySheet = true },
+                                    shape = CircleShape,
+                                    modifier = Modifier
+                                        .size(48.dp),
+                                    colors = CardDefaults.cardColors(
+                                        containerColor = Color(
+                                            0xFF2C2C2E
+                                        )
+                                    ),
+                                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                                ) {
+                                    Box(
+                                        contentAlignment = Alignment.Center,
+                                        modifier = Modifier.fillMaxSize()
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.ic_history),
+                                            contentDescription = "История вычислений",
+                                            tint = Color.White,
+                                            modifier = Modifier.size(32.dp)
+                                        )
+                                    }
                                 }
                             } else {
                                 Button(
@@ -163,13 +163,29 @@ fun CalculatorScreen(
                         }
 
                         if (showIconButton) {
-                            IconButton(onClick = onNavigateToSettings) {
-                                Icon(
-                                    modifier = Modifier.size(size = 32.dp),
-                                    painter = painterResource(id = R.drawable.ic_more),
-                                    contentDescription = "Настройки приложения",
-                                    tint = Gray
-                                )
+                            Card(
+                                onClick = onNavigateToSettings,
+                                shape = CircleShape,
+                                modifier = Modifier
+                                    .size(48.dp),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = Color(
+                                        0xFF2C2C2E
+                                    )
+                                ),
+                                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                            ) {
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier.fillMaxSize()
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_more),
+                                        contentDescription = "Настройки приложения",
+                                        tint = Color.White,
+                                        modifier = Modifier.size(32.dp)
+                                    )
+                                }
                             }
                         } else {
                             Button(
@@ -194,14 +210,7 @@ fun CalculatorScreen(
                     // Сетка кнопок
                     CalculatorButtonGrid(
                         viewModelSetting = viewModelSettings,
-                        viewModelCalculation = viewModelCalculation,
-                        onDigitClick = { text, offset ->
-                            // Здесь мы добавляем новую летящую цифру в список
-                            val newFlyingDigit = FlyingDigit(
-                                text = text,
-                                startOffset = offset
-                            )
-                        }
+                        viewModelCalculation = viewModelCalculation
                     )
                 }
             }
@@ -210,19 +219,16 @@ fun CalculatorScreen(
 }
 
 @Composable
-fun SetStatusBarStyle(
-    darkIcons: Boolean,
-    color: Color
-) {
+private fun ForceWhiteStatusBarIcons(trigger: Any? = null) {
     val view = LocalView.current
-    val context = view.context
-    val window = (context as Activity).window
+    if (!view.isInEditMode) {
+        val window = (view.context as Activity).window
 
-    SideEffect {
-        window.statusBarColor = color.toArgb()
-        WindowInsetsControllerCompat(
-            window,
-            view
-        ).isAppearanceLightStatusBars = darkIcons
+        // Используем SideEffect, который срабатывает после каждой успешной рекомпозиции
+        SideEffect {
+            val insetsController = WindowCompat.getInsetsController(window, view)
+            // false означает, что мы НЕ используем темные иконки (т.е. они будут белыми)
+            insetsController.isAppearanceLightStatusBars = false
+        }
     }
 }

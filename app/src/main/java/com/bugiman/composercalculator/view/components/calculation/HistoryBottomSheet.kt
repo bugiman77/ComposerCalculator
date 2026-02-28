@@ -1,6 +1,7 @@
 package com.bugiman.composercalculator.view.components.calculation
 
 import android.content.ClipData
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +25,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Button
@@ -55,16 +57,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bugiman.composercalculator.data.local.db.entity.History
+import com.bugiman.composercalculator.presentation.HistoryViewModel
 import com.bugiman.composercalculator.ui.theme.Orange
 import com.bugiman.composercalculator.viewmodel.CalculatorViewModel
 import com.bugiman.composercalculator.viewmodel.SettingsViewModel
+import com.bugiman.domain.models.history.HistoryModel
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
@@ -251,6 +258,10 @@ private fun HistorySheetContent(
 
     val historyItems by calculatorViewModel.history.collectAsStateWithLifecycle()
 
+    val historyViewModel = hiltViewModel<HistoryViewModel>()
+
+    val historyList = historyViewModel.history.collectAsStateWithLifecycle(emptyList()).value
+
     LazyColumn(
         modifier = Modifier.fillMaxHeight(fraction = 0.92f),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
@@ -281,6 +292,7 @@ private fun HistorySheetContent(
                 )
             }
         }
+
     }
 }
 
@@ -406,20 +418,22 @@ private fun HistoryItemRow(
                             }
                         },
                         placeholder = { Text(text = "Заметка", color = Color.Gray) },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(16.dp)),
+                        singleLine = false,
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = Color.Transparent,
+                            focusedContainerColor = Color(0xFF2C2C2E),
                             unfocusedContainerColor = Color.Transparent,
                             focusedBorderColor = Orange.copy(alpha = 0.5f),
-                            unfocusedBorderColor = Color.Gray.copy(alpha = 0.3f),
+                            unfocusedBorderColor = Color.Transparent,
                             cursorColor = Orange,
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White,
                             focusedPlaceholderColor = Color.Gray,
-                            unfocusedPlaceholderColor = Color.Gray
+                            unfocusedPlaceholderColor = Color.Gray,
                         ),
-                        shape = RoundedCornerShape(size = 12.dp),
+                        shape = RoundedCornerShape(size = 16.dp),
                         keyboardOptions = KeyboardOptions(
                             capitalization = if (isTitleNote) KeyboardCapitalization.Sentences
                             else KeyboardCapitalization.None // С заглавной буквы в начале предложения

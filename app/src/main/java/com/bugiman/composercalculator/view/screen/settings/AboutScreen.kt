@@ -59,7 +59,7 @@ fun AboutScreen(
     onNavigateToPrivacy: () -> Unit
 ) {
     Scaffold(
-        containerColor = Color(color = 0xFF161616),
+        containerColor = Color(color = 0xFF000000),
         topBar = {
             CustomTopBar(
                 screenTitle = title,

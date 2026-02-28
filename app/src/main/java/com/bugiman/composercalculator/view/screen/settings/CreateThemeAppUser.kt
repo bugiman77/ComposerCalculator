@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bugiman.composercalculator.view.components.general.settings.CustomTopBar
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

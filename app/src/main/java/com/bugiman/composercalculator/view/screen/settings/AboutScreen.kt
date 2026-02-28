@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import com.bugiman.composercalculator.BuildConfig
 import com.bugiman.composercalculator.R
 import com.bugiman.composercalculator.model.DeviceInfo
+import com.bugiman.composercalculator.view.components.general.settings.CustomTopBar
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 
 

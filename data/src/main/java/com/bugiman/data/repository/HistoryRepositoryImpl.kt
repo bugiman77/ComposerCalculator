@@ -3,8 +3,6 @@ package com.bugiman.data.repository
 import com.bugiman.data.local.dao.HistoryDao
 import com.bugiman.data.mapper.toDomain
 import com.bugiman.data.mapper.toEntity
-import com.bugiman.domain.models.history.HistoryModel
-import com.bugiman.domain.repository.history.HistoryRepository
 import com.bugiman.domain.models.HistoryModel
 import com.bugiman.domain.repository.HistoryRepository
 import kotlinx.coroutines.flow.Flow

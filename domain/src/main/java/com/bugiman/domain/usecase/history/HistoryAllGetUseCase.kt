@@ -1,7 +1,7 @@
 package com.bugiman.domain.usecase.history
 
-import com.bugiman.domain.models.history.HistoryModel
-import com.bugiman.domain.repository.history.HistoryRepository
+import com.bugiman.domain.models.HistoryModel
+import com.bugiman.domain.repository.HistoryRepository
 import kotlinx.coroutines.flow.Flow
 
 class HistoryAllGetUseCase(

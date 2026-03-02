@@ -1,4 +1,4 @@
-package com.bugiman.domain.models.history
+package com.bugiman.domain.models
 
 class HistoryModel(
     val id: Long = 0,

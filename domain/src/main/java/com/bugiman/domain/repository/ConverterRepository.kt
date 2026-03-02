@@ -1,4 +1,4 @@
-package com.bugiman.domain.repository.convert
+package com.bugiman.domain.repository
 
 import com.bugiman.domain.models.ConverterType
 

@@ -19,7 +19,7 @@ interface HistoryDao {
     fun getHistoryItem(itemId: Long): HistoryEntity
 
     @Query(value = "SELECT * FROM history ORDER BY timestamp DESC")
-    fun getHistoryAll(): Flow<List<HistoryEntity>>
+    fun getHistoryAllFlow(): Flow<List<HistoryEntity>>
 
     @Delete
     suspend fun deleteItem(item: HistoryEntity)

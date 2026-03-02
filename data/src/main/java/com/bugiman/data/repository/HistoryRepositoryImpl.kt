@@ -16,7 +16,7 @@ class HistoryRepositoryImpl @Inject constructor(
 ): HistoryRepository {
 
     override fun getItemsAll(): Flow<List<HistoryModel>> {
-        return historyDao.getHistoryAll()
+        return historyDao.getHistoryAllFlow()
             .map { list ->
                 list.map { it.toDomain() }
             }

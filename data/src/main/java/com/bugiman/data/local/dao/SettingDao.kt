@@ -18,7 +18,7 @@ interface SettingsDao {
 
     // Получаем настройки как Flow
     @Query(value = "SELECT * FROM settings LIMIT 1")
-    fun getSettingsFlow(): Flow<SettingEntity>
+    fun getSettingsAllFlow(): Flow<SettingEntity>
 
     // Вставка новых настроек
     @Insert(onConflict = OnConflictStrategy.REPLACE)

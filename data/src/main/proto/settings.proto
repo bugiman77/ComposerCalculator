@@ -1,0 +1,26 @@
+syntax = "proto3"; // Версия синтаксиса
+
+option java_package = "com.bugiman.data.proto";
+option java_multiple_files = true;
+
+message SettingsProto {
+  bool is_dark_theme = 1;
+  bool is_system_theme = 2;
+  bool is_show_history_button = 3;
+  bool is_swipe_enabled = 4;
+  bool is_note_enabled = 5;
+  bool is_show_icon_button = 6;
+  bool is_play_sound = 7;
+  bool is_play_vibration = 8;
+  bool is_keep_screen_on = 9;
+  bool is_show_placeholder_input = 10;
+  bool is_title_note = 11;
+  bool is_clear_history_on_close = 12;
+  bool is_show_history_last_calculation = 13;
+
+  enum HistoryHeaderLayout {
+    CLOSE_LEFT_CLEAR_RIGHT = 0;
+    CLOSE_RIGHT_CLEAR_LEFT = 1;
+  }
+  HistoryHeaderLayout header_layout = 14;
+}

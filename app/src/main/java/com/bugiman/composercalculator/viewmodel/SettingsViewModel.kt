@@ -3,18 +3,17 @@ package com.bugiman.composercalculator.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.bugiman.composercalculator.data.local.db.AppDatabaseHistory
-import com.bugiman.composercalculator.data.local.db.AppDatabaseSetting
-import com.bugiman.composercalculator.data.local.db.dao.InputStateDao
-import com.bugiman.composercalculator.data.local.db.dao.SettingsDao
-import com.bugiman.composercalculator.data.local.db.entity.InputState
-import com.bugiman.composercalculator.data.local.db.entity.Settings
+//import com.bugiman.composercalculator.data.local.db.AppDatabaseHistory
+//import com.bugiman.composercalculator.data.local.db.AppDatabaseSetting
+//import com.bugiman.composercalculator.data.local.db.dao.InputStateDao
+//import com.bugiman.composercalculator.data.local.db.dao.SettingsDao
+//import com.bugiman.composercalculator.data.local.db.entity.InputState
+//import com.bugiman.composercalculator.data.local.db.entity.Settings
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.mongodb.kbson.BsonRegularExpression
 
-class SettingsViewModel(
+/*class SettingsViewModel(
     application: Application,
 ) : AndroidViewModel(application) {
 
@@ -280,4 +279,4 @@ class SettingsViewModel(
             )
         )
     }
-}
+}*/

@@ -6,9 +6,9 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-import com.bugiman.data.local.entity.SettingEntity
+//import com.bugiman.data.local.entity.SettingEntity
 
-@Dao
+/*@Dao
 interface SettingsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveSettings(settings: SettingEntity)
@@ -27,5 +27,5 @@ interface SettingsDao {
     // Обновление существующих настроек
     @Update
     suspend fun updateSettings(settings: SettingEntity)
-}
+}*/
 

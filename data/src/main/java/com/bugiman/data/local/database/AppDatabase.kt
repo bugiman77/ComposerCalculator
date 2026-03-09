@@ -6,18 +6,18 @@ import com.bugiman.data.local.dao.BuiltInThemesDao
 import com.bugiman.data.local.dao.CustomThemesDao
 import com.bugiman.data.local.dao.HistoryDao
 import com.bugiman.data.local.dao.InputStateDao
-import com.bugiman.data.local.dao.SettingsDao
+//import com.bugiman.data.local.dao.SettingsDao
 import com.bugiman.data.local.entity.BuiltInThemesEntity
 import com.bugiman.data.local.entity.CustomThemesEntity
 import com.bugiman.data.local.entity.HistoryEntity
 import com.bugiman.data.local.entity.InputState
-import com.bugiman.data.local.entity.SettingEntity
+//import com.bugiman.data.local.entity.SettingEntity
 
 @Database(
     entities = [
         HistoryEntity::class,
         InputState::class,
-        SettingEntity::class,
+//        SettingEntity::class,
         BuiltInThemesEntity::class,
         CustomThemesEntity::class
     ],
@@ -27,7 +27,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun historyDao(): HistoryDao
     abstract fun inputStateDao(): InputStateDao
-    abstract fun settingsDao(): SettingsDao
+//    abstract fun settingsDao(): SettingsDao
     abstract fun builtInThemesDao(): BuiltInThemesDao
     abstract fun customThemesDao(): CustomThemesDao
 

@@ -1,0 +1,20 @@
+package com.bugiman.domain.models.settings
+
+data class SettingModel(
+    var isDarkTheme: Boolean = true,
+    var isSystemTheme: Boolean = false,
+    var isShowHistoryButton: Boolean = true,
+    var systemFontSize: Boolean = true,
+    var displayFontSize: Float = 80f,
+    var isSwipeEnabled: Boolean = true,
+    var isNoteEnabled: Boolean = true,
+    var isShowIconButton: Boolean = true,
+    var isPlaySound: Boolean = false,
+    var isPlayVibration: Boolean = false,
+    var isKeepScreenOn: Boolean = false,
+    var isShowPlaceholderInput: Boolean = true,
+    var historyHeaderLayout: Int = 0,
+    var isTitleNote: Boolean = true,
+    var isClearHistoryOnClose: Boolean = false,
+    var isShowHistoryLastCalculation: Boolean = true,
+)

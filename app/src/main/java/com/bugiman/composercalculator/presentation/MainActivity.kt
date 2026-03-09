@@ -1,4 +1,4 @@
-package com.bugiman.composercalculator
+package com.bugiman.composercalculator.presentation
 
 import android.os.Bundle
 import android.view.WindowManager

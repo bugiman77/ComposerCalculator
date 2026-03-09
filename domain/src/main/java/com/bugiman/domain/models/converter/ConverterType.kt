@@ -1,4 +1,4 @@
-package com.bugiman.domain.models
+package com.bugiman.domain.models.converter
 
 sealed class ConverterType(val key: String) {
     object Angle: ConverterType(key = "angle")

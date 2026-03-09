@@ -9,7 +9,7 @@ class SettingsAllGetUseCase(
 ) {
 
     operator fun invoke(): Flow<SettingModel> {
-        return repository.getSettingsAll()
+        return repository.getSettings()
     }
 
 }

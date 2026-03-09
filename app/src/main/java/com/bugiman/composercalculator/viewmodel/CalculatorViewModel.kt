@@ -9,18 +9,19 @@ import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.bugiman.composercalculator.core.managers.SoundManager
 import com.bugiman.composercalculator.core.managers.VibrationManager
-import com.bugiman.composercalculator.data.local.db.AppDatabaseHistory
-import com.bugiman.composercalculator.data.local.db.dao.HistoryDao
-import com.bugiman.composercalculator.data.local.db.dao.InputStateDao
-import com.bugiman.composercalculator.data.local.db.entity.History
-import com.bugiman.composercalculator.data.local.db.entity.InputState
+//import com.bugiman.composercalculator.data.local.db.AppDatabaseHistory
+//import com.bugiman.composercalculator.data.local.db.dao.HistoryDao
+//import com.bugiman.composercalculator.data.local.db.dao.InputStateDao
+//import com.bugiman.composercalculator.data.local.db.entity.History
+//import com.bugiman.composercalculator.data.local.db.entity.InputState
+import com.bugiman.domain.models.history.HistoryModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class CalculatorViewModel(
+/*class CalculatorViewModel(
     application: Application,
     private val settingsViewModel: SettingsViewModel,
     private val soundManager: SoundManager,
@@ -42,8 +43,8 @@ class CalculatorViewModel(
     private val _note = MutableStateFlow(value = "")
     val note: StateFlow<String> = _note.asStateFlow()
 
-    private val _history = MutableStateFlow<List<History>>(value = emptyList())
-    val history: StateFlow<List<History>> = _history
+    private val _history = MutableStateFlow<List<HistoryModel>>(value = emptyList())
+    val history: StateFlow<List<HistoryModel>> = _history
 
     init {
         viewModelScope.launch {
@@ -339,7 +340,7 @@ class CalculatorViewModel(
 
     private suspend fun saveToDatabase(expression: String, result: String) {
         historyDao.insertItem(
-            item = History(
+            item = HistoryModel(
                 expression = expression,
                 result = result,
                 note = "",
@@ -348,4 +349,4 @@ class CalculatorViewModel(
         )
     }
 
-}
+}*/

@@ -1,29 +1,21 @@
 package com.bugiman.data.mapper
 
-import com.bugiman.data.local.entity.SettingEntity
-import com.bugiman.domain.models.SettingModel
+import com.bugiman.data.proto.SettingsProto
+import com.bugiman.domain.models.settings.SettingModel
 
-fun SettingEntity.toDomain(): SettingModel {
+fun SettingsProto.toDomain(): SettingModel {
     return SettingModel(
-        id = id,
         isDarkTheme = isDarkTheme,
         isSystemTheme = isSystemTheme,
-        showHistoryButton = showHistoryButton,
-        systemFontSize = systemFontSize,
-        displayFontSize = displayFontSize,
-        decimalFormat = decimalFormat,
-        isSaveHistoryData = isSaveHistoryData,
-        isSaveSettingsData = isSaveSettingsData,
+        isShowHistoryButton = isShowHistoryButton,
         isSwipeEnabled = isSwipeEnabled,
         isNoteEnabled = isNoteEnabled,
-        showIconButton = showIconButton,
-        playSound = playSound,
-        playVibration = playVibration,
-        bottomSpacer = bottomSpacer,
-        isAnimationAll = isAnimationAll,
-        keepScreenOn = keepScreenOn,
-        showPlaceholderInput = showPlaceholderInput,
-        historyHeaderLayout = historyHeaderLayout,
+        isShowIconButton = isShowIconButton,
+        isPlaySound = isPlaySound,
+        isPlayVibration = isPlayVibration,
+        isKeepScreenOn = isKeepScreenOn,
+        isShowPlaceholderInput = isShowPlaceholderInput,
+        historyHeaderLayout = headerLayoutValue,
         isTitleNote = isTitleNote,
         isClearHistoryOnClose = isClearHistoryOnClose,
         isShowHistoryLastCalculation = isShowHistoryLastCalculation,

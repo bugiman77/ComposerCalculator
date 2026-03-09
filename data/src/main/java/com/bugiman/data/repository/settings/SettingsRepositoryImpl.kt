@@ -3,7 +3,7 @@ package com.bugiman.data.repository.settings
 import androidx.datastore.core.DataStore
 import com.bugiman.data.mapper.toDomain
 import com.bugiman.data.proto.SettingsProto
-//import com.bugiman.data.mapper.toProto
+import com.bugiman.data.mapper.toProto
 import com.bugiman.domain.models.settings.SettingModel
 import com.bugiman.domain.repository.settings.SettingsRepository
 import kotlinx.coroutines.flow.Flow
@@ -20,13 +20,8 @@ class SettingsRepositoryImpl(
 
     override suspend fun updateSettings(transform: (SettingModel) -> SettingModel) {
         dataStore.updateData { currentProto ->
-            // 1. Превращаем текущий бинарный Proto в чистый Kotlin-объект
             val currentDomain = currentProto.toDomain()
-
-            // 2. Применяем трансформацию (то самое .copy() из Use Case)
             val updatedDomain = transform(currentDomain)
-
-            // 3. Собираем новый Proto-объект на основе обновленного Domain
             updatedDomain.toProto(currentProto)
         }
     }

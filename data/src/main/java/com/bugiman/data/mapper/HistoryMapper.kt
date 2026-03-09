@@ -1,7 +1,7 @@
 package com.bugiman.data.mapper
 
 import com.bugiman.data.local.entity.HistoryEntity
-import com.bugiman.domain.models.HistoryModel
+import com.bugiman.domain.models.history.HistoryModel
 
 fun HistoryEntity.toDomain(): HistoryModel {
     return HistoryModel(

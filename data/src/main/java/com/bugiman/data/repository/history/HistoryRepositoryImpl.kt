@@ -1,4 +1,4 @@
-package com.bugiman.data.repository
+package com.bugiman.data.repository.history
 
 import com.bugiman.data.local.dao.HistoryDao
 import com.bugiman.data.mapper.toDomain

@@ -1,6 +1,6 @@
 package com.bugiman.data.di
 
-import com.bugiman.data.repository.HistoryRepositoryImpl
+import com.bugiman.data.repository.history.HistoryRepositoryImpl
 import com.bugiman.domain.repository.history.HistoryRepository
 import dagger.Binds
 import dagger.Module

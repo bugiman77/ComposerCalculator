@@ -1,7 +1,7 @@
 package com.bugiman.domain.usecase.settings
 
-import com.bugiman.domain.models.SettingModel
-import com.bugiman.domain.repository.SettingsRepository
+import com.bugiman.domain.models.settings.SettingModel
+import com.bugiman.domain.repository.settings.SettingsRepository
 import kotlinx.coroutines.flow.Flow
 
 class SettingsAllGetUseCase(

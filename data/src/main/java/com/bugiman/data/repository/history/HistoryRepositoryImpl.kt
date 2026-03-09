@@ -5,6 +5,7 @@ import com.bugiman.data.mapper.toDomain
 import com.bugiman.data.mapper.toEntity
 import com.bugiman.domain.models.HistoryModel
 import com.bugiman.domain.repository.HistoryRepository
+import com.bugiman.domain.models.history.HistoryModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

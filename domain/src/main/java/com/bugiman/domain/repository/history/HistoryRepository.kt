@@ -1,6 +1,6 @@
-package com.bugiman.domain.repository
+package com.bugiman.domain.repository.history
 
-import com.bugiman.domain.models.HistoryModel
+import com.bugiman.domain.models.history.HistoryModel
 import kotlinx.coroutines.flow.Flow
 
 interface HistoryRepository {

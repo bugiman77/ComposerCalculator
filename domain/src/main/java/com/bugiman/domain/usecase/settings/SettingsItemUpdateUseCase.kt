@@ -8,7 +8,9 @@ class SettingsItemUpdateUseCase(
 ) {
 
     suspend operator fun invoke(settingModel: SettingModel) {
-        repository.updateSettingItem(settingModel)
+        repository.updateSettings { currentModel ->
+            settingModel
+        }
     }
 
 }

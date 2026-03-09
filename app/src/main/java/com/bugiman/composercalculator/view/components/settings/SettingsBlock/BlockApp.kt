@@ -28,7 +28,7 @@ fun App(
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                contentDescription = "Перейти",
+                contentDescription = "Перейти к информации о приложении",
                 tint = Color.Gray
             )
         }

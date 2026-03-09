@@ -1,6 +1,6 @@
 package com.bugiman.domain.usecase.history
 
-import com.bugiman.domain.repository.HistoryRepository
+import com.bugiman.domain.repository.history.HistoryRepository
 
 class HistoryItemCopyResultUseCase(
     private val repository: HistoryRepository

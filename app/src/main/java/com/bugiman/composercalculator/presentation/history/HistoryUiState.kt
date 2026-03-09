@@ -1,4 +1,4 @@
-package com.bugiman.composercalculator.presentation
+package com.bugiman.composercalculator.presentation.history
 
 import com.bugiman.domain.models.history.HistoryModel
 

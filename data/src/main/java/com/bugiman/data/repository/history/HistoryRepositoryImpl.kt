@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class HistoryRepositoryImpl @Inject constructor(
+class HistoryRepositoryImpl /*@Inject constructor*/(
     private val historyDao: HistoryDao
 ): HistoryRepository {
 
@@ -18,6 +18,10 @@ class HistoryRepositoryImpl @Inject constructor(
             .map { list ->
                 list.map { it.toDomain() }
             }
+    }
+
+    override fun getItemsCount(): Flow<Long> {
+        return historyDao.getHistoryItemCount()
     }
 
     override suspend fun getItem(itemId: Long): HistoryModel {

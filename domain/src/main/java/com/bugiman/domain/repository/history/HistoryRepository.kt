@@ -7,6 +7,8 @@ interface HistoryRepository {
 
     fun getItemsAll(): Flow<List<HistoryModel>>
 
+    fun getItemsCount(): Flow<Long>
+
     suspend fun getItem(itemId: Long): HistoryModel
 
     suspend fun deleteAll()

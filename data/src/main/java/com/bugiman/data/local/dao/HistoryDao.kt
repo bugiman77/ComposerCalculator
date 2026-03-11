@@ -30,4 +30,7 @@ interface HistoryDao {
     @Query(value = "UPDATE history SET note = :newNote WHERE id = :itemId")
     suspend fun updateNote(itemId: Long, newNote: String)
 
+    @Query("SELECT COUNT(*) FROM history")
+    fun getHistoryItemCount(): Flow<Long>
+
 }

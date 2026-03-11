@@ -1,4 +1,4 @@
-package com.bugiman.composercalculator.presentation
+package com.bugiman.composercalculator.presentation.main
 
 import android.os.Bundle
 import android.view.WindowManager
@@ -13,8 +13,6 @@ import com.bugiman.composercalculator.core.managers.SoundManager
 import com.bugiman.composercalculator.core.managers.VibrationManager
 import com.bugiman.composercalculator.navigation.AppNavigation
 import com.bugiman.composercalculator.ui.theme.ComposerCalculatorTheme
-import com.bugiman.composercalculator.viewmodel.CalculatorViewModel
-import com.bugiman.composercalculator.viewmodel.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

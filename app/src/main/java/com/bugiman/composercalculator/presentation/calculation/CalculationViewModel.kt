@@ -1,25 +1,16 @@
-package com.bugiman.composercalculator.viewmodel
+package com.bugiman.composercalculator.presentation.calculation
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.application
-import androidx.lifecycle.viewModelScope
-import com.chaquo.python.PyException
-import com.chaquo.python.Python
-import com.chaquo.python.android.AndroidPlatform
-import com.bugiman.composercalculator.core.managers.SoundManager
-import com.bugiman.composercalculator.core.managers.VibrationManager
-//import com.bugiman.composercalculator.data.local.db.AppDatabaseHistory
-//import com.bugiman.composercalculator.data.local.db.dao.HistoryDao
-//import com.bugiman.composercalculator.data.local.db.dao.InputStateDao
-//import com.bugiman.composercalculator.data.local.db.entity.History
-//import com.bugiman.composercalculator.data.local.db.entity.InputState
-import com.bugiman.domain.models.history.HistoryModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import androidx.lifecycle.ViewModel
+
+class CalculationViewModel(
+
+): ViewModel() {
+
+
+
+}
+
+
 
 /*class CalculatorViewModel(
     application: Application,

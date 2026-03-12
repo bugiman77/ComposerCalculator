@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bugiman.domain.models.history.HistoryModel
 import com.bugiman.domain.usecase.history.HistoryAllDeleteUseCase
 import com.bugiman.domain.usecase.history.HistoryAllGetUseCase
+import com.bugiman.domain.usecase.history.HistoryCountUseCase
 import com.bugiman.domain.usecase.history.HistoryItemCopyExpressionUseCase
 import com.bugiman.domain.usecase.history.HistoryItemCopyResultUseCase
 import com.bugiman.domain.usecase.history.HistoryItemDeleteUseCase
@@ -25,13 +26,15 @@ class HistoryViewModel /*@Inject constructor*/(
     private val historyItemCopyResultUseCase: HistoryItemCopyResultUseCase,
     private val historyItemDeleteUseCase: HistoryItemDeleteUseCase,
     private val historyItemEditUseCase: HistoryItemEditUseCase,
-    private val historyItemUpdateNoteUseCase: HistoryItemUpdateNoteUseCase
+    private val historyItemUpdateNoteUseCase: HistoryItemUpdateNoteUseCase,
+    private val historyCountUseCase: HistoryCountUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HistoryUiState())
     val uiState: StateFlow<HistoryUiState> = _uiState.asStateFlow()
 
     val history = historyAllGetUseCase()
+    val historyCount = historyCountUseCase()
 
     fun deleteAll() {
         viewModelScope.launch {

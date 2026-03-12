@@ -17,8 +17,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
-class HistoryViewModel @Inject constructor(
+//@HiltViewModel
+class HistoryViewModel /*@Inject constructor*/(
     private val historyAllGetUseCase: HistoryAllGetUseCase,
     private val historyAllDeleteUseCase: HistoryAllDeleteUseCase,
     private val historyItemCopyExpressionUseCase: HistoryItemCopyExpressionUseCase,

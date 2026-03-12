@@ -77,8 +77,8 @@ object DatabaseModule {
     @Provides
     fun provideInputStateDao(db: AppDatabase) = db.inputStateDao()
 
-    @Provides
-    fun provideSettingsDao(db: AppDatabase) = db.settingsDao()
+/*    @Provides
+    fun provideSettingsDao(db: AppDatabase) = db.settingsDao()*/
 
     @Provides
     fun provideBuiltInThemesDao(db: AppDatabase) = db.builtInThemesDao()

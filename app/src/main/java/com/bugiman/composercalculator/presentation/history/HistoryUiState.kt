@@ -7,5 +7,6 @@ data class HistoryUiState(
     val isNoteEnabled: Boolean = false,
     val isSwipeEnabled: Boolean = false,
     val isTitleNote: Boolean = false,
-    val headerLayout: Int = 0
+    val headerLayout: Int = 0,
+    val count: Long = 0L
 )

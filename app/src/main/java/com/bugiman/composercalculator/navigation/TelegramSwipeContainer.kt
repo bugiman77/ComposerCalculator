@@ -79,14 +79,14 @@ fun TelegramSwipeContainer(navigator: Navigator) {
 
                 awaitPointerEventScope {
                     while (true) {
-                        // 1. Ждем касания
-                        val down = awaitFirstDown(requireUnconsumed = false)
                         var totalDragX = 0f
                         var totalDragY = 0f
-                        isDragging = false
-                        var isVerticalScrollActive = false // Флаг: пользователь уже скроллит вертикально
 
-                        // 2. Слушаем перемещения
+                        // Локальные флаги для этого конкретного касания
+                        var isDragging = false
+                        var isVerticalLocked = false
+                        var hasDecided = false // Флаг: принято ли решение о направлении
+
                         do {
                             val event = awaitPointerEvent()
                             val dragChange = event.changes.first()
@@ -97,36 +97,42 @@ fun TelegramSwipeContainer(navigator: Navigator) {
                             totalDragX += deltaX
                             totalDragY += kotlin.math.abs(deltaY)
 
-                            // ФАЗА РАСПОЗНАВАНИЯ:
-                            // Если мы еще не начали драг, проверяем, куда идет палец
-                            if (!isDragging && !isVerticalScrollActive) {
-                                // Если вертикальное смещение стало значительным раньше горизонтального
-                                if (totalDragY > touchSlop && totalDragY > kotlin.math.abs(totalDragX)) {
-                                    isVerticalScrollActive = true
-                                }
-                                // Если горизонтальное смещение (вправо!) превысило порог и оно доминирует
-                                else if (totalDragX > touchSlop && totalDragX > totalDragY) {
-                                    isDragging = true
+                            // 1. ПРИНЯТИЕ РЕШЕНИЯ (Decision Phase)
+                            if (!hasDecided) {
+                                // Ждем, пока суммарное движение превысит небольшой порог (напр. 8-10 пикселей)
+                                if (kotlin.math.abs(totalDragX) > 10f || totalDragY > 10f) {
+                                    hasDecided = true
+                                    // Если горизонталь явно доминирует над вертикалью
+                                    if (totalDragX > 0 && totalDragX > totalDragY * 1.2f) {
+                                        isDragging = true
+                                        isVerticalLocked = false
+                                    } else {
+                                        // Иначе отдаем приоритет вертикальному скроллу
+                                        isDragging = false
+                                        isVerticalLocked = true
+                                    }
                                 }
                             }
 
-                            // РЕЖИМ СВАЙПА НАЗАД:
-                            if (isDragging && !isVerticalScrollActive) {
+                            // 2. ИСПОЛНЕНИЕ (Execution Phase)
+                            if (isDragging) {
+                                // Если мы решили, что это свайп назад — МЫ ПОГЛОЩАЕМ ВСЁ.
+                                // Даже если палец пойдет под 45 градусов, список этого не увидит.
                                 val newOffset = (offsetX.value + deltaX).coerceAtLeast(0f)
                                 scope.launch { offsetX.snapTo(newOffset) }
 
-                                // Поглощаем жест полностью — список под ним ничего не почувствует
+                                // Критически важно: consume() блокирует передачу жеста детям
                                 dragChange.consume()
+                            } else if (isVerticalLocked) {
+                                // Если решили, что это скролл — мы НИЧЕГО не трогаем,
+                                // позволяя LazyColumn забрать жест себе.
+                                // offsetX остается 0.
                             }
-
-                            // Если активен вертикальный скролл — мы НИЧЕГО не консюмим,
-                            // и offsetX остается 0. Жест уходит в LazyColumn/Settings.
 
                         } while (event.changes.any { it.pressed })
 
-                        // 3. Завершение
+                        // 3. ЗАВЕРШЕНИЕ (После отпускания пальца)
                         if (isDragging) {
-                            isDragging = false
                             if (offsetX.value > screenWidthPx / 4) {
                                 scope.launch {
                                     offsetX.animateTo(screenWidthPx, tween(250))
@@ -137,6 +143,9 @@ fun TelegramSwipeContainer(navigator: Navigator) {
                                 scope.launch { offsetX.animateTo(0f, spring()) }
                             }
                         }
+                        // Сбрасываем флаги для следующего касания
+                        isDragging = false
+                        hasDecided = false
                     }
                 }
             }

@@ -46,4 +46,8 @@ class HistoryRepositoryImpl /*@Inject constructor*/(
         historyDao.updateNote(itemId = id, newNote = newNote)
     }
 
+    override suspend fun saveItem(historyModel: HistoryModel) {
+        historyDao.insertItem(item = historyModel.toEntity())
+    }
+
 }

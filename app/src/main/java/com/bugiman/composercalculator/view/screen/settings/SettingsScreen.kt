@@ -12,11 +12,15 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bugiman.composercalculator.presentation.calculation.CalculationViewModel
+import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.view.components.general.settings.CustomTopBar
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.App
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.AppTheme
@@ -24,8 +28,6 @@ import com.bugiman.composercalculator.view.components.settings.SettingsBlock.App
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.Display
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.HistoryComputing
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.SoundAndVibration
-import com.bugiman.composercalculator.viewmodel.CalculatorViewModel
-import com.bugiman.composercalculator.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,7 +35,7 @@ import kotlinx.coroutines.launch
 fun SettingsScreen(
     title: String,
     viewModelSettings: SettingsViewModel = viewModel(),
-    viewModelCalculation: CalculatorViewModel = viewModel(),
+    viewModelCalculation: CalculationViewModel = viewModel(),
     onNavigateBack: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onNavigateToCreateThemes: () -> Unit,
@@ -41,6 +43,8 @@ fun SettingsScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
+
+    val settingsModel by viewModelSettings.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         containerColor = Color(0xFF000000),
@@ -55,6 +59,7 @@ fun SettingsScreen(
                     .padding(top = 120.dp, start = 16.dp, end = 16.dp)
             ) {
                 AppTheme(
+                    settingsModel = settingsModel,
                     viewModelSettings = viewModelSettings,
                     onNavigateToCreateThemes = onNavigateToCreateThemes,
                     onNavigateToViewThemes = onNavigateToViewThemes
@@ -62,26 +67,37 @@ fun SettingsScreen(
 
                 Spacer(modifier = Modifier.height(18.dp))
 
-                SoundAndVibration(viewModelSettings = viewModelSettings)
-
-                Spacer(modifier = Modifier.height(18.dp))
-
-                Appearance(viewModelSettings = viewModelSettings)
-
-                Spacer(modifier = Modifier.height(18.dp))
-
-                HistoryComputing(
-                    viewModelSettings = viewModelSettings,
-                    viewModelCalculation = viewModelCalculation,
+                SoundAndVibration(
+                    settingsModel = settingsModel,
+                    viewModelSettings = viewModelSettings
                 )
 
                 Spacer(modifier = Modifier.height(18.dp))
 
-                Display(viewModelSettings = viewModelSettings)
+                Appearance(
+                    settingsModel = settingsModel,
+                    viewModelSettings = viewModelSettings
+                )
+
+                /*Spacer(modifier = Modifier.height(18.dp))
+
+                HistoryComputing(
+                    viewModelSettings = viewModelSettings,
+                    viewModelCalculation = viewModelCalculation,
+                )*/
 
                 Spacer(modifier = Modifier.height(18.dp))
 
-                App(onNavigateToAbout = onNavigateToAbout)
+                Display(
+                    settingsModel = settingsModel,
+                    viewModelSettings = viewModelSettings
+                )
+
+                Spacer(modifier = Modifier.height(18.dp))
+
+                App(
+                    onNavigateToAbout = onNavigateToAbout
+                )
 
                 // Дополнительный отступ снизу для красоты
                 Spacer(modifier = Modifier.height(32.dp))

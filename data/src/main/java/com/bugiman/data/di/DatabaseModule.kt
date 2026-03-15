@@ -5,21 +5,21 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.bugiman.data.local.database.AppDatabase
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+//import dagger.Module
+//import dagger.Provides
+//import dagger.hilt.InstallIn
+//import dagger.hilt.android.qualifiers.ApplicationContext
+//import dagger.hilt.components.SingletonComponent
+//import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
+//@Module
+//@InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
-    @Provides
-    @Singleton
+//    @Provides
+//    @Singleton
     fun provideDatabase(
-        @ApplicationContext context: Context
+        /*@ApplicationContext*/ context: Context
     ): AppDatabase {
         return Room.databaseBuilder(
             context,
@@ -71,18 +71,18 @@ object DatabaseModule {
         }
     }
 
-    @Provides
+//    @Provides
     fun provideHistoryDao(db: AppDatabase) = db.historyDao()
 
-    @Provides
+//    @Provides
     fun provideInputStateDao(db: AppDatabase) = db.inputStateDao()
 
 /*    @Provides
     fun provideSettingsDao(db: AppDatabase) = db.settingsDao()*/
 
-    @Provides
+//    @Provides
     fun provideBuiltInThemesDao(db: AppDatabase) = db.builtInThemesDao()
 
-    @Provides
+//    @Provides
     fun provideCustomThemesDao(db: AppDatabase) = db.customThemesDao()
 }

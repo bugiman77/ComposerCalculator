@@ -1,15 +1,88 @@
 package com.bugiman.composercalculator.presentation.calculation
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.bugiman.composercalculator.core.managers.SoundManager
+import com.bugiman.composercalculator.core.managers.VibrationManager
+import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
+import com.bugiman.domain.models.history.HistoryModel
+import com.bugiman.domain.usecase.calculation.CalculateExpressionUseCase
+import com.bugiman.domain.usecase.history.HistoryItemSaveUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
-class CalculationViewModel(
+class CalculatorViewModel(
+    private val calculateUseCase: CalculateExpressionUseCase,
+    private val saveHistoryUseCase: HistoryItemSaveUseCase,
+    private val settingsViewModel: SettingsViewModel,
+    private val soundManager: SoundManager,
+    private val vibrationManager: VibrationManager
+) : ViewModel() {
 
-): ViewModel() {
+    private val _expression = MutableStateFlow("")
+    val expression = _expression.asStateFlow()
 
+    // Подписка на историю напрямую из UseCase (Flow)
+//    val history: StateFlow<List<HistoryModel>> = getHistoryUseCase()
+//        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
+    fun onInputDigit(digit: String) {
+        triggerFeedback()
+        val current = _expression.value
 
+        // Ваша логика с проверкой скобок и нулей
+        if (current.isNotEmpty() && current.last() == ')') {
+            _expression.value += "*$digit"
+        } else {
+            // ... (остальная логика из старого метода onInputDigit)
+            _expression.value += digit
+        }
+    }
+
+    fun onCalculate() {
+        val currentExpression = _expression.value
+        if (currentExpression.isBlank()) return
+
+        viewModelScope.launch {
+            triggerFeedback()
+
+            val result = calculateUseCase(currentExpression)
+
+            result
+                .onSuccess { successValue ->
+                    _expression.value = successValue
+                    // Сохраняем в историю через UseCase
+                    saveHistoryUseCase(
+                        HistoryModel(
+                            expression = currentExpression,
+                            result = result.toString(),
+                        )
+                    )
+                }.onFailure {
+                    // Обработка ошибки
+                }
+        }
+    }
+
+    private fun triggerFeedback() {
+        val settings = settingsViewModel.uiState.value
+        if (settings.isPlaySound) soundManager.playClick()
+        if (settings.isPlayVibration) vibrationManager.vibrateClick()
+    }
+
+    fun clear() {
+        triggerFeedback()
+        _expression.value = ""
+    }
+
+    fun removeLast() {
+        triggerFeedback()
+        if (_expression.value.isNotEmpty()) {
+            _expression.value = _expression.value.dropLast(1)
+        }
+    }
 }
-
 
 
 /*class CalculatorViewModel(

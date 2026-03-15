@@ -7,7 +7,7 @@ import com.bugiman.domain.models.history.HistoryModel
 import com.bugiman.domain.repository.history.HistoryRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
+//import javax.inject.Inject
 
 class HistoryRepositoryImpl /*@Inject constructor*/(
     private val historyDao: HistoryDao

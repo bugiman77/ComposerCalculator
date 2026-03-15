@@ -4,13 +4,13 @@ import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
+import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.view.screen.main.CalculatorScreen
 import com.bugiman.composercalculator.view.screen.settings.AboutScreen
 import com.bugiman.composercalculator.view.screen.settings.CreateThemeAppUser
 import com.bugiman.composercalculator.view.screen.settings.PrivacyPolicyScreen
 import com.bugiman.composercalculator.view.screen.settings.SettingsScreen
-import com.bugiman.composercalculator.viewmodel.CalculatorViewModel
-import com.bugiman.composercalculator.viewmodel.SettingsViewModel
 
 class CalculatorScreen(
     val settingsViewModel: SettingsViewModel,

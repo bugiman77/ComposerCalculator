@@ -5,38 +5,35 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.ui.theme.iOSGray
 import com.bugiman.composercalculator.ui.theme.iOSGreen
 import com.bugiman.composercalculator.view.components.calculation.SettingsGroup
 import com.bugiman.composercalculator.view.components.calculation.SettingsRow
 import com.bugiman.composercalculator.view.components.general.settings.SettingsSelectionRow
-import com.bugiman.composercalculator.viewmodel.SettingsViewModel
+import com.bugiman.domain.models.settings.SettingModel
 
 @Composable
 fun Appearance(
     modifier: Modifier = Modifier,
+    settingsModel: SettingModel,
     viewModelSettings: SettingsViewModel
 ) {
-
-    val showIconButton = viewModelSettings.showIconButton.collectAsState()
-    val bottomSpacer = viewModelSettings.bottomSpacer.collectAsState()
-    val showPlaceholderInput = viewModelSettings.showPlaceholderInput.collectAsState()
 
     SettingsGroup(title = "Внешний вид") {
 
         SettingsSelectionRow(
             title = "Кнопки/Иконки",
-            subtitle = if (showIconButton.value) "Будут отображаться иконки в верхней части главного экрана"
+            subtitle = if (settingsModel.isShowHistoryButton) "Будут отображаться иконки в верхней части главного экрана"
                         else "Будут отображаться кнопки в верхней части главного экрана",
             option1Text = "Кнопки",
             option2Text = "Иконки",
-            selectedOption = if (showIconButton.value) 1 else 0,
-            onClick1 = { viewModelSettings.switchIconButton(switch = false) },
-            onClick2 = { viewModelSettings.switchIconButton(switch = true) }
+            selectedOption = if (settingsModel.isShowHistoryButton) 1 else 0,
+            onClick1 = { viewModelSettings.updateSettings { it.copy(isShowIconButton = false) } },
+            onClick2 = { viewModelSettings.updateSettings { it.copy(isShowIconButton = true) } }
         )
 
         HorizontalDivider(color = Color(color = 0xFF3A3A3C))
@@ -47,8 +44,10 @@ fun Appearance(
             modifier = modifier.padding(vertical = 4.dp)
         ) {
             Switch(
-                checked = showPlaceholderInput.value,
-                onCheckedChange = { viewModelSettings.toggleShowPlaceholderInput(enabled = it) },
+                checked = settingsModel.isShowPlaceholderInput,
+                onCheckedChange = { viewModelSettings.updateSettings { current ->
+                    current.copy(isShowPlaceholderInput = it)
+                }},
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
                     checkedTrackColor = iOSGreen,

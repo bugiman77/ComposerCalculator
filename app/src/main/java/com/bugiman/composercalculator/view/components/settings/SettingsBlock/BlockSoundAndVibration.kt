@@ -9,32 +9,32 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.ui.theme.iOSGray
 import com.bugiman.composercalculator.ui.theme.iOSGreen
 import com.bugiman.composercalculator.view.components.calculation.SettingsGroup
 import com.bugiman.composercalculator.view.components.calculation.SettingsRow
-import com.bugiman.composercalculator.viewmodel.SettingsViewModel
+import com.bugiman.domain.models.settings.SettingModel
 
 @Composable
 fun SoundAndVibration(
     modifier: Modifier = Modifier,
+    settingsModel: SettingModel,
     viewModelSettings: SettingsViewModel,
 ) {
 
-    val isPlaySound = viewModelSettings.playSound.collectAsState()
-    val isPlayVibration = viewModelSettings.playVibration.collectAsState()
-
     SettingsGroup(title = "Отклик") {
 
-//        if (mode != SoundMode.SILENT || mode != SoundMode.VIBRATE) {
         SettingsRow(
             title = "Звук",
             subtitle = "Воспроизводить звук при нажатии кнопок",
             modifier = modifier.padding(vertical = 4.dp)
         ) {
             Switch(
-                checked = isPlaySound.value,
-                onCheckedChange = { viewModelSettings.onClickPlaySound(isPlay = it) },
+                checked = settingsModel.isPlaySound,
+                onCheckedChange = { enabled ->
+                    viewModelSettings.updateSettings { it.copy(isPlaySound = enabled) }
+                },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
                     checkedTrackColor = iOSGreen,
@@ -43,7 +43,6 @@ fun SoundAndVibration(
                     uncheckedBorderColor = Color.Transparent
                 )
             )
-//            }
         }
 
         HorizontalDivider(color = Color(color = 0xFF3A3A3C))
@@ -54,8 +53,10 @@ fun SoundAndVibration(
             modifier = Modifier.padding(vertical = 4.dp)
         ) {
             Switch(
-                checked = isPlayVibration.value,
-                onCheckedChange = { viewModelSettings.onClickPlayVibration(isPlay = it) },
+                checked = settingsModel.isPlayVibration,
+                onCheckedChange = { enabled ->
+                    viewModelSettings.updateSettings { it.copy(isPlayVibration = enabled) }
+                },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
                     checkedTrackColor = iOSGreen,

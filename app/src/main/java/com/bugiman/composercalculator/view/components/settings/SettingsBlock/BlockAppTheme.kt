@@ -14,22 +14,21 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.ui.theme.iOSGray
 import com.bugiman.composercalculator.ui.theme.iOSGreen
 import com.bugiman.composercalculator.view.components.calculation.SettingsGroup
 import com.bugiman.composercalculator.view.components.calculation.SettingsRow
-import com.bugiman.composercalculator.viewmodel.SettingsViewModel
+import com.bugiman.domain.models.settings.SettingModel
 
 @Composable
 fun AppTheme(
     modifier: Modifier = Modifier,
+    settingsModel: SettingModel,
     viewModelSettings: SettingsViewModel,
     onNavigateToCreateThemes: () -> Unit,
     onNavigateToViewThemes: () -> Unit,
 ) {
-
-    val isDarkTheme = viewModelSettings.isDarkTheme.collectAsState()
-    val isSystemTheme = viewModelSettings.isSystemTheme.collectAsState()
 
     SettingsGroup(title = "Тема приложения") {
         SettingsRow(
@@ -38,8 +37,10 @@ fun AppTheme(
             modifier = modifier.padding(vertical = 4.dp)
         ) {
             Switch(
-                checked = isSystemTheme.value,
-                onCheckedChange = { viewModelSettings.onSystemThemeChange(isSystem = it) },
+                checked = settingsModel.isSystemTheme,
+                onCheckedChange = { enabled ->
+                    viewModelSettings.updateSettings { it.copy(isSystemTheme = enabled) }
+                },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
                     checkedTrackColor = iOSGreen,
@@ -50,7 +51,7 @@ fun AppTheme(
             )
         }
 
-        if (!isSystemTheme.value) {
+        if (!settingsModel.isSystemTheme) {
             HorizontalDivider(color = Color(color = 0xFF3A3A3C))
 
             SettingsRow(
@@ -59,8 +60,10 @@ fun AppTheme(
                 modifier = Modifier.padding(vertical = 4.dp)
             ) {
                 Switch(
-                    checked = isDarkTheme.value,
-                    onCheckedChange = { viewModelSettings.onDarkThemeChange(isDark = it) },
+                    checked = settingsModel.isDarkTheme,
+                    onCheckedChange = { enabled ->
+                        viewModelSettings.updateSettings { it.copy(isDarkTheme = enabled) }
+                    },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.White,
                         checkedTrackColor = iOSGreen,

@@ -9,20 +9,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.ui.theme.iOSGray
 import com.bugiman.composercalculator.ui.theme.iOSGreen
 import com.bugiman.composercalculator.view.components.calculation.SettingsGroup
 import com.bugiman.composercalculator.view.components.calculation.SettingsRow
-import com.bugiman.composercalculator.viewmodel.SettingsViewModel
+import com.bugiman.domain.models.settings.SettingModel
 
 @Composable
 fun SavingData(
     modifier: Modifier = Modifier,
+    settingsModel: SettingModel,
     viewModelSettings: SettingsViewModel,
 ) {
-
-    val isSaveHistoryData = viewModelSettings.isSaveHistoryData.collectAsState()
-    val isSaveSettingsData = viewModelSettings.isSaveSettingsData.collectAsState()
 
     SettingsGroup(title = "Сохранение данных") {
         SettingsRow(
@@ -31,8 +30,8 @@ fun SavingData(
             modifier = modifier.padding(vertical = 4.dp)
         ) {
             Switch(
-                checked = isSaveSettingsData.value,
-                onCheckedChange = { viewModelSettings.onSaveSettingsDataChange(isEnabled = it) },
+                checked = false,
+                onCheckedChange = { },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
                     checkedTrackColor = iOSGreen,
@@ -51,8 +50,8 @@ fun SavingData(
             modifier = Modifier.padding(vertical = 4.dp)
         ) {
             Switch(
-                checked = isSaveHistoryData.value,
-                onCheckedChange = { viewModelSettings.onSaveHistoryDataChange(isEnabled = it) },
+                checked = false,
+                onCheckedChange = { },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
                     checkedTrackColor = iOSGreen,

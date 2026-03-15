@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -12,12 +14,22 @@ android {
         version = release(36)
     }
 
+    buildFeatures {
+        buildConfig = true // Включаем генерацию BuildConfig
+    }
+
+    val localProperties = Properties().apply {
+        val file = rootProject.file("local.properties")
+        if (file.exists()) load(file.inputStream())
+    }
+
     defaultConfig {
         minSdk = 29
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
 
+        buildConfigField("String", "CURRENCY_API_KEY", "\"${localProperties.getProperty("CURRENCY_API_KEY")}\"")
     }
 
     buildTypes {

@@ -11,5 +11,4 @@ interface ConverterRepository {
         to: String
     ): Result<Double>
 
-//    suspend fun getUnits(type: ConverterType): List<String>
 }

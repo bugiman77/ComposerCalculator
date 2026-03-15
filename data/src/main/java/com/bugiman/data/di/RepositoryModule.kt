@@ -2,18 +2,18 @@ package com.bugiman.data.di
 
 import com.bugiman.data.repository.history.HistoryRepositoryImpl
 import com.bugiman.domain.repository.history.HistoryRepository
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+//import dagger.Binds
+//import dagger.Module
+//import dagger.hilt.InstallIn
+//import dagger.hilt.components.SingletonComponent
+//import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
+//@Module
+//@InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
 
-    @Binds
-    @Singleton
+//    @Binds
+//    @Singleton
     abstract fun bindHistoryRepository(
         impl: HistoryRepositoryImpl
     ): HistoryRepository

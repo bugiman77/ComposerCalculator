@@ -15,4 +15,5 @@ data class SettingModel(
     var isTitleNote: Boolean = true,
     var isClearHistoryOnClose: Boolean = false,
     var isShowHistoryLastCalculation: Boolean = true,
+    var historyHeaderLayout: Int = 0,
 )

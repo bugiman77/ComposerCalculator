@@ -1,282 +1,32 @@
 package com.bugiman.composercalculator.presentation.settings
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.bugiman.domain.models.settings.SettingModel
+import com.bugiman.domain.usecase.settings.SettingsAllGetUseCase
+import com.bugiman.domain.usecase.settings.SettingsItemUpdateUseCase
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class SettingsViewModel(
+    private val getSettingsUseCase: SettingsAllGetUseCase,
+    private val updateSettingsUseCase: SettingsItemUpdateUseCase
+) : ViewModel() {
 
-): ViewModel() {
+    val uiState: StateFlow<SettingModel> = getSettingsUseCase()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = SettingModel() // Дефолтные значения до загрузки из БД/Prefs
+        )
 
-
+    fun updateSettings(transform: (SettingModel) -> SettingModel) {
+        viewModelScope.launch {
+            val newSettings = transform(uiState.value)
+            updateSettingsUseCase(newSettings)
+        }
+    }
 
 }
-
-
-
-
-/*class SettingsViewModel(
-    application: Application,
-) : AndroidViewModel(application) {
-
-    private val settingsDao: SettingsDao =
-        AppDatabaseSetting.getDatabase(context = application).settingsDao()
-
-    private val inputStateDao: InputStateDao = AppDatabaseHistory.getDatabase(context = application).inputStateDao()
-
-    private val _isDarkTheme = MutableStateFlow(value = true)
-    val isDarkTheme: StateFlow<Boolean> = _isDarkTheme
-
-    private val _isSystemTheme = MutableStateFlow(value = true)
-    val isSystemTheme: StateFlow<Boolean> = _isSystemTheme
-
-    private val _showHistoryButton = MutableStateFlow(value = true)
-    val showHistoryButton: StateFlow<Boolean> = _showHistoryButton
-
-    private val _systemFontSize = MutableStateFlow(value = true)
-    val systemFontSize: StateFlow<Boolean> = _systemFontSize
-
-    private val _displayFontSize = MutableStateFlow(value = 80f)
-    val displayFontSize: StateFlow<Float> = _displayFontSize
-
-    private val _decimalFormat = MutableStateFlow(value = "1,234.56")
-    val decimalFormat: StateFlow<String> = _decimalFormat
-
-    private val _isSaveHistoryData = MutableStateFlow(value = true)
-    val isSaveHistoryData: StateFlow<Boolean> = _isSaveHistoryData
-
-    private val _isSaveSettingsData = MutableStateFlow(value = true)
-    val isSaveSettingsData: StateFlow<Boolean> = _isSaveSettingsData
-
-    private val _isSwipeEnabled = MutableStateFlow(value = true)
-    val isSwipeEnabled: StateFlow<Boolean> = _isSwipeEnabled
-
-    private val _isNoteEnabled = MutableStateFlow(value = true)
-    val isNoteEnabled: StateFlow<Boolean> = _isNoteEnabled
-
-    private val _showIconButton = MutableStateFlow(value = true)
-    val showIconButton: StateFlow<Boolean> = _showIconButton
-
-    private val _playSound = MutableStateFlow(value = false)
-    val playSound: StateFlow<Boolean> = _playSound
-
-    private val _playVibration = MutableStateFlow(value = false)
-    val playVibration: StateFlow<Boolean> = _playVibration
-
-    private val _bottomSpacer = MutableStateFlow(value = 24)
-    val bottomSpacer: StateFlow<Int> = _bottomSpacer
-
-    private val _isAnimationAll = MutableStateFlow(value = false)
-    val isAnimationAll: StateFlow<Boolean> = _isAnimationAll
-
-    private val _keepScreenOn = MutableStateFlow(value = false)
-    val keepScreenOn: StateFlow<Boolean> = _keepScreenOn
-
-    private val _showPlaceholderInput = MutableStateFlow(value = true)
-    val showPlaceholderInput: StateFlow<Boolean> = _showPlaceholderInput
-
-    private val _historyHeaderLayout = MutableStateFlow(value = 0)
-    val historyHeaderLayout: StateFlow<Int> = _historyHeaderLayout
-
-    private val _isTitleNote = MutableStateFlow(value = true)
-    val isTitleNote: StateFlow<Boolean> = _isTitleNote
-
-    private val _isClearHistoryOnClose = MutableStateFlow(value = false)
-    val isClearHistoryOnClose: StateFlow<Boolean> = _isClearHistoryOnClose
-
-    private val _isShowHistoryLastCalculation = MutableStateFlow(value = true)
-    val isShowHistoryLastCalculation: StateFlow<Boolean> = _isShowHistoryLastCalculation
-
-    init {
-        viewModelScope.launch {
-            loadSettings()
-        }
-    }
-
-    private suspend fun loadSettings() {
-        val settings = settingsDao.getSettings()
-        settings?.let {
-            _isDarkTheme.value = it.isDarkTheme
-            _isSystemTheme.value = it.isSystemTheme
-            _showHistoryButton.value = it.showHistoryButton
-            _systemFontSize.value = it.systemFontSize
-            _displayFontSize.value = it.displayFontSize
-            _decimalFormat.value = it.decimalFormat
-            _isSaveHistoryData.value = it.isSaveHistoryData
-            _isSaveSettingsData.value = it.isSaveSettingsData
-            _isSwipeEnabled.value = it.isSwipeEnabled
-            _isNoteEnabled.value = it.isNoteEnabled
-            _showIconButton.value = it.showIconButton
-            _playSound.value = it.playSound
-            _playVibration.value = it.playVibration
-            _bottomSpacer.value = it.bottomSpacer
-            _isAnimationAll.value = it.isAnimationAll
-            _keepScreenOn.value = it.keepScreenOn
-            _showPlaceholderInput.value = it.showPlaceholderInput
-            _historyHeaderLayout.value = it.historyHeaderLayout
-            _isTitleNote.value = it.isTitleNote
-            _isClearHistoryOnClose.value = it.isClearHistoryOnClose
-            _isShowHistoryLastCalculation.value = it.isShowHistoryLastCalculation
-        }
-    }
-
-    // Функции для сохранения изменений
-    fun onDarkThemeChange(isDark: Boolean) {
-        viewModelScope.launch {
-            saveSetting { _isDarkTheme.value = isDark }
-        }
-    }
-
-    fun onSystemThemeChange(isSystem: Boolean) {
-        viewModelScope.launch {
-            saveSetting { _isSystemTheme.value = isSystem }
-        }
-    }
-
-    fun onShowHistoryChange(show: Boolean) {
-        viewModelScope.launch {
-            saveSetting { _showHistoryButton.value = show }
-        }
-    }
-
-    fun onSystemFontSizeChange(isEnable: Boolean) {
-        viewModelScope.launch {
-            saveSetting { _systemFontSize.value = isEnable }
-        }
-    }
-
-    fun onFontSizeChange(size: Float) {
-        viewModelScope.launch {
-            saveSetting { _displayFontSize.value = size }
-        }
-    }
-
-    fun onDecimalFormatChange(format: String) {
-        viewModelScope.launch {
-            saveSetting { _decimalFormat.value = format }
-        }
-    }
-
-    fun onSaveHistoryDataChange(isEnabled: Boolean) {
-        viewModelScope.launch {
-            saveSetting { _isSaveHistoryData.value = isEnabled }
-        }
-    }
-
-    fun onSaveSettingsDataChange(isEnabled: Boolean) {
-        viewModelScope.launch {
-            saveSetting { _isSaveSettingsData.value = isEnabled }
-        }
-    }
-
-    fun onSaveSwipeDeleteItem(isEnabled: Boolean) {
-        viewModelScope.launch {
-            saveSetting { _isSwipeEnabled.value = isEnabled }
-        }
-    }
-
-    fun onSaveNoteItem(isEnabled: Boolean) {
-        viewModelScope.launch {
-            saveSetting { _isNoteEnabled.value = isEnabled }
-        }
-    }
-
-    fun switchIconButton(switch: Boolean) {
-        viewModelScope.launch {
-            saveSetting { _showIconButton.value = switch }
-        }
-    }
-
-    fun onClickPlaySound(isPlay: Boolean) {
-        viewModelScope.launch {
-            saveSetting { _playSound.value = isPlay }
-        }
-    }
-
-    fun onClickPlayVibration(isPlay: Boolean) {
-        viewModelScope.launch {
-            saveSetting { _playVibration.value = isPlay }
-        }
-    }
-
-    fun onBottomChangeChange(spacer: Int) {
-        viewModelScope.launch {
-            saveSetting { _bottomSpacer.value = spacer }
-        }
-    }
-
-    fun isAnimationAllChange(enable: Boolean) {
-        viewModelScope.launch {
-            saveSetting { _isAnimationAll.value = enable }
-        }
-    }
-
-    fun toggleKeepScreenOn(enabled: Boolean) {
-        viewModelScope.launch {
-            saveSetting { _keepScreenOn.value = enabled }
-        }
-    }
-
-    fun toggleShowPlaceholderInput(enabled: Boolean) {
-        viewModelScope.launch {
-            saveSetting { _showPlaceholderInput.value = enabled }
-        }
-    }
-
-    fun toggleHistoryHeaderLayout(layout: Int) {
-        viewModelScope.launch {
-            saveSetting { _historyHeaderLayout.value = layout }
-        }
-    }
-
-    fun toggleIsTitleNote(enabled: Boolean) {
-        viewModelScope.launch {
-            saveSetting { _isTitleNote.value = enabled }
-        }
-    }
-
-    fun toggleIsClearHistoryOnClose(enabled: Boolean) {
-        viewModelScope.launch {
-            saveSetting { _isClearHistoryOnClose.value = enabled }
-        }
-    }
-
-    fun toggleIsShowHistoryLastCalculation(enabled: Boolean, expression: String) {
-        viewModelScope.launch {
-            saveSetting { _isShowHistoryLastCalculation.value = enabled }
-            if (!enabled) inputStateDao.deleteItem()
-            else inputStateDao.saveInput(state = InputState(currentText = expression))
-        }
-    }
-
-    private suspend fun saveSetting(updateState: suspend () -> Unit) {
-        // Обновляем состояние в UI
-        updateState()
-
-        // Сохраняем изменения в базу данных
-        settingsDao.saveSettings(
-            Settings(
-                id = 0,
-                isDarkTheme = _isDarkTheme.value,
-                isSystemTheme = _isSystemTheme.value,
-                showHistoryButton = _showHistoryButton.value,
-                systemFontSize = _systemFontSize.value,
-                displayFontSize = _displayFontSize.value,
-                decimalFormat = _decimalFormat.value,
-                isSaveHistoryData = _isSaveHistoryData.value,
-                isSaveSettingsData = _isSaveSettingsData.value,
-                isSwipeEnabled = _isSwipeEnabled.value,
-                isNoteEnabled = _isNoteEnabled.value,
-                showIconButton = _showIconButton.value,
-                playSound = _playSound.value,
-                playVibration = _playVibration.value,
-                bottomSpacer = _bottomSpacer.value,
-                isAnimationAll = _isAnimationAll.value,
-                keepScreenOn = _keepScreenOn.value,
-                showPlaceholderInput = _showPlaceholderInput.value,
-                historyHeaderLayout = _historyHeaderLayout.value,
-                isTitleNote = _isTitleNote.value,
-                isClearHistoryOnClose = _isClearHistoryOnClose.value,
-                isShowHistoryLastCalculation = _isShowHistoryLastCalculation.value
-            )
-        )
-    }
-}*/

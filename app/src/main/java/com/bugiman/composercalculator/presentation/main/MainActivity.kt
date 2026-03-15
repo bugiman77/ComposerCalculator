@@ -5,39 +5,42 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bugiman.composercalculator.Application
 import com.bugiman.composercalculator.core.managers.SoundManager
 import com.bugiman.composercalculator.core.managers.VibrationManager
 import com.bugiman.composercalculator.navigation.AppNavigation
+import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
+import com.bugiman.composercalculator.presentation.settings.SettingsViewModelFactory
 import com.bugiman.composercalculator.ui.theme.ComposerCalculatorTheme
 import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
+//@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        installSplashScreen()
+        enableEdgeToEdge()
+
+        val app = application as Application
+
+        val viewModelSettings: SettingsViewModel by viewModels {
+            SettingsViewModelFactory(app.getSettingsUseCase, app.updateSettingsUseCase)
+        }
 
         val managerSound = SoundManager(context = application)
         val managerVibration = VibrationManager(context = application)
 
-        val viewModelSettings = SettingsViewModel(
-            application = application,
-        )
-
-        val viewModelCalculation = CalculatorViewModel(
-            application = application,
-            settingsViewModel = viewModelSettings,
-            soundManager = managerSound,
-            vibrationManager = managerVibration,
-        )
-
-        installSplashScreen()
-
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
+
+            val settings by viewModelSettings.uiState.collectAsStateWithLifecycle()
 
             val view = LocalView.current
             val keepScreenOn = viewModelSettings.keepScreenOn.collectAsState().value

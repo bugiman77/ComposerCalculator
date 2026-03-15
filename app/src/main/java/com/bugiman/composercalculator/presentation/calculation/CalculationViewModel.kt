@@ -13,8 +13,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class CalculatorViewModel(
-    private val calculateUseCase: CalculateExpressionUseCase,
-    private val saveHistoryUseCase: HistoryItemSaveUseCase,
+    private val calculateExpressionUseCase: CalculateExpressionUseCase,
+    private val historyItemSaveUseCase: HistoryItemSaveUseCase,
     private val settingsViewModel: SettingsViewModel,
     private val soundManager: SoundManager,
     private val vibrationManager: VibrationManager
@@ -47,13 +47,13 @@ class CalculatorViewModel(
         viewModelScope.launch {
             triggerFeedback()
 
-            val result = calculateUseCase(currentExpression)
+            val result = calculateExpressionUseCase(currentExpression)
 
             result
                 .onSuccess { successValue ->
                     _expression.value = successValue
                     // Сохраняем в историю через UseCase
-                    saveHistoryUseCase(
+                    historyItemSaveUseCase(
                         HistoryModel(
                             expression = currentExpression,
                             result = result.toString(),

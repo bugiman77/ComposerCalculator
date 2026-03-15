@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
     id("com.google.protobuf")
-    kotlin("kapt")
+//    kotlin("kapt")
 }
 
 android {
@@ -30,14 +30,14 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 
-    ndkVersion = "25.1.8937393"
+//    ndkVersion = "25.1.8937393"
 
 }
 
@@ -46,8 +46,6 @@ dependencies {
     implementation(project(":domain"))
 
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
@@ -55,8 +53,12 @@ dependencies {
     implementation(libs.protobuf.javalite)
     ksp(libs.androidx.room.compiler)
 
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
+//    implementation(libs.hilt.android)
+//    ksp(libs.hilt.compiler)
+
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.google.gson)
 
 }
 

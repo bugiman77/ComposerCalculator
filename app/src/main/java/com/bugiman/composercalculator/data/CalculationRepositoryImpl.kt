@@ -1,23 +1,24 @@
 package com.bugiman.composercalculator.data
 
 import com.bugiman.domain.repository.calculation.CalculationRepository
+import com.chaquo.python.PyException
+import com.chaquo.python.PyObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class CalculationRepositoryImpl(
-    // Здесь должен быть ваш объект/класс для работы с Python (например, Chaquopy)
-    private val pythonInterpreter: Any
+    private val pythonModule: PyObject
 ) : CalculationRepository {
 
-    override suspend fun calculate(expression: String): Result<String> =
-        withContext(Dispatchers.Default) {
-            try {
-                // Имитация вызова вашего питона:
-                // val result = pythonInterpreter.call("calculate", expression)
-                val result = "12.0" // Здесь ваш реальный вызов
-                Result.success(result)
-            } catch (e: Exception) {
-                Result.failure(e)
-            }
+    override suspend fun calculate(expression: String): Result<String> = withContext(Dispatchers.Default) {
+        try {
+            // Вызываем функцию из вашего .py файла
+            val result = pythonModule.callAttr("evaluate_expression", expression).toString()
+            Result.success(result)
+        } catch (e: PyException) {
+            Result.failure(Exception("Ошибка вычислений"))
+        } catch (e: Exception) {
+            Result.failure(Exception("Критическая ошибка"))
         }
+    }
 }

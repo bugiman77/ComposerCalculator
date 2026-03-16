@@ -7,19 +7,17 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bugiman.composercalculator.Application
-import com.bugiman.composercalculator.core.managers.SoundManager
-import com.bugiman.composercalculator.core.managers.VibrationManager
 import com.bugiman.composercalculator.navigation.AppNavigation
+import com.bugiman.composercalculator.presentation.calculation.CalculationViewModelFactory
+import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
 import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.presentation.settings.SettingsViewModelFactory
 import com.bugiman.composercalculator.ui.theme.ComposerCalculatorTheme
-import dagger.hilt.android.AndroidEntryPoint
 
 //@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -32,18 +30,26 @@ class MainActivity : ComponentActivity() {
         val app = application as Application
 
         val viewModelSettings: SettingsViewModel by viewModels {
-            SettingsViewModelFactory(app.getSettingsUseCase, app.updateSettingsUseCase)
+            SettingsViewModelFactory(
+                settingsAllGetUseCase = app.settingsAllGetUseCase,
+                settingsItemUpdateUseCase = app.settingsItemUpdateUseCase
+            )
         }
 
-        val managerSound = SoundManager(context = application)
-        val managerVibration = VibrationManager(context = application)
+        val viewModelCalculation: CalculatorViewModel by viewModels {
+            CalculationViewModelFactory(
+                calculateExpressionUseCase = app.calculateExpressionUseCase,
+                historyItemSaveUseCase = app.historyItemSaveUseCase,
+                triggerFeedbackUseCase = app.triggerFeedbackUseCase,
+            )
+        }
 
         setContent {
 
             val settings by viewModelSettings.uiState.collectAsStateWithLifecycle()
 
             val view = LocalView.current
-            val keepScreenOn = viewModelSettings.keepScreenOn.collectAsState().value
+            val keepScreenOn = settings.isKeepScreenOn
             DisposableEffect(key1 = keepScreenOn) {
                 view.keepScreenOn = keepScreenOn
                 if (keepScreenOn) {
@@ -57,7 +63,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            val isDarkTheme = viewModelSettings.isDarkTheme.collectAsState().value
+            val isDarkTheme = settings.isDarkTheme
             ComposerCalculatorTheme(
                 darkTheme = isDarkTheme,
                 dynamicColor = false,
@@ -68,11 +74,10 @@ class MainActivity : ComponentActivity() {
                 )
             }
 
-            val isClearHistoryOnClose =
-                viewModelSettings.isClearHistoryOnClose.collectAsState().value
+            val isClearHistoryOnClose = settings.isClearHistoryOnClose
 
             if (isClearHistoryOnClose) {
-                viewModelCalculation.deleteHistoryItemAll()
+                viewModelCalculation.deleteAll()
             }
 
         }

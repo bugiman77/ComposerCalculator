@@ -2,11 +2,9 @@ package com.bugiman.composercalculator.presentation.calculation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bugiman.composercalculator.core.managers.SoundManager
-import com.bugiman.composercalculator.core.managers.VibrationManager
-import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.domain.models.history.HistoryModel
 import com.bugiman.domain.usecase.calculation.CalculateExpressionUseCase
+import com.bugiman.domain.usecase.feedback.TriggerFeedbackUseCase
 import com.bugiman.domain.usecase.history.HistoryItemSaveUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,9 +13,7 @@ import kotlinx.coroutines.launch
 class CalculatorViewModel(
     private val calculateExpressionUseCase: CalculateExpressionUseCase,
     private val historyItemSaveUseCase: HistoryItemSaveUseCase,
-    private val settingsViewModel: SettingsViewModel,
-    private val soundManager: SoundManager,
-    private val vibrationManager: VibrationManager
+    private val triggerFeedbackUseCase: TriggerFeedbackUseCase,
 ) : ViewModel() {
 
     private val _expression = MutableStateFlow("")
@@ -27,7 +23,7 @@ class CalculatorViewModel(
 //    val history: StateFlow<List<HistoryModel>> = getHistoryUseCase()
 //        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    fun onInputDigit(digit: String) {
+    suspend fun onInputDigit(digit: String) {
         triggerFeedback()
         val current = _expression.value
 
@@ -65,22 +61,24 @@ class CalculatorViewModel(
         }
     }
 
-    private fun triggerFeedback() {
-        val settings = settingsViewModel.uiState.value
-        if (settings.isPlaySound) soundManager.playClick()
-        if (settings.isPlayVibration) vibrationManager.vibrateClick()
+    private suspend fun triggerFeedback() {
+        triggerFeedbackUseCase()
     }
 
-    fun clear() {
+    suspend fun clear() {
         triggerFeedback()
         _expression.value = ""
     }
 
-    fun removeLast() {
+    suspend fun removeLast() {
         triggerFeedback()
         if (_expression.value.isNotEmpty()) {
             _expression.value = _expression.value.dropLast(1)
         }
+    }
+
+    fun deleteAll() {
+
     }
 }
 

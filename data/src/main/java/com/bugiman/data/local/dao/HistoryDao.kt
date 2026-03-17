@@ -4,13 +4,21 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.bugiman.data.local.entity.HistoryEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface HistoryDao {
+
     @Insert(entity = HistoryEntity::class)
     suspend fun insertItem(item: HistoryEntity)
+
+    @Delete
+    suspend fun deleteItem(item: HistoryEntity)
+
+    @Update
+    suspend fun updateNote(item: HistoryEntity)
 
     @Query(value = "SELECT * FROM history ORDER BY timestamp DESC LIMIT 1")
     fun getHistoryLast(): HistoryEntity?
@@ -21,14 +29,8 @@ interface HistoryDao {
     @Query(value = "SELECT * FROM history ORDER BY timestamp DESC")
     fun getHistoryAllFlow(): Flow<List<HistoryEntity>>
 
-    @Delete
-    suspend fun deleteItem(item: HistoryEntity)
-
     @Query("DELETE FROM history")
     suspend fun deleteAll()
-
-    @Query(value = "UPDATE history SET note = :newNote WHERE id = :itemId")
-    suspend fun updateNote(itemId: Long, newNote: String)
 
     @Query("SELECT COUNT(*) FROM history")
     fun getHistoryItemCount(): Flow<Long>

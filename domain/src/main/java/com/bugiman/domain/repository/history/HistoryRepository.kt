@@ -17,8 +17,6 @@ interface HistoryRepository {
 
     suspend fun insertItem(historyModel: HistoryModel)
 
-    suspend fun updateItemNote(itemId: Long, newNote: String)
-
-    suspend fun saveItem(historyModel: HistoryModel)
+    suspend fun updateItemNote(historyModel: HistoryModel)
 
 }

@@ -4,12 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.bugiman.domain.usecase.calculation.CalculateExpressionUseCase
 import com.bugiman.domain.usecase.feedback.TriggerFeedbackUseCase
+import com.bugiman.domain.usecase.history.HistoryAllDeleteUseCase
+import com.bugiman.domain.usecase.history.HistoryAllGetUseCase
 import com.bugiman.domain.usecase.history.HistoryItemSaveUseCase
 
 class CalculationViewModelFactory(
     private val calculateExpressionUseCase: CalculateExpressionUseCase,
     private val historyItemSaveUseCase: HistoryItemSaveUseCase,
-    private val triggerFeedbackUseCase: TriggerFeedbackUseCase
+    private val triggerFeedbackUseCase: TriggerFeedbackUseCase,
+    private val historyAllGetUseCase: HistoryAllGetUseCase,
+    private val historyAllDeleteUseCase: HistoryAllDeleteUseCase
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
@@ -19,7 +23,9 @@ class CalculationViewModelFactory(
             return CalculatorViewModel(
                 calculateExpressionUseCase = calculateExpressionUseCase,
                 historyItemSaveUseCase = historyItemSaveUseCase,
-                triggerFeedbackUseCase = triggerFeedbackUseCase
+                triggerFeedbackUseCase = triggerFeedbackUseCase,
+                historyAllGetUseCase = historyAllGetUseCase,
+                historyAllDeleteUseCase = historyAllDeleteUseCase
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

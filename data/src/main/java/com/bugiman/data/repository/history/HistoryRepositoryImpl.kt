@@ -14,10 +14,11 @@ class HistoryRepositoryImpl /*@Inject constructor*/(
 ): HistoryRepository {
 
     override fun getItemsAll(): Flow<List<HistoryModel>> {
-        return historyDao.getHistoryAllFlow()
-            .map { list ->
-                list.map { it.toDomain() }
+        return historyDao.getHistoryAllFlow().map { entityList ->
+            entityList.map { entity ->
+                entity.toDomain()
             }
+        }
     }
 
     override fun getItemsCount(): Flow<Long> {
@@ -42,12 +43,8 @@ class HistoryRepositoryImpl /*@Inject constructor*/(
         historyDao.insertItem(item = historyModel.toEntity())
     }
 
-    override suspend fun updateItemNote(id: Long, newNote: String) {
-        historyDao.updateNote(itemId = id, newNote = newNote)
-    }
-
-    override suspend fun saveItem(historyModel: HistoryModel) {
-        historyDao.insertItem(item = historyModel.toEntity())
+    override suspend fun updateItemNote(historyModel: HistoryModel) {
+        historyDao.updateNote(item = historyModel.toEntity())
     }
 
 }

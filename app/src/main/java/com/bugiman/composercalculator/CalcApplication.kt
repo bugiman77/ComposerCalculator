@@ -9,11 +9,21 @@ import com.bugiman.composercalculator.core.managers.VibrationManager
 import com.bugiman.composercalculator.data.CalculationRepositoryImpl
 import com.bugiman.composercalculator.data.FeedbackRepositoryImpl
 import com.bugiman.data.proto.SettingsProto
+import com.bugiman.data.repository.converter.ConverterRepositoryImpl
 import com.bugiman.data.repository.settings.SettingsRepositoryImpl
 import com.bugiman.data.serializer.SettingsProtoSerializer
 import com.bugiman.domain.usecase.calculation.CalculateExpressionUseCase
+import com.bugiman.domain.usecase.convert.ConvertValueUseCase
 import com.bugiman.domain.usecase.feedback.TriggerFeedbackUseCase
+import com.bugiman.domain.usecase.history.HistoryAllDeleteUseCase
+import com.bugiman.domain.usecase.history.HistoryAllGetUseCase
+import com.bugiman.domain.usecase.history.HistoryCountUseCase
+import com.bugiman.domain.usecase.history.HistoryItemCopyExpressionUseCase
+import com.bugiman.domain.usecase.history.HistoryItemCopyResultUseCase
+import com.bugiman.domain.usecase.history.HistoryItemDeleteUseCase
+import com.bugiman.domain.usecase.history.HistoryItemEditUseCase
 import com.bugiman.domain.usecase.history.HistoryItemSaveUseCase
+import com.bugiman.domain.usecase.history.HistoryItemUpdateNoteUseCase
 import com.bugiman.domain.usecase.settings.SettingsAllGetUseCase
 import com.bugiman.domain.usecase.settings.SettingsItemUpdateUseCase
 import com.chaquo.python.Python
@@ -26,12 +36,24 @@ private val Context.settingsDataStore: DataStore<SettingsProto> by dataStore(
 )
 
 class CalcApplication : Application() {
-    // Эти переменные будут доступны во всем приложении через context
+    lateinit var calculateExpressionUseCase: CalculateExpressionUseCase
+
+    lateinit var convertValueUseCase: ConvertValueUseCase
+
     lateinit var settingsAllGetUseCase: SettingsAllGetUseCase
     lateinit var settingsItemUpdateUseCase: SettingsItemUpdateUseCase
-    lateinit var calculateExpressionUseCase: CalculateExpressionUseCase
-    lateinit var triggerFeedbackUseCase: TriggerFeedbackUseCase
+
+    lateinit var historyAllDeleteUseCase: HistoryAllDeleteUseCase
+    lateinit var historyAllGetUseCase: HistoryAllGetUseCase
+    lateinit var historyCountUseCase: HistoryCountUseCase
+    lateinit var historyItemCopyExpressionUseCase: HistoryItemCopyExpressionUseCase
+    lateinit var historyItemCopyResultUseCase: HistoryItemCopyResultUseCase
+    lateinit var historyItemDeleteUseCase: HistoryItemDeleteUseCase
+    lateinit var historyItemEditUseCase: HistoryItemEditUseCase
     lateinit var historyItemSaveUseCase: HistoryItemSaveUseCase
+    lateinit var historyItemUpdateNoteUseCase: HistoryItemUpdateNoteUseCase
+
+    lateinit var triggerFeedbackUseCase: TriggerFeedbackUseCase
 
     override fun onCreate() {
         super.onCreate()
@@ -49,6 +71,10 @@ class CalcApplication : Application() {
 
         calculateExpressionUseCase =
             CalculateExpressionUseCase(repository = calculationRepositoryImpl)
+
+        val converterRepositoryImpl = ConverterRepositoryImpl()
+
+        convertValueUseCase = ConvertValueUseCase(repository = converterRepositoryImpl)
 
         // Склеиваем слои: Data -> Domain
         val settingsRepositoryImpl = SettingsRepositoryImpl(

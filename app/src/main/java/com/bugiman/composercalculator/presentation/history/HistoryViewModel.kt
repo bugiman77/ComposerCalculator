@@ -10,6 +10,7 @@ import com.bugiman.domain.usecase.history.HistoryItemCopyExpressionUseCase
 import com.bugiman.domain.usecase.history.HistoryItemCopyResultUseCase
 import com.bugiman.domain.usecase.history.HistoryItemDeleteUseCase
 import com.bugiman.domain.usecase.history.HistoryItemEditUseCase
+import com.bugiman.domain.usecase.history.HistoryItemSaveUseCase
 import com.bugiman.domain.usecase.history.HistoryItemUpdateNoteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,14 +21,15 @@ import javax.inject.Inject
 
 //@HiltViewModel
 class HistoryViewModel /*@Inject constructor*/(
-    private val historyAllGetUseCase: HistoryAllGetUseCase,
     private val historyAllDeleteUseCase: HistoryAllDeleteUseCase,
+    private val historyAllGetUseCase: HistoryAllGetUseCase,
+    private val historyCountUseCase: HistoryCountUseCase,
     private val historyItemCopyExpressionUseCase: HistoryItemCopyExpressionUseCase,
     private val historyItemCopyResultUseCase: HistoryItemCopyResultUseCase,
     private val historyItemDeleteUseCase: HistoryItemDeleteUseCase,
     private val historyItemEditUseCase: HistoryItemEditUseCase,
+    private val historyItemSaveUseCase: HistoryItemSaveUseCase,
     private val historyItemUpdateNoteUseCase: HistoryItemUpdateNoteUseCase,
-    private val historyCountUseCase: HistoryCountUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HistoryUiState())

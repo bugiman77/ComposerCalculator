@@ -5,34 +5,45 @@ import androidx.lifecycle.viewModelScope
 import com.bugiman.domain.models.history.HistoryModel
 import com.bugiman.domain.usecase.calculation.CalculateExpressionUseCase
 import com.bugiman.domain.usecase.feedback.TriggerFeedbackUseCase
+import com.bugiman.domain.usecase.history.HistoryAllDeleteUseCase
+import com.bugiman.domain.usecase.history.HistoryAllGetUseCase
 import com.bugiman.domain.usecase.history.HistoryItemSaveUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class CalculatorViewModel(
     private val calculateExpressionUseCase: CalculateExpressionUseCase,
     private val historyItemSaveUseCase: HistoryItemSaveUseCase,
-    private val triggerFeedbackUseCase: TriggerFeedbackUseCase,
+    private val historyAllDeleteUseCase: HistoryAllDeleteUseCase,
+    private val historyAllGetUseCase: HistoryAllGetUseCase,
+    private val triggerFeedbackUseCase: TriggerFeedbackUseCase
 ) : ViewModel() {
 
     private val _expression = MutableStateFlow("")
     val expression = _expression.asStateFlow()
 
-    // Подписка на историю напрямую из UseCase (Flow)
-//    val history: StateFlow<List<HistoryModel>> = getHistoryUseCase()
-//        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+    // 1. Восстанавливаем поток истории для UI
+    val history: StateFlow<List<HistoryModel>> = historyAllGetUseCase()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
 
-    suspend fun onInputDigit(digit: String) {
-        triggerFeedback()
-        val current = _expression.value
+    fun onInputDigit(digit: String) {
+        viewModelScope.launch {
+            triggerFeedback()
+            val current = _expression.value
 
-        // Ваша логика с проверкой скобок и нулей
-        if (current.isNotEmpty() && current.last() == ')') {
-            _expression.value += "*$digit"
-        } else {
-            // ... (остальная логика из старого метода onInputDigit)
-            _expression.value += digit
+            if (current.isNotEmpty() && current.last() == ')') {
+                _expression.value += "*$digit"
+            } else {
+                _expression.value += digit
+            }
         }
     }
 
@@ -45,19 +56,27 @@ class CalculatorViewModel(
 
             val result = calculateExpressionUseCase(currentExpression)
 
-            result
-                .onSuccess { successValue ->
-                    _expression.value = successValue
-                    // Сохраняем в историю через UseCase
-                    historyItemSaveUseCase(
-                        HistoryModel(
-                            expression = currentExpression,
-                            result = result.toString(),
-                        )
+            result.onSuccess { successValue ->
+                _expression.value = successValue
+
+                // 2. ИСПРАВЛЕНИЕ: сохраняем именно successValue, а не объект Result
+                historyItemSaveUseCase(
+                    HistoryModel(
+                        expression = currentExpression,
+                        result = successValue
                     )
-                }.onFailure {
-                    // Обработка ошибки
-                }
+                )
+            }.onFailure {
+                // Можно добавить специфичный фидбек на ошибку
+                triggerFeedback()
+            }
+        }
+    }
+
+    // 3. Реализация удаления (вызывается из MainActivity при закрытии)
+    fun deleteAll() {
+        viewModelScope.launch {
+            historyAllDeleteUseCase()
         }
     }
 
@@ -65,20 +84,20 @@ class CalculatorViewModel(
         triggerFeedbackUseCase()
     }
 
-    suspend fun clear() {
-        triggerFeedback()
-        _expression.value = ""
-    }
-
-    suspend fun removeLast() {
-        triggerFeedback()
-        if (_expression.value.isNotEmpty()) {
-            _expression.value = _expression.value.dropLast(1)
+    fun clear() {
+        viewModelScope.launch {
+            triggerFeedback()
+            _expression.value = ""
         }
     }
 
-    fun deleteAll() {
-
+    fun removeLast() {
+        viewModelScope.launch {
+            triggerFeedback()
+            if (_expression.value.isNotEmpty()) {
+                _expression.value = _expression.value.dropLast(1)
+            }
+        }
     }
 }
 

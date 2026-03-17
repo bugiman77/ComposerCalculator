@@ -8,7 +8,7 @@ class HistoryItemSaveUseCase(
 ) {
 
     suspend operator fun invoke(historyModel: HistoryModel) {
-        repository.saveItem(historyModel = historyModel)
+        repository.insertItem(historyModel = historyModel)
     }
 
 }

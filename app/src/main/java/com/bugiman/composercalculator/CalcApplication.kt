@@ -25,7 +25,7 @@ private val Context.settingsDataStore: DataStore<SettingsProto> by dataStore(
     serializer = SettingsProtoSerializer
 )
 
-class Application : Application() {
+class CalcApplication : Application() {
     // Эти переменные будут доступны во всем приложении через context
     lateinit var settingsAllGetUseCase: SettingsAllGetUseCase
     lateinit var settingsItemUpdateUseCase: SettingsItemUpdateUseCase

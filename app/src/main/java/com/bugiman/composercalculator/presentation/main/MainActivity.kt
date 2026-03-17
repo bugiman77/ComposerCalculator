@@ -41,6 +41,8 @@ class MainActivity : ComponentActivity() {
                 calculateExpressionUseCase = app.calculateExpressionUseCase,
                 historyItemSaveUseCase = app.historyItemSaveUseCase,
                 triggerFeedbackUseCase = app.triggerFeedbackUseCase,
+                historyAllGetUseCase = app.historyAllGetUseCase,
+                historyAllDeleteUseCase = app.historyAllDeleteUseCase,
             )
         }
 

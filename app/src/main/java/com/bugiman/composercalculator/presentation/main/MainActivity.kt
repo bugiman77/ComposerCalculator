@@ -1,17 +1,17 @@
 package com.bugiman.composercalculator.presentation.main
 
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bugiman.composercalculator.Application
+import com.bugiman.composercalculator.CalcApplication
 import com.bugiman.composercalculator.navigation.AppNavigation
 import com.bugiman.composercalculator.presentation.calculation.CalculationViewModelFactory
 import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         enableEdgeToEdge()
 
-        val app = application as Application
+        val app = application as CalcApplication
 
         val viewModelSettings: SettingsViewModel by viewModels {
             SettingsViewModelFactory(
@@ -45,27 +45,24 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-
+            // Подписка на настройки (один источник истины для всего UI)
             val settings by viewModelSettings.uiState.collectAsStateWithLifecycle()
 
+            // Управление включенным экраном
             val view = LocalView.current
-            val keepScreenOn = settings.isKeepScreenOn
-            DisposableEffect(key1 = keepScreenOn) {
-                view.keepScreenOn = keepScreenOn
-                if (keepScreenOn) {
-                    window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-                } else {
-                    window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-                }
-                onDispose {
-                    view.keepScreenOn = false
-                    window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            DisposableEffect(settings.isKeepScreenOn) {
+                view.keepScreenOn = settings.isKeepScreenOn
+                onDispose { view.keepScreenOn = false }
+            }
+
+            LaunchedEffect(Unit) {
+                if (settings.isClearHistoryOnClose) {
+                    viewModelCalculation.deleteAll()
                 }
             }
 
-            val isDarkTheme = settings.isDarkTheme
             ComposerCalculatorTheme(
-                darkTheme = isDarkTheme,
+                darkTheme = settings.isDarkTheme,
                 dynamicColor = false,
             ) {
                 AppNavigation(
@@ -73,13 +70,6 @@ class MainActivity : ComponentActivity() {
                     calculatorViewModel = viewModelCalculation,
                 )
             }
-
-            val isClearHistoryOnClose = settings.isClearHistoryOnClose
-
-            if (isClearHistoryOnClose) {
-                viewModelCalculation.deleteAll()
-            }
-
         }
     }
 }

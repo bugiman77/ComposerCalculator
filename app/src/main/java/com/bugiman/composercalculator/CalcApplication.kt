@@ -8,8 +8,10 @@ import com.bugiman.composercalculator.core.managers.SoundManager
 import com.bugiman.composercalculator.core.managers.VibrationManager
 import com.bugiman.composercalculator.data.CalculationRepositoryImpl
 import com.bugiman.composercalculator.data.FeedbackRepositoryImpl
+import com.bugiman.data.local.dao.HistoryDao
 import com.bugiman.data.proto.SettingsProto
 import com.bugiman.data.repository.converter.ConverterRepositoryImpl
+import com.bugiman.data.repository.history.HistoryRepositoryImpl
 import com.bugiman.data.repository.settings.SettingsRepositoryImpl
 import com.bugiman.data.serializer.SettingsProtoSerializer
 import com.bugiman.domain.usecase.calculation.CalculateExpressionUseCase
@@ -81,12 +83,20 @@ class CalcApplication : Application() {
             settingsDataStore
         )
 
-        settingsAllGetUseCase = SettingsAllGetUseCase(
-            settingsRepositoryImpl
-        )
-        settingsItemUpdateUseCase = SettingsItemUpdateUseCase(
-            settingsRepositoryImpl
-        )
+        settingsAllGetUseCase = SettingsAllGetUseCase(settingsRepositoryImpl)
+        settingsItemUpdateUseCase = SettingsItemUpdateUseCase(settingsRepositoryImpl)
+
+        val historyRepositoryImpl = HistoryRepositoryImpl()
+
+        historyAllDeleteUseCase = HistoryAllDeleteUseCase(repository = historyRepositoryImpl)
+        historyAllGetUseCase = HistoryAllGetUseCase(repository = historyRepositoryImpl)
+        historyCountUseCase = HistoryCountUseCase(repository = historyRepositoryImpl)
+        historyItemCopyExpressionUseCase = HistoryItemCopyExpressionUseCase(repository = historyRepositoryImpl)
+        historyItemCopyResultUseCase = HistoryItemCopyResultUseCase(repository = historyRepositoryImpl)
+        historyItemDeleteUseCase = HistoryItemDeleteUseCase(repository = historyRepositoryImpl)
+        historyItemEditUseCase = HistoryItemEditUseCase(repository = historyRepositoryImpl)
+        historyItemSaveUseCase = HistoryItemSaveUseCase(repository = historyRepositoryImpl)
+        historyItemUpdateNoteUseCase = HistoryItemUpdateNoteUseCase(repository = historyRepositoryImpl)
 
         val soundManager = SoundManager(this)
         val vibrationManager = VibrationManager(this)

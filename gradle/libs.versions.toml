@@ -36,6 +36,8 @@ material3 = "1.4.0"
 hilt = "2.51.1"
 retrofit = "2.11.0"
 gson = "2.10.1"
+voyager = "1.1.0-beta03"
+cupertino = "0.1.0-alpha04"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -85,6 +87,10 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3",
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 google-gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+voyager-navigator = { group = "cafe.adriel.voyager", name = "voyager-navigator", version.ref = "voyager" }
+voyager-transitions = { group = "cafe.adriel.voyager", name = "voyager-transitions", version.ref = "voyager" }
+cupertino-core = { group = "io.github.alexzhirkevich", name = "cupertino", version.ref = "cupertino" }
+cupertino-decompose = { group = "io.github.alexzhirkevich", name = "cupertino-decompose", version.ref = "cupertino" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

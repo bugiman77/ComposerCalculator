@@ -95,6 +95,7 @@ android {
 chaquopy {
     defaultConfig {
         pip {
+            options("--default-timeout=100")
             install("simpleeval")
             install("requests")
             install("sympy")
@@ -156,11 +157,15 @@ dependencies {
     implementation(project(":data"))
 
     val voyagerVersion = "1.1.0-beta03" // Текущая стабильная версия
-    implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
-    implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
     implementation("cafe.adriel.voyager:voyager-hilt:$voyagerVersion")
+    implementation(libs.voyager.navigator)
+    implementation(libs.voyager.transitions)
 
-    implementation("io.github.alexzhirkevich:cupertino-decompose:0.1.0-alpha04")
-    implementation("io.github.alexzhirkevich:cupertino:0.1.0-alpha04")
+    implementation(libs.cupertino.core)
+    implementation(libs.cupertino.decompose)
+
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.google.gson)
 
 }

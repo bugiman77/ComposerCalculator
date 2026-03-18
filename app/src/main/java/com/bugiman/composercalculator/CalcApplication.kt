@@ -4,11 +4,14 @@ import android.app.Application
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
+import androidx.room.Room
 import com.bugiman.composercalculator.core.managers.SoundManager
 import com.bugiman.composercalculator.core.managers.VibrationManager
 import com.bugiman.composercalculator.data.CalculationRepositoryImpl
 import com.bugiman.composercalculator.data.FeedbackRepositoryImpl
-import com.bugiman.data.local.dao.HistoryDao
+import com.bugiman.data.datasource.remote.CurrencyApiDataSource
+import com.bugiman.data.local.database.AppDatabase
+import com.bugiman.data.network.CurrencyApiService
 import com.bugiman.data.proto.SettingsProto
 import com.bugiman.data.repository.converter.ConverterRepositoryImpl
 import com.bugiman.data.repository.history.HistoryRepositoryImpl
@@ -30,6 +33,9 @@ import com.bugiman.domain.usecase.settings.SettingsAllGetUseCase
 import com.bugiman.domain.usecase.settings.SettingsItemUpdateUseCase
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.jvm.java
 
 //@HiltAndroidApp
 private val Context.settingsDataStore: DataStore<SettingsProto> by dataStore(
@@ -74,6 +80,14 @@ class CalcApplication : Application() {
         calculateExpressionUseCase =
             CalculateExpressionUseCase(repository = calculationRepositoryImpl)
 
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://v6.exchangerate-api.com")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val currencyApiService = retrofit.create(CurrencyApiService::class.java)
+        val currencyApiDataSource = CurrencyApiDataSource(currencyApiService)
+
         val converterRepositoryImpl = ConverterRepositoryImpl()
 
         convertValueUseCase = ConvertValueUseCase(repository = converterRepositoryImpl)
@@ -86,7 +100,18 @@ class CalcApplication : Application() {
         settingsAllGetUseCase = SettingsAllGetUseCase(settingsRepositoryImpl)
         settingsItemUpdateUseCase = SettingsItemUpdateUseCase(settingsRepositoryImpl)
 
-        val historyRepositoryImpl = HistoryRepositoryImpl()
+        val database = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java,
+            "calculator_db" // Имя файла базы данных
+        ).build()
+
+        // 2. Получаем DAO из базы данных
+        val historyDao = database.historyDao()
+
+        val historyRepositoryImpl = HistoryRepositoryImpl(
+            historyDao = historyDao
+        )
 
         historyAllDeleteUseCase = HistoryAllDeleteUseCase(repository = historyRepositoryImpl)
         historyAllGetUseCase = HistoryAllGetUseCase(repository = historyRepositoryImpl)

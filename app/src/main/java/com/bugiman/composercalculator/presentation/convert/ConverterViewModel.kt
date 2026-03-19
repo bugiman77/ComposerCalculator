@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bugiman.domain.models.converter.ConverterType
 import com.bugiman.domain.usecase.convert.ConvertValueUseCase
+import com.bugiman.domain.usecase.feedback.TriggerFeedbackUseCase
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,70 +13,66 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class ConverterViewModel(
-    private val convertValueUseCase: ConvertValueUseCase
+    private val convertValueUseCase: ConvertValueUseCase,
+    private val triggerFeedbackUseCase: TriggerFeedbackUseCase
 ) : ViewModel() {
 
-    // Вводные данные
     val amount = MutableStateFlow("1")
     val fromCurrency = MutableStateFlow("USD")
     val toCurrency = MutableStateFlow("RUB")
-    private val converterType = MutableStateFlow(ConverterType.Currency) // Укажите нужный тип по умолчанию
 
-    // Состояние результата (Число, Ошибка или Загрузка)
-    private val _conversionResult = MutableStateFlow("0.0")
-    val conversionResult: StateFlow<String> = _conversionResult.asStateFlow()
+    private val _result = MutableStateFlow("0.0")
+    val result: StateFlow<String> = _result.asStateFlow()
 
-    init {
-        // Автоматически запускаем конвертацию при любом изменении параметров
-        observeChanges()
-    }
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading = _isLoading.asStateFlow()
 
     @OptIn(FlowPreview::class)
-    private fun observeChanges() {
-        combine(amount, fromCurrency, toCurrency, converterType) { a, f, t, type ->
-            // Упаковываем все параметры в один объект для удобства
-            DataPackage(a, f, t, type)
-        }
-            .debounce(500) // Ждем 500мс после ввода, чтобы не спамить запросами в сеть
-            .onEach { data ->
-                performConversion(data)
+    val conversionTrigger = combine(amount, fromCurrency, toCurrency) { a, f, t ->
+        Triple(a, f, t)
+    }.debounce(500) // Задержка, чтобы не спамить запросами при вводе цифр
+
+    init {
+        viewModelScope.launch {
+            conversionTrigger.collect { (a, f, t) ->
+                performConversion(a, f, t)
             }
-            .launchIn(viewModelScope)
+        }
     }
 
-    private suspend fun performConversion(data: DataPackage) {
-        val valueToConvert = data.amount.toDoubleOrNull() ?: 0.0
+    private suspend fun performConversion(a: String, f: String, t: String) {
+        val valToConvert = a.toDoubleOrNull() ?: 0.0
+        if (valToConvert <= 0.0) return
 
-        if (valueToConvert <= 0.0) {
-            _conversionResult.value = "0.0"
-            return
-        }
-
-        // Вызываем UseCase
-        val result = convertValueUseCase(
-            type = data.type,
-            value = valueToConvert,
-            from = data.from,
-            to = data.to
+        _isLoading.value = true
+        val response = convertValueUseCase(
+            type = ConverterType.CURRENCY,
+            value = valToConvert,
+            from = f,
+            to = t
         )
 
-        // Обрабатываем Result<Double>
-        result.onSuccess { convertedValue ->
-            _conversionResult.value = String.format("%.2f", convertedValue)
-        }.onFailure { error ->
-            _conversionResult.value = "Ошибка сети" // Или error.message
+        response.onSuccess {
+            _result.value = String.format("%.2f", it)
+        }.onFailure {
+            _result.value = "Ошибка"
         }
+        _isLoading.value = false
     }
 
-    // Методы для UI
-    fun onAmountChanged(newAmount: String) { amount.value = newAmount }
+    fun onAmountChanged(newAmount: String) {
+        amount.value = newAmount
+    }
 
-    fun selectFromCurrency(code: String) { fromCurrency.value = code }
-
-    fun selectToCurrency(code: String) { toCurrency.value = code }
-
-    // Вспомогательный класс для группировки данных
-    private data class DataPackage(val amount: String, val from: String, val to: String, val type: ConverterType)
+    fun onCurrencySwap() {
+        viewModelScope.launch {
+            triggerFeedbackUseCase()
+            val temp = fromCurrency.value
+            fromCurrency.value = toCurrency.value
+            toCurrency.value = temp
+        }
+    }
 }

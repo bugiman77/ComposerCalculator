@@ -96,11 +96,12 @@ chaquopy {
     defaultConfig {
         pip {
             options("--default-timeout=100")
-            install("simpleeval")
-            install("requests")
-            install("sympy")
-            install("numpy")
-            install("matplotlib")
+            install("--index-url https://pypi.org simpleeval")
+            install("--index-url https://pypi.org requests")
+            install("--index-url https://pypi.org sympy")
+            install("--index-url https://pypi.org numpy")
+            install("--index-url https://pypi.org matplotlib")
+
         }
     }
 }

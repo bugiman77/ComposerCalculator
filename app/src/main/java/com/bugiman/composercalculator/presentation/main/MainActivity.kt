@@ -15,6 +15,8 @@ import com.bugiman.composercalculator.CalcApplication
 import com.bugiman.composercalculator.navigation.AppNavigation
 import com.bugiman.composercalculator.presentation.calculation.CalculationViewModelFactory
 import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
+import com.bugiman.composercalculator.presentation.convert.ConverterViewModel
+import com.bugiman.composercalculator.presentation.convert.ConverterViewModelFactory
 import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.presentation.settings.SettingsViewModelFactory
 import com.bugiman.composercalculator.ui.theme.ComposerCalculatorTheme
@@ -43,6 +45,13 @@ class MainActivity : ComponentActivity() {
                 triggerFeedbackUseCase = app.triggerFeedbackUseCase,
                 historyAllGetUseCase = app.historyAllGetUseCase,
                 historyAllDeleteUseCase = app.historyAllDeleteUseCase,
+            )
+        }
+
+        val viewModelConverter: ConverterViewModel by viewModels {
+            ConverterViewModelFactory(
+                convertValueUseCase = app.convertValueUseCase,
+                triggerFeedbackUseCase = app.triggerFeedbackUseCase
             )
         }
 

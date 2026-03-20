@@ -4,7 +4,7 @@ import com.bugiman.domain.repository.feedback.FeedbackRepository
 import com.bugiman.domain.repository.settings.SettingsRepository
 import kotlinx.coroutines.flow.first
 
-class TriggerFeedbackUseCase(
+class FeedbackTriggerUseCase(
     private val feedbackRepository: FeedbackRepository,
     private val settingsRepository: SettingsRepository
 ) {

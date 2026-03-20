@@ -3,7 +3,7 @@ package com.bugiman.composercalculator.presentation.calculation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.bugiman.domain.usecase.calculation.CalculateExpressionUseCase
-import com.bugiman.domain.usecase.feedback.TriggerFeedbackUseCase
+import com.bugiman.domain.usecase.feedback.FeedbackTriggerUseCase
 import com.bugiman.domain.usecase.history.HistoryAllDeleteUseCase
 import com.bugiman.domain.usecase.history.HistoryAllGetUseCase
 import com.bugiman.domain.usecase.history.HistoryItemSaveUseCase
@@ -11,7 +11,7 @@ import com.bugiman.domain.usecase.history.HistoryItemSaveUseCase
 class CalculationViewModelFactory(
     private val calculateExpressionUseCase: CalculateExpressionUseCase,
     private val historyItemSaveUseCase: HistoryItemSaveUseCase,
-    private val triggerFeedbackUseCase: TriggerFeedbackUseCase,
+    private val feedbackTriggerUseCase: FeedbackTriggerUseCase,
     private val historyAllGetUseCase: HistoryAllGetUseCase,
     private val historyAllDeleteUseCase: HistoryAllDeleteUseCase
 ) : ViewModelProvider.Factory {
@@ -23,7 +23,7 @@ class CalculationViewModelFactory(
             return CalculatorViewModel(
                 calculateExpressionUseCase = calculateExpressionUseCase,
                 historyItemSaveUseCase = historyItemSaveUseCase,
-                triggerFeedbackUseCase = triggerFeedbackUseCase,
+                feedbackTriggerUseCase = feedbackTriggerUseCase,
                 historyAllGetUseCase = historyAllGetUseCase,
                 historyAllDeleteUseCase = historyAllDeleteUseCase
             ) as T

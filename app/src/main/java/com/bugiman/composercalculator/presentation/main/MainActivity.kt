@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
             CalculationViewModelFactory(
                 calculateExpressionUseCase = app.calculateExpressionUseCase,
                 historyItemSaveUseCase = app.historyItemSaveUseCase,
-                triggerFeedbackUseCase = app.triggerFeedbackUseCase,
+                feedbackTriggerUseCase = app.feedbackTriggerUseCase,
                 historyAllGetUseCase = app.historyAllGetUseCase,
                 historyAllDeleteUseCase = app.historyAllDeleteUseCase,
             )
@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
         val viewModelConverter: ConverterViewModel by viewModels {
             ConverterViewModelFactory(
                 convertValueUseCase = app.convertValueUseCase,
-                triggerFeedbackUseCase = app.triggerFeedbackUseCase
+                feedbackTriggerUseCase = app.feedbackTriggerUseCase
             )
         }
 

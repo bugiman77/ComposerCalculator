@@ -4,7 +4,7 @@ import com.bugiman.domain.models.settings.SettingModel
 import com.bugiman.domain.repository.settings.SettingsRepository
 import kotlinx.coroutines.flow.Flow
 
-class SettingsAllGetUseCase(
+class CalculationSettingsAllGetUseCase(
     private val repository: SettingsRepository
 ) {
 

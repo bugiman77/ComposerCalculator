@@ -50,9 +50,9 @@ class HistoryViewModel /*@Inject constructor*/(
         }
     }
 
-    fun updateNote(itemId: Long, newNote: String) {
+    fun updateNote(historyModel: HistoryModel) {
         viewModelScope.launch {
-            historyItemUpdateNoteUseCase(itemId = itemId, newNote = newNote)
+            historyItemUpdateNoteUseCase(historyModel = historyModel)
         }
     }
 

@@ -4,20 +4,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bugiman.domain.models.converter.ConverterType
 import com.bugiman.domain.usecase.convert.ConvertValueUseCase
-import com.bugiman.domain.usecase.feedback.TriggerFeedbackUseCase
+import com.bugiman.domain.usecase.feedback.FeedbackTriggerUseCase
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class ConverterViewModel(
     private val convertValueUseCase: ConvertValueUseCase,
-    private val triggerFeedbackUseCase: TriggerFeedbackUseCase
+    private val feedbackTriggerUseCase: FeedbackTriggerUseCase
 ) : ViewModel() {
 
     val amount = MutableStateFlow("1")
@@ -69,7 +67,7 @@ class ConverterViewModel(
 
     fun onCurrencySwap() {
         viewModelScope.launch {
-            triggerFeedbackUseCase()
+            feedbackTriggerUseCase()
             val temp = fromCurrency.value
             fromCurrency.value = toCurrency.value
             toCurrency.value = temp

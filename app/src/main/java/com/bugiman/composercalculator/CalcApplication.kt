@@ -18,8 +18,15 @@ import com.bugiman.data.repository.history.HistoryRepositoryImpl
 import com.bugiman.data.repository.settings.SettingsRepositoryImpl
 import com.bugiman.data.serializer.SettingsProtoSerializer
 import com.bugiman.domain.usecase.calculation.CalculateExpressionUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildBracketUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildDecimalUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildDigitUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildOperatorUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildZeroUseCase
+import com.bugiman.domain.usecase.calculation.CalculationRemoveLastCharUseCase
+import com.bugiman.domain.usecase.calculation.CalculationSettingsAllGetUseCase
 import com.bugiman.domain.usecase.convert.ConvertValueUseCase
-import com.bugiman.domain.usecase.feedback.TriggerFeedbackUseCase
+import com.bugiman.domain.usecase.feedback.FeedbackTriggerUseCase
 import com.bugiman.domain.usecase.history.HistoryAllDeleteUseCase
 import com.bugiman.domain.usecase.history.HistoryAllGetUseCase
 import com.bugiman.domain.usecase.history.HistoryCountUseCase
@@ -45,6 +52,13 @@ private val Context.settingsDataStore: DataStore<SettingsProto> by dataStore(
 
 class CalcApplication : Application() {
     lateinit var calculateExpressionUseCase: CalculateExpressionUseCase
+    lateinit var calculationBuildBracketUseCase: CalculationBuildBracketUseCase
+    lateinit var calculationBuildDecimalUseCase: CalculationBuildDecimalUseCase
+    lateinit var calculationBuildDigitUseCase: CalculationBuildDigitUseCase
+    lateinit var calculationBuildOperatorUseCase: CalculationBuildOperatorUseCase
+    lateinit var calculationBuildZeroUseCase: CalculationBuildZeroUseCase
+    lateinit var calculationRemoveLastCharUseCase: CalculationRemoveLastCharUseCase
+    lateinit var calculationSettingsAllGetUseCase: CalculationSettingsAllGetUseCase
 
     lateinit var convertValueUseCase: ConvertValueUseCase
 
@@ -61,24 +75,34 @@ class CalcApplication : Application() {
     lateinit var historyItemSaveUseCase: HistoryItemSaveUseCase
     lateinit var historyItemUpdateNoteUseCase: HistoryItemUpdateNoteUseCase
 
-    lateinit var triggerFeedbackUseCase: TriggerFeedbackUseCase
+    lateinit var feedbackTriggerUseCase: FeedbackTriggerUseCase
 
     override fun onCreate() {
         super.onCreate()
 
-        // 1. Инициализация Python платформы
         if (!Python.isStarted()) {
             Python.start(AndroidPlatform(this))
         }
 
-        // 2. Получаем модуль Python (файл calculator.py)
         val py = Python.getInstance()
         val pythonModule = py.getModule("calculator")
 
         val calculationRepositoryImpl = CalculationRepositoryImpl(pythonModule)
 
+        val settingsRepositoryImpl = SettingsRepositoryImpl(
+            settingsDataStore
+        )
+
         calculateExpressionUseCase =
             CalculateExpressionUseCase(repository = calculationRepositoryImpl)
+        calculationBuildBracketUseCase = CalculationBuildBracketUseCase()
+        calculationBuildDecimalUseCase = CalculationBuildDecimalUseCase()
+        calculationBuildDigitUseCase = CalculationBuildDigitUseCase()
+        calculationBuildOperatorUseCase = CalculationBuildOperatorUseCase()
+        calculationBuildZeroUseCase = CalculationBuildZeroUseCase()
+        calculationRemoveLastCharUseCase = CalculationRemoveLastCharUseCase()
+        calculationSettingsAllGetUseCase =
+            CalculationSettingsAllGetUseCase(repository = settingsRepositoryImpl)
 
         val retrofit = Retrofit.Builder()
             .baseUrl("https://v6.exchangerate-api.com")
@@ -92,10 +116,6 @@ class CalcApplication : Application() {
 
         convertValueUseCase = ConvertValueUseCase(repository = converterRepositoryImpl)
 
-        // Склеиваем слои: Data -> Domain
-        val settingsRepositoryImpl = SettingsRepositoryImpl(
-            settingsDataStore
-        )
 
         settingsAllGetUseCase = SettingsAllGetUseCase(settingsRepositoryImpl)
         settingsItemUpdateUseCase = SettingsItemUpdateUseCase(settingsRepositoryImpl)
@@ -106,7 +126,6 @@ class CalcApplication : Application() {
             "calculator_db" // Имя файла базы данных
         ).build()
 
-        // 2. Получаем DAO из базы данных
         val historyDao = database.historyDao()
 
         val historyRepositoryImpl = HistoryRepositoryImpl(
@@ -116,12 +135,15 @@ class CalcApplication : Application() {
         historyAllDeleteUseCase = HistoryAllDeleteUseCase(repository = historyRepositoryImpl)
         historyAllGetUseCase = HistoryAllGetUseCase(repository = historyRepositoryImpl)
         historyCountUseCase = HistoryCountUseCase(repository = historyRepositoryImpl)
-        historyItemCopyExpressionUseCase = HistoryItemCopyExpressionUseCase(repository = historyRepositoryImpl)
-        historyItemCopyResultUseCase = HistoryItemCopyResultUseCase(repository = historyRepositoryImpl)
+        historyItemCopyExpressionUseCase =
+            HistoryItemCopyExpressionUseCase(repository = historyRepositoryImpl)
+        historyItemCopyResultUseCase =
+            HistoryItemCopyResultUseCase(repository = historyRepositoryImpl)
         historyItemDeleteUseCase = HistoryItemDeleteUseCase(repository = historyRepositoryImpl)
         historyItemEditUseCase = HistoryItemEditUseCase(repository = historyRepositoryImpl)
         historyItemSaveUseCase = HistoryItemSaveUseCase(repository = historyRepositoryImpl)
-        historyItemUpdateNoteUseCase = HistoryItemUpdateNoteUseCase(repository = historyRepositoryImpl)
+        historyItemUpdateNoteUseCase =
+            HistoryItemUpdateNoteUseCase(repository = historyRepositoryImpl)
 
         val soundManager = SoundManager(this)
         val vibrationManager = VibrationManager(this)
@@ -132,7 +154,7 @@ class CalcApplication : Application() {
                 vibrationManager = vibrationManager,
                 settingsRepository = settingsRepositoryImpl
             )
-        triggerFeedbackUseCase = TriggerFeedbackUseCase(
+        feedbackTriggerUseCase = FeedbackTriggerUseCase(
             feedbackRepository = feedbackRepositoryImpl,
             settingsRepository = settingsRepositoryImpl
         )

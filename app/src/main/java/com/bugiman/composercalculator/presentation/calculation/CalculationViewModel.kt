@@ -4,7 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bugiman.domain.models.history.HistoryModel
 import com.bugiman.domain.usecase.calculation.CalculateExpressionUseCase
-import com.bugiman.domain.usecase.feedback.TriggerFeedbackUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildBracketUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildDecimalUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildDigitUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildOperatorUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildZeroUseCase
+import com.bugiman.domain.usecase.calculation.CalculationRemoveLastCharUseCase
+import com.bugiman.domain.usecase.feedback.FeedbackTriggerUseCase
 import com.bugiman.domain.usecase.history.HistoryAllDeleteUseCase
 import com.bugiman.domain.usecase.history.HistoryAllGetUseCase
 import com.bugiman.domain.usecase.history.HistoryItemSaveUseCase
@@ -20,13 +26,18 @@ class CalculatorViewModel(
     private val historyItemSaveUseCase: HistoryItemSaveUseCase,
     private val historyAllDeleteUseCase: HistoryAllDeleteUseCase,
     private val historyAllGetUseCase: HistoryAllGetUseCase,
-    private val triggerFeedbackUseCase: TriggerFeedbackUseCase
+    private val feedbackTriggerUseCase: FeedbackTriggerUseCase,
+    private val buildDigitUseCase: CalculationBuildDigitUseCase,
+    private val buildOperatorUseCase: CalculationBuildOperatorUseCase,
+    private val buildBracketUseCase: CalculationBuildBracketUseCase,
+    private val buildDecimalUseCase: CalculationBuildDecimalUseCase,
+    private val buildZeroUseCase: CalculationBuildZeroUseCase,
+    private val removeLastCharUseCase: CalculationRemoveLastCharUseCase
 ) : ViewModel() {
 
-    private val _expression = MutableStateFlow("")
+    private val _expression = MutableStateFlow(value = "")
     val expression = _expression.asStateFlow()
 
-    // 1. Восстанавливаем поток истории для UI
     val history: StateFlow<List<HistoryModel>> = historyAllGetUseCase()
         .stateIn(
             scope = viewModelScope,
@@ -35,53 +46,27 @@ class CalculatorViewModel(
         )
 
     fun onInputDigit(digit: String) {
-        viewModelScope.launch {
-            triggerFeedback()
-            val current = _expression.value
-
-            if (current.isNotEmpty() && current.last() == ')') {
-                _expression.value += "*$digit"
-            } else {
-                _expression.value += digit
-            }
-        }
+        updateExpression { buildDigitUseCase(current = it, digit) }
     }
 
-    fun onCalculate() {
-        val currentExpression = _expression.value
-        if (currentExpression.isBlank()) return
-
-        viewModelScope.launch {
-            triggerFeedback()
-
-            val result = calculateExpressionUseCase(currentExpression)
-
-            result.onSuccess { successValue ->
-                _expression.value = successValue
-
-                // 2. ИСПРАВЛЕНИЕ: сохраняем именно successValue, а не объект Result
-                historyItemSaveUseCase(
-                    HistoryModel(
-                        expression = currentExpression,
-                        result = successValue
-                    )
-                )
-            }.onFailure {
-                // Можно добавить специфичный фидбек на ошибку
-                triggerFeedback()
-            }
-        }
+    fun onInputZero() {
+        updateExpression { buildZeroUseCase(current = it) }
     }
 
-    // 3. Реализация удаления (вызывается из MainActivity при закрытии)
-    fun deleteAll() {
-        viewModelScope.launch {
-            historyAllDeleteUseCase()
-        }
+    fun onInputMathOperation(operation: String) {
+        updateExpression { buildOperatorUseCase(current = it, operator = operation) }
     }
 
-    private suspend fun triggerFeedback() {
-        triggerFeedbackUseCase()
+    fun onInputBrackets(bracket: String) {
+        updateExpression { buildBracketUseCase(current = it, bracket = bracket) }
+    }
+
+    fun onInputComma() {
+        updateExpression { buildDecimalUseCase(current = it) }
+    }
+
+    fun removeLast() {
+        updateExpression { removeLastCharUseCase(current = it) }
     }
 
     fun clear() {
@@ -91,13 +76,43 @@ class CalculatorViewModel(
         }
     }
 
-    fun removeLast() {
+    fun onCalculate() {
+        val currentExpression = _expression.value
+        if (currentExpression.isBlank()) return
+
         viewModelScope.launch {
             triggerFeedback()
-            if (_expression.value.isNotEmpty()) {
-                _expression.value = _expression.value.dropLast(1)
+            val result = calculateExpressionUseCase(currentExpression)
+
+            result.onSuccess { successValue ->
+                _expression.value = successValue
+                historyItemSaveUseCase(
+                    HistoryModel(
+                        expression = currentExpression,
+                        result = successValue
+                    )
+                )
+            }.onFailure {
+                triggerFeedback()
             }
         }
+    }
+
+    fun deleteAll() {
+        viewModelScope.launch {
+            historyAllDeleteUseCase()
+        }
+    }
+
+    private fun updateExpression(transform: (String) -> String) {
+        viewModelScope.launch {
+            triggerFeedback()
+            _expression.value = transform(_expression.value)
+        }
+    }
+
+    private suspend fun triggerFeedback() {
+        feedbackTriggerUseCase()
     }
 }
 

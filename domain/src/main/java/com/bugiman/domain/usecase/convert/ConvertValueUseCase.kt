@@ -1,17 +1,17 @@
 package com.bugiman.domain.usecase.convert
 
-import com.bugiman.domain.models.converter.ConverterType
-import com.bugiman.domain.repository.converter.ConverterRepository
+import com.bugiman.domain.models.converter.ConvertType
+import com.bugiman.domain.repository.converter.ConvertRepository
 
 class ConvertValueUseCase(
-    private val repository: ConverterRepository
+    private val repository: ConvertRepository
 ) {
     /**
      * Выполняет конвертацию значения.
      * Возвращает Result<Double>, чтобы ViewModel могла обработать ошибку (например, нет сети).
      */
     suspend operator fun invoke(
-        type: ConverterType,
+        type: ConvertType,
         value: Double,
         from: String,
         to: String

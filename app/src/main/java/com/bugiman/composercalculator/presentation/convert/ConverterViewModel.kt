@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bugiman.domain.models.converter.ConverterType
 import com.bugiman.domain.usecase.convert.ConvertValueUseCase
+import com.bugiman.domain.usecase.convert.GetFormattedConversionUseCase
+import com.bugiman.domain.usecase.convert.SwapCurrenciesUseCase
 import com.bugiman.domain.usecase.feedback.FeedbackTriggerUseCase
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +16,8 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 
 class ConverterViewModel(
-    private val convertValueUseCase: ConvertValueUseCase,
+    private val getFormattedConversionUseCase: GetFormattedConversionUseCase,
+    private val swapCurrenciesUseCase: SwapCurrenciesUseCase,
     private val feedbackTriggerUseCase: FeedbackTriggerUseCase
 ) : ViewModel() {
 
@@ -29,9 +32,9 @@ class ConverterViewModel(
     val isLoading = _isLoading.asStateFlow()
 
     @OptIn(FlowPreview::class)
-    val conversionTrigger = combine(amount, fromCurrency, toCurrency) { a, f, t ->
+    private val conversionTrigger = combine(amount, fromCurrency, toCurrency) { a, f, t ->
         Triple(a, f, t)
-    }.debounce(500) // Задержка, чтобы не спамить запросами при вводе цифр
+    }.debounce(500)
 
     init {
         viewModelScope.launch {
@@ -42,22 +45,16 @@ class ConverterViewModel(
     }
 
     private suspend fun performConversion(a: String, f: String, t: String) {
-        val valToConvert = a.toDoubleOrNull() ?: 0.0
-        if (valToConvert <= 0.0) return
-
         _isLoading.value = true
-        val response = convertValueUseCase(
-            type = ConverterType.CURRENCY,
-            value = valToConvert,
-            from = f,
-            to = t
-        )
+
+        val response = getFormattedConversionUseCase(amount = a, from = f, to = t)
 
         response.onSuccess {
-            _result.value = String.format("%.2f", it)
+            _result.value = it
         }.onFailure {
             _result.value = "Ошибка"
         }
+
         _isLoading.value = false
     }
 
@@ -68,9 +65,9 @@ class ConverterViewModel(
     fun onCurrencySwap() {
         viewModelScope.launch {
             feedbackTriggerUseCase()
-            val temp = fromCurrency.value
-            fromCurrency.value = toCurrency.value
-            toCurrency.value = temp
+            val swapped = swapCurrenciesUseCase(fromCurrency.value, toCurrency.value)
+            fromCurrency.value = swapped.from
+            toCurrency.value = swapped.to
         }
     }
 }

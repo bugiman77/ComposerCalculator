@@ -1,11 +1,11 @@
 package com.bugiman.domain.repository.converter
 
-import com.bugiman.domain.models.converter.ConverterType
+import com.bugiman.domain.models.converter.ConvertType
 
-interface ConverterRepository {
+interface ConvertRepository {
 
     suspend fun convert(
-        type: ConverterType,
+        type: ConvertType,
         value: Double,
         from: String,
         to: String

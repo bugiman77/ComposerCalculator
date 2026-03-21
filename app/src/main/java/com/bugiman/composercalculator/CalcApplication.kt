@@ -13,7 +13,7 @@ import com.bugiman.data.datasource.remote.CurrencyApiDataSource
 import com.bugiman.data.local.database.AppDatabase
 import com.bugiman.data.network.CurrencyApiService
 import com.bugiman.data.proto.SettingsProto
-import com.bugiman.data.repository.converter.ConverterRepositoryImpl
+import com.bugiman.data.repository.converter.ConvertRepositoryImpl
 import com.bugiman.data.repository.history.HistoryRepositoryImpl
 import com.bugiman.data.repository.settings.SettingsRepositoryImpl
 import com.bugiman.data.serializer.SettingsProtoSerializer
@@ -112,7 +112,7 @@ class CalcApplication : Application() {
         val currencyApiService = retrofit.create(CurrencyApiService::class.java)
         val currencyApiDataSource = CurrencyApiDataSource(currencyApiService)
 
-        val converterRepositoryImpl = ConverterRepositoryImpl()
+        val converterRepositoryImpl = ConvertRepositoryImpl()
 
         convertValueUseCase = ConvertValueUseCase(repository = converterRepositoryImpl)
 

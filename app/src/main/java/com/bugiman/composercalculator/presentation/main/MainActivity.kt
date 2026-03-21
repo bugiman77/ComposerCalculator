@@ -15,8 +15,8 @@ import com.bugiman.composercalculator.CalcApplication
 import com.bugiman.composercalculator.navigation.AppNavigation
 import com.bugiman.composercalculator.presentation.calculation.CalculationViewModelFactory
 import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
-import com.bugiman.composercalculator.presentation.convert.ConverterViewModel
-import com.bugiman.composercalculator.presentation.convert.ConverterViewModelFactory
+import com.bugiman.composercalculator.presentation.convert.ConvertViewModel
+import com.bugiman.composercalculator.presentation.convert.ConvertViewModelFactory
 import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.presentation.settings.SettingsViewModelFactory
 import com.bugiman.composercalculator.ui.theme.ComposerCalculatorTheme
@@ -48,8 +48,8 @@ class MainActivity : ComponentActivity() {
             )
         }
 
-        val viewModelConverter: ConverterViewModel by viewModels {
-            ConverterViewModelFactory(
+        val viewModelConverter: ConvertViewModel by viewModels {
+            ConvertViewModelFactory(
                 convertValueUseCase = app.convertValueUseCase,
                 feedbackTriggerUseCase = app.feedbackTriggerUseCase
             )

@@ -47,8 +47,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bugiman.composercalculator.BuildConfig
 import com.bugiman.composercalculator.R
-import com.bugiman.composercalculator.model.DeviceInfo
+//import com.bugiman.composercalculator.model.DeviceInfo
 import com.bugiman.composercalculator.view.components.general.settings.CustomTopBar
+import com.bugiman.domain.models.DeviceInfo
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 
 
@@ -181,7 +182,12 @@ private fun InfoLinkRow(title: String, onClick: () -> Unit) {
 @Composable
 private fun DeviceInfoApp() {
 
-    val infoDevice = DeviceInfo()
+    val infoDevice = DeviceInfo(
+        deviceName = "",
+        manufacturer = "",
+        androidVersion = "",
+        apiLevel = 0
+    )
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally

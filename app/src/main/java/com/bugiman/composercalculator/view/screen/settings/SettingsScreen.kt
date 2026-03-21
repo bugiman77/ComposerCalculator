@@ -19,14 +19,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bugiman.composercalculator.presentation.calculation.CalculationViewModel
 import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.view.components.general.settings.CustomTopBar
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.App
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.AppTheme
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.Appearance
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.Display
-import com.bugiman.composercalculator.view.components.settings.SettingsBlock.HistoryComputing
+//import com.bugiman.composercalculator.view.components.settings.SettingsBlock.HistoryComputing
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.SoundAndVibration
 import kotlinx.coroutines.launch
 
@@ -50,7 +49,9 @@ fun SettingsScreen(
         containerColor = Color(0xFF000000),
         contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { innerPadding ->
-        Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding)) {
 
             Column(
                 modifier = Modifier
@@ -79,12 +80,13 @@ fun SettingsScreen(
                     viewModelSettings = viewModelSettings
                 )
 
-                /*Spacer(modifier = Modifier.height(18.dp))
+                Spacer(modifier = Modifier.height(18.dp))
 
                 HistoryComputing(
                     viewModelSettings = viewModelSettings,
                     viewModelCalculation = viewModelCalculation,
-                )*/
+                )
+
 
                 Spacer(modifier = Modifier.height(18.dp))
 

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bugiman.domain.usecase.convert.ConvertValueUseCase
 import com.bugiman.domain.usecase.feedback.FeedbackTriggerUseCase
 
-class ConverterViewModelFactory(
+class ConvertViewModelFactory(
     private val convertValueUseCase: ConvertValueUseCase,
     private val feedbackTriggerUseCase: FeedbackTriggerUseCase
 ) : ViewModelProvider.Factory {
@@ -13,8 +13,8 @@ class ConverterViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         // Проверяем, что создается именно ConverterViewModel
-        if (modelClass.isAssignableFrom(ConverterViewModel::class.java)) {
-            return ConverterViewModel(
+        if (modelClass.isAssignableFrom(ConvertViewModel::class.java)) {
+            return ConvertViewModel(
                 convertValueUseCase = convertValueUseCase,
                 feedbackTriggerUseCase = feedbackTriggerUseCase
             ) as T

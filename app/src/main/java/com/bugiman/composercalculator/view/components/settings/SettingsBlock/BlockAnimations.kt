@@ -12,8 +12,8 @@ import com.bugiman.composercalculator.ui.theme.iOSGray
 import com.bugiman.composercalculator.ui.theme.iOSGreen
 import com.bugiman.composercalculator.view.components.calculation.SettingsGroup
 import com.bugiman.composercalculator.view.components.calculation.SettingsRow
-import com.bugiman.composercalculator.viewmodel.SettingsViewModel
 
+/*
 @Composable
 fun Animations(
     modifier: Modifier = Modifier,
@@ -38,4 +38,4 @@ fun Animations(
             )
         }
     }
-}
+}*/

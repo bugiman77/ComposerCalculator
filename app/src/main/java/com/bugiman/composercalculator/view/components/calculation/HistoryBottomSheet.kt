@@ -1,7 +1,6 @@
 package com.bugiman.composercalculator.view.components.calculation
 
 import android.content.ClipData
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +24,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Button
@@ -57,31 +55,30 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bugiman.composercalculator.data.local.db.entity.History
-import com.bugiman.composercalculator.presentation.HistoryViewModel
+import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
+import com.bugiman.composercalculator.presentation.history.HistoryViewModel
+import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.ui.theme.Orange
-import com.bugiman.composercalculator.viewmodel.CalculatorViewModel
-import com.bugiman.composercalculator.viewmodel.SettingsViewModel
 import com.bugiman.domain.models.history.HistoryModel
+import com.bugiman.domain.models.settings.SettingModel
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import kotlin.collections.isNotEmpty
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryBottomSheet(
     calculatorViewModel: CalculatorViewModel,
-    settingsViewModel: SettingsViewModel,
+    settingModel: SettingModel,
     sheetState: SheetState,
     onDismiss: () -> Unit,
     onCloseClick: () -> Unit
@@ -92,16 +89,6 @@ fun HistoryBottomSheet(
         sheetState = sheetState,
         sheetGesturesEnabled = false,
         containerColor = Color(color = 0xFF1C1C1E),
-        /*dragHandle = {
-            Box(
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .width(width = 40.dp)
-                    .height(height = 4.dp)
-                    .clip(CircleShape)
-                    .background(Color.Gray)
-            )
-        },*/
     ) {
 
         if (settingsViewModel.historyHeaderLayout.collectAsState().value == 0) {
@@ -252,11 +239,11 @@ private fun HistoryHeaderContentClearClose(
 
 @Composable
 private fun HistorySheetContent(
-    calculatorViewModel: CalculatorViewModel,
+    calculatorViewModel: CalculationViewModel,
     settingsViewModel: SettingsViewModel,
 ) {
 
-    val historyItems by calculatorViewModel.history.collectAsStateWithLifecycle()
+    val historyItems = calculatorViewModel.history.collectAsStateWithLifecycle()
 
     val historyViewModel = hiltViewModel<HistoryViewModel>()
 
@@ -298,7 +285,7 @@ private fun HistorySheetContent(
 
 @Composable
 private fun HistoryItemRow(
-    item: History,
+    item: HistoryModel,
     isNoteEnabled: Boolean,
     calculatorViewModel: CalculatorViewModel,
     settingsViewModel: SettingsViewModel,

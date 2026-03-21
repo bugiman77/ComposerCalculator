@@ -20,14 +20,12 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,15 +39,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bugiman.composercalculator.R
+import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
 import com.bugiman.composercalculator.ui.theme.DarkGray
-import com.bugiman.composercalculator.ui.theme.Gray
 import com.bugiman.composercalculator.view.components.calculation.CalculatorButtonGrid
 import com.bugiman.composercalculator.view.components.calculation.DisplayArea
 import com.bugiman.composercalculator.view.components.calculation.HistoryBottomSheet
-import com.bugiman.composercalculator.viewmodel.CalculatorViewModel
-import com.bugiman.composercalculator.viewmodel.SettingsViewModel
+import com.bugiman.domain.models.settings.SettingModel
+//import com.bugiman.composercalculator.view.components.calculation.CalculatorButtonGrid
+//import com.bugiman.composercalculator.view.components.calculation.DisplayArea
+//import com.bugiman.composercalculator.view.components.calculation.HistoryBottomSheet
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
@@ -57,9 +56,9 @@ import kotlinx.coroutines.launch
 fun CalculatorScreen(
     onNavigateToSettings: () -> Unit,
     onNavigateToHistory: () -> Unit,
-    showHistoryButton: Boolean,
-    viewModelCalculation: CalculatorViewModel = viewModel(),
-    viewModelSettings: SettingsViewModel = viewModel(),
+    viewModelCalculation: CalculatorViewModel,
+    settingModel: SettingModel,
+    onUpdateSettings: ((SettingModel) -> SettingModel) -> Unit = {}
 ) {
 
     val sheetState = rememberModalBottomSheetState(
@@ -73,7 +72,8 @@ fun CalculatorScreen(
 
     val scope = rememberCoroutineScope()
 
-    val showIconButton = viewModelSettings.showIconButton.collectAsState().value
+    val showIconButton = settingModel.isShowHistoryButton
+    val isShowHistoryBotton = settingModel.isShowHistoryButton
 
     LaunchedEffect(key1 = sheetState.isVisible) {
         if (!sheetState.isVisible) {
@@ -85,7 +85,7 @@ fun CalculatorScreen(
 
         HistoryBottomSheet(
             calculatorViewModel = viewModelCalculation,
-            settingsViewModel = viewModelSettings,
+            settingModel = settingModel,
             sheetState = sheetState,
             onDismiss = { showHistorySheet = false },
             onCloseClick = {
@@ -120,7 +120,7 @@ fun CalculatorScreen(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
 
-                        if (showHistoryButton) {
+                        if (isShowHistoryBotton) {
                             if (showIconButton) {
                                 Card(
                                     onClick = { showHistorySheet = true },
@@ -204,7 +204,6 @@ fun CalculatorScreen(
                     DisplayArea(
                         viewModelCalculation = viewModelCalculation,
                         viewModelSettings = viewModelSettings,
-                        onPositioned = { /*offset -> targetOffset = offset*/ },
                     )
 
                     // Сетка кнопок
@@ -219,7 +218,9 @@ fun CalculatorScreen(
 }
 
 @Composable
-private fun ForceWhiteStatusBarIcons(trigger: Any? = null) {
+private fun ForceWhiteStatusBarIcons(
+    trigger: Any? = null
+) {
     val view = LocalView.current
     if (!view.isInEditMode) {
         val window = (view.context as Activity).window

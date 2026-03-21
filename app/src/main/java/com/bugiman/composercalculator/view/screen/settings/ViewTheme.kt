@@ -27,8 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bugiman.composercalculator.data.local.db.entity.BuiltInThemes
-import com.bugiman.composercalculator.data.local.db.entity.CustomThemes
+//import com.bugiman.composercalculator.data.local.db.entity.BuiltInThemes
+//import com.bugiman.composercalculator.data.local.db.entity.CustomThemes
 import kotlin.collections.isNotEmpty
 
 @Composable
@@ -39,7 +39,7 @@ fun ViewTheme(
 //    onThemeSelected: (AppTheme) -> Unit
 ) {
 
-/*    Scaffold(
+    Scaffold(
         containerColor = Color(0xFF161616)
     ) { padding ->
 
@@ -79,7 +79,8 @@ fun ViewTheme(
                 }
             }
         }
-    }*/
+    }
+
 }
 
 @Composable
@@ -114,19 +115,20 @@ private fun ThemeCard(
             modifier = Modifier.padding(16.dp)
         ) {
 
-            /*Text(
+
+            Text(
                 text = theme.name,
                 color = Color.White,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
-            )*/
+            )
+
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-
 //                MiniButton("7", theme.digitButtonColor, theme.digitTextColor)
 //                MiniButton("+", theme.operationButtonColor, theme.operationTextColor)
 //                MiniButton("AC", theme.deleteButtonColor, theme.deleteTextColor)

@@ -9,7 +9,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.bugiman.composercalculator.presentation.calculation.CalculationViewModel
 import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.ui.theme.iOSGray
 import com.bugiman.composercalculator.ui.theme.iOSGreen
@@ -18,6 +17,7 @@ import com.bugiman.composercalculator.view.components.calculation.SettingsRow
 import com.bugiman.composercalculator.view.components.general.settings.SettingsSelectionRow
 import com.bugiman.domain.models.settings.SettingModel
 
+/*
 @Composable
 fun HistoryComputing(
     modifier: Modifier = Modifier,
@@ -49,7 +49,8 @@ fun HistoryComputing(
 
         if (settingsModel.isShowHistoryButton) {
 
-            /*HorizontalDivider(color = Color(color = 0xFF3A3A3C))
+            */
+/*HorizontalDivider(color = Color(color = 0xFF3A3A3C))
 
             SettingsSelectionRow(
                 title = "Кнопка закрытия",
@@ -59,7 +60,8 @@ fun HistoryComputing(
                 selectedOption = currentLayout.value,
                 onClick1 = { viewModelSettings.toggleHistoryHeaderLayout(layout = 0) },
                 onClick2 = { viewModelSettings.toggleHistoryHeaderLayout(layout = 1) }
-            )*/
+            )*//*
+
 
             HorizontalDivider(color = Color(color = 0xFF3A3A3C))
 
@@ -177,3 +179,4 @@ fun HistoryComputing(
     }
 
 }
+*/

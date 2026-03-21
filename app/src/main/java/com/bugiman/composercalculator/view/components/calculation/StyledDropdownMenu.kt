@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bugiman.composercalculator.viewmodel.SettingsViewModel
 
 @Composable
 fun StyledDropdownMenu(
@@ -77,13 +76,8 @@ fun StyledDropdownMenu(
             )
 
             StyledMenuItem(
-                text = "Конвертер валют",
-                onClick = onOpenCurrencyConverter
-            )
-
-            StyledMenuItem(
-                text = "Конвертер расстояния",
-                onClick = onOpenDistanceConverter
+                text = "Конвертер",
+                onClick = {}
             )
 
             HorizontalDivider(

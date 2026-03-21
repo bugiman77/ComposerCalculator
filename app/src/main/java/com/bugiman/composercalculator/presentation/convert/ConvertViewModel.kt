@@ -2,10 +2,8 @@ package com.bugiman.composercalculator.presentation.convert
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bugiman.domain.models.converter.ConverterType
-import com.bugiman.domain.usecase.convert.ConvertValueUseCase
-import com.bugiman.domain.usecase.convert.GetFormattedConversionUseCase
-import com.bugiman.domain.usecase.convert.SwapCurrenciesUseCase
+import com.bugiman.domain.usecase.convert.ConvertGetFormattedConversionUseCase
+import com.bugiman.domain.usecase.convert.ConvertSwapCurrenciesUseCase
 import com.bugiman.domain.usecase.feedback.FeedbackTriggerUseCase
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,9 +13,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 
-class ConverterViewModel(
-    private val getFormattedConversionUseCase: GetFormattedConversionUseCase,
-    private val swapCurrenciesUseCase: SwapCurrenciesUseCase,
+class ConvertViewModel(
+    private val convertGetFormattedConversionUseCase: ConvertGetFormattedConversionUseCase,
+    private val convertSwapCurrenciesUseCase: ConvertSwapCurrenciesUseCase,
     private val feedbackTriggerUseCase: FeedbackTriggerUseCase
 ) : ViewModel() {
 
@@ -47,7 +45,7 @@ class ConverterViewModel(
     private suspend fun performConversion(a: String, f: String, t: String) {
         _isLoading.value = true
 
-        val response = getFormattedConversionUseCase(amount = a, from = f, to = t)
+        val response = convertGetFormattedConversionUseCase(amount = a, from = f, to = t)
 
         response.onSuccess {
             _result.value = it
@@ -65,7 +63,7 @@ class ConverterViewModel(
     fun onCurrencySwap() {
         viewModelScope.launch {
             feedbackTriggerUseCase()
-            val swapped = swapCurrenciesUseCase(fromCurrency.value, toCurrency.value)
+            val swapped = convertSwapCurrenciesUseCase(fromCurrency.value, toCurrency.value)
             fromCurrency.value = swapped.from
             toCurrency.value = swapped.to
         }

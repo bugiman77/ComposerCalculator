@@ -40,21 +40,19 @@ import com.bugiman.composercalculator.R
 import com.bugiman.composercalculator.ui.theme.DarkGray
 import com.bugiman.composercalculator.ui.theme.LightGray
 import com.bugiman.composercalculator.ui.theme.Orange
-import com.bugiman.composercalculator.viewmodel.CalculatorViewModel
-import com.bugiman.composercalculator.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.Dp
+import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
+import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 
 @Composable
 fun CalculatorButtonGrid(
     viewModelSetting: SettingsViewModel = viewModel(),
     viewModelCalculation: CalculatorViewModel = viewModel()
 ) {
-
-    val bottomSpacer = viewModelSetting.bottomSpacer.collectAsState()
 
     Column(
         modifier = Modifier
@@ -121,9 +119,10 @@ private fun BtnCalculationText(
         onClick = { },
         modifier = modifier
             .aspectRatio(ratio = 1f)
-        /*.onGloballyPositioned { coordinates ->
+        .onGloballyPositioned { coordinates ->
             buttonOffset = coordinates.positionInRoot()
-        }*/,
+        }
+,
         shape = CircleShape,
         contentPadding = PaddingValues(all = 0.dp),
         border = BorderStroke(width = 1.dp, borderBrush),

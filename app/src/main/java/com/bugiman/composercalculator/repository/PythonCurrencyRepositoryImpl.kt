@@ -1,8 +1,8 @@
 package com.bugiman.composercalculator.repository
 
 import android.content.Context
-import com.bugiman.domain.models.converter.ConverterType
-import com.bugiman.domain.repository.converter.ConverterRepository
+import com.bugiman.domain.models.converter.ConvertType
+import com.bugiman.domain.repository.converter.ConvertRepository
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import kotlinx.coroutines.Dispatchers
@@ -10,10 +10,10 @@ import kotlinx.coroutines.withContext
 
 class PythonCurrencyRepositoryImpl(
     private val context: Context
-) : ConverterRepository {
+) : ConvertRepository {
 
     override suspend fun convert(
-        type: ConverterType,
+        type: ConvertType,
         value: Double,
         from: String,
         to: String

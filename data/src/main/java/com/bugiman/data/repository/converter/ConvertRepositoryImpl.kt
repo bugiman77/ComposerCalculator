@@ -1,13 +1,13 @@
 package com.bugiman.data.repository.converter
 
-import com.bugiman.domain.models.converter.ConverterType
-import com.bugiman.domain.repository.converter.ConverterRepository
+import com.bugiman.domain.models.converter.ConvertType
+import com.bugiman.domain.repository.converter.ConvertRepository
 
-class ConverterRepositoryImpl(
+class ConvertRepositoryImpl(
 
-) : ConverterRepository {
+) : ConvertRepository {
     override suspend fun convert(
-        type: ConverterType,
+        type: ConvertType,
         value: Double,
         from: String,
         to: String

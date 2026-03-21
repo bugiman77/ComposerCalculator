@@ -1,8 +1,8 @@
 package com.bugiman.domain.usecase.convert
 
-import com.bugiman.domain.models.converter.ConverterType
+import com.bugiman.domain.models.converter.ConvertType
 
-class GetFormattedConversionUseCase(
+class ConvertGetFormattedConversionUseCase(
     private val convertValueUseCase: ConvertValueUseCase
 ) {
     suspend operator fun invoke(
@@ -14,7 +14,7 @@ class GetFormattedConversionUseCase(
         if (valueToConvert <= 0.0) return Result.success("0.0")
 
         val response = convertValueUseCase(
-            type = ConverterType.CURRENCY,
+            type = ConvertType.CURRENCY,
             value = valueToConvert,
             from = from,
             to = to

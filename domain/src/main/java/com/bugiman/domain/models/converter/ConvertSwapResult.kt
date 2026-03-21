@@ -1,6 +1,6 @@
 package com.bugiman.domain.models.converter
 
-data class SwapResult(
+data class ConvertSwapResult(
     val from: String,
     val to: String
 )

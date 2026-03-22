@@ -9,13 +9,9 @@ This is the complete source code and the architecture overview for the official 
 
 ---
 
-## 📱 Interface Preview
-
 [![Preview of Composer Calculator][hero_image]][hero_image_url]
 
 ---
-
-## 🛠 Features & Tech Stack
 
 *   **Python Engine:** Heavy-duty calculations powered by Python's SymPy and NumPy.
 *   **Currency Converter:** Real-time exchange rates via Retrofit 2 and external APIs.

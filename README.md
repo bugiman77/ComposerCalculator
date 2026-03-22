@@ -1,50 +1,29 @@
-# 🧮 Composer Calculator & Converter
+# [Composer Calculator][project_url] — Modern Android Engine
 
-![Kotlin]([https://img.shields.io](https://img.shields.io/badge/kotlin-2.0.21-blue.svg))
-![Compose]([https://img.shields.io](https://img.shields.io/badge/JetpackCompose-2.0.21-green.svg))
-![Python](https://img.shields.io/badge/Python-Chaquopy-yellow.svg)
+This is the complete source code and the architecture overview for the official Composer Calculator, based on **Clean Architecture** principles and **Python 3.11** (via Chaquopy) for high-precision computing.
 
-Современный Android-калькулятор с расширенным функционалом конвертации валют. Проект разработан как демонстрация глубокого понимания **Clean Architecture** и интеграции многоязычных сред (Kotlin + Python).
-
----
-
-## 🌟 Ключевые особенности
-
-*   **Smart Engine:** Математические вычисления производятся на Python через **Chaquopy** (использование библиотек SymPy/Numpy для высокой точности).
-*   **Currency Converter:** Актуальные курсы валют (включая RUB) через **Retrofit 2** и внешние API.
-*   **Modern UI:** Полностью на **Jetpack Compose** с поддержкой динамических тем и адаптивной верстки.
-*   **Persistence:** История вычислений на **Room**, настройки приложения через **Proto DataStore** (типизированное хранилище).
-*   **Feedback:** Настраиваемый тактильный (Vibration) и звуковой отклик.
+[![Kotlin Version](https://img.shields.io)](https://kotlinlang.org)
+[![Compose](https://img.shields.io)](https://developer.android.com)
+[![Build Status](https://github.com)](https://github.com)
+[![License](https://img.shields.io)](LICENSE)
 
 ---
 
-## 🏗 Архитектурный стек (Clean Architecture)
+## 📱 Interface Preview
 
-Проект разделен на три независимых модуля для обеспечения максимальной тестируемости и гибкости:
-
-1.  **`:domain`** (Pure Kotlin): Бизнес-логика, модели данных, интерфейсы репозиториев и Use Cases. Не имеет зависимостей от Android SDK.
-2.  **`:data`** (Android Library): Реализация репозиториев, работа с сетью (Retrofit), БД (Room), сериализация (Protobuf).
-3.  **`:app`** (Android App): UI слой (Compose), ViewModels, DI (Manual Dependency Injection) и точка входа Python.
+[![Preview of Composer Calculator][hero_image]][hero_image_url]
 
 ---
 
-## 🛠 Технологии
+## 🛠 Features & Tech Stack
 
-*   **UI:** Jetpack Compose (Material 3)
-*   **Navigation:** Voyager (Multi-stack navigation)
-*   **Networking:** Retrofit 2 + GSON
-*   **Database:** Room Persistence
-*   **Storage:** Proto DataStore
-*   **Scripting:** Chaquopy (Python 3.11)
-*   **Concurrency:** Kotlin Coroutines & Flow
-*   **Build:** Gradle Kotlin DSL + Version Catalog (`libs.versions.toml`)
+*   **Python Engine:** Heavy-duty calculations powered by Python's SymPy and NumPy.
+*   **Currency Converter:** Real-time exchange rates via Retrofit 2 and external APIs.
+*   **Persistence:** Local history on **Room** and settings via **Proto DataStore**.
+*   **Modern UI:** Built entirely with Jetpack Compose & Material 3.
 
 ---
 
-## 📸 Скриншоты
-
-| Calculator | Settings | Converter |
-| :---: | :---: | :---: |
-| <img src="" width="200" /> | <img src="" width="200" /> | <img src="" width="200" /> |
-
----
+[project_url]: https://github.com
+[hero_image]: docs/hero_promo.png
+[hero_image_url]: docs/hero_promo.png

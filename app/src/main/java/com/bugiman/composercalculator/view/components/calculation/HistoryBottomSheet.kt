@@ -42,7 +42,6 @@ import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,7 +63,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
 import com.bugiman.composercalculator.presentation.history.HistoryViewModel
-import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.ui.theme.Orange
 import com.bugiman.domain.models.history.HistoryModel
 import com.bugiman.domain.models.settings.SettingModel
@@ -91,28 +89,24 @@ fun HistoryBottomSheet(
         containerColor = Color(color = 0xFF1C1C1E),
     ) {
 
-        if (settingsViewModel.historyHeaderLayout.collectAsState().value == 0) {
+        if (settingModel.historyHeaderLayout == 0) {
             HistoryHeaderContentCloseClear(
-                calculatorViewModel = calculatorViewModel,
                 onCloseClick = onCloseClick
             )
         } else {
             HistoryHeaderContentClearClose(
-                calculatorViewModel = calculatorViewModel,
                 onCloseClick = onCloseClick
             )
         }
 
         HistorySheetContent(
-            calculatorViewModel = calculatorViewModel,
-            settingsViewModel = settingsViewModel,
+            settingModel = SettingModel,
         )
     }
 }
 
 @Composable
 private fun HistoryHeaderContentCloseClear(
-    calculatorViewModel: CalculatorViewModel,
     onCloseClick: () -> Unit
 ) {
     Row(
@@ -152,7 +146,7 @@ private fun HistoryHeaderContentCloseClear(
                     .testTag(tag = "sheet_close"),
                 onClick = {
                     scope.launch {
-                        calculatorViewModel.deleteHistoryItemAll()
+                        /*calculatorViewModel.deleteAll()*/
                     }
                 },
                 shape = CircleShape,
@@ -174,7 +168,6 @@ private fun HistoryHeaderContentCloseClear(
 
 @Composable
 private fun HistoryHeaderContentClearClose(
-    calculatorViewModel: CalculatorViewModel,
     onCloseClick: () -> Unit
 ) {
     Row(
@@ -195,7 +188,7 @@ private fun HistoryHeaderContentClearClose(
                     .testTag(tag = "sheet_close"),
                 onClick = {
                     scope.launch {
-                        calculatorViewModel.deleteHistoryItemAll()
+                        /*calculatorViewModel.deleteAll()*/
                     }
                 },
                 shape = CircleShape,
@@ -239,15 +232,10 @@ private fun HistoryHeaderContentClearClose(
 
 @Composable
 private fun HistorySheetContent(
-    calculatorViewModel: CalculationViewModel,
-    settingsViewModel: SettingsViewModel,
+    settingModel: SettingModel,
 ) {
 
-    val historyItems = calculatorViewModel.history.collectAsStateWithLifecycle()
-
-    val historyViewModel = hiltViewModel<HistoryViewModel>()
-
-    val historyList = historyViewModel.history.collectAsStateWithLifecycle(emptyList()).value
+    val historyItems = emptyList<String>() /*calculatorViewModel.history.collectAsStateWithLifecycle()*/
 
     LazyColumn(
         modifier = Modifier.fillMaxHeight(fraction = 0.92f),
@@ -272,10 +260,8 @@ private fun HistorySheetContent(
                 key = { it.id }
             ) { item ->
                 HistoryItemRow(
+                    settingModel = settingModel,
                     item = item,
-                    isNoteEnabled = settingsViewModel.isNoteEnabled.collectAsState().value,
-                    calculatorViewModel = calculatorViewModel,
-                    settingsViewModel = settingsViewModel,
                 )
             }
         }
@@ -285,18 +271,20 @@ private fun HistorySheetContent(
 
 @Composable
 private fun HistoryItemRow(
-    item: HistoryModel,
-    isNoteEnabled: Boolean,
-    calculatorViewModel: CalculatorViewModel,
-    settingsViewModel: SettingsViewModel,
+    historyModel: HistoryModel,
+    settingModel: SettingModel,
+    onDeleteItemClick: () -> Unit,
+    onNoteUpdate: (String) -> Unit,
+    onEditExpression: (String) -> Unit,
 ) {
 
-    var labelText by remember(key1 = item.id) { mutableStateOf(value = item.note) }
+    var labelText by remember(key1 = historyModel.id) { mutableStateOf(value = historyModel.note) }
     val scope = rememberCoroutineScope()
     val clipboard = LocalClipboard.current
 
-    val isSwipeEnable = settingsViewModel.isSwipeEnabled.collectAsState().value
-    val isTitleNote = settingsViewModel.isTitleNote.collectAsState().value
+    val isSwipe = settingModel.isSwipeEnabled
+    val isNote = settingModel.isNoteEnabled
+    val isTitleNote = settingModel.isTitleNote
 
     // Состояние свайпа
     val dismissState = rememberSwipeToDismissBoxState(
@@ -306,7 +294,12 @@ private fun HistoryItemRow(
                     // Действие при свайпе слева направо (например, копирование результата)
                     scope.launch {
                         val clipEntry =
-                            ClipEntry(ClipData.newPlainText("Result", item.result))
+                            ClipEntry(
+                                ClipData.newPlainText(
+                                    "Result",
+                                    historyModel.result
+                                )
+                            )
                         clipboard.setClipEntry(clipEntry)
                     }
                     false // Возвращаем карточку на место
@@ -314,7 +307,7 @@ private fun HistoryItemRow(
 
                 SwipeToDismissBoxValue.EndToStart -> {
                     // Действие при свайпе справа налево (например, удаление)
-                    calculatorViewModel.deleteHistoryItem(itemHistory = item)
+                    onDeleteItemClick()
                     true
                 }
 
@@ -326,7 +319,7 @@ private fun HistoryItemRow(
     SwipeToDismissBox(
         state = dismissState,
         enableDismissFromStartToEnd = false, // Слева направо
-        enableDismissFromEndToStart = isSwipeEnable, // Справа налево
+        enableDismissFromEndToStart = isSwipe, // Справа налево
         backgroundContent = {
             // Фоновый слой (иконки/цвета при свайпе)
             val direction = dismissState.dismissDirection
@@ -366,12 +359,12 @@ private fun HistoryItemRow(
                 ) {
 
                     Text(
-                        text = item.expression,
+                        text = historyModel.expression,
                         color = Color.Gray,
                         fontSize = 16.sp
                     )
                     Text(
-                        text = item.result,
+                        text = historyModel.result,
                         color = Color.White,
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Medium
@@ -383,7 +376,7 @@ private fun HistoryItemRow(
                 Text(
                     text = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
                         .withZone(ZoneId.systemDefault())
-                        .format(Instant.ofEpochMilli(item.timestamp)),
+                        .format(Instant.ofEpochMilli(historyModel.timestamp)),
                     color = Color.Gray,
                     fontSize = 12.sp,
                     modifier = Modifier
@@ -391,18 +384,13 @@ private fun HistoryItemRow(
 
                 Spacer(modifier = Modifier.height(height = 8.dp))
 
-                if (isNoteEnabled) {
+                if (isNote) {
 
                     OutlinedTextField(
                         value = labelText,
                         onValueChange = { newText ->
                             labelText = newText
-                            scope.launch {
-                                calculatorViewModel.onInputNote(
-                                    itemHistory = item,
-                                    newNote = newText
-                                )
-                            }
+                            onNoteUpdate(newText)
                         },
                         placeholder = { Text(text = "Заметка", color = Color.Gray) },
                         modifier = Modifier
@@ -438,9 +426,7 @@ private fun HistoryItemRow(
                 ) {
 
                     Button(
-                        onClick = {
-                            calculatorViewModel.editingExpression(itemHistory = item)
-                        },
+                        onClick = { },
                         modifier = Modifier.weight(weight = 1f),
                         shape = RoundedCornerShape(size = 20.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -456,7 +442,7 @@ private fun HistoryItemRow(
                     )
 
                     Button(
-                        onClick = { calculatorViewModel.deleteHistoryItem(itemHistory = item) },
+                        onClick = { onDeleteItemClick() },
                         modifier = Modifier.weight(weight = 1f),
                         shape = RoundedCornerShape(size = 20.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -477,7 +463,12 @@ private fun HistoryItemRow(
                         onClick = {
                             scope.launch {
                                 val clipEntry =
-                                    ClipEntry(ClipData.newPlainText("Expression", item.expression))
+                                    ClipEntry(
+                                        ClipData.newPlainText(
+                                            "Expression",
+                                            historyModel.expression
+                                        )
+                                    )
                                 clipboard.setClipEntry(clipEntry)
                             }
                         },
@@ -499,7 +490,12 @@ private fun HistoryItemRow(
                         onClick = {
                             scope.launch {
                                 val clipEntry =
-                                    ClipEntry(ClipData.newPlainText("Result", item.result))
+                                    ClipEntry(
+                                        ClipData.newPlainText(
+                                            "Result",
+                                            historyModel.result
+                                        )
+                                    )
                                 clipboard.setClipEntry(clipEntry)
                             }
                         },

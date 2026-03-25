@@ -32,7 +32,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 fun StyledDropdownMenu(
     expanded: Boolean,
     isEnableSwitchDarkMode: Boolean = true,
-    viewModel: SettingsViewModel = viewModel(),
     onDismissRequest: () -> Unit,
     onOpenEngineeringMode: () -> Unit,
     onOpenScientificMode: () -> Unit,
@@ -42,7 +41,7 @@ fun StyledDropdownMenu(
 
     val density = LocalDensity.current
 
-    val isDarkTheme = viewModel.isDarkTheme.collectAsState()
+    val isDarkTheme = false /*viewModel.isDarkTheme.collectAsState()*/
 
     // Используем Popup для полного контроля над стилем
     Popup(
@@ -87,9 +86,9 @@ fun StyledDropdownMenu(
 
             StyledMenuItemWithSwitch(
                 text = "Тёмная тема",
-                checked = if (isEnableSwitchDarkMode) isDarkTheme.value else false,
+                checked = /*if (isEnableSwitchDarkMode) isDarkTheme.value else*/ false,
                 isEnableSwitchDarkMode = isEnableSwitchDarkMode,
-                onCheckedChange = { viewModel.onDarkThemeChange(isDark = it) }
+                onCheckedChange = {  }
             )
 
         }

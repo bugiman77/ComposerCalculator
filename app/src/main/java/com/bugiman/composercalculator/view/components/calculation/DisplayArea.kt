@@ -20,17 +20,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bugiman.domain.models.settings.SettingModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DisplayArea(
-    viewModelCalculation: CalculatorViewModel = viewModel(),
-    viewModelSettings: SettingsViewModel = viewModel(),
+    settingModel: SettingModel,
 ) {
     var fontSize by remember { mutableStateOf(value = 80.sp) }
     val minFontSize = 40.sp
     val scrollState = rememberScrollState()
-    val displayText = viewModelCalculation.expression.collectAsState().value
+    val displayText =  "" /*viewModelCalculation.expression.collectAsState().value*/
     var inputPosition by remember { mutableStateOf(value = Offset.Zero) }
 
     LaunchedEffect(key1 = displayText) {
@@ -54,7 +54,7 @@ fun DisplayArea(
     ) {
         val containerWidth = constraints.maxWidth
 
-        if (displayText.isEmpty() && viewModelSettings.showPlaceholderInput.collectAsState().value) {
+        if (displayText.isEmpty() && false /*viewModelSettings.showPlaceholderInput.collectAsState().value*/) {
             Text(
                 text = "0",
                 color = Color.White.copy(alpha = 0.4f),

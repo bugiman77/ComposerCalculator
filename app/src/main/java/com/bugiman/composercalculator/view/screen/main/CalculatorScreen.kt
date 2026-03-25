@@ -54,10 +54,10 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CalculatorScreen(
-    onNavigateToSettings: () -> Unit,
-    onNavigateToHistory: () -> Unit,
     viewModelCalculation: CalculatorViewModel,
     settingModel: SettingModel,
+    onNavigateToSettings: () -> Unit,
+    onNavigateToHistory: () -> Unit,
     onUpdateSettings: ((SettingModel) -> SettingModel) -> Unit = {}
 ) {
 
@@ -66,7 +66,7 @@ fun CalculatorScreen(
     )
 
     val isSheetVisible = sheetState.isVisible
-    ForceWhiteStatusBarIcons(trigger = isSheetVisible)
+//    ForceWhiteStatusBarIcons(trigger = isSheetVisible)
 
     var showHistorySheet by remember { mutableStateOf(value = false) }
 
@@ -202,14 +202,12 @@ fun CalculatorScreen(
                     }
 
                     DisplayArea(
-                        viewModelCalculation = viewModelCalculation,
-                        viewModelSettings = viewModelSettings,
+                        settingModel = settingModel,
                     )
 
                     // Сетка кнопок
                     CalculatorButtonGrid(
-                        viewModelSetting = viewModelSettings,
-                        viewModelCalculation = viewModelCalculation
+                        settingModel = settingModel,
                     )
                 }
             }
@@ -217,7 +215,7 @@ fun CalculatorScreen(
     }
 }
 
-@Composable
+/*@Composable
 private fun ForceWhiteStatusBarIcons(
     trigger: Any? = null
 ) {
@@ -232,4 +230,4 @@ private fun ForceWhiteStatusBarIcons(
             insetsController.isAppearanceLightStatusBars = false
         }
     }
-}
+}*/

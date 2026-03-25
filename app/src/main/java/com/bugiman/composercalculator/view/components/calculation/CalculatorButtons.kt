@@ -47,11 +47,12 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.Dp
 import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
 import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
+import com.bugiman.domain.models.settings.SettingModel
 
 @Composable
 fun CalculatorButtonGrid(
-    viewModelSetting: SettingsViewModel = viewModel(),
-    viewModelCalculation: CalculatorViewModel = viewModel()
+    viewModelCalculation: CalculatorViewModel = viewModel(),
+    settingModel: SettingModel,
 ) {
 
     Column(
@@ -61,24 +62,24 @@ fun CalculatorButtonGrid(
     ) {
 
         LineCalculation1(
-            viewModelCalculation = viewModelCalculation,
+            /*viewModelCalculation = viewModelCalculation,*/
         )
 
         LineCalculation2(
-            viewModelCalculation = viewModelCalculation,
+            /*viewModelCalculation = viewModelCalculation,*/
         )
 
         LineCalculation3(
-            viewModelCalculation = viewModelCalculation,
+            /*viewModelCalculation = viewModelCalculation,*/
         )
 
         LineCalculation4(
-            viewModelCalculation = viewModelCalculation,
+            /*viewModelCalculation = viewModelCalculation,*/
         )
 
         LineCalculation5(
-            viewModelCalculation = viewModelCalculation,
-            viewModelSetting = viewModelSetting,
+            /*viewModelCalculation = viewModelCalculation,
+            viewModelSetting = viewModelSetting,*/
         )
 
     }
@@ -118,11 +119,7 @@ private fun BtnCalculationText(
     Button(
         onClick = { },
         modifier = modifier
-            .aspectRatio(ratio = 1f)
-        .onGloballyPositioned { coordinates ->
-            buttonOffset = coordinates.positionInRoot()
-        }
-,
+            .aspectRatio(ratio = 1f),
         shape = CircleShape,
         contentPadding = PaddingValues(all = 0.dp),
         border = BorderStroke(width = 1.dp, borderBrush),
@@ -218,10 +215,9 @@ private fun BtnCalculationIcon(
 @Composable
 private fun LineCalculation1(
     modifier: Modifier = Modifier,
-    viewModelCalculation: CalculatorViewModel,
 ) {
 
-    val isInputEmpty = viewModelCalculation.expression.collectAsState().value.isEmpty()
+    val isInputEmpty = false /*viewModelCalculation.expression.collectAsState().value.isEmpty()*/
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -234,10 +230,10 @@ private fun LineCalculation1(
             modifier = Modifier.weight(weight = 1f),
             fontSize = 30.sp,
             onClick = {
-                viewModelCalculation.removeLastCharacter()
+                /*viewModelCalculation.removeLastCharacter()*/
             },
             onLongClick = {
-                viewModelCalculation.clearExpression()
+                /*viewModelCalculation.clearExpression()*/
             },
         )
 
@@ -247,7 +243,7 @@ private fun LineCalculation1(
             modifier = Modifier.weight(weight = 1f),
             fontSize = 30.sp,
             onClick = {
-                viewModelCalculation.onToggleSign()
+                /*viewModelCalculation.onToggleSign()*/
             },
         )
 
@@ -268,7 +264,7 @@ private fun LineCalculation1(
             modifier = Modifier.weight(weight = 1f),
             fontSize = 50.sp,
             onClick = {
-                viewModelCalculation.onInputMathematicalOperations(inputOperation = "/")
+                /*viewModelCalculation.onInputMathematicalOperations(inputOperation = "/")*/
             },
         )
     }
@@ -278,7 +274,6 @@ private fun LineCalculation1(
 @Composable
 private fun LineCalculation2(
     modifier: Modifier = Modifier,
-    viewModelCalculation: CalculatorViewModel,
 ) {
 
     Row(
@@ -291,7 +286,7 @@ private fun LineCalculation2(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = { offset ->
-                viewModelCalculation.onInputDigit(inputDigit = "7")
+                /*viewModelCalculation.onInputDigit(inputDigit = "7")*/
             },
         )
 
@@ -300,7 +295,7 @@ private fun LineCalculation2(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = { offset ->
-                viewModelCalculation.onInputDigit(inputDigit = "8")
+                /*viewModelCalculation.onInputDigit(inputDigit = "8")*/
             },
         )
 
@@ -309,7 +304,7 @@ private fun LineCalculation2(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = { offset ->
-                viewModelCalculation.onInputDigit(inputDigit = "9")
+                /*viewModelCalculation.onInputDigit(inputDigit = "9")*/
             },
         )
 
@@ -320,7 +315,7 @@ private fun LineCalculation2(
             modifier = Modifier.weight(weight = 1f),
             iconSize = 50.dp,
             onClick = {
-                viewModelCalculation.onInputMathematicalOperations(inputOperation = "*")
+                /*viewModelCalculation.onInputMathematicalOperations(inputOperation = "*")*/
             },
             onLongClick = {
 //                TODO
@@ -333,7 +328,6 @@ private fun LineCalculation2(
 @Composable
 private fun LineCalculation3(
     modifier: Modifier = Modifier,
-    viewModelCalculation: CalculatorViewModel,
 ) {
 
     Row(
@@ -346,7 +340,7 @@ private fun LineCalculation3(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = { offset ->
-                viewModelCalculation.onInputDigit(inputDigit = "4")
+                /*viewModelCalculation.onInputDigit(inputDigit = "4")*/
             },
         )
 
@@ -355,7 +349,7 @@ private fun LineCalculation3(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = { offset ->
-                viewModelCalculation.onInputDigit(inputDigit = "5")
+                /*viewModelCalculation.onInputDigit(inputDigit = "5")*/
             },
         )
 
@@ -364,7 +358,7 @@ private fun LineCalculation3(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = { offset ->
-                viewModelCalculation.onInputDigit(inputDigit = "6")
+                /*viewModelCalculation.onInputDigit(inputDigit = "6")*/
             }
         )
 
@@ -375,7 +369,7 @@ private fun LineCalculation3(
             modifier = Modifier.weight(weight = 1f),
             iconSize = 70.dp,
             onClick = {
-                viewModelCalculation.onInputMathematicalOperations(inputOperation = "-")
+                /*viewModelCalculation.onInputMathematicalOperations(inputOperation = "-")*/
             },
         )
 
@@ -385,10 +379,9 @@ private fun LineCalculation3(
 @Composable
 private fun LineCalculation4(
     modifier: Modifier = Modifier,
-    viewModelCalculation: CalculatorViewModel,
 ) {
 
-    val isInputEmpty = viewModelCalculation.expression.collectAsState().value.isEmpty()
+    val isInputEmpty = false /*viewModelCalculation.expression.collectAsState().value.isEmpty()*/
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -400,7 +393,7 @@ private fun LineCalculation4(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = { offset ->
-                viewModelCalculation.onInputDigit(inputDigit = "1")
+                /*viewModelCalculation.onInputDigit(inputDigit = "1")*/
             },
         )
 
@@ -409,7 +402,7 @@ private fun LineCalculation4(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = { offset ->
-                viewModelCalculation.onInputDigit(inputDigit = "2")
+                /*viewModelCalculation.onInputDigit(inputDigit = "2")*/
             },
         )
 
@@ -418,7 +411,7 @@ private fun LineCalculation4(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = { offset ->
-                viewModelCalculation.onInputDigit(inputDigit = "3")
+                /*viewModelCalculation.onInputDigit(inputDigit = "3")*/
             },
         )
 
@@ -429,7 +422,7 @@ private fun LineCalculation4(
             modifier = Modifier.weight(weight = 1f),
             iconSize = 50.dp,
             onClick = {
-                viewModelCalculation.onInputMathematicalOperations(inputOperation = "+")
+                /*viewModelCalculation.onInputMathematicalOperations(inputOperation = "+")*/
             },
         )
 
@@ -439,12 +432,10 @@ private fun LineCalculation4(
 @Composable
 private fun LineCalculation5(
     modifier: Modifier = Modifier,
-    viewModelCalculation: CalculatorViewModel,
-    viewModelSetting: SettingsViewModel,
 ) {
 
-    val isInputEmpty = viewModelCalculation.expression.collectAsState().value.isEmpty()
-    val isSwitchEnableDarkMode = !viewModelSetting.isSystemTheme.collectAsState().value
+    val isInputEmpty = false /*viewModelCalculation.expression.collectAsState().value.isEmpty()*/
+    val isSwitchEnableDarkMode = false /*!viewModelSetting.isSystemTheme.collectAsState().value*/
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -480,7 +471,6 @@ private fun LineCalculation5(
                 StyledDropdownMenu(
                     expanded = true,
                     isEnableSwitchDarkMode = isSwitchEnableDarkMode,
-                    viewModel = viewModelSetting,
                     onDismissRequest = { menuExpanded = false },
                     onOpenEngineeringMode = {},
                     onOpenScientificMode = {},
@@ -496,7 +486,7 @@ private fun LineCalculation5(
             modifier = Modifier.weight(weight = 1f),
             fontSize = 45.sp,
             onClick = {
-                viewModelCalculation.onInputDigit(inputDigit = "0")
+                /*viewModelCalculation.onInputDigit(inputDigit = "0")*/
             },
         )
 
@@ -507,7 +497,7 @@ private fun LineCalculation5(
                 .weight(weight = 1f),
             fontSize = 60.sp,
             onClick = {
-                viewModelCalculation.onInputMathematicalOperations(inputOperation = ".")
+                /*viewModelCalculation.onInputMathematicalOperations(inputOperation = ".")*/
             },
         )
 
@@ -519,7 +509,7 @@ private fun LineCalculation5(
             iconSize = 55.dp,
             onClick = {
                 scope.launch {
-                    viewModelCalculation.calculateAndSave()
+                    /*viewModelCalculation.calculateAndSave()*/
                 }
             },
         )

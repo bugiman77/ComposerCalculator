@@ -5,4 +5,4 @@
 [![Build Status](https://github.com)](https://github.com)
 [![License](https://img.shields.io)](LICENSE)
 
-![calculator.png](screenshots_for_readme/calculator.png)
+![calculator.png](forREADME/calculator.png)

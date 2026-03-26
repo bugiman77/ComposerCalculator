@@ -7,18 +7,12 @@ This is the complete source code and the architecture overview for the official 
 [![Build Status](https://github.com)](https://github.com)
 [![License](https://img.shields.io)](LICENSE)
 
----
-
-[![Preview of Composer Calculator][hero_image]][hero_image_url]
-
----
+![calculator.png](screenshots_for_readme/calculator.png)
 
 *   **Python Engine:** Heavy-duty calculations powered by Python's SymPy and NumPy.
 *   **Currency Converter:** Real-time exchange rates via Retrofit 2 and external APIs.
 *   **Persistence:** Local history on **Room** and settings via **Proto DataStore**.
 *   **Modern UI:** Built entirely with Jetpack Compose & Material 3.
-
----
 
 [project_url]: https://github.com
 [hero_image]: docs/hero_promo.png

@@ -2,50 +2,14 @@
 
 ![calculator.png](forREADME/calculator.png)
 
-Инженерный калькулятор, в котором совмещено нативная Android-разработка и мощь 
-Python-библиотек. Основная идея была в том, чтобы не писать велосипед для парсинга сложных 
-математических выражений на Kotlin, а использовать возможности библиотек Python.
+Composer Calculator is a feature-rich Android calculator application built with Kotlin and Jetpack Compose, powered by Python mathematical libraries. It goes beyond basic calculations by offering:
 
-```mermaid
----
-Block Diagram
----
-graph TB
-    subgraph Android["Android Native Layer"]
-        UI["User Interface<br/>(Kotlin/Jetpack Compose)"]
-        InputHandler["Input Handler<br/>(UI Events)"]
-        OutputDisplay["Output Display<br/>(Results & History)"]
-    end
+- Advanced Mathematical Computations - Leverage Python's sympy and numpy libraries for complex expression parsing and evaluation
+- Comprehensive Calculation History - Save, organize, and manage all your calculations with searchable, annotated records
+- Unit Conversion - Convert between various measurement units seamlessly
+- Customizable Settings - Control haptic feedback, sound notifications, and app behavior
+- Clean Modern UI - Built with Jetpack Compose for a responsive, adaptive interface
+- Local Data Storage - All data is stored locally using Room database for privacy and offline access
+- Perfect for engineers, students, and professionals who need reliable mathematical computations with persistent history tracking.
 
-    subgraph Processing["Processing Layer"]
-        ExpressionValidator["Expression Validator"]
-        Calculator["Calculator Engine"]
-    end
-
-    subgraph Python["Python Backend"]
-        PythonParser["Python Expression Parser<br/>(sympy/numpy)"]
-        MathLibs["Mathematical Libraries<br/>(Advanced Operations)"]
-    end
-
-    subgraph Storage["Data Storage"]
-        History["Calculation History<br/>(Local Database)"]
-        Cache["Cache Layer"]
-    end
-
-    UI -->|User Input| InputHandler
-    InputHandler -->|Expression| ExpressionValidator
-    ExpressionValidator -->|Valid Expression| Calculator
-    Calculator -->|Parse Request| PythonParser
-    PythonParser -->|Use Libraries| MathLibs
-    MathLibs -->|Result| Calculator
-    Calculator -->|Display Result| OutputDisplay
-    OutputDisplay -->|Update| UI
-    Calculator -->|Save| History
-    History -->|Load| InputHandler
-    Calculator -.->|Cache| Cache
-
-    style Android fill:#3ddc84
-    style Processing fill:#bb86fc
-    style Python fill:#ff6b6b
-    style Storage fill:#03dac6
-```
+[📊 Посмотреть архитектурную схему и Use Cases проекта](docs/DIAGRAMS.md)

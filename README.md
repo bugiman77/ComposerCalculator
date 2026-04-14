@@ -2,14 +2,31 @@
 
 ![calculator.png](forREADME/calculator.png)
 
-Composer Calculator is a feature-rich Android calculator application built with Kotlin and Jetpack Compose, powered by Python mathematical libraries. It goes beyond basic calculations by offering:
+Это многофункциональное приложение-калькулятор для Android, созданное на Kotlin и Jetpack Compose с использованием математических библиотек Python. Оно выходит за рамки базовых вычислений, предлагая:
 
-- Advanced Mathematical Computations - Leverage Python's sympy and numpy libraries for complex expression parsing and evaluation
-- Comprehensive Calculation History - Save, organize, and manage all your calculations with searchable, annotated records
-- Unit Conversion - Convert between various measurement units seamlessly
-- Customizable Settings - Control haptic feedback, sound notifications, and app behavior
-- Clean Modern UI - Built with Jetpack Compose for a responsive, adaptive interface
-- Local Data Storage - All data is stored locally using Room database for privacy and offline access
-- Perfect for engineers, students, and professionals who need reliable mathematical computations with persistent history tracking.
+- **Расширенные математические вычисления** — *используйте библиотеки Python sympy и numpy для анализа и оценки сложных выражений*
+- **Полная история вычислений** — *сохраняйте, организуйте и управляйте всеми своими вычислениями с помощью аннотированных записей с возможностью поиска*
+- **Преобразование единиц измерения** — *легко конвертируйте между различными единицами измерения*
+- **Настраиваемые параметры** — *управляйте тактильной обратной связью, звуковыми уведомлениями и поведением приложения*
+- **Чистый современный пользовательский интерфейс** — *создан с помощью Jetpack Compose для отзывчивого, адаптивного интерфейса*
+- **Локальное хранение данных** — *все данные хранятся локально с использованием базы данных Room для обеспечения конфиденциальности и доступа в автономном режиме*
+- **Идеально подходит для инженеров, студентов и специалистов**, *которым необходимы надежные математические вычисления с постоянным отслеживанием истории.*
 
-[📊 Посмотреть архитектурную схему и Use Cases проекта](docs/DIAGRAMS.md)
+
+### 🧮 Математические возможности движка
+
+Приложение использует мощь библиотек **SymPy** и **NumPy**, что позволяет выполнять сложные вычисления с высокой точностью.
+
+#### Работа с большими числами (до $10^{27}$)
+Вычисления с экстремально большими значениями, включая факториалы:
+$$N! = \prod_{k=1}^{n} k \implies 25! \approx 1.55 \times 10^{25}$$
+
+#### Символьные вычисления и уравнения
+Решение квадратных уравнений и поиск корней:
+$$ax^2 + bx + c = 0 \rightarrow x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
+
+
+<div align="center">
+  <a href="docs/DIAGRAMS.md">Архитектурная схема и Use Cases проекта</a>
+</div>
+  

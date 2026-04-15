@@ -23,6 +23,6 @@ dependencyResolutionManagement {
 rootProject.name = "ComposerCalculator"
 
 include(":calculation_app")
-include(":data")
-include(":domain")
-include(":designsystem")
+include(":calculation_data")
+include(":calculation_domain")
+include(":calculation_designsystem")

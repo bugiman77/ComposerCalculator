@@ -153,9 +153,9 @@ dependencies {
 
     implementation(libs.google.accompanist.drawablepainter)
     implementation(libs.lottie.compose)
+    implementation(project(":calculation_domain"))
 
-    implementation(project(":domain"))
-    implementation(project(":data"))
+    implementation(project(":calculation_data"))
 
     val voyagerVersion = "1.1.0-beta03" // Текущая стабильная версия
     implementation("cafe.adriel.voyager:voyager-hilt:$voyagerVersion")

@@ -55,8 +55,7 @@ android {
 
 dependencies {
 
-    implementation(project(":domain"))
-
+    implementation(project(":calculation_domain"))
     testImplementation(libs.junit)
 
     implementation(libs.androidx.room.runtime)

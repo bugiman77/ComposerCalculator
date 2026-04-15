@@ -14,10 +14,5 @@
 
 
 <div align="center">
-  <a href="docs/MATH.md">Математические возможности движка</a>
+  <a href="docs/MATH.md"><kbd>Математические возможности движка</kbd></a> <a href="docs/DIAGRAMS.md"><kbd>Архитектурная схема и Use Cases проекта</kbd></a>
 </div>
-
-<div align="center">
-  <a href="docs/DIAGRAMS.md">Архитектурная схема и Use Cases проекта</a>
-</div>
-  

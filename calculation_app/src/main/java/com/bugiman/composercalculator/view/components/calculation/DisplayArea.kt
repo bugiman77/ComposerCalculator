@@ -36,9 +36,7 @@ fun DisplayArea(
     LaunchedEffect(key1 = displayText) {
         scrollState.animateScrollTo(scrollState.maxValue)
         // Сбрасываем размер шрифта при коротком тексте
-        if (displayText.length < 10) {
-            fontSize = 85.sp
-        }
+        if (displayText.length < 10) fontSize = 85.sp
     }
 
     BoxWithConstraints(
@@ -54,7 +52,7 @@ fun DisplayArea(
     ) {
         val containerWidth = constraints.maxWidth
 
-        if (displayText.isEmpty() && false /*viewModelSettings.showPlaceholderInput.collectAsState().value*/) {
+        if (false /*viewModelSettings.showPlaceholderInput.collectAsState().value*/) {
             Text(
                 text = "0",
                 color = Color.White.copy(alpha = 0.4f),

@@ -1,6 +1,8 @@
 package com.bugiman.composercalculator.view.screen.main
 
-import android.app.Activity
+//import com.bugiman.composercalculator.view.components.calculation.CalculatorButtonGrid
+//import com.bugiman.composercalculator.view.components.calculation.DisplayArea
+//import com.bugiman.composercalculator.view.components.calculation.HistoryBottomSheet
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -25,7 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,11 +35,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.view.WindowCompat
 import com.bugiman.composercalculator.R
 import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
 import com.bugiman.composercalculator.ui.theme.DarkGray
@@ -46,9 +45,6 @@ import com.bugiman.composercalculator.view.components.calculation.CalculatorButt
 import com.bugiman.composercalculator.view.components.calculation.DisplayArea
 import com.bugiman.composercalculator.view.components.calculation.HistoryBottomSheet
 import com.bugiman.domain.models.settings.SettingModel
-//import com.bugiman.composercalculator.view.components.calculation.CalculatorButtonGrid
-//import com.bugiman.composercalculator.view.components.calculation.DisplayArea
-//import com.bugiman.composercalculator.view.components.calculation.HistoryBottomSheet
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
@@ -66,12 +62,12 @@ fun CalculatorScreen(
     )
 
     val isSheetVisible = sheetState.isVisible
-//    ForceWhiteStatusBarIcons(trigger = isSheetVisible)
 
     var showHistorySheet by remember { mutableStateOf(value = false) }
 
     val scope = rememberCoroutineScope()
 
+    //TODO
     val showIconButton = settingModel.isShowHistoryButton
     val isShowHistoryBotton = settingModel.isShowHistoryButton
 
@@ -154,7 +150,7 @@ fun CalculatorScreen(
                                     Text(
                                         text = "История",
                                         fontSize = 14.sp, // Уменьшаем размер шрифта для компактности
-                                        color = MaterialTheme.colors.onPrimary // Цвет текста
+                                        color = MaterialTheme.colorScheme.onPrimary // Цвет текста
                                     )
                                 }
                             }
@@ -195,7 +191,7 @@ fun CalculatorScreen(
                                 Text(
                                     text = "Настройки",
                                     fontSize = 14.sp,
-                                    color = MaterialTheme.colors.onPrimary // Цвет текста
+                                    color = MaterialTheme.colorScheme.onPrimary // Цвет текста
                                 )
                             }
                         }
@@ -214,20 +210,3 @@ fun CalculatorScreen(
         }
     }
 }
-
-/*@Composable
-private fun ForceWhiteStatusBarIcons(
-    trigger: Any? = null
-) {
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        val window = (view.context as Activity).window
-
-        // Используем SideEffect, который срабатывает после каждой успешной рекомпозиции
-        SideEffect {
-            val insetsController = WindowCompat.getInsetsController(window, view)
-            // false означает, что мы НЕ используем темные иконки (т.е. они будут белыми)
-            insetsController.isAppearanceLightStatusBars = false
-        }
-    }
-}*/

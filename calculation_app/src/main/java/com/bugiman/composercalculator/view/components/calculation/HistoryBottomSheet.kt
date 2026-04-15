@@ -100,7 +100,7 @@ fun HistoryBottomSheet(
         }
 
         HistorySheetContent(
-            settingModel = SettingModel,
+            settingModel = settingModel,
         )
     }
 }

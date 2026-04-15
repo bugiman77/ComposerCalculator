@@ -1,6 +1,6 @@
 <h1 align="center">Composer Calculator</h1>
 
-![calculator.png](forREADME/calculator.png)
+![calculator.png](docs/forREADME/calculator.png)
 
 Это многофункциональное приложение-калькулятор для Android, созданное на Kotlin и Jetpack Compose с использованием математических библиотек Python. Оно выходит за рамки базовых вычислений, предлагая:
 

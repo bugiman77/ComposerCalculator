@@ -11,7 +11,7 @@
       сложных выражений</i>
     </td>
     <td width="30" align="center" valign="middle">
-      <img src="https://placeholder.com" width="30" height="30" style="display:block;">
+      <img src="docs_readme/forREADME/Advanced Math.png" width="30" height="30" style="display:block;">
     </td>
   </tr>
 

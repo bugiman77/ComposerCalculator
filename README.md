@@ -1,4 +1,4 @@
-<h1 align="center">Composer Calculator</h1>
+<h1 align="center">Composer Calculator <img alt="Static Badge" src="https://img.shields.io/badge/portfolio-orange"></h1>
 
 ![calculator.png](docs_readme/forREADME/calculator.png)
 

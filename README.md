@@ -10,14 +10,14 @@
       <b>&emsp;Расширенные математические вычисления</b> — <i>используется библиотеки Python для анализа и оценки
       сложных выражений</i>
     </td>
-    <td width="150" align="center" valign="middle">
-      <img src="docs_readme/forREADME/possibilities/Advanced Math.png" width="150" height="150">
+    <td width="200" align="center" valign="middle">
+      <img src="docs_readme/forREADME/possibilities/Advanced Math.png" width="200">
     </td>
   </tr>
 
   <tr>
-    <td width="150" align="center" valign="middle">
-      <img src="docs_readme/forREADME/possibilities/Complete History.png" width="150" height="150">
+    <td width="200" align="center" valign="middle">
+      <img src="docs_readme/forREADME/possibilities/Complete History.png" width="200">
     </td>
     <td colspan="9">
       <b>&emsp;Полная история вычислений</b> — <i>сохраняйте, организуйте и управляйте всеми своими вычислениями с
@@ -29,14 +29,14 @@
     <td colspan="9">
       <b>&emsp;Преобразование единиц измерения</b> — <i>легко конвертируйте между различными единицами измерения</i>
     </td>
-    <td width="150" align="center">
-      <img src="docs_readme/forREADME/possibilities/Unit Conversion.png" width="150" height="150">
+    <td width="200" align="center">
+      <img src="docs_readme/forREADME/possibilities/Unit Conversion.png" width="200"">
     </td>
   </tr>
 
   <tr>
-    <td width="150" align="center">
-      <img src="docs_readme/forREADME/possibilities/Customizable Settings.png" width="150" height="150">
+    <td width="200" align="center">
+      <img src="docs_readme/forREADME/possibilities/Customizable Settings.png" width="200">
     </td>
     <td colspan="9">
       <b>&emsp;Настраиваемые параметры</b> — <i>управляйте тактильной обратной связью</i>
@@ -47,8 +47,8 @@
     <td colspan="9">
       <b>&emsp;Чистый современный пользовательский интерфейс</b> — <i>создан с помощью Jetpack Compose</i>
     </td>
-    <td width="150" align="center">
-      <img src="docs_readme/forREADME/possibilities/Clean Modern UI.png" width="150" height="150">
+    <td width="200" align="center">
+      <img src="docs_readme/forREADME/possibilities/Clean Modern UI.png" width="200">
     </td>
   </tr>
 

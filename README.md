@@ -63,8 +63,8 @@
   </tr>
 </table>
 
-&emsp;**Локальное хранение данных** — *все данные хранятся локально*
+&emsp;**Локальное хранение данных на устройстве**
 
-<div align="center">
+<!-- <div align="center">
   <a href="docs_readme/MATH.md"><kbd>Математические возможности движка</kbd></a> <a href="docs_readme/DIAGRAMS.md"><kbd>Архитектурная схема и Use Cases проекта</kbd></a>
 </div>

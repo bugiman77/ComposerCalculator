@@ -42,24 +42,29 @@ class MainActivity : ComponentActivity() {
             CalculationViewModelFactory(
                 calculateExpressionUseCase = app.calculateExpressionUseCase,
                 historyItemSaveUseCase = app.historyItemSaveUseCase,
-                feedbackTriggerUseCase = app.feedbackTriggerUseCase,
-                historyAllGetUseCase = app.historyAllGetUseCase,
                 historyAllDeleteUseCase = app.historyAllDeleteUseCase,
+                historyAllGetUseCase = app.historyAllGetUseCase,
+                feedbackTriggerUseCase = app.feedbackTriggerUseCase,
+                buildDigitUseCase = app.buildDigitUseCase,
+                buildOperatorUseCase = app.buildOperatorUseCase,
+                buildBracketUseCase = app.buildBracketUseCase,
+                buildDecimalUseCase = app.buildDecimalUseCase,
+                buildZeroUseCase = app.buildZeroUseCase,
+                removeLastCharUseCase = app.removeLastCharUseCase
             )
         }
 
         val viewModelConverter: ConvertViewModel by viewModels {
             ConvertViewModelFactory(
-                convertValueUseCase = app.convertValueUseCase,
+                convertGetFormattedConversionUseCase = app.convertGetFormattedConversionUseCase,
+                convertSwapCurrenciesUseCase = app.convertSwapCurrenciesUseCase,
                 feedbackTriggerUseCase = app.feedbackTriggerUseCase
             )
         }
 
         setContent {
-            // Подписка на настройки (один источник истины для всего UI)
             val settings by viewModelSettings.uiState.collectAsStateWithLifecycle()
 
-            // Управление включенным экраном
             val view = LocalView.current
             DisposableEffect(settings.isKeepScreenOn) {
                 view.keepScreenOn = settings.isKeepScreenOn
@@ -79,6 +84,7 @@ class MainActivity : ComponentActivity() {
                 AppNavigation(
                     settingsViewModel = viewModelSettings,
                     calculatorViewModel = viewModelCalculation,
+                    converterViewModel = viewModelConverter
                 )
             }
         }

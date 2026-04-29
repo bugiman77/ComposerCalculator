@@ -1,22 +1,17 @@
 package com.bugiman.composercalculator.view.components.calculation
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -24,9 +19,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -35,53 +27,40 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bugiman.composercalculator.R
+import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
+import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.ui.theme.DarkGray
 import com.bugiman.composercalculator.ui.theme.LightGray
 import com.bugiman.composercalculator.ui.theme.Orange
-import kotlinx.coroutines.launch
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.unit.Dp
-import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
-import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.domain.models.settings.SettingModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun CalculatorButtonGrid(
-    viewModelCalculation: CalculatorViewModel = viewModel(),
+    // ✅ Получаем ViewModel в качестве параметра
+    viewModelCalculation: CalculatorViewModel,
     settingModel: SettingModel,
 ) {
-
     Column(
-        modifier = Modifier
-            .padding(start = 4.dp, end = 4.dp),
+        modifier = Modifier.padding(start = 4.dp, end = 4.dp),
         verticalArrangement = Arrangement.spacedBy(space = 8.dp)
     ) {
-
         LineCalculation1(
-            /*viewModelCalculation = viewModelCalculation,*/
+            viewModelCalculation = viewModelCalculation
         )
-
         LineCalculation2(
-            /*viewModelCalculation = viewModelCalculation,*/
+            viewModelCalculation = viewModelCalculation
         )
-
         LineCalculation3(
-            /*viewModelCalculation = viewModelCalculation,*/
+            viewModelCalculation = viewModelCalculation
         )
-
         LineCalculation4(
-            /*viewModelCalculation = viewModelCalculation,*/
+            viewModelCalculation = viewModelCalculation
         )
-
         LineCalculation5(
-            /*viewModelCalculation = viewModelCalculation,
-            viewModelSetting = viewModelSetting,*/
+            viewModelCalculation = viewModelCalculation
         )
-
     }
 }
 
@@ -94,32 +73,15 @@ private fun BtnCalculationText(
     fontSize: TextUnit = 40.sp,
     isButtonEnabled: Boolean = true,
     onLongClick: () -> Unit = {},
-    onClick: (Offset) -> Unit,
+    onClick: () -> Unit,
 ) {
-
-    val scrollState = rememberScrollState()
-    var buttonOffset by remember { mutableStateOf(Offset.Zero) }
-
-// Создаем едва заметный вертикальный градиент для фона
-    val backgroundBrush = Brush.verticalGradient(
-        colors = listOf(
-            color,
-            color
-        )
-    )
-
-// Создаем границу, которая имитирует внутреннюю тень
-    val borderBrush = Brush.verticalGradient(
-        colors = listOf(
-            Color.White.copy(alpha = 0.2f),
-            Color.Transparent
-        )
-    )
+    val backgroundBrush = Brush.verticalGradient(colors = listOf(color, color))
+    val borderBrush =
+        Brush.verticalGradient(colors = listOf(Color.White.copy(alpha = 0.2f), Color.Transparent))
 
     Button(
         onClick = { },
-        modifier = modifier
-            .aspectRatio(ratio = 1f),
+        modifier = modifier.aspectRatio(ratio = 1f),
         shape = CircleShape,
         contentPadding = PaddingValues(all = 0.dp),
         border = BorderStroke(width = 1.dp, borderBrush),
@@ -127,61 +89,37 @@ private fun BtnCalculationText(
     ) {
         Box(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .background(backgroundBrush, shape = CircleShape)
                 .combinedClickable(
-                    onClick = {
-                        onClick(buttonOffset)
-                    },
-                    onLongClick = {
-                        onLongClick()
-                    }
+                    onClick = onClick,
+                    onLongClick = onLongClick
                 ),
-
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                modifier = Modifier.horizontalScroll(scrollState),
-                text = text,
-                fontSize = fontSize,
-                color = Color.White
-            )
+            Text(text = text, fontSize = fontSize, color = Color.White)
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun BtnCalculationIcon(
     modifier: Modifier = Modifier,
-    iconId: Painter,
+    iconId: androidx.compose.ui.graphics.painter.Painter,
     color: Color,
     tint: Color,
-    iconSize: Dp = 40.dp,
     isButtonEnabled: Boolean = true,
     onLongClick: () -> Unit = {},
     onClick: () -> Unit,
 ) {
-
-// Создаем едва заметный вертикальный градиент для фона
-    val backgroundBrush = Brush.verticalGradient(
-        colors = listOf(
-            color,
-            color
-        )
-    )
-
-// Создаем границу, которая имитирует внутреннюю тень
-    val borderBrush = Brush.verticalGradient(
-        colors = listOf(
-            Color.White.copy(alpha = 0.2f),
-            Color.Transparent
-        )
-    )
+    val backgroundBrush = Brush.verticalGradient(colors = listOf(color, color))
+    val borderBrush =
+        Brush.verticalGradient(colors = listOf(Color.White.copy(alpha = 0.2f), Color.Transparent))
 
     Button(
         onClick = { },
-        modifier = modifier
-            .aspectRatio(ratio = 1f),
+        modifier = modifier.aspectRatio(ratio = 1f),
         shape = CircleShape,
         contentPadding = PaddingValues(all = 0.dp),
         border = BorderStroke(width = 1.dp, borderBrush),
@@ -189,23 +127,18 @@ private fun BtnCalculationIcon(
     ) {
         Box(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .background(backgroundBrush, shape = CircleShape)
                 .combinedClickable(
-                    onClick = {
-                        onClick()
-                    },
-                    onLongClick = {
-                        onLongClick()
-                    }
+                    onClick = onClick,
+                    onLongClick = onLongClick
                 ),
-
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 painter = iconId,
                 contentDescription = null,
-                modifier = Modifier.size(iconSize),
+                modifier = Modifier.fillMaxWidth(),
                 tint = tint
             )
         }
@@ -213,269 +146,138 @@ private fun BtnCalculationIcon(
 }
 
 @Composable
-private fun LineCalculation1(
-    modifier: Modifier = Modifier,
-) {
-
-    val isInputEmpty = false /*viewModelCalculation.expression.collectAsState().value.isEmpty()*/
-
+private fun LineCalculation1(viewModelCalculation: CalculatorViewModel) {
     Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(space = 8.dp) // Расстояние между кнопками
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
     ) {
-
         BtnCalculationText(
-            text = if (isInputEmpty) "AC" else "C",
+            text = "C",
             color = LightGray,
             modifier = Modifier.weight(weight = 1f),
             fontSize = 30.sp,
-            onClick = {
-                /*viewModelCalculation.removeLastCharacter()*/
-            },
-            onLongClick = {
-                /*viewModelCalculation.clearExpression()*/
-            },
+            onClick = { viewModelCalculation.clear() },  // ✅ Подключено!
+            onLongClick = { viewModelCalculation.clear() },
         )
-
         BtnCalculationText(
             text = "+/-",
             color = LightGray,
             modifier = Modifier.weight(weight = 1f),
             fontSize = 30.sp,
-            onClick = {
-                /*viewModelCalculation.onToggleSign()*/
-            },
+            onClick = { /* TODO: Toggle sign */ },
         )
-
         BtnCalculationIcon(
             iconId = painterResource(id = R.drawable.ic_percent),
             color = Orange,
             tint = Color.White,
             modifier = Modifier.weight(weight = 1f),
-            iconSize = 50.dp,
-            onClick = {
-
-            },
+            onClick = { viewModelCalculation.onInputMathOperation("%") },  // ✅ П��дключено!
         )
-
         BtnCalculationText(
             text = "/",
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
             fontSize = 50.sp,
-            onClick = {
-                /*viewModelCalculation.onInputMathematicalOperations(inputOperation = "/")*/
-            },
+            onClick = { viewModelCalculation.onInputMathOperation("/") },  // ✅ Подключено!
         )
     }
-
 }
 
 @Composable
-private fun LineCalculation2(
-    modifier: Modifier = Modifier,
-) {
-
+private fun LineCalculation2(viewModelCalculation: CalculatorViewModel) {
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
     ) {
-
         BtnCalculationText(
-            text = "7",
-            color = DarkGray,
-            modifier = Modifier.weight(weight = 1f),
-            onClick = { offset ->
-                /*viewModelCalculation.onInputDigit(inputDigit = "7")*/
-            },
-        )
-
+            text = "7", color = DarkGray, modifier = Modifier.weight(weight = 1f),
+            onClick = { viewModelCalculation.onInputDigit("7") })
         BtnCalculationText(
-            text = "8",
-            color = DarkGray,
-            modifier = Modifier.weight(weight = 1f),
-            onClick = { offset ->
-                /*viewModelCalculation.onInputDigit(inputDigit = "8")*/
-            },
-        )
-
+            text = "8", color = DarkGray, modifier = Modifier.weight(weight = 1f),
+            onClick = { viewModelCalculation.onInputDigit("8") })
         BtnCalculationText(
-            text = "9",
-            color = DarkGray,
-            modifier = Modifier.weight(weight = 1f),
-            onClick = { offset ->
-                /*viewModelCalculation.onInputDigit(inputDigit = "9")*/
-            },
-        )
-
+            text = "9", color = DarkGray, modifier = Modifier.weight(weight = 1f),
+            onClick = { viewModelCalculation.onInputDigit("9") })
         BtnCalculationIcon(
             iconId = painterResource(id = R.drawable.ic_multiply),
             color = Orange,
             tint = Color.White,
             modifier = Modifier.weight(weight = 1f),
-            iconSize = 50.dp,
-            onClick = {
-                /*viewModelCalculation.onInputMathematicalOperations(inputOperation = "*")*/
-            },
-            onLongClick = {
-//                TODO
-            },
+            onClick = { viewModelCalculation.onInputMathOperation("*") },
         )
-
     }
 }
 
 @Composable
-private fun LineCalculation3(
-    modifier: Modifier = Modifier,
-) {
-
+private fun LineCalculation3(viewModelCalculation: CalculatorViewModel) {
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
     ) {
-
         BtnCalculationText(
-            text = "4",
-            color = DarkGray,
-            modifier = Modifier.weight(weight = 1f),
-            onClick = { offset ->
-                /*viewModelCalculation.onInputDigit(inputDigit = "4")*/
-            },
-        )
-
+            text = "4", color = DarkGray, modifier = Modifier.weight(weight = 1f),
+            onClick = { viewModelCalculation.onInputDigit("4") })
         BtnCalculationText(
-            text = "5",
-            color = DarkGray,
-            modifier = Modifier.weight(weight = 1f),
-            onClick = { offset ->
-                /*viewModelCalculation.onInputDigit(inputDigit = "5")*/
-            },
-        )
-
+            text = "5", color = DarkGray, modifier = Modifier.weight(weight = 1f),
+            onClick = { viewModelCalculation.onInputDigit("5") })
         BtnCalculationText(
-            text = "6",
-            color = DarkGray,
-            modifier = Modifier.weight(weight = 1f),
-            onClick = { offset ->
-                /*viewModelCalculation.onInputDigit(inputDigit = "6")*/
-            }
-        )
-
+            text = "6", color = DarkGray, modifier = Modifier.weight(weight = 1f),
+            onClick = { viewModelCalculation.onInputDigit("6") })
         BtnCalculationIcon(
             iconId = painterResource(id = R.drawable.ic_minus),
             color = Orange,
             tint = Color.White,
             modifier = Modifier.weight(weight = 1f),
-            iconSize = 70.dp,
-            onClick = {
-                /*viewModelCalculation.onInputMathematicalOperations(inputOperation = "-")*/
-            },
+            onClick = { viewModelCalculation.onInputMathOperation("-") },
         )
-
     }
 }
 
 @Composable
-private fun LineCalculation4(
-    modifier: Modifier = Modifier,
-) {
-
-    val isInputEmpty = false /*viewModelCalculation.expression.collectAsState().value.isEmpty()*/
-
+private fun LineCalculation4(viewModelCalculation: CalculatorViewModel) {
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
     ) {
-
         BtnCalculationText(
-            text = "1",
-            color = DarkGray,
-            modifier = Modifier.weight(weight = 1f),
-            onClick = { offset ->
-                /*viewModelCalculation.onInputDigit(inputDigit = "1")*/
-            },
-        )
-
+            text = "1", color = DarkGray, modifier = Modifier.weight(weight = 1f),
+            onClick = { viewModelCalculation.onInputDigit("1") })
         BtnCalculationText(
-            text = "2",
-            color = DarkGray,
-            modifier = Modifier.weight(weight = 1f),
-            onClick = { offset ->
-                /*viewModelCalculation.onInputDigit(inputDigit = "2")*/
-            },
-        )
-
+            text = "2", color = DarkGray, modifier = Modifier.weight(weight = 1f),
+            onClick = { viewModelCalculation.onInputDigit("2") })
         BtnCalculationText(
-            text = "3",
-            color = DarkGray,
-            modifier = Modifier.weight(weight = 1f),
-            onClick = { offset ->
-                /*viewModelCalculation.onInputDigit(inputDigit = "3")*/
-            },
-        )
-
+            text = "3", color = DarkGray, modifier = Modifier.weight(weight = 1f),
+            onClick = { viewModelCalculation.onInputDigit("3") })
         BtnCalculationIcon(
             iconId = painterResource(id = R.drawable.ic_plus),
             color = Orange,
             tint = Color.White,
             modifier = Modifier.weight(weight = 1f),
-            iconSize = 50.dp,
-            onClick = {
-                /*viewModelCalculation.onInputMathematicalOperations(inputOperation = "+")*/
-            },
+            onClick = { viewModelCalculation.onInputMathOperation("+") },
         )
-
     }
 }
 
 @Composable
-private fun LineCalculation5(
-    modifier: Modifier = Modifier,
-) {
-
-    val isInputEmpty = false /*viewModelCalculation.expression.collectAsState().value.isEmpty()*/
-    val isSwitchEnableDarkMode = false /*!viewModelSetting.isSystemTheme.collectAsState().value*/
+private fun LineCalculation5(viewModelCalculation: CalculatorViewModel) {
+    val scope = rememberCoroutineScope()
 
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
     ) {
-
-        var menuExpanded by remember { mutableStateOf(value = false) }
-        val scope = rememberCoroutineScope()
-
-        Box(
-            modifier = Modifier.weight(weight = 1f)
-        )
-        {
+        Box(modifier = Modifier.weight(weight = 1f)) {
             Button(
-                onClick = {
-                    menuExpanded = true
-                }, // Передаем клик напрямую
-                modifier = Modifier
-                    .aspectRatio(ratio = 1f),
+                onClick = { /* TODO: Menu */ },
+                modifier = Modifier.aspectRatio(ratio = 1f),
                 shape = CircleShape,
                 colors = ButtonDefaults.buttonColors(containerColor = DarkGray),
                 contentPadding = PaddingValues(all = 0.dp)
             ) {
                 Icon(
-                    modifier = Modifier.size(size = 40.dp),
                     painter = painterResource(id = R.drawable.ic_calculate),
                     contentDescription = null,
                     tint = Color.White
-                )
-            }
-
-            if (menuExpanded) {
-                StyledDropdownMenu(
-                    expanded = true,
-                    isEnableSwitchDarkMode = isSwitchEnableDarkMode,
-                    onDismissRequest = { menuExpanded = false },
-                    onOpenEngineeringMode = {},
-                    onOpenScientificMode = {},
-                    onOpenCurrencyConverter = {},
-                    onOpenDistanceConverter = {}
                 )
             }
         }
@@ -485,20 +287,15 @@ private fun LineCalculation5(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             fontSize = 45.sp,
-            onClick = {
-                /*viewModelCalculation.onInputDigit(inputDigit = "0")*/
-            },
+            onClick = { viewModelCalculation.onInputZero() }
         )
 
         BtnCalculationText(
             text = ".",
             color = DarkGray,
-            modifier = Modifier
-                .weight(weight = 1f),
+            modifier = Modifier.weight(weight = 1f),
             fontSize = 60.sp,
-            onClick = {
-                /*viewModelCalculation.onInputMathematicalOperations(inputOperation = ".")*/
-            },
+            onClick = { viewModelCalculation.onInputComma() }
         )
 
         BtnCalculationIcon(
@@ -506,13 +303,7 @@ private fun LineCalculation5(
             color = Orange,
             tint = Color.White,
             modifier = Modifier.weight(weight = 1f),
-            iconSize = 55.dp,
-            onClick = {
-                scope.launch {
-                    /*viewModelCalculation.calculateAndSave()*/
-                }
-            },
+            onClick = { viewModelCalculation.onCalculate() }
         )
-
     }
 }

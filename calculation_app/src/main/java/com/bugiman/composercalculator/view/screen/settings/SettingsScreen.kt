@@ -18,14 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
 import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.view.components.general.settings.CustomTopBar
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.App
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.AppTheme
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.Appearance
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.Display
-//import com.bugiman.composercalculator.view.components.settings.SettingsBlock.HistoryComputing
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.SoundAndVibration
 import kotlinx.coroutines.launch
 
@@ -33,8 +32,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun SettingsScreen(
     title: String,
-    viewModelSettings: SettingsViewModel = viewModel(),
-    viewModelCalculation: CalculationViewModel = viewModel(),
+    viewModelSettings: SettingsViewModel,
+    viewModelCalculation: CalculatorViewModel,
     onNavigateBack: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onNavigateToCreateThemes: () -> Unit,
@@ -42,16 +41,17 @@ fun SettingsScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
-
     val settingsModel by viewModelSettings.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         containerColor = Color(0xFF000000),
         contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { innerPadding ->
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
 
             Column(
                 modifier = Modifier
@@ -82,14 +82,6 @@ fun SettingsScreen(
 
                 Spacer(modifier = Modifier.height(18.dp))
 
-                HistoryComputing(
-                    viewModelSettings = viewModelSettings,
-                    viewModelCalculation = viewModelCalculation,
-                )
-
-
-                Spacer(modifier = Modifier.height(18.dp))
-
                 Display(
                     settingsModel = settingsModel,
                     viewModelSettings = viewModelSettings
@@ -97,11 +89,8 @@ fun SettingsScreen(
 
                 Spacer(modifier = Modifier.height(18.dp))
 
-                App(
-                    onNavigateToAbout = onNavigateToAbout
-                )
+                App(onNavigateToAbout = onNavigateToAbout)
 
-                // Дополнительный отступ снизу для красоты
                 Spacer(modifier = Modifier.height(32.dp))
             }
 

@@ -6,10 +6,6 @@ import com.bugiman.domain.repository.converter.ConvertRepository
 class ConvertValueUseCase(
     private val repository: ConvertRepository
 ) {
-    /**
-     * Выполняет конвертацию значения.
-     * Возвращает Result<Double>, чтобы ViewModel могла обработать ошибку (например, нет сети).
-     */
     suspend operator fun invoke(
         type: ConvertType,
         value: Double,

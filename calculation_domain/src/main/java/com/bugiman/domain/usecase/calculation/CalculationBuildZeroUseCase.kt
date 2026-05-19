@@ -10,6 +10,7 @@ class CalculationBuildZeroUseCase {
         val lastChar = current.last()
 
         // Если последняя была закрывающая скобка: ")0" -> ")*0"
+        //TODO если после скобки ставится 0, то заменяем ")0" -> ")*0."
         if (lastChar == ')') return "$current*0"
 
         // Ищем последнее число в выражении

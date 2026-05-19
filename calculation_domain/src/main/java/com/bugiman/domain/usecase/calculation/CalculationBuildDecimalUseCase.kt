@@ -7,6 +7,7 @@ class CalculationBuildDecimalUseCase {
         if (current.isEmpty()) return "0."
 
         val lastChar = current.last()
+        // TODO если после скобки ставим точку, то заменяем с "...)." ==> "...)*0."
         if (lastChar == ')') return current // После скобки точку нельзя
 
         // Проверяем последнее число в строке на наличие точки

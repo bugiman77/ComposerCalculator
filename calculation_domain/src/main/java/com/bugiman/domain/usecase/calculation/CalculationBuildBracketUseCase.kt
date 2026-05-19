@@ -8,7 +8,6 @@ class CalculationBuildBracketUseCase {
         val lastChar = current.last()
 
         if (bracket == "(") {
-            // Если перед "(" число или ")", добавляем "*"
             return if (lastChar.isDigit() || lastChar == ')') "$current*(" else "$current("
         }
 

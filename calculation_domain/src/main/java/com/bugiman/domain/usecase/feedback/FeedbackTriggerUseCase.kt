@@ -10,10 +10,8 @@ class FeedbackTriggerUseCase(
 ) {
 
     suspend operator fun invoke() {
-        // Получаем текущий снимок настроек
         val settings = settingsRepository.getSettings().first()
 
-        // Если хоть что-то включено — дергаем репозиторий
         if (settings.isPlaySound || settings.isPlayVibration) {
             feedbackRepository.triggerClick()
         }

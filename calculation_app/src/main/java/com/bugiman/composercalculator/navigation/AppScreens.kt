@@ -1,6 +1,7 @@
 package com.bugiman.composercalculator.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -11,8 +12,11 @@ import com.bugiman.composercalculator.view.screen.settings.AboutScreen
 import com.bugiman.composercalculator.view.screen.settings.CreateThemeAppUser
 import com.bugiman.composercalculator.view.screen.settings.PrivacyPolicyScreen
 import com.bugiman.composercalculator.view.screen.settings.SettingsScreen
+import com.bugiman.domain.models.settings.SettingModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
-class CalculatorScreen(
+class CalculatorScreenNavigation(
     val settingsViewModel: SettingsViewModel,
     val calculatorViewModel: CalculatorViewModel,
     val showHistoryButton: Boolean
@@ -20,36 +24,37 @@ class CalculatorScreen(
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val settingsModel by settingsViewModel.uiState.collectAsStateWithLifecycle()
+
         CalculatorScreen(
+            viewModelCalculation = calculatorViewModel,
+            settingModel = settingsModel,
             onNavigateToSettings = {
                 navigator.push(
-                    SettingsScreen(
+                    SettingsScreenNavigation(
                         settingsViewModel,
                         calculatorViewModel
                     )
                 )
             },
-            onNavigateToHistory = { /* navigator.push(HistoryScreen()) */ },
-            showHistoryButton = showHistoryButton,
-            viewModelSettings = settingsViewModel,
-            viewModelCalculation = calculatorViewModel
+            onNavigateToHistory = { /* navigator.push(HistoryScreen()) */ }
         )
     }
 }
 
-class AboutScreen : Screen {
+class AboutScreenNavigation : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         AboutScreen(
             title = "О приложении",
             onNavigateBack = { navigator.pop() },
-            onNavigateToPrivacy = { navigator.push(PrivacyPoliceScreen()) }
+            onNavigateToPrivacy = { navigator.push(PrivacyPolicyScreenNavigation()) }
         )
     }
 }
 
-class SettingsScreen(
+class SettingsScreenNavigation(
     val viewModelSettings: SettingsViewModel,
     val viewModelCalculation: CalculatorViewModel
 ) : Screen {
@@ -61,14 +66,14 @@ class SettingsScreen(
             viewModelSettings = viewModelSettings,
             viewModelCalculation = viewModelCalculation,
             onNavigateBack = { navigator.pop() },
-            onNavigateToAbout = { navigator.push(AboutScreen()) },
-            onNavigateToCreateThemes = { navigator.push(CreateThemeAppUser()) },
+            onNavigateToAbout = { navigator.push(AboutScreenNavigation()) },
+            onNavigateToCreateThemes = { navigator.push(CreateThemeAppUserNavigation()) },
             onNavigateToViewThemes = { }
         )
     }
 }
 
-class CreateThemeAppUser : Screen {
+class CreateThemeAppUserNavigation : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -79,7 +84,7 @@ class CreateThemeAppUser : Screen {
     }
 }
 
-class PrivacyPoliceScreen : Screen {
+class PrivacyPolicyScreenNavigation : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow

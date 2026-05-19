@@ -10,15 +10,15 @@ class CalculationRepositoryImpl(
     private val pythonModule: PyObject
 ) : CalculationRepository {
 
-    override suspend fun calculate(expression: String): Result<String> = withContext(Dispatchers.Default) {
-        try {
-            // Вызываем функцию из вашего .py файла
-            val result = pythonModule.callAttr("evaluate_expression", expression).toString()
-            Result.success(result)
-        } catch (e: PyException) {
-            Result.failure(Exception("Ошибка вычислений"))
-        } catch (e: Exception) {
-            Result.failure(Exception("Критическая ошибка"))
+    override suspend fun calculate(expression: String): Result<String> =
+        withContext(Dispatchers.Default) {
+            try {
+                val result = pythonModule.callAttr("evaluate_expression", expression).toString()
+                Result.success(result)
+            } catch (e: PyException) {
+                Result.failure(Exception("Ошибка вычислений: ${e.message}"))
+            } catch (e: Exception) {
+                Result.failure(Exception("Критическая ошибка: ${e.message}"))
+            }
         }
-    }
 }

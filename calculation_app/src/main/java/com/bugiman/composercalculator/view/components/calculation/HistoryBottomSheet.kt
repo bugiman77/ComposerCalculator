@@ -91,22 +91,26 @@ fun HistoryBottomSheet(
 
         if (settingModel.historyHeaderLayout == 0) {
             HistoryHeaderContentCloseClear(
+                calculatorViewModel = calculatorViewModel,
                 onCloseClick = onCloseClick
             )
         } else {
             HistoryHeaderContentClearClose(
+                calculatorViewModel = calculatorViewModel,
                 onCloseClick = onCloseClick
             )
         }
 
         HistorySheetContent(
-            settingModel = settingModel,
+            calculatorViewModel = calculatorViewModel,
+            settingModel = settingModel
         )
     }
 }
 
 @Composable
 private fun HistoryHeaderContentCloseClear(
+    calculatorViewModel: CalculatorViewModel,
     onCloseClick: () -> Unit
 ) {
     Row(
@@ -143,10 +147,10 @@ private fun HistoryHeaderContentCloseClear(
             OutlinedButton(
                 modifier = Modifier
                     .size(size = 45.dp)
-                    .testTag(tag = "sheet_close"),
+                    .testTag(tag = "sheet_delete"),
                 onClick = {
                     scope.launch {
-                        /*calculatorViewModel.deleteAll()*/
+                        calculatorViewModel.deleteAll()
                     }
                 },
                 shape = CircleShape,
@@ -168,6 +172,7 @@ private fun HistoryHeaderContentCloseClear(
 
 @Composable
 private fun HistoryHeaderContentClearClose(
+    calculatorViewModel: CalculatorViewModel,
     onCloseClick: () -> Unit
 ) {
     Row(
@@ -185,10 +190,10 @@ private fun HistoryHeaderContentClearClose(
             OutlinedButton(
                 modifier = Modifier
                     .size(size = 45.dp)
-                    .testTag(tag = "sheet_close"),
+                    .testTag(tag = "sheet_delete"),
                 onClick = {
                     scope.launch {
-                        /*calculatorViewModel.deleteAll()*/
+                        calculatorViewModel.deleteAll()
                     }
                 },
                 shape = CircleShape,
@@ -232,15 +237,16 @@ private fun HistoryHeaderContentClearClose(
 
 @Composable
 private fun HistorySheetContent(
+    calculatorViewModel: CalculatorViewModel,
     settingModel: SettingModel,
 ) {
 
-    val historyItems = emptyList<String>() /*calculatorViewModel.history.collectAsStateWithLifecycle()*/
+    val historyItems by calculatorViewModel.history.collectAsStateWithLifecycle()
 
     LazyColumn(
         modifier = Modifier.fillMaxHeight(fraction = 0.92f),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(space = 16.dp) // Расстояние между группами
+        verticalArrangement = Arrangement.spacedBy(space = 16.dp)
     ) {
 
         if (historyItems.isEmpty()) {
@@ -260,8 +266,17 @@ private fun HistorySheetContent(
                 key = { it.id }
             ) { item ->
                 HistoryItemRow(
+                    historyModel = item,
                     settingModel = settingModel,
-                    item = item,
+                    onDeleteItemClick = {
+                        // TODO: Реализовать удаление элемента
+                    },
+                    onNoteUpdate = { newNote ->
+                        // TODO: Реализовать обновление заметки
+                    },
+                    onEditExpression = { expression ->
+                        // TODO: Реализовать редактирование выражения
+                    }
                 )
             }
         }
@@ -291,7 +306,7 @@ private fun HistoryItemRow(
         confirmValueChange = { value ->
             when (value) {
                 SwipeToDismissBoxValue.StartToEnd -> {
-                    // Действие при свайпе слева направо (например, копирование результата)
+                    // Действие при свайпе слева направо (копирование результата)
                     scope.launch {
                         val clipEntry =
                             ClipEntry(
@@ -302,11 +317,11 @@ private fun HistoryItemRow(
                             )
                         clipboard.setClipEntry(clipEntry)
                     }
-                    false // Возвращаем карточку на место
+                    false
                 }
 
                 SwipeToDismissBoxValue.EndToStart -> {
-                    // Действие при свайпе справа налево (например, удаление)
+                    // Действие при свайпе справа налево (удаление)
                     onDeleteItemClick()
                     true
                 }
@@ -318,8 +333,8 @@ private fun HistoryItemRow(
 
     SwipeToDismissBox(
         state = dismissState,
-        enableDismissFromStartToEnd = false, // Слева направо
-        enableDismissFromEndToStart = isSwipe, // Справа налево
+        enableDismissFromStartToEnd = false,
+        enableDismissFromEndToStart = isSwipe,
         backgroundContent = {
             // Фоновый слой (иконки/цвета при свайпе)
             val direction = dismissState.dismissDirection
@@ -411,7 +426,7 @@ private fun HistoryItemRow(
                         shape = RoundedCornerShape(size = 16.dp),
                         keyboardOptions = KeyboardOptions(
                             capitalization = if (isTitleNote) KeyboardCapitalization.Sentences
-                            else KeyboardCapitalization.None // С заглавной буквы в начале предложения
+                            else KeyboardCapitalization.None
                         )
                     )
 
@@ -426,7 +441,7 @@ private fun HistoryItemRow(
                 ) {
 
                     Button(
-                        onClick = { },
+                        onClick = { onEditExpression(historyModel.expression) },
                         modifier = Modifier.weight(weight = 1f),
                         shape = RoundedCornerShape(size = 20.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -472,7 +487,7 @@ private fun HistoryItemRow(
                                 clipboard.setClipEntry(clipEntry)
                             }
                         },
-                        modifier = Modifier.weight(weight = 1f), // Занимает 1 долю (половину)
+                        modifier = Modifier.weight(weight = 1f),
                         shape = RoundedCornerShape(size = 20.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(color = 0xFF757575)
@@ -499,7 +514,7 @@ private fun HistoryItemRow(
                                 clipboard.setClipEntry(clipEntry)
                             }
                         },
-                        modifier = Modifier.weight(weight = 1f), // Занимает 1 долю (половину)
+                        modifier = Modifier.weight(weight = 1f),
                         shape = RoundedCornerShape(size = 20.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(color = 0xFF616161)

@@ -25,6 +25,8 @@ import com.bugiman.domain.usecase.calculation.CalculationBuildOperatorUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildZeroUseCase
 import com.bugiman.domain.usecase.calculation.CalculationRemoveLastCharUseCase
 import com.bugiman.domain.usecase.calculation.CalculationSettingsAllGetUseCase
+import com.bugiman.domain.usecase.convert.ConvertGetFormattedConversionUseCase
+import com.bugiman.domain.usecase.convert.ConvertSwapCurrenciesUseCase
 import com.bugiman.domain.usecase.convert.ConvertValueUseCase
 import com.bugiman.domain.usecase.feedback.FeedbackTriggerUseCase
 import com.bugiman.domain.usecase.history.HistoryAllDeleteUseCase
@@ -50,6 +52,34 @@ private val Context.settingsDataStore: DataStore<SettingsProto> by dataStore(
     serializer = SettingsProtoSerializer
 )
 
+/*
+// CalcApplication.kt
+class CalcApplication : Application() {
+    // === CALCULATION USE CASES ===
+    val calculateExpressionUseCase: CalculateExpressionUseCase by lazy { /* ... */ }
+    val historyItemSaveUseCase: HistoryItemSaveUseCase by lazy { /* ... */ }
+    val historyAllDeleteUseCase: HistoryAllDeleteUseCase by lazy { /* ... */ }
+    val historyAllGetUseCase: HistoryAllGetUseCase by lazy { /* ... */ }
+    val feedbackTriggerUseCase: FeedbackTriggerUseCase by lazy { /* ... */ }
+
+    // === BUILDING USE CASES ===
+    val buildDigitUseCase: CalculationBuildDigitUseCase by lazy { /* ... */ }
+    val buildOperatorUseCase: CalculationBuildOperatorUseCase by lazy { /* ... */ }
+    val buildBracketUseCase: CalculationBuildBracketUseCase by lazy { /* ... */ }
+    val buildDecimalUseCase: CalculationBuildDecimalUseCase by lazy { /* ... */ }
+    val buildZeroUseCase: CalculationBuildZeroUseCase by lazy { /* ... */ }
+    val removeLastCharUseCase: CalculationRemoveLastCharUseCase by lazy { /* ... */ }
+
+    // === CONVERT USE CASES ===
+    val convertGetFormattedConversionUseCase: ConvertGetFormattedConversionUseCase by lazy { /* ... */ }
+    val convertSwapCurrenciesUseCase: ConvertSwapCurrenciesUseCase by lazy { /* ... */ }
+
+    // === SETTINGS USE CASES ===
+    val settingsAllGetUseCase: SettingsAllGetUseCase by lazy { /* ... */ }
+    val settingsItemUpdateUseCase: SettingsItemUpdateUseCase by lazy { /* ... */ }
+}
+* */
+
 class CalcApplication : Application() {
     lateinit var calculateExpressionUseCase: CalculateExpressionUseCase
     lateinit var calculationBuildBracketUseCase: CalculationBuildBracketUseCase
@@ -61,6 +91,8 @@ class CalcApplication : Application() {
     lateinit var calculationSettingsAllGetUseCase: CalculationSettingsAllGetUseCase
 
     lateinit var convertValueUseCase: ConvertValueUseCase
+    lateinit var convertGetFormattedConversionUseCase: ConvertGetFormattedConversionUseCase
+    lateinit var convertSwapCurrenciesUseCase: ConvertSwapCurrenciesUseCase
 
     lateinit var settingsAllGetUseCase: SettingsAllGetUseCase
     lateinit var settingsItemUpdateUseCase: SettingsItemUpdateUseCase
@@ -76,6 +108,13 @@ class CalcApplication : Application() {
     lateinit var historyItemUpdateNoteUseCase: HistoryItemUpdateNoteUseCase
 
     lateinit var feedbackTriggerUseCase: FeedbackTriggerUseCase
+
+    lateinit var buildDigitUseCase: CalculationBuildDigitUseCase
+    lateinit var buildOperatorUseCase: CalculationBuildOperatorUseCase
+    lateinit var buildBracketUseCase: CalculationBuildBracketUseCase
+    lateinit var buildDecimalUseCase: CalculationBuildDecimalUseCase
+    lateinit var buildZeroUseCase: CalculationBuildZeroUseCase
+    lateinit var removeLastCharUseCase: CalculationRemoveLastCharUseCase
 
     override fun onCreate() {
         super.onCreate()

@@ -1,8 +1,5 @@
 package com.bugiman.composercalculator.view.screen.main
 
-//import com.bugiman.composercalculator.view.components.calculation.CalculatorButtonGrid
-//import com.bugiman.composercalculator.view.components.calculation.DisplayArea
-//import com.bugiman.composercalculator.view.components.calculation.HistoryBottomSheet
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bugiman.composercalculator.R
 import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
+import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.ui.theme.DarkGray
 import com.bugiman.composercalculator.view.components.calculation.CalculatorButtonGrid
 import com.bugiman.composercalculator.view.components.calculation.DisplayArea
@@ -149,8 +147,8 @@ fun CalculatorScreen(
                                 ) {
                                     Text(
                                         text = "История",
-                                        fontSize = 14.sp, // Уменьшаем размер шрифта для компактности
-                                        color = MaterialTheme.colorScheme.onPrimary // Цвет текста
+                                        fontSize = 14.sp,
+                                        color = MaterialTheme.colorScheme.onPrimary
                                     )
                                 }
                             }
@@ -191,19 +189,22 @@ fun CalculatorScreen(
                                 Text(
                                     text = "Настройки",
                                     fontSize = 14.sp,
-                                    color = MaterialTheme.colorScheme.onPrimary // Цвет текста
+                                    color = MaterialTheme.colorScheme.onPrimary
                                 )
                             }
                         }
                     }
 
+                    // ✅ ИСПРАВЛЕНИЕ: Передаём оба обязательных параметра
                     DisplayArea(
-                        settingModel = settingModel,
+                        viewModelCalculation = viewModelCalculation,
+                        settingModel = settingModel
                     )
 
                     // Сетка кнопок
                     CalculatorButtonGrid(
-                        settingModel = settingModel,
+                        viewModelCalculation = viewModelCalculation,
+                        settingModel = settingModel
                     )
                 }
             }

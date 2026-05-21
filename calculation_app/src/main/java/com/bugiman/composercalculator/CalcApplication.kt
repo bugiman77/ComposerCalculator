@@ -45,6 +45,7 @@ import com.chaquo.python.android.AndroidPlatform
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import kotlin.jvm.java
+import com.bugiman.python.PythonInitializer
 
 //@HiltAndroidApp
 private val Context.settingsDataStore: DataStore<SettingsProto> by dataStore(
@@ -118,6 +119,8 @@ class CalcApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        PythonInitializer.initialize(this)
 
         if (!Python.isStarted()) {
             Python.start(AndroidPlatform(this))

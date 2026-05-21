@@ -21,7 +21,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
-    id("com.chaquo.python")
+//    id("com.chaquo.python")
 
     alias(libs.plugins.hilt.android)
     kotlin("kapt")
@@ -31,7 +31,6 @@ plugins {
 android {
     namespace = "com.bugiman.composercalculator"
     compileSdk = 36
-
 
     defaultConfig {
         applicationId = "com.example.composercalculator"
@@ -83,6 +82,7 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
     dependenciesInfo {
         includeInApk = true
         includeInBundle = true
@@ -92,7 +92,7 @@ android {
 
 }
 
-chaquopy {
+/*chaquopy {
     defaultConfig {
         pip {
             options("--default-timeout=100")
@@ -104,7 +104,7 @@ chaquopy {
 
         }
     }
-}
+}*/
 
 dependencies {
     implementation(libs.androidx.core.ktx)
@@ -153,9 +153,10 @@ dependencies {
 
     implementation(libs.google.accompanist.drawablepainter)
     implementation(libs.lottie.compose)
-    implementation(project(":calculation_domain"))
 
+    implementation(project(":calculation_domain"))
     implementation(project(":calculation_data"))
+    implementation(project(":calculation_python"))
 
     val voyagerVersion = "1.1.0-beta03" // Текущая стабильная версия
     implementation("cafe.adriel.voyager:voyager-hilt:$voyagerVersion")

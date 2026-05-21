@@ -15,7 +15,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-object UseCaseModule {
+object UseCaseHistoryModule {
 
     @Provides
     fun provideHistoryAllGetUseCase(

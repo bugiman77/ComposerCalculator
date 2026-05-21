@@ -7,6 +7,6 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.jvm) apply false
     alias(libs.plugins.hilt.android) apply false
     id("com.google.devtools.ksp") version "2.0.21-1.0.28" apply false
-    id("com.chaquo.python") version "15.0.1" apply false
+    id("com.chaquo.python") version "16.1.0" apply false
     id("com.google.protobuf") version "0.9.4" apply false
 }

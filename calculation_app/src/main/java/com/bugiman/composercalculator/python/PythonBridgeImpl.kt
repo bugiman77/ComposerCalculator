@@ -1,7 +1,7 @@
 package com.bugiman.composercalculator.python
 
 import com.bugiman.data.python.PythonBridge
-import com.chaquo.python.Python
+import com.bugiman.python.PythonInitializer
 
 class PythonBridgeImpl : PythonBridge {
 
@@ -10,7 +10,8 @@ class PythonBridgeImpl : PythonBridge {
         function: String,
         vararg args: Any?
     ): Any {
-        val python = Python.getInstance()
+        // Новый вызов из отдельного модуля
+        val python = PythonInitializer.getInstance()
         val pyModule = python.getModule(module)
         return pyModule.callAttr(function, *args).toJava(Any::class.java)
     }

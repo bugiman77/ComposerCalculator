@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 //import com.bugiman.composercalculator.data.local.db.entity.CustomThemes
 import kotlin.collections.isNotEmpty
 
+/*
 @Composable
 fun ViewTheme(
     builtInThemes: List<BuiltInThemes>,
@@ -163,4 +164,4 @@ private fun MiniButton(
             fontWeight = FontWeight.Bold
         )
     }
-}
+}*/

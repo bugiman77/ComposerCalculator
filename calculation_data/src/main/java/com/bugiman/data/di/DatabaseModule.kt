@@ -36,7 +36,7 @@ object DatabaseModule {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
 
-                db.execSQL("""
+                /*db.execSQL("""
                     CREATE TABLE IF NOT EXISTS built_in_themes (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         name TEXT NOT NULL,
@@ -66,7 +66,7 @@ object DatabaseModule {
                     INSERT INTO built_in_themes 
                     (name, primary_color, secondary_color, background_color, surface_color, onPrimary_color, is_dark_mode, is_pin) 
                     VALUES ('Deep Blue', 0xFF0D47A1, 0xFF002171, 0xFF002171, 0xFF002171, 0xFF002171, 1, 0)
-                """)
+                """)*/
             }
         }
     }

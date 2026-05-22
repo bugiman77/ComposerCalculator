@@ -135,8 +135,7 @@ class CalcApplication : Application() {
             settingsDataStore
         )
 
-        calculateExpressionUseCase =
-            CalculateExpressionUseCase(repository = calculationRepositoryImpl)
+        calculateExpressionUseCase = CalculateExpressionUseCase(repository = calculationRepositoryImpl)
         calculationBuildBracketUseCase = CalculationBuildBracketUseCase()
         calculationBuildDecimalUseCase = CalculationBuildDecimalUseCase()
         calculationBuildDigitUseCase = CalculationBuildDigitUseCase()
@@ -145,6 +144,13 @@ class CalcApplication : Application() {
         calculationRemoveLastCharUseCase = CalculationRemoveLastCharUseCase()
         calculationSettingsAllGetUseCase =
             CalculationSettingsAllGetUseCase(repository = settingsRepositoryImpl)
+
+        buildDigitUseCase = CalculationBuildDigitUseCase()
+        buildOperatorUseCase = CalculationBuildOperatorUseCase()
+        buildBracketUseCase = CalculationBuildBracketUseCase()
+        buildDecimalUseCase = CalculationBuildDecimalUseCase()
+        buildZeroUseCase = CalculationBuildZeroUseCase()
+        removeLastCharUseCase = CalculationRemoveLastCharUseCase()
 
         val retrofit = Retrofit.Builder()
             .baseUrl("https://v6.exchangerate-api.com")

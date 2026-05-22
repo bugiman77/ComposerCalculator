@@ -18,10 +18,9 @@ fun AppNavigation(
     val isShowHistory = settings.isShowHistoryButton
 
     Navigator(
-        screen = CalculatorScreen(
+        screen = CalculatorScreenNavigation(
             settingsViewModel = settingsViewModel,
             calculatorViewModel = calculatorViewModel,
-            converterViewModel = converterViewModel,
             showHistoryButton = isShowHistory
         )
     ) { navigator ->

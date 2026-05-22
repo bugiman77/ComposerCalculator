@@ -129,7 +129,7 @@ class CalcApplication : Application() {
         val py = Python.getInstance()
         val pythonModule = py.getModule("calculator")
 
-        val calculationRepositoryImpl = CalculationRepositoryImpl(pythonModule)
+        val calculationRepositoryImpl = CalculationRepositoryImpl()
 
         val settingsRepositoryImpl = SettingsRepositoryImpl(
             settingsDataStore

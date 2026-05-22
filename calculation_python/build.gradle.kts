@@ -10,41 +10,28 @@ android {
 
     defaultConfig {
         minSdk = 29
-        targetSdk = 34
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        vectorDrawables {
-            useSupportLibrary = true
-        }
-
         ndk {
-            abiFilters.addAll(
-                listOf(
-                    "armeabi-v7a",
-                    "arm64-v8a",
-                    "x86",
-                    "x86_64"
-                )
+            abiFilters += listOf(
+                "armeabi-v7a",
+                "arm64-v8a",
+                "x86",
+                "x86_64"
             )
         }
-    }
-
-    buildFeatures {
-        buildConfig = true
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
-
-    ndkVersion = "25.1.8937393"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -55,19 +42,33 @@ android {
         jvmTarget = "11"
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 chaquopy {
     defaultConfig {
+        version = "3.10"
+
         pip {
-            options("--default-timeout=100")
-            install("--index-url https://pypi.org simpleeval")
-            install("--index-url https://pypi.org requests")
-            install("--index-url https://pypi.org sympy")
-            install("--index-url https://pypi.org numpy")
-            install("--index-url https://pypi.org matplotlib")
+            // Увеличиваем timeout для медленного интернета
+            options("--default-timeout=120")
+
+            options("--trusted-host", "pypi.org")
+            options("--trusted-host", "files.pythonhosted.org")
+            options("--trusted-host", "chaquo.com")
+
+            // Правильный синтаксис - каждый пакет в отдельной строке
+            install("simpleeval")
+            install("requests")
+            install("sympy")
+//            install("numpy")
+//            install("matplotlib")
         }
     }
+
+//    onError("ignore")
 }
 
 dependencies {

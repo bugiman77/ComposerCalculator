@@ -21,7 +21,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
-//    id("com.chaquo.python")
 
     alias(libs.plugins.hilt.android)
     kotlin("kapt")
@@ -87,24 +86,9 @@ android {
         includeInApk = true
         includeInBundle = true
     }
-//    buildToolsVersion = "30.0.3"
     ndkVersion = "25.1.8937393"
 
 }
-
-/*chaquopy {
-    defaultConfig {
-        pip {
-            options("--default-timeout=100")
-            install("--index-url https://pypi.org simpleeval")
-            install("--index-url https://pypi.org requests")
-            install("--index-url https://pypi.org sympy")
-            install("--index-url https://pypi.org numpy")
-            install("--index-url https://pypi.org matplotlib")
-
-        }
-    }
-}*/
 
 dependencies {
     implementation(libs.androidx.core.ktx)
@@ -116,7 +100,6 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation("androidx.compose.material:material-icons-extended")
-//    implementation(libs.mediation.test.suite)
     implementation(libs.androidx.compose.adaptive)
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.material3)
@@ -158,8 +141,7 @@ dependencies {
     implementation(project(":calculation_data"))
     implementation(project(":calculation_python"))
 
-    val voyagerVersion = "1.1.0-beta03" // Текущая стабильная версия
-    implementation("cafe.adriel.voyager:voyager-hilt:$voyagerVersion")
+    implementation("cafe.adriel.voyager:voyager-hilt:1.1.0-beta03")
     implementation(libs.voyager.navigator)
     implementation(libs.voyager.transitions)
 
@@ -169,5 +151,8 @@ dependencies {
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.google.gson)
+
+    implementation("dev.chrisbanes.haze:haze:1.7.2")
+    implementation("dev.chrisbanes.haze:haze-materials:1.7.2")
 
 }

@@ -28,6 +28,7 @@ import com.bugiman.composercalculator.view.components.settings.SettingsBlock.App
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.Display
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.HistoryComputing
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.SoundAndVibration
+import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,6 +46,8 @@ fun SettingsScreen(
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
     val settingsModel by viewModelSettings.uiState.collectAsStateWithLifecycle()
+
+    val hazeState = rememberHazeState()
 
     Scaffold(
         containerColor = Color(0xFF000000),
@@ -105,6 +108,7 @@ fun SettingsScreen(
             }
 
             CustomTopBar(
+                hazeState = hazeState,
                 screenTitle = title,
                 onNavigateBack = onNavigateBack,
                 onScrollToTop = {

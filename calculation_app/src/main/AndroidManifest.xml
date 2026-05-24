@@ -14,17 +14,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.App.Starting">
-        <!--
-          Комментарии к блоку application выше:
-          - allowBackup: позволяет Google Диску сохранять данные приложения.
-          - dataExtractionRules и fullBackupContent: указывают, какие файлы копировать, а какие нет.
-          - icon и roundIcon: обычная и круглая иконки, которые видны на рабочем столе.
-          - label: имя приложения под иконкой.
-          - supportsRtl: чтобы интерфейс не «поехал» на арабском или иврите.
-          - theme: общий стиль оформления (цвета, шрифты).
-        -->
-        <!-- Описание главного экрана (активности) -->
+        android:enableOnBackInvokedCallback="true"
+        android:theme="@style/Theme.App.Starting"
+        tools:targetApi="33">
         <activity
             android:name=".presentation.main.MainActivity"
             android:exported="true"

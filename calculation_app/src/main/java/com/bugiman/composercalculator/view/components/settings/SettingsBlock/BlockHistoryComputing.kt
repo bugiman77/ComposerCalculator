@@ -17,13 +17,11 @@ import com.bugiman.composercalculator.view.components.calculation.SettingsRow
 import com.bugiman.composercalculator.view.components.general.settings.SettingsSelectionRow
 import com.bugiman.domain.models.settings.SettingModel
 
-/*
 @Composable
 fun HistoryComputing(
     modifier: Modifier = Modifier,
     settingsModel: SettingModel,
     viewModelSettings: SettingsViewModel,
-    viewModelCalculation: CalculationViewModel
 ) {
 
     SettingsGroup(title = "История вычислений") {
@@ -49,19 +47,17 @@ fun HistoryComputing(
 
         if (settingsModel.isShowHistoryButton) {
 
-            */
-/*HorizontalDivider(color = Color(color = 0xFF3A3A3C))
+            HorizontalDivider(color = Color(color = 0xFF3A3A3C))
 
             SettingsSelectionRow(
                 title = "Кнопка закрытия",
                 subtitle = "Выберите, с какой стороны будет находиться кнопка закрытия в истории",
                 option1Text = "Слева",
                 option2Text = "Справа",
-                selectedOption = currentLayout.value,
-                onClick1 = { viewModelSettings.toggleHistoryHeaderLayout(layout = 0) },
-                onClick2 = { viewModelSettings.toggleHistoryHeaderLayout(layout = 1) }
-            )*//*
-
+                selectedOption = settingsModel.historyHeaderLayout,
+                onClick1 = { viewModelSettings.updateSettings { it.copy(historyHeaderLayout = 0) } },
+                onClick2 = { viewModelSettings.updateSettings { it.copy(historyHeaderLayout = 1) } }
+            )
 
             HorizontalDivider(color = Color(color = 0xFF3A3A3C))
 
@@ -179,4 +175,3 @@ fun HistoryComputing(
     }
 
 }
-*/

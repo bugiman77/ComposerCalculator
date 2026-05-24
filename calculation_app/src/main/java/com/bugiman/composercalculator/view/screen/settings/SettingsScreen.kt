@@ -19,12 +19,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
+import com.bugiman.composercalculator.presentation.history.HistoryViewModel
 import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.view.components.general.settings.CustomTopBar
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.App
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.AppTheme
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.Appearance
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.Display
+import com.bugiman.composercalculator.view.components.settings.SettingsBlock.HistoryComputing
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.SoundAndVibration
 import kotlinx.coroutines.launch
 
@@ -34,6 +36,7 @@ fun SettingsScreen(
     title: String,
     viewModelSettings: SettingsViewModel,
     viewModelCalculation: CalculatorViewModel,
+    viewModelHistory: HistoryViewModel,
     onNavigateBack: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onNavigateToCreateThemes: () -> Unit,
@@ -76,6 +79,13 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(18.dp))
 
                 Appearance(
+                    settingsModel = settingsModel,
+                    viewModelSettings = viewModelSettings
+                )
+
+                Spacer(modifier = Modifier.height(18.dp))
+
+                HistoryComputing(
                     settingsModel = settingsModel,
                     viewModelSettings = viewModelSettings
                 )

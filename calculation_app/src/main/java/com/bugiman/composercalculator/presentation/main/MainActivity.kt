@@ -17,6 +17,8 @@ import com.bugiman.composercalculator.presentation.calculation.CalculationViewMo
 import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
 import com.bugiman.composercalculator.presentation.convert.ConvertViewModel
 import com.bugiman.composercalculator.presentation.convert.ConvertViewModelFactory
+import com.bugiman.composercalculator.presentation.history.HistoryViewModel
+import com.bugiman.composercalculator.presentation.history.HistoryViewModelFactory
 import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.presentation.settings.SettingsViewModelFactory
 import com.bugiman.composercalculator.ui.theme.ComposerCalculatorTheme
@@ -54,6 +56,20 @@ class MainActivity : ComponentActivity() {
             )
         }
 
+        val viewModelHistory: HistoryViewModel by viewModels {
+            HistoryViewModelFactory(
+                historyAllDeleteUseCase = app.historyAllDeleteUseCase,
+                        historyAllGetUseCase = app.historyAllGetUseCase,
+                        historyCountUseCase = app.historyCountUseCase,
+                        historyItemCopyExpressionUseCase = app.historyItemCopyExpressionUseCase,
+                        historyItemCopyResultUseCase = app.historyItemCopyResultUseCase,
+                        historyItemDeleteUseCase = app.historyItemDeleteUseCase,
+                        historyItemEditUseCase = app.historyItemEditUseCase,
+                        historyItemSaveUseCase = app.historyItemSaveUseCase,
+                        historyItemUpdateNoteUseCase = app.historyItemUpdateNoteUseCase,
+            )
+        }
+
         val viewModelConverter: ConvertViewModel by viewModels {
             ConvertViewModelFactory(
                 convertGetFormattedConversionUseCase = app.convertGetFormattedConversionUseCase,
@@ -84,6 +100,7 @@ class MainActivity : ComponentActivity() {
                 AppNavigation(
                     settingsViewModel = viewModelSettings,
                     calculatorViewModel = viewModelCalculation,
+                    historyViewModel = viewModelHistory,
                     converterViewModel = viewModelConverter
                 )
             }

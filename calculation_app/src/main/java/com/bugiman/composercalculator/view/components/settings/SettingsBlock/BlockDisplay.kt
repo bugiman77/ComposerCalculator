@@ -47,9 +47,9 @@ fun Display(
             )
         }
 
-        if (!settingsModel.isSystemFontSize) {
+        /*if (!settingsModel.isSystemFontSize) {
 
-            /*HorizontalDivider(color = Color(color = 0xFF3A3A3C))
+            HorizoalDivider(color = Color(color = 0xFF3A3A3C))
 
             SettingsRow(
                 title = "Размер шрифта",
@@ -68,8 +68,8 @@ fun Display(
                     ),
                     modifier = Modifier.weight(weight = 1f)
                 )
-            }*/
-        }
+            }
+        }*/
 
         HorizontalDivider(color = Color(color = 0xFF3A3A3C))
 

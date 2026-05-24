@@ -6,12 +6,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.navigator.Navigator
 import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
 import com.bugiman.composercalculator.presentation.convert.ConvertViewModel
+import com.bugiman.composercalculator.presentation.history.HistoryViewModel
 import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 
 @Composable
 fun AppNavigation(
     settingsViewModel: SettingsViewModel,
     calculatorViewModel: CalculatorViewModel,
+    historyViewModel: HistoryViewModel,
     converterViewModel: ConvertViewModel,
 ) {
     val settings by settingsViewModel.uiState.collectAsStateWithLifecycle()
@@ -21,6 +23,7 @@ fun AppNavigation(
         screen = CalculatorScreenNavigation(
             settingsViewModel = settingsViewModel,
             calculatorViewModel = calculatorViewModel,
+            viewModelHistory = historyViewModel,
             showHistoryButton = isShowHistory
         )
     ) { navigator ->

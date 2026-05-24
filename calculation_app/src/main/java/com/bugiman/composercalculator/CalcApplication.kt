@@ -160,10 +160,15 @@ class CalcApplication : Application() {
         val currencyApiService = retrofit.create(CurrencyApiService::class.java)
         val currencyApiDataSource = CurrencyApiDataSource(currencyApiService)
 
-        val converterRepositoryImpl = ConvertRepositoryImpl()
+        val converterRepositoryImpl = ConvertRepositoryImpl(
+            currencyApiService = currencyApiService,
+            apiKey = "8d9f1a2bf35e857c45b22c1c"
+        )
 
         convertValueUseCase = ConvertValueUseCase(repository = converterRepositoryImpl)
 
+        convertGetFormattedConversionUseCase = ConvertGetFormattedConversionUseCase(convertValueUseCase = convertValueUseCase)
+        convertSwapCurrenciesUseCase = ConvertSwapCurrenciesUseCase()
 
         settingsAllGetUseCase = SettingsAllGetUseCase(settingsRepositoryImpl)
         settingsItemUpdateUseCase = SettingsItemUpdateUseCase(settingsRepositoryImpl)

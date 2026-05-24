@@ -27,11 +27,11 @@ fun Appearance(
 
         SettingsSelectionRow(
             title = "Кнопки/Иконки",
-            subtitle = if (settingsModel.isShowHistoryButton) "Будут отображаться иконки в верхней части главного экрана"
-                        else "Будут отображаться кнопки в верхней части главного экрана",
+            subtitle = if (settingsModel.isShowIconButton) "Будут отображаться иконки в верхней части главного экрана"
+            else "Будут отображаться кнопки в верхней части главного экрана",
             option1Text = "Кнопки",
             option2Text = "Иконки",
-            selectedOption = if (settingsModel.isShowHistoryButton) 1 else 0,
+            selectedOption = if (settingsModel.isShowIconButton) 1 else 0,
             onClick1 = { viewModelSettings.updateSettings { it.copy(isShowIconButton = false) } },
             onClick2 = { viewModelSettings.updateSettings { it.copy(isShowIconButton = true) } }
         )
@@ -45,9 +45,11 @@ fun Appearance(
         ) {
             Switch(
                 checked = settingsModel.isShowPlaceholderInput,
-                onCheckedChange = { viewModelSettings.updateSettings { current ->
-                    current.copy(isShowPlaceholderInput = it)
-                }},
+                onCheckedChange = {
+                    viewModelSettings.updateSettings { current ->
+                        current.copy(isShowPlaceholderInput = it)
+                    }
+                },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
                     checkedTrackColor = iOSGreen,

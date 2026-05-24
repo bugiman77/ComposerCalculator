@@ -15,10 +15,12 @@ import com.bugiman.composercalculator.view.screen.settings.SettingsScreen
 import com.bugiman.domain.models.settings.SettingModel
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bugiman.composercalculator.presentation.history.HistoryViewModel
 
 class CalculatorScreenNavigation(
     val settingsViewModel: SettingsViewModel,
     val calculatorViewModel: CalculatorViewModel,
+    val viewModelHistory: HistoryViewModel,
     val showHistoryButton: Boolean
 ) : Screen {
     @Composable
@@ -28,12 +30,14 @@ class CalculatorScreenNavigation(
 
         CalculatorScreen(
             viewModelCalculation = calculatorViewModel,
+            viewModelHistory = viewModelHistory,
             settingModel = settingsModel,
             onNavigateToSettings = {
                 navigator.push(
                     SettingsScreenNavigation(
-                        settingsViewModel,
-                        calculatorViewModel
+                        viewModelSettings = settingsViewModel,
+                        viewModelCalculation = calculatorViewModel,
+                        viewModelHistory = viewModelHistory,
                     )
                 )
             },
@@ -56,7 +60,8 @@ class AboutScreenNavigation : Screen {
 
 class SettingsScreenNavigation(
     val viewModelSettings: SettingsViewModel,
-    val viewModelCalculation: CalculatorViewModel
+    val viewModelCalculation: CalculatorViewModel,
+    val viewModelHistory: HistoryViewModel,
 ) : Screen {
     @Composable
     override fun Content() {
@@ -65,6 +70,7 @@ class SettingsScreenNavigation(
             title = "Настройки",
             viewModelSettings = viewModelSettings,
             viewModelCalculation = viewModelCalculation,
+            viewModelHistory = viewModelHistory,
             onNavigateBack = { navigator.pop() },
             onNavigateToAbout = { navigator.push(AboutScreenNavigation()) },
             onNavigateToCreateThemes = { navigator.push(CreateThemeAppUserNavigation()) },

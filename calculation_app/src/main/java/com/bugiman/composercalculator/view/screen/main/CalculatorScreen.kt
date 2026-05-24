@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bugiman.composercalculator.R
 import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
+import com.bugiman.composercalculator.presentation.history.HistoryViewModel
 import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.ui.theme.DarkGray
 import com.bugiman.composercalculator.view.components.calculation.CalculatorButtonGrid
@@ -49,6 +50,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun CalculatorScreen(
     viewModelCalculation: CalculatorViewModel,
+    viewModelHistory: HistoryViewModel,
     settingModel: SettingModel,
     onNavigateToSettings: () -> Unit,
     onNavigateToHistory: () -> Unit,
@@ -66,8 +68,8 @@ fun CalculatorScreen(
     val scope = rememberCoroutineScope()
 
     //TODO
-    val showIconButton = settingModel.isShowHistoryButton
     val isShowHistoryBotton = settingModel.isShowHistoryButton
+    val isShowBottonLabel = settingModel.isShowIconButton
 
     LaunchedEffect(key1 = sheetState.isVisible) {
         if (!sheetState.isVisible) {
@@ -87,6 +89,20 @@ fun CalculatorScreen(
                     sheetState.hide()
                     showHistorySheet = false
                 }
+            },
+            // Действия приходят извне согласно чистой архитектуре
+            onDeleteItem = { historyModel ->
+                scope.launch {
+                     viewModelHistory.deleteItem(historyModel)
+                }
+            },
+            onUpdateNote = { historyModel ->
+                scope.launch {
+                     viewModelHistory.updateNote(historyModel)
+                }
+            },
+            onEditExpression = { historyModel ->
+//                 viewModelHistory._expression.value = historyModel.expression
             }
         )
     }
@@ -115,7 +131,7 @@ fun CalculatorScreen(
                     ) {
 
                         if (isShowHistoryBotton) {
-                            if (showIconButton) {
+                            if (isShowBottonLabel) {
                                 Card(
                                     onClick = { showHistorySheet = true },
                                     shape = CircleShape,
@@ -148,7 +164,7 @@ fun CalculatorScreen(
                                     Text(
                                         text = "История",
                                         fontSize = 14.sp,
-                                        color = MaterialTheme.colorScheme.onPrimary
+                                        color = Color.White
                                     )
                                 }
                             }
@@ -156,7 +172,7 @@ fun CalculatorScreen(
                             Spacer(modifier = Modifier.size(size = 40.dp))
                         }
 
-                        if (showIconButton) {
+                        if (isShowBottonLabel) {
                             Card(
                                 onClick = onNavigateToSettings,
                                 shape = CircleShape,
@@ -189,19 +205,17 @@ fun CalculatorScreen(
                                 Text(
                                     text = "Настройки",
                                     fontSize = 14.sp,
-                                    color = MaterialTheme.colorScheme.onPrimary
+                                    color = Color.White
                                 )
                             }
                         }
                     }
 
-                    // ✅ ИСПРАВЛЕНИЕ: Передаём оба обязательных параметра
                     DisplayArea(
                         viewModelCalculation = viewModelCalculation,
                         settingModel = settingModel
                     )
 
-                    // Сетка кнопок
                     CalculatorButtonGrid(
                         viewModelCalculation = viewModelCalculation,
                         settingModel = settingModel

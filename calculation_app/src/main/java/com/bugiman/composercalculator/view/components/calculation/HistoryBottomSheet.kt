@@ -79,7 +79,10 @@ fun HistoryBottomSheet(
     settingModel: SettingModel,
     sheetState: SheetState,
     onDismiss: () -> Unit,
-    onCloseClick: () -> Unit
+    onCloseClick: () -> Unit,
+    onDeleteItem: (HistoryModel) -> Unit,
+    onUpdateNote: (HistoryModel) -> Unit,
+    onEditExpression: (HistoryModel) -> Unit,
 ) {
 
     ModalBottomSheet(
@@ -103,7 +106,10 @@ fun HistoryBottomSheet(
 
         HistorySheetContent(
             calculatorViewModel = calculatorViewModel,
-            settingModel = settingModel
+            settingModel = settingModel,
+            onDeleteItem = onDeleteItem,
+            onUpdateNote = onUpdateNote,
+            onEditExpression = onEditExpression
         )
     }
 }
@@ -239,6 +245,9 @@ private fun HistoryHeaderContentClearClose(
 private fun HistorySheetContent(
     calculatorViewModel: CalculatorViewModel,
     settingModel: SettingModel,
+    onDeleteItem: (HistoryModel) -> Unit,
+    onUpdateNote: (HistoryModel) -> Unit,
+    onEditExpression: (HistoryModel) -> Unit,
 ) {
 
     val historyItems by calculatorViewModel.history.collectAsStateWithLifecycle()
@@ -269,13 +278,13 @@ private fun HistorySheetContent(
                     historyModel = item,
                     settingModel = settingModel,
                     onDeleteItemClick = {
-                        // TODO: Реализовать удаление элемента
+                        onDeleteItem(item)
                     },
                     onNoteUpdate = { newNote ->
-                        // TODO: Реализовать обновление заметки
+                        onUpdateNote(item.copy(note = newNote))
                     },
-                    onEditExpression = { expression ->
-                        // TODO: Реализовать редактирование выражения
+                    onEditExpression = {
+                        onEditExpression(item)
                     }
                 )
             }
@@ -290,7 +299,7 @@ private fun HistoryItemRow(
     settingModel: SettingModel,
     onDeleteItemClick: () -> Unit,
     onNoteUpdate: (String) -> Unit,
-    onEditExpression: (String) -> Unit,
+    onEditExpression: () -> Unit,
 ) {
 
     var labelText by remember(key1 = historyModel.id) { mutableStateOf(value = historyModel.note) }
@@ -441,7 +450,7 @@ private fun HistoryItemRow(
                 ) {
 
                     Button(
-                        onClick = { onEditExpression(historyModel.expression) },
+                        onClick = { onEditExpression() },
                         modifier = Modifier.weight(weight = 1f),
                         shape = RoundedCornerShape(size = 20.dp),
                         colors = ButtonDefaults.buttonColors(

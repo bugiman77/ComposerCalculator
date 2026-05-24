@@ -12,13 +12,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -38,7 +43,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun CalculatorButtonGrid(
-    // ✅ Получаем ViewModel в качестве параметра
     viewModelCalculation: CalculatorViewModel,
     settingModel: SettingModel,
 ) {
@@ -89,7 +93,7 @@ private fun BtnCalculationText(
     ) {
         Box(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .background(backgroundBrush, shape = CircleShape)
                 .combinedClickable(
                     onClick = onClick,
@@ -127,7 +131,7 @@ private fun BtnCalculationIcon(
     ) {
         Box(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .background(backgroundBrush, shape = CircleShape)
                 .combinedClickable(
                     onClick = onClick,
@@ -156,7 +160,7 @@ private fun LineCalculation1(viewModelCalculation: CalculatorViewModel) {
             color = LightGray,
             modifier = Modifier.weight(weight = 1f),
             fontSize = 30.sp,
-            onClick = { viewModelCalculation.clear() },  // ✅ Подключено!
+            onClick = { viewModelCalculation.clear() },
             onLongClick = { viewModelCalculation.clear() },
         )
         BtnCalculationText(
@@ -171,14 +175,14 @@ private fun LineCalculation1(viewModelCalculation: CalculatorViewModel) {
             color = Orange,
             tint = Color.White,
             modifier = Modifier.weight(weight = 1f),
-            onClick = { viewModelCalculation.onInputMathOperation("%") },  // ✅ П��дключено!
+            onClick = { viewModelCalculation.onInputMathOperation("%") },
         )
         BtnCalculationText(
             text = "/",
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
             fontSize = 50.sp,
-            onClick = { viewModelCalculation.onInputMathOperation("/") },  // ✅ Подключено!
+            onClick = { viewModelCalculation.onInputMathOperation("/") },
         )
     }
 }
@@ -261,6 +265,8 @@ private fun LineCalculation4(viewModelCalculation: CalculatorViewModel) {
 @Composable
 private fun LineCalculation5(viewModelCalculation: CalculatorViewModel) {
     val scope = rememberCoroutineScope()
+    var menuExpanded by remember { mutableStateOf(value = false) }
+    val isSwitchEnableDarkMode = false
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -268,7 +274,7 @@ private fun LineCalculation5(viewModelCalculation: CalculatorViewModel) {
     ) {
         Box(modifier = Modifier.weight(weight = 1f)) {
             Button(
-                onClick = { /* TODO: Menu */ },
+                onClick = { menuExpanded = true },
                 modifier = Modifier.aspectRatio(ratio = 1f),
                 shape = CircleShape,
                 colors = ButtonDefaults.buttonColors(containerColor = DarkGray),
@@ -280,6 +286,19 @@ private fun LineCalculation5(viewModelCalculation: CalculatorViewModel) {
                     tint = Color.White
                 )
             }
+
+            if (menuExpanded) {
+                StyledDropdownMenu(
+                    expanded = true,
+                    isEnableSwitchDarkMode = isSwitchEnableDarkMode,
+                    onDismissRequest = { menuExpanded = false },
+                    onOpenEngineeringMode = {},
+                    onOpenScientificMode = {},
+                    onOpenCurrencyConverter = {},
+                    onOpenDistanceConverter = {}
+                )
+            }
+
         }
 
         BtnCalculationText(

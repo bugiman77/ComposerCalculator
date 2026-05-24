@@ -36,7 +36,7 @@ fun SettingsGroup(
             color = Color.Gray,
             fontSize = 13.sp,
             modifier = Modifier
-                .padding(start = 16.dp, bottom = 8.dp)
+                .padding(bottom = 8.dp)
         )
         Column(
             modifier = Modifier

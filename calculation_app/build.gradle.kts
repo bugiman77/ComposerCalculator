@@ -152,7 +152,4 @@ dependencies {
     implementation(libs.retrofit.converter.gson)
     implementation(libs.google.gson)
 
-    implementation("dev.chrisbanes.haze:haze:1.7.2")
-    implementation("dev.chrisbanes.haze:haze-materials:1.7.2")
-
 }

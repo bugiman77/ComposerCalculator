@@ -22,82 +22,50 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bugiman.composercalculator.R
-import dev.chrisbanes.haze.HazeState
-import dev.chrisbanes.haze.HazeStyle
-import dev.chrisbanes.haze.haze
-import dev.chrisbanes.haze.hazeChild
-import dev.chrisbanes.haze.materials.HazeMaterials
-import dev.chrisbanes.haze.rememberHazeState
 
 @Composable
 fun CustomTopBar(
-    hazeState: HazeState,
     screenTitle: String,
     onNavigateBack: () -> Unit,
     onScrollToTop: () -> Unit,
 ) {
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .statusBarsPadding()
+            .statusBarsPadding() // Только отступ, БЕЗ background
             .padding(horizontal = 16.dp, vertical = 10.dp),
         contentAlignment = Alignment.Center
     ) {
-
-        // Кнопка назад
+        // Островок кнопки "Назад"
         Card(
             onClick = onNavigateBack,
             shape = CircleShape,
-            modifier = Modifier
-                .size(48.dp)
-                .align(Alignment.CenterStart)
-                .hazeChild(
-                    state = hazeState,
-                    style = HazeMaterials.ultraThin()
-                ),
-            colors = CardDefaults.cardColors(
-                containerColor = Color(0x662C2C2E)
-            )
+            modifier = Modifier.size(48.dp).align(Alignment.CenterStart),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF2C2C2E)),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
         ) {
-
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                 Icon(
                     painter = painterResource(id = R.drawable.back_ios),
-                    contentDescription = null,
+                    contentDescription = "Назад",
                     tint = Color.White,
                     modifier = Modifier.size(20.dp)
                 )
             }
         }
 
-        // Заголовок
+        // Островок заголовка
         Card(
             onClick = onScrollToTop,
             shape = RoundedCornerShape(24.dp),
-            modifier = Modifier
-                .align(Alignment.Center)
-                .hazeChild(
-                    state = hazeState,
-                    style = HazeMaterials.ultraThin()
-                ),
-            colors = CardDefaults.cardColors(
-                containerColor = Color(0x662C2C2E)
-            )
+            modifier = Modifier.align(Alignment.Center),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF2C2C2E)),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
         ) {
-
             Row(
-                modifier = Modifier.padding(
-                    horizontal = 20.dp,
-                    vertical = 10.dp
-                ),
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-
                 Text(
                     text = screenTitle,
                     fontWeight = FontWeight.SemiBold,

@@ -126,9 +126,6 @@ class CalcApplication : Application() {
             Python.start(AndroidPlatform(this))
         }
 
-        val py = Python.getInstance()
-        val pythonModule = py.getModule("calculator")
-
         val calculationRepositoryImpl = CalculationRepositoryImpl()
 
         val settingsRepositoryImpl = SettingsRepositoryImpl(

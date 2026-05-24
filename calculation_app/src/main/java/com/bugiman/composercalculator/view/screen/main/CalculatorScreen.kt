@@ -67,7 +67,6 @@ fun CalculatorScreen(
 
     val scope = rememberCoroutineScope()
 
-    //TODO
     val isShowHistoryBotton = settingModel.isShowHistoryButton
     val isShowBottonLabel = settingModel.isShowIconButton
 

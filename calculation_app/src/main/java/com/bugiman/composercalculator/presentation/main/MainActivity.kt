@@ -1,6 +1,7 @@
 package com.bugiman.composercalculator.presentation.main
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -88,6 +89,7 @@ class MainActivity : ComponentActivity() {
             }
 
             LaunchedEffect(Unit) {
+                Log.i("isClearHistoryOnClose", settings.isClearHistoryOnClose.toString())
                 if (settings.isClearHistoryOnClose) {
                     viewModelCalculation.deleteAll()
                 }

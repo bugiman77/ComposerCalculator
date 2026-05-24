@@ -1,5 +1,6 @@
 package com.bugiman.composercalculator.view.components.settings.SettingsBlock
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Switch
@@ -147,6 +148,7 @@ fun HistoryComputing(
                         uncheckedBorderColor = Color.Transparent
                     )
                 )
+                Log.i("isClearHistoryOnClose", settingsModel.isClearHistoryOnClose.toString())
             }
 
             HorizontalDivider(color = Color(color = 0xFF3A3A3C))

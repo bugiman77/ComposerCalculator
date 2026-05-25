@@ -23,6 +23,7 @@ import com.bugiman.domain.usecase.calculation.CalculationBuildDecimalUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildDigitUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildOperatorUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildZeroUseCase
+import com.bugiman.domain.usecase.calculation.CalculationRemoveExpressionUseCase
 import com.bugiman.domain.usecase.calculation.CalculationRemoveLastCharUseCase
 import com.bugiman.domain.usecase.calculation.CalculationSettingsAllGetUseCase
 import com.bugiman.domain.usecase.convert.ConvertGetFormattedConversionUseCase
@@ -89,6 +90,7 @@ class CalcApplication : Application() {
     lateinit var calculationBuildOperatorUseCase: CalculationBuildOperatorUseCase
     lateinit var calculationBuildZeroUseCase: CalculationBuildZeroUseCase
     lateinit var calculationRemoveLastCharUseCase: CalculationRemoveLastCharUseCase
+    lateinit var calculationRemoveExpressionUseCase: CalculationRemoveExpressionUseCase
     lateinit var calculationSettingsAllGetUseCase: CalculationSettingsAllGetUseCase
 
     lateinit var convertValueUseCase: ConvertValueUseCase
@@ -139,6 +141,7 @@ class CalcApplication : Application() {
         calculationBuildOperatorUseCase = CalculationBuildOperatorUseCase()
         calculationBuildZeroUseCase = CalculationBuildZeroUseCase()
         calculationRemoveLastCharUseCase = CalculationRemoveLastCharUseCase()
+        calculationRemoveExpressionUseCase = CalculationRemoveExpressionUseCase()
         calculationSettingsAllGetUseCase =
             CalculationSettingsAllGetUseCase(repository = settingsRepositoryImpl)
 

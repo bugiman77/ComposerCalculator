@@ -8,6 +8,7 @@ import com.bugiman.domain.usecase.calculation.CalculationBuildDecimalUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildDigitUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildOperatorUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildZeroUseCase
+import com.bugiman.domain.usecase.calculation.CalculationRemoveExpressionUseCase
 import com.bugiman.domain.usecase.calculation.CalculationRemoveLastCharUseCase
 import com.bugiman.domain.usecase.feedback.FeedbackTriggerUseCase
 import com.bugiman.domain.usecase.history.HistoryAllDeleteUseCase
@@ -25,7 +26,8 @@ class CalculationViewModelFactory(
     private val buildBracketUseCase: CalculationBuildBracketUseCase,
     private val buildDecimalUseCase: CalculationBuildDecimalUseCase,
     private val buildZeroUseCase: CalculationBuildZeroUseCase,
-    private val removeLastCharUseCase: CalculationRemoveLastCharUseCase
+    private val removeLastCharUseCase: CalculationRemoveLastCharUseCase,
+    private val calculationRemoveExpressionUseCase: CalculationRemoveExpressionUseCase,
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
@@ -42,7 +44,8 @@ class CalculationViewModelFactory(
                 buildBracketUseCase = buildBracketUseCase,
                 buildDecimalUseCase = buildDecimalUseCase,
                 buildZeroUseCase = buildZeroUseCase,
-                removeLastCharUseCase = removeLastCharUseCase
+                removeLastCharUseCase = removeLastCharUseCase,
+                calculationRemoveExpressionUseCase = calculationRemoveExpressionUseCase,
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

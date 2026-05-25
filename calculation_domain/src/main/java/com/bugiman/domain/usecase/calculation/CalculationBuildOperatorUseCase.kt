@@ -10,7 +10,7 @@ class CalculationBuildOperatorUseCase {
 
         // Если последний символ точка — игнорируем оператор
         //TODO если последний символ точка, то заменяем его на оператор
-        if (lastChar == '.') return current
+//        if (lastChar == '.') return current
 
         // Замена оператора: "5+" + "-" -> "5-"
         if (lastChar in operators) {

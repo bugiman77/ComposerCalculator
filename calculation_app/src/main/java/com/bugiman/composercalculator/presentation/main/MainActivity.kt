@@ -53,7 +53,8 @@ class MainActivity : ComponentActivity() {
                 buildBracketUseCase = app.buildBracketUseCase,
                 buildDecimalUseCase = app.buildDecimalUseCase,
                 buildZeroUseCase = app.buildZeroUseCase,
-                removeLastCharUseCase = app.removeLastCharUseCase
+                removeLastCharUseCase = app.removeLastCharUseCase,
+                calculationRemoveExpressionUseCase = app.calculationRemoveExpressionUseCase
             )
         }
 

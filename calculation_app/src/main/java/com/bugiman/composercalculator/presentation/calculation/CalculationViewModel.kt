@@ -9,6 +9,7 @@ import com.bugiman.domain.usecase.calculation.CalculationBuildDecimalUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildDigitUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildOperatorUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildZeroUseCase
+import com.bugiman.domain.usecase.calculation.CalculationRemoveExpressionUseCase
 import com.bugiman.domain.usecase.calculation.CalculationRemoveLastCharUseCase
 import com.bugiman.domain.usecase.feedback.FeedbackTriggerUseCase
 import com.bugiman.domain.usecase.history.HistoryAllDeleteUseCase
@@ -32,7 +33,8 @@ class CalculatorViewModel(
     private val buildBracketUseCase: CalculationBuildBracketUseCase,
     private val buildDecimalUseCase: CalculationBuildDecimalUseCase,
     private val buildZeroUseCase: CalculationBuildZeroUseCase,
-    private val removeLastCharUseCase: CalculationRemoveLastCharUseCase
+    private val removeLastCharUseCase: CalculationRemoveLastCharUseCase,
+    private val calculationRemoveExpressionUseCase: CalculationRemoveExpressionUseCase
 ) : ViewModel() {
 
     private val _expression = MutableStateFlow(value = "")
@@ -71,17 +73,14 @@ class CalculatorViewModel(
 
     fun clear() {
         viewModelScope.launch {
-            triggerFeedback()
-            _expression.value = ""
+            updateExpression { calculationRemoveExpressionUseCase(current = it) }
         }
     }
 
     fun onCalculate() {
         val currentExpression = _expression.value
-        if (currentExpression.isBlank()) return
 
         viewModelScope.launch {
-            triggerFeedback()
             val result = calculateExpressionUseCase(currentExpression)
 
             result.onSuccess { successValue ->
@@ -93,7 +92,7 @@ class CalculatorViewModel(
                     )
                 )
             }.onFailure {
-                triggerFeedback()
+//                triggerFeedback()
             }
         }
     }

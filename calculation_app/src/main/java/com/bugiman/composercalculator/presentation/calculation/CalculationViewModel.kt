@@ -4,9 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bugiman.domain.models.history.HistoryModel
 import com.bugiman.domain.usecase.calculation.CalculateExpressionUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildBracketLeftUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildBracketRigthUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildBracketUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildCommaUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildDecimalUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildDigitUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildMathOperatorDivisionUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildMathOperatorMinusUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildMathOperatorMultiplicationUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildMathOperatorPlusUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildOperatorUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildZeroUseCase
 import com.bugiman.domain.usecase.calculation.CalculationRemoveExpressionUseCase
@@ -29,10 +36,15 @@ class CalculatorViewModel(
     private val historyAllGetUseCase: HistoryAllGetUseCase,
     private val feedbackTriggerUseCase: FeedbackTriggerUseCase,
     private val buildDigitUseCase: CalculationBuildDigitUseCase,
-    private val buildOperatorUseCase: CalculationBuildOperatorUseCase,
-    private val buildBracketUseCase: CalculationBuildBracketUseCase,
+    private val buildMathOperatorDivisionUseCase: CalculationBuildMathOperatorDivisionUseCase,
+    private val buildMathOperatorMultiplicationUseCase: CalculationBuildMathOperatorMultiplicationUseCase,
+    private val buildMathOperatorMinusUseCase: CalculationBuildMathOperatorMinusUseCase,
+    private val buildMathOperatorPlusUseCase: CalculationBuildMathOperatorPlusUseCase,
+    private val buildBracketLeftUseCase: CalculationBuildBracketLeftUseCase,
+    private val buildBracketRigthUseCase: CalculationBuildBracketRigthUseCase,
     private val buildDecimalUseCase: CalculationBuildDecimalUseCase,
     private val buildZeroUseCase: CalculationBuildZeroUseCase,
+    private val buildCommaUseCase: CalculationBuildCommaUseCase,
     private val removeLastCharUseCase: CalculationRemoveLastCharUseCase,
     private val calculationRemoveExpressionUseCase: CalculationRemoveExpressionUseCase
 ) : ViewModel() {
@@ -43,7 +55,7 @@ class CalculatorViewModel(
     val history: StateFlow<List<HistoryModel>> = historyAllGetUseCase()
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000),
             initialValue = emptyList()
         )
 
@@ -55,16 +67,32 @@ class CalculatorViewModel(
         updateExpression { buildZeroUseCase(current = it) }
     }
 
-    fun onInputMathOperation(operation: String) {
-        updateExpression { buildOperatorUseCase(current = it, operator = operation) }
+    fun onInputMathOperationDivision(operation: String) {
+        updateExpression { buildMathOperatorDivisionUseCase(current = it, operator = operation) }
     }
 
-    fun onInputBrackets(bracket: String) {
-        updateExpression { buildBracketUseCase(current = it, bracket = bracket) }
+    fun onInputMathOperationMultiplication(operation: String) {
+        updateExpression { buildMathOperatorMultiplicationUseCase(current = it, operator = operation) }
     }
 
-    fun onInputComma() {
-        updateExpression { buildDecimalUseCase(current = it) }
+    fun onInputMathOperationPlus(operation: String) {
+        updateExpression { buildMathOperatorPlusUseCase(current = it, operator = operation) }
+    }
+
+    fun onInputMathOperationMinus(operation: String) {
+        updateExpression { buildMathOperatorMinusUseCase(current = it, operator = operation) }
+    }
+
+    fun onInputBracketLeft(bracket: String) {
+        updateExpression { buildBracketLeftUseCase(current = it, bracketLeft = bracket) }
+    }
+
+    fun onInputBracketRigth(bracket: String) {
+        updateExpression { buildBracketRigthUseCase(current = it, bracketRigth = bracket) }
+    }
+
+    fun onInputComma(comma: String) {
+        updateExpression { buildCommaUseCase(current = it, comma = comma) }
     }
 
     fun removeLast() {
@@ -72,9 +100,7 @@ class CalculatorViewModel(
     }
 
     fun clear() {
-        viewModelScope.launch {
-            updateExpression { calculationRemoveExpressionUseCase(current = it) }
-        }
+        updateExpression { calculationRemoveExpressionUseCase(current = it) }
     }
 
     fun onCalculate() {

@@ -8,10 +8,6 @@ class CalculationBuildOperatorUseCase {
 
         val lastChar = current.last()
 
-        // Если последний символ точка — игнорируем оператор
-        //TODO если последний символ точка, то заменяем его на оператор
-//        if (lastChar == '.') return current
-
         // Замена оператора: "5+" + "-" -> "5-"
         if (lastChar in operators) {
             return current.dropLast(1) + operator

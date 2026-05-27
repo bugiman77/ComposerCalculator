@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -37,6 +38,7 @@ import com.bugiman.composercalculator.R
 import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
 import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.ui.theme.DarkGray
+import com.bugiman.composercalculator.ui.theme.DarkOrange
 import com.bugiman.composercalculator.ui.theme.LightGray
 import com.bugiman.composercalculator.ui.theme.Orange
 import com.bugiman.domain.models.settings.SettingModel
@@ -162,6 +164,7 @@ private fun LineCalculation1(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
     ) {
+
         BtnCalculationText(
             text = "C", // if (isInputEmpty) "AC" else "C"
             color = LightGray,
@@ -174,31 +177,43 @@ private fun LineCalculation1(
                 viewModelCalculation.clear()
             },
         )
+
         BtnCalculationText(
-            text = "+/-",
-            color = LightGray,
+            text = "(",
+            color = Orange,
             modifier = Modifier.weight(weight = 1f),
             fontSize = 50.sp,
             onClick = {
-                /* TODO: Toggle sign */
+
+            },
+            onLongClick = {
+
             },
         )
-        BtnCalculationIcon(
-            iconId = painterResource(id = R.drawable.ic_percent),
+
+        BtnCalculationText(
+            text = ")",
             color = Orange,
-            tint = Color.White,
             modifier = Modifier.weight(weight = 1f),
+            fontSize = 50.sp,
             onClick = {
-                viewModelCalculation.onInputMathOperation("%")
+
+            },
+            onLongClick = {
+
             },
         )
+
         BtnCalculationText(
             text = "/",
             color = Orange,
             modifier = Modifier.weight(weight = 1f),
             fontSize = 50.sp,
             onClick = {
-                viewModelCalculation.onInputMathOperation("/")
+
+            },
+            onLongClick = {
+
             },
         )
     }
@@ -212,37 +227,53 @@ private fun LineCalculation2(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
     ) {
+
         BtnCalculationText(
             text = "7",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
                 viewModelCalculation.onInputDigit("7")
-            }
+            },
+            onLongClick = {
+
+            },
         )
+
         BtnCalculationText(
             text = "8",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
                 viewModelCalculation.onInputDigit("8")
-            }
+            },
+            onLongClick = {
+
+            },
         )
+
         BtnCalculationText(
             text = "9",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
                 viewModelCalculation.onInputDigit("9")
-            }
+            },
+            onLongClick = {
+
+            },
         )
+
         BtnCalculationIcon(
             iconId = painterResource(id = R.drawable.ic_multiply),
             color = Orange,
             tint = Color.White,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
-                viewModelCalculation.onInputMathOperation("*")
+
+            },
+            onLongClick = {
+
             },
         )
     }
@@ -256,39 +287,56 @@ private fun LineCalculation3(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
     ) {
+
         BtnCalculationText(
             text = "4",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
                 viewModelCalculation.onInputDigit("4")
-            }
+            },
+            onLongClick = {
+
+            },
         )
+
         BtnCalculationText(
             text = "5",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
                 viewModelCalculation.onInputDigit("5")
-            }
+            },
+            onLongClick = {
+
+            },
         )
+
         BtnCalculationText(
             text = "6",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
                 viewModelCalculation.onInputDigit("6")
-            }
-        )
-        BtnCalculationIcon(
-            iconId = painterResource(id = R.drawable.ic_minus),
-            color = Orange,
-            tint = Color.White,
-            modifier = Modifier.weight(weight = 1f),
-            onClick = {
-                viewModelCalculation.onInputMathOperation("-")
+            },
+            onLongClick = {
+
             },
         )
+
+        BtnCalculationText(
+            text = "-",
+            color = Orange,
+            modifier = Modifier.weight(weight = 1f),
+            fontSize = 50.sp,
+            onClick = {
+
+            },
+            onLongClick = {
+
+            },
+        )
+
     }
 }
 
@@ -300,39 +348,56 @@ private fun LineCalculation4(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
     ) {
+
         BtnCalculationText(
             text = "1",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
                 viewModelCalculation.onInputDigit("1")
-            }
+            },
+            onLongClick = {
+
+            },
         )
+
         BtnCalculationText(
             text = "2",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
                 viewModelCalculation.onInputDigit("2")
-            }
+            },
+            onLongClick = {
+
+            },
         )
+
         BtnCalculationText(
             text = "3",
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
                 viewModelCalculation.onInputDigit("3")
-            }
-        )
-        BtnCalculationIcon(
-            iconId = painterResource(id = R.drawable.ic_plus),
-            color = Orange,
-            tint = Color.White,
-            modifier = Modifier.weight(weight = 1f),
-            onClick = {
-                viewModelCalculation.onInputMathOperation("+")
+            },
+            onLongClick = {
+
             },
         )
+
+        BtnCalculationText(
+            text = "+",
+            color = Orange,
+            modifier = Modifier.weight(weight = 1f),
+            fontSize = 50.sp,
+            onClick = {
+
+            },
+            onLongClick = {
+
+            },
+        )
+
     }
 }
 
@@ -356,6 +421,7 @@ private fun LineCalculation5(
                 contentPadding = PaddingValues(all = 0.dp)
             ) {
                 Icon(
+                    modifier = Modifier.size(40.dp),
                     painter = painterResource(id = R.drawable.ic_calculate),
                     contentDescription = null,
                     tint = Color.White
@@ -383,7 +449,10 @@ private fun LineCalculation5(
             fontSize = 45.sp,
             onClick = {
                 viewModelCalculation.onInputZero()
-            }
+            },
+            onLongClick = {
+
+            },
         )
 
         BtnCalculationText(
@@ -392,18 +461,24 @@ private fun LineCalculation5(
             modifier = Modifier.weight(weight = 1f),
             fontSize = 60.sp,
             onClick = {
-                viewModelCalculation.onInputComma()
-            }
+
+            },
+            onLongClick = {
+
+            },
         )
 
-        BtnCalculationIcon(
-            iconId = painterResource(id = R.drawable.ic_equal),
-            color = Orange,
-            tint = Color.White,
+        BtnCalculationText(
+            text = "=",
+            color = DarkOrange,
             modifier = Modifier.weight(weight = 1f),
+            fontSize = 65.sp,
             onClick = {
-                viewModelCalculation.onCalculate()
-            }
+
+            },
+            onLongClick = {
+
+            },
         )
     }
 }

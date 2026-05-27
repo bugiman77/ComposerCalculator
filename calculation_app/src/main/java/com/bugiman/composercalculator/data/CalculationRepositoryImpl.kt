@@ -11,7 +11,6 @@ class CalculationRepositoryImpl : CalculationRepository {
     override suspend fun calculate(expression: String): Result<String> =
         withContext(Dispatchers.Default) {
             try {
-                // Новый вызов из отдельного модуля
                 val python = PythonInitializer.getInstance()
                 val pythonFile = python.getModule("calculator")
                 val result = pythonFile.callAttr("evaluate_expression", expression).toString()

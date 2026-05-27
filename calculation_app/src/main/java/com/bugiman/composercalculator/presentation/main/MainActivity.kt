@@ -44,17 +44,22 @@ class MainActivity : ComponentActivity() {
         val viewModelCalculation: CalculatorViewModel by viewModels {
             CalculationViewModelFactory(
                 calculateExpressionUseCase = app.calculateExpressionUseCase,
-                historyItemSaveUseCase = app.historyItemSaveUseCase,
-                historyAllDeleteUseCase = app.historyAllDeleteUseCase,
-                historyAllGetUseCase = app.historyAllGetUseCase,
-                feedbackTriggerUseCase = app.feedbackTriggerUseCase,
-                buildDigitUseCase = app.buildDigitUseCase,
-                buildOperatorUseCase = app.buildOperatorUseCase,
-                buildBracketUseCase = app.buildBracketUseCase,
-                buildDecimalUseCase = app.buildDecimalUseCase,
-                buildZeroUseCase = app.buildZeroUseCase,
-                removeLastCharUseCase = app.removeLastCharUseCase,
-                calculationRemoveExpressionUseCase = app.calculationRemoveExpressionUseCase
+                        historyItemSaveUseCase = app.historyItemSaveUseCase,
+                        historyAllDeleteUseCase = app.historyAllDeleteUseCase,
+                        historyAllGetUseCase = app.historyAllGetUseCase,
+                        feedbackTriggerUseCase = app.feedbackTriggerUseCase,
+                        buildDigitUseCase = app.buildDigitUseCase,
+                        buildMathOperatorDivisionUseCase = app.buildMathOperatorDivisionUseCase,
+                        buildMathOperatorMultiplicationUseCase = app.buildMathOperatorMultiplicationUseCase,
+                        buildMathOperatorMinusUseCase = app.buildMathOperatorMinusUseCase,
+                        buildMathOperatorPlusUseCase = app.buildMathOperatorPlusUseCase,
+                        buildBracketLeftUseCase = app.buildBracketLeftUseCase,
+                        buildBracketRigthUseCase = app.buildBracketRigthUseCase,
+                        buildDecimalUseCase = app.buildDecimalUseCase,
+                        buildZeroUseCase = app.buildZeroUseCase,
+                        buildCommaUseCase = app.buildCommaUseCase,
+                        removeLastCharUseCase = app.removeLastCharUseCase,
+                        calculationRemoveExpressionUseCase = app.calculationRemoveExpressionUseCase,
             )
         }
 

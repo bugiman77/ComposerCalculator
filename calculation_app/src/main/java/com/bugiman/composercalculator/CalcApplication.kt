@@ -18,9 +18,16 @@ import com.bugiman.data.repository.history.HistoryRepositoryImpl
 import com.bugiman.data.repository.settings.SettingsRepositoryImpl
 import com.bugiman.data.serializer.SettingsProtoSerializer
 import com.bugiman.domain.usecase.calculation.CalculateExpressionUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildBracketLeftUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildBracketRigthUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildBracketUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildCommaUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildDecimalUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildDigitUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildMathOperatorDivisionUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildMathOperatorMinusUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildMathOperatorMultiplicationUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildMathOperatorPlusUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildOperatorUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildZeroUseCase
 import com.bugiman.domain.usecase.calculation.CalculationRemoveExpressionUseCase
@@ -54,34 +61,6 @@ private val Context.settingsDataStore: DataStore<SettingsProto> by dataStore(
     serializer = SettingsProtoSerializer
 )
 
-/*
-// CalcApplication.kt
-class CalcApplication : Application() {
-    // === CALCULATION USE CASES ===
-    val calculateExpressionUseCase: CalculateExpressionUseCase by lazy { /* ... */ }
-    val historyItemSaveUseCase: HistoryItemSaveUseCase by lazy { /* ... */ }
-    val historyAllDeleteUseCase: HistoryAllDeleteUseCase by lazy { /* ... */ }
-    val historyAllGetUseCase: HistoryAllGetUseCase by lazy { /* ... */ }
-    val feedbackTriggerUseCase: FeedbackTriggerUseCase by lazy { /* ... */ }
-
-    // === BUILDING USE CASES ===
-    val buildDigitUseCase: CalculationBuildDigitUseCase by lazy { /* ... */ }
-    val buildOperatorUseCase: CalculationBuildOperatorUseCase by lazy { /* ... */ }
-    val buildBracketUseCase: CalculationBuildBracketUseCase by lazy { /* ... */ }
-    val buildDecimalUseCase: CalculationBuildDecimalUseCase by lazy { /* ... */ }
-    val buildZeroUseCase: CalculationBuildZeroUseCase by lazy { /* ... */ }
-    val removeLastCharUseCase: CalculationRemoveLastCharUseCase by lazy { /* ... */ }
-
-    // === CONVERT USE CASES ===
-    val convertGetFormattedConversionUseCase: ConvertGetFormattedConversionUseCase by lazy { /* ... */ }
-    val convertSwapCurrenciesUseCase: ConvertSwapCurrenciesUseCase by lazy { /* ... */ }
-
-    // === SETTINGS USE CASES ===
-    val settingsAllGetUseCase: SettingsAllGetUseCase by lazy { /* ... */ }
-    val settingsItemUpdateUseCase: SettingsItemUpdateUseCase by lazy { /* ... */ }
-}
-* */
-
 class CalcApplication : Application() {
     lateinit var calculateExpressionUseCase: CalculateExpressionUseCase
     lateinit var calculationBuildBracketUseCase: CalculationBuildBracketUseCase
@@ -92,6 +71,13 @@ class CalcApplication : Application() {
     lateinit var calculationRemoveLastCharUseCase: CalculationRemoveLastCharUseCase
     lateinit var calculationRemoveExpressionUseCase: CalculationRemoveExpressionUseCase
     lateinit var calculationSettingsAllGetUseCase: CalculationSettingsAllGetUseCase
+    lateinit var buildMathOperatorDivisionUseCase: CalculationBuildMathOperatorDivisionUseCase
+    lateinit var buildMathOperatorMultiplicationUseCase: CalculationBuildMathOperatorMultiplicationUseCase
+    lateinit var buildMathOperatorMinusUseCase: CalculationBuildMathOperatorMinusUseCase
+    lateinit var buildMathOperatorPlusUseCase: CalculationBuildMathOperatorPlusUseCase
+    lateinit var buildBracketLeftUseCase: CalculationBuildBracketLeftUseCase
+    lateinit var buildBracketRigthUseCase: CalculationBuildBracketRigthUseCase
+    lateinit var buildCommaUseCase: CalculationBuildCommaUseCase
 
     lateinit var convertValueUseCase: ConvertValueUseCase
     lateinit var convertGetFormattedConversionUseCase: ConvertGetFormattedConversionUseCase
@@ -144,6 +130,13 @@ class CalcApplication : Application() {
         calculationRemoveExpressionUseCase = CalculationRemoveExpressionUseCase()
         calculationSettingsAllGetUseCase =
             CalculationSettingsAllGetUseCase(repository = settingsRepositoryImpl)
+        buildMathOperatorDivisionUseCase = CalculationBuildMathOperatorDivisionUseCase()
+        buildMathOperatorMultiplicationUseCase = CalculationBuildMathOperatorMultiplicationUseCase()
+        buildMathOperatorMinusUseCase = CalculationBuildMathOperatorMinusUseCase()
+        buildMathOperatorPlusUseCase = CalculationBuildMathOperatorPlusUseCase()
+        buildBracketLeftUseCase = CalculationBuildBracketLeftUseCase()
+        buildBracketRigthUseCase = CalculationBuildBracketRigthUseCase()
+        buildCommaUseCase = CalculationBuildCommaUseCase()
 
         buildDigitUseCase = CalculationBuildDigitUseCase()
         buildOperatorUseCase = CalculationBuildOperatorUseCase()

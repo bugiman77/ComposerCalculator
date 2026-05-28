@@ -306,7 +306,7 @@ private fun LineCalculation2(
                 viewModelCalculation.onInputDigit("7")
             },
             onLongClick = {
-
+                viewModelCalculation.onInputDigit("7")
             },
         )
 
@@ -318,7 +318,7 @@ private fun LineCalculation2(
                 viewModelCalculation.onInputDigit("8")
             },
             onLongClick = {
-
+                viewModelCalculation.onInputDigit("8")
             },
         )
 
@@ -330,7 +330,7 @@ private fun LineCalculation2(
                 viewModelCalculation.onInputDigit("9")
             },
             onLongClick = {
-
+                viewModelCalculation.onInputDigit("9")
             },
         )
 
@@ -366,7 +366,7 @@ private fun LineCalculation3(
                 viewModelCalculation.onInputDigit("4")
             },
             onLongClick = {
-
+                viewModelCalculation.onInputDigit("4")
             },
         )
 
@@ -378,7 +378,7 @@ private fun LineCalculation3(
                 viewModelCalculation.onInputDigit("5")
             },
             onLongClick = {
-
+                viewModelCalculation.onInputDigit("5")
             },
         )
 
@@ -390,7 +390,7 @@ private fun LineCalculation3(
                 viewModelCalculation.onInputDigit("6")
             },
             onLongClick = {
-
+                viewModelCalculation.onInputDigit("6")
             },
         )
 
@@ -427,7 +427,7 @@ private fun LineCalculation4(
                 viewModelCalculation.onInputDigit("1")
             },
             onLongClick = {
-
+                viewModelCalculation.onInputDigit("1")
             },
         )
 
@@ -439,7 +439,7 @@ private fun LineCalculation4(
                 viewModelCalculation.onInputDigit("2")
             },
             onLongClick = {
-
+                viewModelCalculation.onInputDigit("2")
             },
         )
 
@@ -451,7 +451,7 @@ private fun LineCalculation4(
                 viewModelCalculation.onInputDigit("3")
             },
             onLongClick = {
-
+                viewModelCalculation.onInputDigit("3")
             },
         )
 
@@ -521,7 +521,7 @@ private fun LineCalculation5(
                 viewModelCalculation.onInputZero()
             },
             onLongClick = {
-
+                viewModelCalculation.onInputZero()
             },
         )
 

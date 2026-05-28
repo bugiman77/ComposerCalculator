@@ -2,20 +2,26 @@ package com.bugiman.composercalculator.presentation.calculation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bugiman.domain.models.calculation.CursorPosition
 import com.bugiman.domain.models.history.HistoryModel
 import com.bugiman.domain.usecase.calculation.CalculateExpressionUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildBracketLeftUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildBracketLeftCursorUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildBracketRigthUseCase
-import com.bugiman.domain.usecase.calculation.CalculationBuildBracketUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildCommaUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildDecimalUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildDecimalCursorUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildDigitUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildDigitCursorUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildMathOperatorDivisionUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildMathOperatorMinusUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildMathOperatorMultiplicationUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildMathOperatorPlusUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildOperatorUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildOperatorCursorUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildZeroUseCase
+import com.bugiman.domain.usecase.calculation.CalculationRemoveAtCursorUseCase
+import com.bugiman.domain.usecase.calculation.CalculationRemoveBeforeCursorUseCase
 import com.bugiman.domain.usecase.calculation.CalculationRemoveExpressionUseCase
 import com.bugiman.domain.usecase.calculation.CalculationRemoveLastCharUseCase
 import com.bugiman.domain.usecase.feedback.FeedbackTriggerUseCase
@@ -26,7 +32,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class CalculatorViewModel(
@@ -36,21 +42,46 @@ class CalculatorViewModel(
     private val historyAllGetUseCase: HistoryAllGetUseCase,
     private val feedbackTriggerUseCase: FeedbackTriggerUseCase,
     private val buildDigitUseCase: CalculationBuildDigitUseCase,
+    private val buildDigitCursorUseCase: CalculationBuildDigitCursorUseCase,
     private val buildMathOperatorDivisionUseCase: CalculationBuildMathOperatorDivisionUseCase,
     private val buildMathOperatorMultiplicationUseCase: CalculationBuildMathOperatorMultiplicationUseCase,
     private val buildMathOperatorMinusUseCase: CalculationBuildMathOperatorMinusUseCase,
     private val buildMathOperatorPlusUseCase: CalculationBuildMathOperatorPlusUseCase,
     private val buildBracketLeftUseCase: CalculationBuildBracketLeftUseCase,
+    private val buildBracketLeftCursorUseCase: CalculationBuildBracketLeftCursorUseCase,
     private val buildBracketRigthUseCase: CalculationBuildBracketRigthUseCase,
     private val buildDecimalUseCase: CalculationBuildDecimalUseCase,
+    private val buildDecimalCursorUseCase: CalculationBuildDecimalCursorUseCase,
     private val buildZeroUseCase: CalculationBuildZeroUseCase,
     private val buildCommaUseCase: CalculationBuildCommaUseCase,
+    private val buildOperatorUseCase: CalculationBuildOperatorUseCase,
+    private val buildOperatorCursorUseCase: CalculationBuildOperatorCursorUseCase,
     private val removeLastCharUseCase: CalculationRemoveLastCharUseCase,
+    private val removeAtCursorUseCase: CalculationRemoveAtCursorUseCase,
+    private val removeBeforeCursorUseCase: CalculationRemoveBeforeCursorUseCase,
     private val calculationRemoveExpressionUseCase: CalculationRemoveExpressionUseCase
 ) : ViewModel() {
 
     private val _expression = MutableStateFlow(value = "")
-    val expression = _expression.asStateFlow()
+    val expression: StateFlow<String> = _expression.asStateFlow()
+
+    /**
+     * Позиция курсора в выражении (0 = начало, length = конец)
+     */
+    private val _cursorPosition = MutableStateFlow(value = 0)
+    val cursorPosition: StateFlow<Int> = _cursorPosition.asStateFlow()
+
+    /**
+     * Начало выделения текста (для поддержки выделения)
+     */
+    private val _selectionStart = MutableStateFlow(value = 0)
+    val selectionStart: StateFlow<Int> = _selectionStart.asStateFlow()
+
+    /**
+     * Конец выделения текста (для поддержки выделения)
+     */
+    private val _selectionEnd = MutableStateFlow(value = 0)
+    val selectionEnd: StateFlow<Int> = _selectionEnd.asStateFlow()
 
     val history: StateFlow<List<HistoryModel>> = historyAllGetUseCase()
         .stateIn(
@@ -59,49 +90,271 @@ class CalculatorViewModel(
             initialValue = emptyList()
         )
 
+    // ============= Методы ввода цифр (с поддержкой курсора) =============
+
+    /**
+     * Ввод цифры в позицию курсора
+     */
+    fun onInputDigitAtCursor(digit: String, cursorPos: Int) {
+        updateExpressionWithCursor(cursorPos) { expression ->
+            val cursor = CursorPosition(expression, cursorPos)
+            val (result, newPos) = buildDigitCursorUseCase(cursor, digit)
+            Triple(result, newPos, newPos)
+        }
+    }
+
+    /**
+     * Ввод цифры в конец (обратная совместимость)
+     */
     fun onInputDigit(digit: String) {
         updateExpression { buildDigitUseCase(current = it, digit) }
     }
+
+    // ============= Методы ввода нуля =============
 
     fun onInputZero() {
         updateExpression { buildZeroUseCase(current = it) }
     }
 
+    // ============= Методы ввода операторов (с поддержкой курсора) =============
+
+    /**
+     * Ввод оператора деления в позицию курсора
+     */
+    fun onInputMathOperationDivisionAtCursor(operation: String, cursorPos: Int) {
+        updateExpressionWithCursor(cursorPos) { expression ->
+            val cursor = CursorPosition(expression, cursorPos)
+            val result = buildOperatorCursorUseCase(cursor, operation)
+            if (result != null) {
+                val (newExpr, newPos) = result
+                Triple(newExpr, newPos, newPos)
+            } else {
+                Triple(expression, cursorPos, cursorPos)
+            }
+        }
+    }
+
+    /**
+     * Ввод оператора деления в конец (обратная совместимость)
+     */
     fun onInputMathOperationDivision(operation: String) {
         updateExpression { buildMathOperatorDivisionUseCase(current = it, operator = operation) }
     }
 
+    /**
+     * Ввод оператора умножения в позицию курсора
+     */
+    fun onInputMathOperationMultiplicationAtCursor(operation: String, cursorPos: Int) {
+        updateExpressionWithCursor(cursorPos) { expression ->
+            val cursor = CursorPosition(expression, cursorPos)
+            val result = buildOperatorCursorUseCase(cursor, operation)
+            if (result != null) {
+                val (newExpr, newPos) = result
+                Triple(newExpr, newPos, newPos)
+            } else {
+                Triple(expression, cursorPos, cursorPos)
+            }
+        }
+    }
+
+    /**
+     * Ввод оператора умножения в конец (обратная совместимость)
+     */
     fun onInputMathOperationMultiplication(operation: String) {
         updateExpression { buildMathOperatorMultiplicationUseCase(current = it, operator = operation) }
     }
 
+    /**
+     * Ввод оператора плюса в позицию курсора
+     */
+    fun onInputMathOperationPlusAtCursor(operation: String, cursorPos: Int) {
+        updateExpressionWithCursor(cursorPos) { expression ->
+            val cursor = CursorPosition(expression, cursorPos)
+            val result = buildOperatorCursorUseCase(cursor, operation)
+            if (result != null) {
+                val (newExpr, newPos) = result
+                Triple(newExpr, newPos, newPos)
+            } else {
+                Triple(expression, cursorPos, cursorPos)
+            }
+        }
+    }
+
+    /**
+     * Ввод оператора плюса в конец (обратная совместимость)
+     */
     fun onInputMathOperationPlus(operation: String) {
         updateExpression { buildMathOperatorPlusUseCase(current = it, operator = operation) }
     }
 
+    /**
+     * Ввод оператора минуса в позицию курсора
+     */
+    fun onInputMathOperationMinusAtCursor(operation: String, cursorPos: Int) {
+        updateExpressionWithCursor(cursorPos) { expression ->
+            val cursor = CursorPosition(expression, cursorPos)
+            val result = buildOperatorCursorUseCase(cursor, operation)
+            if (result != null) {
+                val (newExpr, newPos) = result
+                Triple(newExpr, newPos, newPos)
+            } else {
+                Triple(expression, cursorPos, cursorPos)
+            }
+        }
+    }
+
+    /**
+     * Ввод оператора минуса в конец (обратная совместимость)
+     */
     fun onInputMathOperationMinus(operation: String) {
         updateExpression { buildMathOperatorMinusUseCase(current = it, operator = operation) }
     }
 
+    // ============= Методы ввода скобок (с поддержкой курсора) =============
+
+    /**
+     * Ввод открывающей скобки в позицию курсора
+     */
+    fun onInputBracketLeftAtCursor(bracket: String, cursorPos: Int) {
+        updateExpressionWithCursor(cursorPos) { expression ->
+            val cursor = CursorPosition(expression, cursorPos)
+            val (result, newPos) = buildBracketLeftCursorUseCase(cursor, bracket)
+            Triple(result, newPos, newPos)
+        }
+    }
+
+    /**
+     * Ввод открывающей скобки в конец (обратная совместимость)
+     */
     fun onInputBracketLeft(bracket: String) {
         updateExpression { buildBracketLeftUseCase(current = it, bracketLeft = bracket) }
     }
 
+    /**
+     * Ввод закрывающей скобки в конец (только в конец, т.к. логика сложная)
+     */
     fun onInputBracketRigth(bracket: String) {
         updateExpression { buildBracketRigthUseCase(current = it, bracketRigth = bracket) }
     }
 
+    // ============= Методы ввода десятичной точки (с поддержкой курсора) =============
+
+    /**
+     * Ввод десятичной точки в позицию курсора
+     */
+    fun onInputDecimalAtCursor(cursorPos: Int) {
+        updateExpressionWithCursor(cursorPos) { expression ->
+            val cursor = CursorPosition(expression, cursorPos)
+            val result = buildDecimalCursorUseCase(cursor)
+            if (result != null) {
+                val (newExpr, newPos) = result
+                Triple(newExpr, newPos, newPos)
+            } else {
+                Triple(expression, cursorPos, cursorPos)
+            }
+        }
+    }
+
+    /**
+     * Ввод десятичной точки в конец (обратная совместимость)
+     */
+    fun onInputDecimal() {
+        updateExpression { buildDecimalUseCase(current = it) }
+    }
+
+    /**
+     * Ввод запятой в конец
+     */
     fun onInputComma(comma: String) {
         updateExpression { buildCommaUseCase(current = it, comma = comma) }
     }
 
+    // ============= Методы удаления =============
+
+    /**
+     * Удаление символа перед курсором (Backspace)
+     */
+    fun removeBeforeCursor(cursorPos: Int) {
+        updateExpressionWithCursor(cursorPos) { expression ->
+            val cursor = CursorPosition(expression, cursorPos)
+            val (result, newPos) = removeBeforeCursorUseCase(cursor)
+            Triple(result, newPos, newPos)
+        }
+    }
+
+    /**
+     * Удаление символа в позиции курсора (Delete)
+     */
+    fun removeAtCursor(cursorPos: Int) {
+        updateExpressionWithCursor(cursorPos) { expression ->
+            val cursor = CursorPosition(expression, cursorPos)
+            val (result, newPos) = removeAtCursorUseCase(cursor)
+            Triple(result, newPos, newPos)
+        }
+    }
+
+    /**
+     * Удаление выделенного текста
+     */
+    fun removeSelection(selStart: Int, selEnd: Int) {
+        if (selStart >= selEnd) return
+
+        updateExpressionWithCursor(selStart) { expression ->
+            val result = expression.substring(0, selStart) + expression.substring(selEnd)
+            Triple(result, selStart, selStart)
+        }
+    }
+
+    /**
+     * Удаление последнего символа (обратная совместимость)
+     */
     fun removeLast() {
         updateExpression { removeLastCharUseCase(current = it) }
     }
 
+    /**
+     * Очистка всего выражения
+     */
     fun clear() {
         updateExpression { calculationRemoveExpressionUseCase(current = it) }
+        setCursorPosition(0)
     }
+
+    // ============= Методы управления курсором =============
+
+    /**
+     * Установка позиции курсора
+     */
+    fun setCursorPosition(position: Int) {
+        val clampedPosition = position.coerceIn(0, _expression.value.length)
+        _cursorPosition.value = clampedPosition
+        _selectionStart.value = clampedPosition
+        _selectionEnd.value = clampedPosition
+    }
+
+    /**
+     * Установка выделения текста
+     */
+    fun setSelection(start: Int, end: Int) {
+        val clampedStart = start.coerceIn(0, _expression.value.length)
+        val clampedEnd = end.coerceIn(0, _expression.value.length)
+
+        _selectionStart.value = minOf(clampedStart, clampedEnd)
+        _selectionEnd.value = maxOf(clampedStart, clampedEnd)
+        _cursorPosition.value = maxOf(clampedStart, clampedEnd)
+    }
+
+    /**
+     * Очистка выделения (курсор в конец выделения)
+     */
+    fun clearSelection() {
+        val endPos = _selectionEnd.value
+        _selectionStart.value = endPos
+        _selectionEnd.value = endPos
+        _cursorPosition.value = endPos
+    }
+
+    // ============= Метод вычисления =============
 
     fun onCalculate() {
         val currentExpression = _expression.value
@@ -111,6 +364,7 @@ class CalculatorViewModel(
 
             result.onSuccess { successValue ->
                 _expression.value = successValue
+                setCursorPosition(successValue.length)
                 historyItemSaveUseCase(
                     HistoryModel(
                         expression = currentExpression,
@@ -118,7 +372,7 @@ class CalculatorViewModel(
                     )
                 )
             }.onFailure {
-//                triggerFeedback()
+                // Обработка ошибки
             }
         }
     }
@@ -129,10 +383,39 @@ class CalculatorViewModel(
         }
     }
 
+    // ============= Внутренние вспомогательные методы =============
+
+    /**
+     * Обновление выражения с поддержкой курсора
+     * @param currentCursorPos текущая позиция курсора
+     * @param transform функция трансформации (expression) -> Triple(newExpression, newCursorPos, newSelectionEnd)
+     */
+    private fun updateExpressionWithCursor(
+        currentCursorPos: Int,
+        transform: (String) -> Triple<String, Int, Int>
+    ) {
+        viewModelScope.launch {
+            triggerFeedback()
+            val (newExpression, newCursorPos, newSelectionEnd) = transform(_expression.value)
+            _expression.value = newExpression
+            _cursorPosition.value = newCursorPos.coerceIn(0, newExpression.length)
+            _selectionStart.value = newCursorPos.coerceIn(0, newExpression.length)
+            _selectionEnd.value = newSelectionEnd.coerceIn(0, newExpression.length)
+        }
+    }
+
+    /**
+     * Обновление выражения в конец (обратная совместимость)
+     */
     private fun updateExpression(transform: (String) -> String) {
         viewModelScope.launch {
             triggerFeedback()
-            _expression.value = transform(_expression.value)
+            val newExpression = transform(_expression.value)
+            _expression.value = newExpression
+            // Переместить курсор в конец
+            _cursorPosition.value = newExpression.length
+            _selectionStart.value = newExpression.length
+            _selectionEnd.value = newExpression.length
         }
     }
 
@@ -140,334 +423,3 @@ class CalculatorViewModel(
         feedbackTriggerUseCase()
     }
 }
-
-
-/*class CalculatorViewModel(
-    application: Application,
-    private val settingsViewModel: SettingsViewModel,
-    private val soundManager: SoundManager,
-    private val vibrationManager: VibrationManager
-) : AndroidViewModel(application) {
-
-    private val historyDao: HistoryDao =
-        AppDatabaseHistory.getDatabase(context = application).historyDao()
-
-    private val inputStateDao: InputStateDao =
-        AppDatabaseHistory.getDatabase(context = application).inputStateDao()
-
-    private val _id = MutableStateFlow(value = "")
-    val id: StateFlow<String> = _id.asStateFlow()
-
-    private val _expression = MutableStateFlow(value = "")
-    val expression: StateFlow<String> = _expression.asStateFlow()
-
-    private val _note = MutableStateFlow(value = "")
-    val note: StateFlow<String> = _note.asStateFlow()
-
-    private val _history = MutableStateFlow<List<HistoryModel>>(value = emptyList())
-    val history: StateFlow<List<HistoryModel>> = _history
-
-    init {
-        viewModelScope.launch {
-            loadHistoryAll()
-        }
-        viewModelScope.launch(Dispatchers.IO) {
-            loadLastValue()
-        }
-    }
-
-    private suspend fun loadHistoryAll() {
-        historyDao.getHistoryAll().collect { list ->
-            _history.value = list
-        }
-    }
-
-    private suspend fun loadLastValue() {
-        inputStateDao.getInputState().collect { savedState ->
-            savedState?.let {
-                _expression.value = it.currentText
-            }
-        }
-    }
-
-    fun deleteHistoryItemAll() {
-        viewModelScope.launch {
-            historyDao.deleteAll()
-            loadHistoryAll()
-        }
-    }
-
-    fun deleteHistoryItem(itemHistory: History) {
-        viewModelScope.launch {
-            historyDao.deleteItem(item = itemHistory)
-            loadHistoryAll()
-        }
-    }
-
-    fun onInputDigit(inputDigit: String) {
-        val currentExpression = _expression.value
-
-        if (currentExpression.isNotEmpty() && currentExpression.last() == ')') {
-            _expression.value += "*$inputDigit"
-            updateExpression(newExpression = _expression.value)
-            triggerFeedback()
-            return
-        }
-
-        if (currentExpression.isNotEmpty()) {
-            val lastChar = currentExpression.last()
-
-            if (lastChar == '0') {
-                val parts = currentExpression.split('+', '-', '*', '/', '%', '(')
-                val lastNumber = parts.last()
-
-                if (lastNumber == "0") {
-                    _expression.value += ".$inputDigit"
-                    updateExpression(newExpression = _expression.value)
-                    triggerFeedback()
-                    return
-                }
-            }
-        }
-
-        _expression.value += inputDigit
-        updateExpression(newExpression = _expression.value)
-        triggerFeedback()
-    }
-
-    fun onInputMathematicalOperations(inputOperation: String) {
-
-        if (settingsViewModel.playSound.value) {
-            soundManager.playClick()
-        }
-        if (settingsViewModel.playVibration.value) {
-            vibrationManager.vibrateClick()
-        }
-
-        val currentExpression = _expression.value
-        val operators = setOf('+', '-', '/', '*', '%')
-
-        // 1. Обработка ввода точки
-        if (inputOperation == ".") {
-            // Если поле пустое — превращаем в "0."
-            if (currentExpression.isEmpty()) {
-                _expression.value = "0."
-                updateExpression(_expression.value)
-                return
-            }
-
-            val lastChar = currentExpression.last()
-            val lastNumber = currentExpression.split('+', '-', '*', '/', '%').last()
-
-            // Если в последнем числе уже есть точка — игнорируем
-            if (lastNumber.contains('.')) {
-                return
-            }
-
-            // Если последний символ — оператор, добавляем "0."
-            if (lastChar in operators) {
-                _expression.value += "0."
-            } else {
-                // Если последний символ — цифра, просто добавляем точку
-                _expression.value += "."
-            }
-
-            updateExpression(_expression.value)
-            return
-        }
-
-        // 2. Обработка ввода операторов
-        // Если поле пустое, оператор (кроме, возможно, минуса) обычно не ставится
-        if (currentExpression.isEmpty()) return
-
-        val lastChar = currentExpression.last()
-
-        if (inputOperation.first() in operators) {
-            // Не даем ставить оператор сразу после точки
-            if (lastChar == '.') {
-                return
-            }
-
-            if (lastChar in operators) {
-                // Заменяем старый оператор на новый
-                _expression.value = currentExpression.dropLast(1) + inputOperation
-            } else {
-                // "Причесываем" число и добавляем оператор
-                val trimmedExpression = trimTrailingZerosFromLastNumber(currentExpression)
-                _expression.value = trimmedExpression + inputOperation
-            }
-        }
-
-        updateExpression(newExpression = _expression.value)
-    }
-
-
-    suspend fun onInputNote(itemHistory: History, newNote: String) {
-        historyDao.updateNote(itemId = itemHistory.id, newNote = newNote)
-    }
-
-    fun onToggleSign() {
-        val currentExpression = _expression.value
-
-        if (currentExpression.isEmpty()) return
-
-        val lastTokenRegex = Regex(pattern = """(\(-\d+\.?\d*\)|(?<!\d)\d+\.?\d*)$""")
-        val matchResult = lastTokenRegex.find(input = currentExpression)
-
-        if (matchResult != null) {
-            val lastToken = matchResult.value
-            val prefix = currentExpression.take(n = matchResult.range.first)
-
-            val updatedToken = if (lastToken.startsWith(prefix = "(-")) {
-                lastToken.removeSurrounding(prefix = "(-", suffix = ")")
-            } else {
-                "(-$lastToken)"
-            }
-
-            if (settingsViewModel.playSound.value) {
-                soundManager.playClick()
-            }
-            if (settingsViewModel.playVibration.value) {
-                vibrationManager.vibrateClick()
-            }
-
-            _expression.value = prefix + updatedToken
-
-            updateExpression(newExpression = _expression.value)
-
-        }
-
-    }
-
-    fun removeLastCharacter() {
-        if (_expression.value.isNotEmpty()) {
-            _expression.value = _expression.value.dropLast(n = 1)
-
-            updateExpression(newExpression = _expression.value)
-
-            if (settingsViewModel.playSound.value) {
-                soundManager.playClick()
-            }
-            if (settingsViewModel.playVibration.value) {
-                vibrationManager.vibrateClick()
-            }
-
-        }
-    }
-
-    fun clearExpression() {
-        if (_expression.value.isNotEmpty()) {
-            _expression.value = ""
-
-            updateExpression(newExpression = _expression.value)
-
-            if (settingsViewModel.playSound.value) {
-                soundManager.playClick()
-            }
-            if (settingsViewModel.playVibration.value) {
-                vibrationManager.vibrateClick()
-            }
-
-        }
-    }
-
-    fun editingExpression(itemHistory: History) {
-        _expression.value = itemHistory.expression
-
-        updateExpression(newExpression = _expression.value)
-
-    }
-
-    suspend fun calculateAndSave() {
-        val currentExpression = _expression.value
-        if (currentExpression.isBlank() || currentExpression.last() in listOf(
-                '+',
-                '-',
-                '/',
-                '*',
-                '.',
-                '%'
-            )
-        ) return
-
-        val calculationResult = evaluateExpressionWithPython(expressionStr = currentExpression)
-
-        _expression.value = calculationResult
-
-        if (settingsViewModel.playSound.value) {
-            soundManager.playClick()
-        }
-        if (settingsViewModel.playVibration.value) {
-            vibrationManager.vibrateClick()
-        }
-
-        saveToDatabase(currentExpression, calculationResult)
-
-        updateExpression(newExpression = _expression.value)
-
-    }
-
-    private fun trimTrailingZerosFromLastNumber(expression: String): String {
-        // Находим последнее число в строке
-        val operators = charArrayOf('+', '-', '*', '/', '%')
-        val lastOperatorIndex = expression.lastIndexOfAny(operators)
-
-        val prefix = if (lastOperatorIndex != -1) expression.substring(0, lastOperatorIndex + 1) else ""
-        var lastNumber = if (lastOperatorIndex != -1) expression.substring(lastOperatorIndex + 1) else expression
-
-        // Удаляем нули только если в числе есть точка
-        if (lastNumber.contains('.')) {
-            // Удаляем все нули с конца, а затем саму точку, если она осталась в конце
-            lastNumber = lastNumber.trimEnd('0').trimEnd('.')
-        }
-
-        return prefix + lastNumber
-    }
-
-    private fun updateExpression(newExpression: String) {
-        val isShowHistoryLastCalculation = settingsViewModel.isShowHistoryLastCalculation.value
-        _expression.value = newExpression
-        if (isShowHistoryLastCalculation) {
-            viewModelScope.launch(context = Dispatchers.IO) {
-                inputStateDao.saveInput(state = InputState(currentText = newExpression))
-            }
-        }
-    }
-
-    private fun triggerFeedback() {
-        if (settingsViewModel.playSound.value) {
-            soundManager.playClick()
-        }
-        if (settingsViewModel.playVibration.value) {
-            vibrationManager.vibrateClick()
-        }
-    }
-
-    private fun evaluateExpressionWithPython(expressionStr: String): String {
-        return try {
-            if (!Python.isStarted()) {
-                Python.start(AndroidPlatform(application))  // Инициализация с AndroidPlatform
-            }
-            val python = Python.getInstance()
-            val pythonFile = python.getModule("calculator")
-            val expression = pythonFile.callAttr("evaluate_expression", expressionStr).toString()
-            expression
-        } catch (_: PyException) {
-            "Ошибка вычислений"
-        } catch (_: Exception) {
-            "Критическая ошибка"
-        }
-    }
-
-    private suspend fun saveToDatabase(expression: String, result: String) {
-        historyDao.insertItem(
-            item = HistoryModel(
-                expression = expression,
-                result = result,
-                note = "",
-                timestamp = System.currentTimeMillis(),
-            )
-        )
-    }
-
-}*/

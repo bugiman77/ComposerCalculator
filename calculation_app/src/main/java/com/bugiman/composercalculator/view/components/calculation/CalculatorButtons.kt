@@ -1,9 +1,16 @@
 package com.bugiman.composercalculator.view.components.calculation
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.TextUnit
@@ -73,47 +81,111 @@ fun CalculatorButtonGrid(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
+private fun AnimatedCalculatorButton(
+    modifier: Modifier = Modifier,
+    color: Color,
+    borderBrush: Brush,
+    enabled: Boolean = true,
+    onLongClick: () -> Unit = {},
+    onClick: () -> Unit,
+    content: @Composable (Float) -> Unit
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 1.08f else 1f,
+        animationSpec = spring(
+            dampingRatio = 0.45f,
+            stiffness = 900f
+        ),
+        label = "button_scale"
+    )
+
+    val contentScale by animateFloatAsState(
+        targetValue = if (isPressed) 1.12f else 1f,
+        animationSpec = spring(
+            dampingRatio = 0.4f,
+            stiffness = 950f
+        ),
+        label = "content_scale"
+    )
+
+    val elevation by animateDpAsState(
+        targetValue = if (isPressed) 10.dp else 2.dp,
+        animationSpec = tween(90),
+        label = "elevation"
+    )
+
+    Box(
+        modifier = modifier
+            .graphicsLayer {
+                scaleX = scale
+                scaleY = scale
+                shadowElevation = elevation.toPx()
+                shape = CircleShape
+                clip = false
+            }
+            .border(
+                width = 1.dp,
+                brush = borderBrush,
+                shape = CircleShape
+            )
+            .background(
+                color = color,
+                shape = CircleShape
+            )
+            .combinedClickable(
+                interactionSource = interactionSource,
+                indication = null,
+                enabled = enabled,
+                onClick = onClick,
+                onLongClick = onLongClick
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        content(contentScale)
+    }
+}
+
+@Composable
 private fun BtnCalculationText(
     modifier: Modifier = Modifier,
     text: String,
     color: Color,
     fontSize: TextUnit = 40.sp,
     isButtonEnabled: Boolean = true,
-    onLongClick: () -> Unit = {},
     onClick: () -> Unit,
+    onLongClick: () -> Unit = {}
 ) {
-    val backgroundBrush = Brush.verticalGradient(colors = listOf(color, color))
-    val borderBrush =
-        Brush.verticalGradient(colors = listOf(Color.White.copy(alpha = 0.2f), Color.Transparent))
+    val borderBrush = Brush.verticalGradient(
+        colors = listOf(
+            Color.White.copy(alpha = 0.2f),
+            Color.Transparent
+        )
+    )
 
-    Button(
-        onClick = { },
-        modifier = modifier.aspectRatio(ratio = 1f),
-        shape = CircleShape,
-        contentPadding = PaddingValues(all = 0.dp),
-        border = BorderStroke(width = 1.dp, borderBrush),
-        enabled = isButtonEnabled
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(backgroundBrush, shape = CircleShape)
-                .combinedClickable(
-                    onClick = onClick,
-                    onLongClick = onLongClick
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = text,
-                fontSize = fontSize,
-                color = Color.White
-            )
-        }
+    AnimatedCalculatorButton(
+        modifier = modifier.aspectRatio(1f),
+        color = color,
+        borderBrush = borderBrush,
+        enabled = isButtonEnabled,
+        onClick = onClick,
+        onLongClick = onLongClick
+    ) { contentScale ->
+
+        Text(
+            text = text,
+            fontSize = fontSize,
+            color = Color.White,
+            modifier = Modifier.graphicsLayer {
+                scaleX = contentScale
+                scaleY = contentScale
+            }
+        )
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun BtnCalculationIcon(
     modifier: Modifier = Modifier,
@@ -121,38 +193,36 @@ private fun BtnCalculationIcon(
     color: Color,
     tint: Color,
     isButtonEnabled: Boolean = true,
-    onLongClick: () -> Unit = {},
     onClick: () -> Unit,
+    onLongClick: () -> Unit = {}
 ) {
-    val backgroundBrush = Brush.verticalGradient(colors = listOf(color, color))
-    val borderBrush =
-        Brush.verticalGradient(colors = listOf(Color.White.copy(alpha = 0.2f), Color.Transparent))
+    val borderBrush = Brush.verticalGradient(
+        colors = listOf(
+            Color.White.copy(alpha = 0.2f),
+            Color.Transparent
+        )
+    )
 
-    Button(
-        onClick = { },
-        modifier = modifier.aspectRatio(ratio = 1f),
-        shape = CircleShape,
-        contentPadding = PaddingValues(all = 0.dp),
-        border = BorderStroke(width = 1.dp, borderBrush),
-        enabled = isButtonEnabled
-    ) {
-        Box(
+    AnimatedCalculatorButton(
+        modifier = modifier.aspectRatio(1f),
+        color = color,
+        borderBrush = borderBrush,
+        enabled = isButtonEnabled,
+        onClick = onClick,
+        onLongClick = onLongClick
+    ) { contentScale ->
+
+        Icon(
+            painter = iconId,
+            contentDescription = null,
+            tint = tint,
             modifier = Modifier
-                .fillMaxSize()
-                .background(backgroundBrush, shape = CircleShape)
-                .combinedClickable(
-                    onClick = onClick,
-                    onLongClick = onLongClick
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                painter = iconId,
-                contentDescription = null,
-                modifier = Modifier.fillMaxWidth(),
-                tint = tint
-            )
-        }
+                .fillMaxWidth(0.5f)
+                .graphicsLayer {
+                    scaleX = contentScale
+                    scaleY = contentScale
+                }
+        )
     }
 }
 

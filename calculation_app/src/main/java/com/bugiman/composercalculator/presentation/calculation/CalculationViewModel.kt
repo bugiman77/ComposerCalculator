@@ -54,12 +54,11 @@ class CalculatorViewModel(
     private val buildDecimalCursorUseCase: CalculationBuildDecimalCursorUseCase,
     private val buildZeroUseCase: CalculationBuildZeroUseCase,
     private val buildCommaUseCase: CalculationBuildCommaUseCase,
-    private val buildOperatorUseCase: CalculationBuildOperatorUseCase,
     private val buildOperatorCursorUseCase: CalculationBuildOperatorCursorUseCase,
     private val removeLastCharUseCase: CalculationRemoveLastCharUseCase,
     private val removeAtCursorUseCase: CalculationRemoveAtCursorUseCase,
     private val removeBeforeCursorUseCase: CalculationRemoveBeforeCursorUseCase,
-    private val calculationRemoveExpressionUseCase: CalculationRemoveExpressionUseCase
+    private val calculationRemoveExpressionUseCase: CalculationRemoveExpressionUseCase,
 ) : ViewModel() {
 
     private val _expression = MutableStateFlow(value = "")

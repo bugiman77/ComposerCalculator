@@ -1,14 +1,24 @@
 package com.bugiman.composercalculator.view.components.settings.SettingsBlock
 
+import android.R.attr.scaleY
 import android.util.Log
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.ui.theme.iOSGray
@@ -31,7 +41,46 @@ fun HistoryComputing(
             subtitle = "Отображать кнопку истории вычислений в левом верхнем углу главного экрана",
             modifier = modifier.padding(vertical = 4.dp)
         ) {
-            Switch(
+            val interactionSource = remember { MutableInteractionSource() }
+            val isPressed by interactionSource.collectIsPressedAsState()
+            val scale by animateFloatAsState(
+                targetValue = if (isPressed) 1.13f else 1f,
+                animationSpec = spring(
+                    dampingRatio = 0.45f,
+                    stiffness = 900f
+                ),
+                label = "switchScale"
+            )
+
+            Box(
+                modifier = modifier
+                    .graphicsLayer {
+                        scaleX = scale
+                        scaleY = scale
+                    }
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = null
+                    ) {
+                        !settingsModel.isShowHistoryButton
+                    }
+            ) {
+                Switch(
+                    settingsModel.isShowHistoryButton,
+                    onCheckedChange = { enabled ->
+                        viewModelSettings.updateSettings { it.copy(isShowHistoryButton = enabled) }
+                    },
+                    interactionSource = interactionSource,
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = iOSGreen,
+                        uncheckedThumbColor = Color.White,
+                        uncheckedTrackColor = iOSGray,
+                        uncheckedBorderColor = Color.Transparent
+                    )
+                )
+            }
+            /*Switch(
                 checked = settingsModel.isShowHistoryButton,
                 onCheckedChange = { enabled ->
                     viewModelSettings.updateSettings { it.copy(isShowHistoryButton = enabled) }
@@ -43,7 +92,7 @@ fun HistoryComputing(
                     uncheckedTrackColor = iOSGray,
                     uncheckedBorderColor = Color.Transparent
                 )
-            )
+            )*/
         }
 
         if (settingsModel.isShowHistoryButton) {
@@ -67,7 +116,46 @@ fun HistoryComputing(
                 subtitle = "Для удаления элемента истории можно включить использование свайпа",
                 modifier = Modifier.padding(vertical = 4.dp)
             ) {
-                Switch(
+                val interactionSource = remember { MutableInteractionSource() }
+                val isPressed by interactionSource.collectIsPressedAsState()
+                val scale by animateFloatAsState(
+                    targetValue = if (isPressed) 1.13f else 1f,
+                    animationSpec = spring(
+                        dampingRatio = 0.45f,
+                        stiffness = 900f
+                    ),
+                    label = "switchScale"
+                )
+
+                Box(
+                    modifier = modifier
+                        .graphicsLayer {
+                            scaleX = scale
+                            scaleY = scale
+                        }
+                        .clickable(
+                            interactionSource = interactionSource,
+                            indication = null
+                        ) {
+                            !settingsModel.isSwipeEnabled
+                        }
+                ) {
+                    Switch(
+                        settingsModel.isSwipeEnabled,
+                        onCheckedChange = { enabled ->
+                            viewModelSettings.updateSettings { it.copy(isSwipeEnabled = enabled) }
+                        },
+                        interactionSource = interactionSource,
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            checkedTrackColor = iOSGreen,
+                            uncheckedThumbColor = Color.White,
+                            uncheckedTrackColor = iOSGray,
+                            uncheckedBorderColor = Color.Transparent
+                        )
+                    )
+                }
+                /*Switch(
                     checked = settingsModel.isSwipeEnabled,
                     onCheckedChange = { enabled ->
                         viewModelSettings.updateSettings { it.copy(isSwipeEnabled = enabled) }
@@ -79,7 +167,7 @@ fun HistoryComputing(
                         uncheckedTrackColor = iOSGray,
                         uncheckedBorderColor = Color.Transparent
                     )
-                )
+                )*/
             }
 
             HorizontalDivider(color = Color(color = 0xFF3A3A3C))
@@ -89,7 +177,46 @@ fun HistoryComputing(
                 subtitle = "Пометка к вычисленному выражению",
                 modifier = Modifier.padding(vertical = 4.dp)
             ) {
-                Switch(
+                val interactionSource = remember { MutableInteractionSource() }
+                val isPressed by interactionSource.collectIsPressedAsState()
+                val scale by animateFloatAsState(
+                    targetValue = if (isPressed) 1.13f else 1f,
+                    animationSpec = spring(
+                        dampingRatio = 0.45f,
+                        stiffness = 900f
+                    ),
+                    label = "switchScale"
+                )
+
+                Box(
+                    modifier = modifier
+                        .graphicsLayer {
+                            scaleX = scale
+                            scaleY = scale
+                        }
+                        .clickable(
+                            interactionSource = interactionSource,
+                            indication = null
+                        ) {
+                            !settingsModel.isNoteEnabled
+                        }
+                ) {
+                    Switch(
+                        settingsModel.isNoteEnabled,
+                        onCheckedChange = { enabled ->
+                            viewModelSettings.updateSettings { it.copy(isNoteEnabled = enabled) }
+                        },
+                        interactionSource = interactionSource,
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            checkedTrackColor = iOSGreen,
+                            uncheckedThumbColor = Color.White,
+                            uncheckedTrackColor = iOSGray,
+                            uncheckedBorderColor = Color.Transparent
+                        )
+                    )
+                }
+                /*Switch(
                     checked = settingsModel.isNoteEnabled,
                     onCheckedChange = { enabled ->
                         viewModelSettings.updateSettings { it.copy(isNoteEnabled = enabled) }
@@ -101,7 +228,7 @@ fun HistoryComputing(
                         uncheckedTrackColor = iOSGray,
                         uncheckedBorderColor = Color.Transparent
                     )
-                )
+                )*/
             }
 
             if (settingsModel.isNoteEnabled) {
@@ -112,7 +239,46 @@ fun HistoryComputing(
                     subtitle = "Начинать заметку с заглавной буквы",
                     modifier = Modifier.padding(vertical = 4.dp)
                 ) {
-                    Switch(
+                    val interactionSource = remember { MutableInteractionSource() }
+                    val isPressed by interactionSource.collectIsPressedAsState()
+                    val scale by animateFloatAsState(
+                        targetValue = if (isPressed) 1.13f else 1f,
+                        animationSpec = spring(
+                            dampingRatio = 0.45f,
+                            stiffness = 900f
+                        ),
+                        label = "switchScale"
+                    )
+
+                    Box(
+                        modifier = modifier
+                            .graphicsLayer {
+                                scaleX = scale
+                                scaleY = scale
+                            }
+                            .clickable(
+                                interactionSource = interactionSource,
+                                indication = null
+                            ) {
+                                !settingsModel.isTitleNote
+                            }
+                    ) {
+                        Switch(
+                            settingsModel.isTitleNote,
+                            onCheckedChange = { enabled ->
+                                viewModelSettings.updateSettings { it.copy(isTitleNote = enabled) }
+                            },
+                            interactionSource = interactionSource,
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = Color.White,
+                                checkedTrackColor = iOSGreen,
+                                uncheckedThumbColor = Color.White,
+                                uncheckedTrackColor = iOSGray,
+                                uncheckedBorderColor = Color.Transparent
+                            )
+                        )
+                    }
+                    /*Switch(
                         checked = settingsModel.isTitleNote,
                         onCheckedChange = { enabled ->
                             viewModelSettings.updateSettings { it.copy(isTitleNote = enabled) }
@@ -124,13 +290,13 @@ fun HistoryComputing(
                             uncheckedTrackColor = iOSGray,
                             uncheckedBorderColor = Color.Transparent
                         )
-                    )
+                    )*/
                 }
             }
 
             HorizontalDivider(color = Color(color = 0xFF3A3A3C))
 
-            SettingsRow(
+            /*SettingsRow(
                 title = "Удалять историю",
                 subtitle = "При включении переключателя, история будет удаляться при закрытии приложения",
                 modifier = Modifier.padding(vertical = 4.dp)
@@ -151,14 +317,53 @@ fun HistoryComputing(
                 Log.i("isClearHistoryOnClose", settingsModel.isClearHistoryOnClose.toString())
             }
 
-            HorizontalDivider(color = Color(color = 0xFF3A3A3C))
+            HorizontalDivider(color = Color(color = 0xFF3A3A3C))*/
 
             SettingsRow(
                 title = "Последнее вычисление",
                 subtitle = "Отображать последнее вычисление при запуске приложения",
                 modifier = Modifier.padding(vertical = 4.dp)
             ) {
-                Switch(
+                val interactionSource = remember { MutableInteractionSource() }
+                val isPressed by interactionSource.collectIsPressedAsState()
+                val scale by animateFloatAsState(
+                    targetValue = if (isPressed) 1.13f else 1f,
+                    animationSpec = spring(
+                        dampingRatio = 0.45f,
+                        stiffness = 900f
+                    ),
+                    label = "switchScale"
+                )
+
+                Box(
+                    modifier = modifier
+                        .graphicsLayer {
+                            scaleX = scale
+                            scaleY = scale
+                        }
+                        .clickable(
+                            interactionSource = interactionSource,
+                            indication = null
+                        ) {
+                            !settingsModel.isShowHistoryLastCalculation
+                        }
+                ) {
+                    Switch(
+                        settingsModel.isShowHistoryLastCalculation,
+                        onCheckedChange = { enabled ->
+                            viewModelSettings.updateSettings { it.copy(isShowHistoryLastCalculation = enabled) }
+                        },
+                        interactionSource = interactionSource,
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            checkedTrackColor = iOSGreen,
+                            uncheckedThumbColor = Color.White,
+                            uncheckedTrackColor = iOSGray,
+                            uncheckedBorderColor = Color.Transparent
+                        )
+                    )
+                }
+                /*Switch(
                     checked = settingsModel.isShowHistoryLastCalculation,
                     onCheckedChange = { enabled ->
                         viewModelSettings.updateSettings { it.copy(isShowHistoryLastCalculation = enabled) }
@@ -170,7 +375,7 @@ fun HistoryComputing(
                         uncheckedTrackColor = iOSGray,
                         uncheckedBorderColor = Color.Transparent
                     )
-                )
+                )*/
             }
 
         }

@@ -18,18 +18,24 @@ import com.bugiman.data.repository.history.HistoryRepositoryImpl
 import com.bugiman.data.repository.settings.SettingsRepositoryImpl
 import com.bugiman.data.serializer.SettingsProtoSerializer
 import com.bugiman.domain.usecase.calculation.CalculateExpressionUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildBracketLeftCursorUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildBracketLeftUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildBracketRigthUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildBracketUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildCommaUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildDecimalCursorUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildDecimalUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildDigitCursorUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildDigitUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildMathOperatorDivisionUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildMathOperatorMinusUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildMathOperatorMultiplicationUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildMathOperatorPlusUseCase
+import com.bugiman.domain.usecase.calculation.CalculationBuildOperatorCursorUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildOperatorUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildZeroUseCase
+import com.bugiman.domain.usecase.calculation.CalculationRemoveAtCursorUseCase
+import com.bugiman.domain.usecase.calculation.CalculationRemoveBeforeCursorUseCase
 import com.bugiman.domain.usecase.calculation.CalculationRemoveExpressionUseCase
 import com.bugiman.domain.usecase.calculation.CalculationRemoveLastCharUseCase
 import com.bugiman.domain.usecase.calculation.CalculationSettingsAllGetUseCase
@@ -105,6 +111,13 @@ class CalcApplication : Application() {
     lateinit var buildZeroUseCase: CalculationBuildZeroUseCase
     lateinit var removeLastCharUseCase: CalculationRemoveLastCharUseCase
 
+    lateinit var buildDigitCursorUseCase: CalculationBuildDigitCursorUseCase
+    lateinit var buildBracketLeftCursorUseCase: CalculationBuildBracketLeftCursorUseCase
+    lateinit var buildDecimalCursorUseCase: CalculationBuildDecimalCursorUseCase
+    lateinit var buildOperatorCursorUseCase: CalculationBuildOperatorCursorUseCase
+    lateinit var removeAtCursorUseCase: CalculationRemoveAtCursorUseCase
+    lateinit var removeBeforeCursorUseCase: CalculationRemoveBeforeCursorUseCase
+
     override fun onCreate() {
         super.onCreate()
 
@@ -144,6 +157,13 @@ class CalcApplication : Application() {
         buildDecimalUseCase = CalculationBuildDecimalUseCase()
         buildZeroUseCase = CalculationBuildZeroUseCase()
         removeLastCharUseCase = CalculationRemoveLastCharUseCase()
+
+        buildDigitCursorUseCase = CalculationBuildDigitCursorUseCase()
+        buildBracketLeftCursorUseCase = CalculationBuildBracketLeftCursorUseCase()
+        buildDecimalCursorUseCase = CalculationBuildDecimalCursorUseCase()
+        buildOperatorCursorUseCase = CalculationBuildOperatorCursorUseCase()
+        removeAtCursorUseCase = CalculationRemoveAtCursorUseCase()
+        removeBeforeCursorUseCase = CalculationRemoveBeforeCursorUseCase()
 
         val retrofit = Retrofit.Builder()
             .baseUrl("https://v6.exchangerate-api.com")

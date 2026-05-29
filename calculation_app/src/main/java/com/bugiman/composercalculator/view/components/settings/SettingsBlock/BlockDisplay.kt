@@ -1,5 +1,11 @@
 package com.bugiman.composercalculator.view.components.settings.SettingsBlock
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Slider
@@ -7,8 +13,11 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
 import com.bugiman.composercalculator.ui.theme.Orange
@@ -27,7 +36,7 @@ fun Display(
 
     SettingsGroup(title = "Дисплей") {
         // Настройка размера шрифта
-        SettingsRow(
+        /*SettingsRow(
             title = "Системный размер шрифта",
             subtitle = "Использовать размер шрифта операционной системы",
             modifier = modifier.padding(vertical = 4.dp)
@@ -45,7 +54,7 @@ fun Display(
                     uncheckedBorderColor = Color.Transparent
                 )
             )
-        }
+        }*/
 
         /*if (!settingsModel.isSystemFontSize) {
 
@@ -71,14 +80,53 @@ fun Display(
             }
         }*/
 
-        HorizontalDivider(color = Color(color = 0xFF3A3A3C))
+//        HorizontalDivider(color = Color(color = 0xFF3A3A3C))
 
         SettingsRow(
             title = "Не отключать экран",
             subtitle = "При использовании приложения экран не будет отключаться при долгих паузах",
             modifier = modifier.padding(vertical = 4.dp)
         ) {
-            Switch(
+            val interactionSource = remember { MutableInteractionSource() }
+            val isPressed by interactionSource.collectIsPressedAsState()
+            val scale by animateFloatAsState(
+                targetValue = if (isPressed) 1.13f else 1f,
+                animationSpec = spring(
+                    dampingRatio = 0.45f,
+                    stiffness = 900f
+                ),
+                label = "switchScale"
+            )
+
+            Box(
+                modifier = modifier
+                    .graphicsLayer {
+                        scaleX = scale
+                        scaleY = scale
+                    }
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = null
+                    ) {
+                        !settingsModel.isKeepScreenOn
+                    }
+            ) {
+                Switch(
+                    settingsModel.isKeepScreenOn,
+                    onCheckedChange = { enabled ->
+                        viewModelSettings.updateSettings { it.copy(isKeepScreenOn = enabled) }
+                    },
+                    interactionSource = interactionSource,
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = iOSGreen,
+                        uncheckedThumbColor = Color.White,
+                        uncheckedTrackColor = iOSGray,
+                        uncheckedBorderColor = Color.Transparent
+                    )
+                )
+            }
+            /*Switch(
                 checked = settingsModel.isKeepScreenOn,
                 onCheckedChange = { enabled ->
                     viewModelSettings.updateSettings { it.copy(isKeepScreenOn = enabled) }
@@ -90,7 +138,7 @@ fun Display(
                     uncheckedTrackColor = iOSGray,
                     uncheckedBorderColor = Color.Transparent
                 )
-            )
+            )*/
         }
 
     }

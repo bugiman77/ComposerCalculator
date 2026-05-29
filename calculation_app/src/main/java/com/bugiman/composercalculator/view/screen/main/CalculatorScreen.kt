@@ -1,7 +1,14 @@
 package com.bugiman.composercalculator.view.screen.main
 
+import android.R.attr.scaleY
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -130,40 +138,66 @@ fun CalculatorScreen(
                     ) {
 
                         if (isShowHistoryBotton) {
+                            val interactionSource = remember { MutableInteractionSource() }
+                            val isPressedHistory by interactionSource.collectIsPressedAsState()
+                            val contentScale by animateFloatAsState(
+                                targetValue = if (isPressedHistory) 1.12f else 1f,
+                                animationSpec = spring(
+                                    dampingRatio = 0.4f,
+                                    stiffness = 950f
+                                ),
+                                label = "contentScale"
+                            )
                             if (isShowBottonLabel) {
+
                                 Card(
                                     onClick = { showHistorySheet = true },
+                                    interactionSource = interactionSource,
                                     shape = CircleShape,
                                     modifier = Modifier
-                                        .size(48.dp),
+                                        .size(48.dp)
+                                        .iosPressAnimation(interactionSource),
                                     colors = CardDefaults.cardColors(
-                                        containerColor = Color(
-                                            0xFF2C2C2E
-                                        )
+                                        containerColor = Color(0xFF2C2C2E)
                                     ),
-                                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                                    elevation = CardDefaults.cardElevation(
+                                        defaultElevation = 4.dp
+                                    )
                                 ) {
                                     Box(
-                                        contentAlignment = Alignment.Center,
-                                        modifier = Modifier.fillMaxSize()
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentAlignment = Alignment.Center
                                     ) {
                                         Icon(
-                                            painter = painterResource(id = R.drawable.ic_history),
-                                            contentDescription = "История вычислений",
+                                            painter = painterResource(R.drawable.ic_history),
+                                            contentDescription = null,
                                             tint = Color.White,
-                                            modifier = Modifier.size(32.dp)
+                                            modifier = Modifier
+                                                .size(32.dp)
+                                                .graphicsLayer {
+                                                    scaleX = contentScale
+                                                    scaleY = contentScale
+                                                }
                                         )
                                     }
                                 }
                             } else {
                                 Button(
                                     onClick = { showHistorySheet = true },
-                                    colors = ButtonDefaults.buttonColors(containerColor = DarkGray)
+                                    interactionSource = interactionSource,
+                                    modifier = Modifier.iosPressAnimation(interactionSource),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = DarkGray
+                                    )
                                 ) {
                                     Text(
                                         text = "История",
                                         fontSize = 14.sp,
-                                        color = Color.White
+                                        color = Color.White,
+                                        modifier = Modifier.graphicsLayer {
+                                            scaleX = contentScale
+                                            scaleY = contentScale
+                                        }
                                     )
                                 }
                             }
@@ -171,8 +205,49 @@ fun CalculatorScreen(
                             Spacer(modifier = Modifier.size(size = 40.dp))
                         }
 
+                        val interactionSource = remember { MutableInteractionSource() }
+                        val isPressedSettings by interactionSource.collectIsPressedAsState()
+                        val contentScale by animateFloatAsState(
+                            targetValue = if (isPressedSettings) 1.12f else 1f,
+                            animationSpec = spring(
+                                dampingRatio = 0.4f,
+                                stiffness = 950f
+                            ),
+                            label = "contentScale"
+                        )
                         if (isShowBottonLabel) {
                             Card(
+                                onClick = onNavigateToSettings,
+                                interactionSource = interactionSource,
+                                shape = CircleShape,
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .iosPressAnimation(interactionSource),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = Color(0xFF2C2C2E)
+                                ),
+                                elevation = CardDefaults.cardElevation(
+                                    defaultElevation = 4.dp
+                                )
+                            ) {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_more),
+                                        contentDescription = "Настройки приложения",
+                                        tint = Color.White,
+                                        modifier = Modifier
+                                            .size(32.dp)
+                                            .graphicsLayer {
+                                                scaleX = contentScale
+                                                scaleY = contentScale
+                                            }
+                                    )
+                                }
+                            }
+                            /*Card(
                                 onClick = onNavigateToSettings,
                                 shape = CircleShape,
                                 modifier = Modifier
@@ -195,9 +270,28 @@ fun CalculatorScreen(
                                         modifier = Modifier.size(32.dp)
                                     )
                                 }
-                            }
+                            }*/
                         } else {
                             Button(
+                                onClick = onNavigateToSettings,
+                                interactionSource = interactionSource,
+                                modifier = Modifier.iosPressAnimation(interactionSource),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = DarkGray
+                                )
+                            ) {
+                                Text(
+                                    text = "Настройки",
+                                    fontSize = 14.sp,
+                                    color = Color.White,
+                                    modifier = Modifier.graphicsLayer {
+                                        scaleX = contentScale
+                                        scaleY = contentScale
+                                    }
+                                )
+                            }
+
+                            /*Button(
                                 onClick = onNavigateToSettings,
                                 colors = ButtonDefaults.buttonColors(containerColor = DarkGray)
                             ) {
@@ -206,7 +300,7 @@ fun CalculatorScreen(
                                     fontSize = 14.sp,
                                     color = Color.White
                                 )
-                            }
+                            }*/
                         }
                     }
 
@@ -222,5 +316,34 @@ fun CalculatorScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun Modifier.iosPressAnimation(
+    interactionSource: MutableInteractionSource
+): Modifier {
+
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 1.08f else 1f,
+        animationSpec = spring(
+            dampingRatio = 0.45f,
+            stiffness = 900f
+        ),
+        label = "scale"
+    )
+
+    val elevation by animateDpAsState(
+        targetValue = if (isPressed) 10.dp else 4.dp,
+        animationSpec = tween(90),
+        label = "elevation"
+    )
+
+    return this.graphicsLayer {
+        scaleX = scale
+        scaleY = scale
+        shadowElevation = elevation.toPx()
     }
 }

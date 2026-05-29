@@ -94,7 +94,7 @@ private fun AnimatedCalculatorButton(
     val isPressed by interactionSource.collectIsPressedAsState()
 
     val scale by animateFloatAsState(
-        targetValue = if (isPressed) 1.08f else 1f,
+        targetValue = if (isPressed) 1.1f else 1f,
         animationSpec = spring(
             dampingRatio = 0.45f,
             stiffness = 900f

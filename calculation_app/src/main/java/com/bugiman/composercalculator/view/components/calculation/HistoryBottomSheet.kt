@@ -59,6 +59,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -375,7 +376,7 @@ private fun HistoryItemRow(
 
                 Text(
                     text = historyModel.expression,
-                    color = Color.Gray,
+                    color = Color(0xFF7A869A),
                     fontSize = 13.sp,
                     maxLines = 1
                 )
@@ -398,14 +399,8 @@ private fun HistoryItemRow(
                 ) {
 
                     HistoryActionButton(
-                        icon = Icons.Default.Edit,
-                        onClick = onEditExpression
-                    )
-
-                    Spacer(Modifier.width(8.dp))
-
-                    HistoryActionButton(
                         icon = Icons.Default.ContentCopy,
+                        colorIcon = Color(0xFF7A869A),
                         onClick = {
                             scope.launch {
 
@@ -424,6 +419,13 @@ private fun HistoryItemRow(
                     Spacer(Modifier.width(8.dp))
 
                     HistoryActionButton(
+                        icon = Icons.Default.Edit,
+                        onClick = onEditExpression
+                    )
+
+                    Spacer(Modifier.width(8.dp))
+
+                    HistoryActionButton(
                         icon = Icons.Default.Note,
                         onClick = {
                             showNoteSheet = true
@@ -431,14 +433,6 @@ private fun HistoryItemRow(
                     )
 
                     Spacer(Modifier.weight(1f))
-
-                    HistoryActionButton(
-                        icon = Icons.Default.Delete,
-                        onClick = onDeleteItemClick,
-                        colorIcon = Color(0xFFF36464)
-                    )
-
-                    Spacer(Modifier.width(8.dp))
 
                     HistoryActionButton(
                         icon = Icons.Default.ContentCopy,
@@ -455,6 +449,14 @@ private fun HistoryItemRow(
                                 )
                             }
                         }
+                    )
+
+                    Spacer(Modifier.width(8.dp))
+
+                    HistoryActionButton(
+                        icon = Icons.Default.Delete,
+                        onClick = onDeleteItemClick,
+                        colorIcon = Color(0xFFF36464)
                     )
                 }
 

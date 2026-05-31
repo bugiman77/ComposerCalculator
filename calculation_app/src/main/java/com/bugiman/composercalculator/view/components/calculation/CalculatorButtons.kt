@@ -42,6 +42,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bugiman.composercalculator.R
 import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
 import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
@@ -94,7 +95,7 @@ private fun AnimatedCalculatorButton(
     val isPressed by interactionSource.collectIsPressedAsState()
 
     val scale by animateFloatAsState(
-        targetValue = if (isPressed) 1.1f else 1f,
+        targetValue = if (isPressed) 1.08f else 1f,
         animationSpec = spring(
             dampingRatio = 0.45f,
             stiffness = 900f
@@ -230,18 +231,20 @@ private fun BtnCalculationIcon(
 private fun LineCalculation1(
     viewModelCalculation: CalculatorViewModel
 ) {
+    val cursorPosition by viewModelCalculation.cursorPosition.collectAsStateWithLifecycle()
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
     ) {
 
         BtnCalculationText(
-            text = "C", // if (isInputEmpty) "AC" else "C"
+            text = "C",
             color = LightGray,
             modifier = Modifier.weight(weight = 1f),
             fontSize = 45.sp,
             onClick = {
-                viewModelCalculation.removeLast()
+                viewModelCalculation.removeBeforeCursor(cursorPosition)
             },
             onLongClick = {
                 viewModelCalculation.clear()
@@ -254,10 +257,10 @@ private fun LineCalculation1(
             modifier = Modifier.weight(weight = 1f),
             fontSize = 50.sp,
             onClick = {
-
+                viewModelCalculation.onInputBracketLeftAtCursor("(", cursorPosition)
             },
             onLongClick = {
-
+                viewModelCalculation.onInputBracketLeftAtCursor("(", cursorPosition)
             },
         )
 
@@ -267,10 +270,10 @@ private fun LineCalculation1(
             modifier = Modifier.weight(weight = 1f),
             fontSize = 50.sp,
             onClick = {
-
+                viewModelCalculation.onInputBracketRigth(")")
             },
             onLongClick = {
-
+                viewModelCalculation.onInputBracketRigth(")")
             },
         )
 
@@ -280,10 +283,10 @@ private fun LineCalculation1(
             modifier = Modifier.weight(weight = 1f),
             fontSize = 50.sp,
             onClick = {
-
+                viewModelCalculation.onInputMathOperationDivisionAtCursor("/", cursorPosition)
             },
             onLongClick = {
-
+                viewModelCalculation.onInputMathOperationDivisionAtCursor("/", cursorPosition)
             },
         )
     }
@@ -293,6 +296,9 @@ private fun LineCalculation1(
 private fun LineCalculation2(
     viewModelCalculation: CalculatorViewModel
 ) {
+    val cursorPosition by viewModelCalculation.cursorPosition.collectAsStateWithLifecycle()
+    val expression by viewModelCalculation.expression.collectAsStateWithLifecycle()
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
@@ -303,10 +309,19 @@ private fun LineCalculation2(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
-                viewModelCalculation.onInputDigit("7")
+                // Если курсор не активен (cursorPosition == 0 и поле пусто), добавляем в конец
+                if (cursorPosition == 0 && expression.isEmpty()) {
+                    viewModelCalculation.onInputDigit("7")
+                } else {
+                    viewModelCalculation.onInputDigitAtCursor("7", cursorPosition)
+                }
             },
             onLongClick = {
-                viewModelCalculation.onInputDigit("7")
+                if (cursorPosition == 0 && expression.isEmpty()) {
+                    viewModelCalculation.onInputDigit("7")
+                } else {
+                    viewModelCalculation.onInputDigitAtCursor("7", cursorPosition)
+                }
             },
         )
 
@@ -315,10 +330,18 @@ private fun LineCalculation2(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
-                viewModelCalculation.onInputDigit("8")
+                if (cursorPosition == 0 && expression.isEmpty()) {
+                    viewModelCalculation.onInputDigit("8")
+                } else {
+                    viewModelCalculation.onInputDigitAtCursor("8", cursorPosition)
+                }
             },
             onLongClick = {
-                viewModelCalculation.onInputDigit("8")
+                if (cursorPosition == 0 && expression.isEmpty()) {
+                    viewModelCalculation.onInputDigit("8")
+                } else {
+                    viewModelCalculation.onInputDigitAtCursor("8", cursorPosition)
+                }
             },
         )
 
@@ -327,10 +350,18 @@ private fun LineCalculation2(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
-                viewModelCalculation.onInputDigit("9")
+                if (cursorPosition == 0 && expression.isEmpty()) {
+                    viewModelCalculation.onInputDigit("9")
+                } else {
+                    viewModelCalculation.onInputDigitAtCursor("9", cursorPosition)
+                }
             },
             onLongClick = {
-                viewModelCalculation.onInputDigit("9")
+                if (cursorPosition == 0 && expression.isEmpty()) {
+                    viewModelCalculation.onInputDigit("9")
+                } else {
+                    viewModelCalculation.onInputDigitAtCursor("9", cursorPosition)
+                }
             },
         )
 
@@ -340,10 +371,19 @@ private fun LineCalculation2(
             tint = Color.White,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
-
+                if (cursorPosition == 0 && expression.isEmpty()) {
+                    // Оператор в пусто не добавляем
+                    return@BtnCalculationIcon
+                } else {
+                    viewModelCalculation.onInputMathOperationMultiplicationAtCursor("*", cursorPosition)
+                }
             },
             onLongClick = {
-
+                if (cursorPosition == 0 && expression.isEmpty()) {
+                    return@BtnCalculationIcon
+                } else {
+                    viewModelCalculation.onInputMathOperationMultiplicationAtCursor("*", cursorPosition)
+                }
             },
         )
     }
@@ -353,6 +393,8 @@ private fun LineCalculation2(
 private fun LineCalculation3(
     viewModelCalculation: CalculatorViewModel
 ) {
+    val cursorPosition by viewModelCalculation.cursorPosition.collectAsStateWithLifecycle()
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
@@ -363,10 +405,10 @@ private fun LineCalculation3(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
-                viewModelCalculation.onInputDigit("4")
+                viewModelCalculation.onInputDigitAtCursor("4", cursorPosition)
             },
             onLongClick = {
-                viewModelCalculation.onInputDigit("4")
+                viewModelCalculation.onInputDigitAtCursor("4", cursorPosition)
             },
         )
 
@@ -375,10 +417,10 @@ private fun LineCalculation3(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
-                viewModelCalculation.onInputDigit("5")
+                viewModelCalculation.onInputDigitAtCursor("5", cursorPosition)
             },
             onLongClick = {
-                viewModelCalculation.onInputDigit("5")
+                viewModelCalculation.onInputDigitAtCursor("5", cursorPosition)
             },
         )
 
@@ -387,10 +429,10 @@ private fun LineCalculation3(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
-                viewModelCalculation.onInputDigit("6")
+                viewModelCalculation.onInputDigitAtCursor("6", cursorPosition)
             },
             onLongClick = {
-                viewModelCalculation.onInputDigit("6")
+                viewModelCalculation.onInputDigitAtCursor("6", cursorPosition)
             },
         )
 
@@ -400,10 +442,10 @@ private fun LineCalculation3(
             modifier = Modifier.weight(weight = 1f),
             fontSize = 50.sp,
             onClick = {
-
+                viewModelCalculation.onInputMathOperationMinusAtCursor("-", cursorPosition)
             },
             onLongClick = {
-
+                viewModelCalculation.onInputMathOperationMinusAtCursor("-", cursorPosition)
             },
         )
 
@@ -414,6 +456,8 @@ private fun LineCalculation3(
 private fun LineCalculation4(
     viewModelCalculation: CalculatorViewModel
 ) {
+    val cursorPosition by viewModelCalculation.cursorPosition.collectAsStateWithLifecycle()
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
@@ -424,10 +468,10 @@ private fun LineCalculation4(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
-                viewModelCalculation.onInputDigit("1")
+                viewModelCalculation.onInputDigitAtCursor("1", cursorPosition)
             },
             onLongClick = {
-                viewModelCalculation.onInputDigit("1")
+                viewModelCalculation.onInputDigitAtCursor("1", cursorPosition)
             },
         )
 
@@ -436,10 +480,10 @@ private fun LineCalculation4(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
-                viewModelCalculation.onInputDigit("2")
+                viewModelCalculation.onInputDigitAtCursor("2", cursorPosition)
             },
             onLongClick = {
-                viewModelCalculation.onInputDigit("2")
+                viewModelCalculation.onInputDigitAtCursor("2", cursorPosition)
             },
         )
 
@@ -448,10 +492,10 @@ private fun LineCalculation4(
             color = DarkGray,
             modifier = Modifier.weight(weight = 1f),
             onClick = {
-                viewModelCalculation.onInputDigit("3")
+                viewModelCalculation.onInputDigitAtCursor("3", cursorPosition)
             },
             onLongClick = {
-                viewModelCalculation.onInputDigit("3")
+                viewModelCalculation.onInputDigitAtCursor("3", cursorPosition)
             },
         )
 
@@ -461,10 +505,10 @@ private fun LineCalculation4(
             modifier = Modifier.weight(weight = 1f),
             fontSize = 50.sp,
             onClick = {
-
+                viewModelCalculation.onInputMathOperationPlusAtCursor("+", cursorPosition)
             },
             onLongClick = {
-
+                viewModelCalculation.onInputMathOperationPlusAtCursor("+", cursorPosition)
             },
         )
 
@@ -475,6 +519,8 @@ private fun LineCalculation4(
 private fun LineCalculation5(
     viewModelCalculation: CalculatorViewModel
 ) {
+    val cursorPosition by viewModelCalculation.cursorPosition.collectAsStateWithLifecycle()
+
     var menuExpanded by remember { mutableStateOf(value = false) }
     val isSwitchEnableDarkMode = false
 
@@ -518,10 +564,10 @@ private fun LineCalculation5(
             modifier = Modifier.weight(weight = 1f),
             fontSize = 45.sp,
             onClick = {
-                viewModelCalculation.onInputZero()
+                viewModelCalculation.onInputDigitAtCursor("0", cursorPosition)
             },
             onLongClick = {
-                viewModelCalculation.onInputZero()
+                viewModelCalculation.onInputDigitAtCursor("0", cursorPosition)
             },
         )
 
@@ -531,10 +577,10 @@ private fun LineCalculation5(
             modifier = Modifier.weight(weight = 1f),
             fontSize = 60.sp,
             onClick = {
-
+                viewModelCalculation.onInputDecimalAtCursor(cursorPosition)
             },
             onLongClick = {
-
+                viewModelCalculation.onInputDecimalAtCursor(cursorPosition)
             },
         )
 
@@ -544,10 +590,10 @@ private fun LineCalculation5(
             modifier = Modifier.weight(weight = 1f),
             fontSize = 65.sp,
             onClick = {
-
+                viewModelCalculation.onCalculate()
             },
             onLongClick = {
-
+                viewModelCalculation.onCalculate()
             },
         )
     }

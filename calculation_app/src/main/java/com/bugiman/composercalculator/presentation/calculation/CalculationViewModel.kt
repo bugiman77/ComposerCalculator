@@ -236,11 +236,6 @@ class CalculatorViewModel(
         updateExpression { buildBracketRigthUseCase(current = it, bracketRigth = bracket) }
     }
 
-    // ============= Методы ввода десятичной точки (с поддержкой курсора) =============
-
-    /**
-     * Ввод десятичной точки в позицию курсора
-     */
     fun onInputDecimalAtCursor(cursorPos: Int) {
         updateExpressionWithCursor(cursorPos) { expression ->
             val cursor = CursorPosition(expression, cursorPos)
@@ -254,25 +249,14 @@ class CalculatorViewModel(
         }
     }
 
-    /**
-     * Ввод десятичной точки в конец (обратная совместимость)
-     */
     fun onInputDecimal() {
         updateExpression { buildDecimalUseCase(current = it) }
     }
 
-    /**
-     * Ввод запятой в конец
-     */
     fun onInputComma(comma: String) {
         updateExpression { buildCommaUseCase(current = it, comma = comma) }
     }
 
-    // ============= Методы удаления =============
-
-    /**
-     * Удаление символа перед курсором (Backspace)
-     */
     fun removeBeforeCursor(cursorPos: Int) {
         updateExpressionWithCursor(cursorPos) { expression ->
             val cursor = CursorPosition(expression, cursorPos)
@@ -281,9 +265,6 @@ class CalculatorViewModel(
         }
     }
 
-    /**
-     * Удаление символа в позиции курсора (Delete)
-     */
     fun removeAtCursor(cursorPos: Int) {
         updateExpressionWithCursor(cursorPos) { expression ->
             val cursor = CursorPosition(expression, cursorPos)
@@ -292,9 +273,6 @@ class CalculatorViewModel(
         }
     }
 
-    /**
-     * Удаление выделенного текста
-     */
     fun removeSelection(selStart: Int, selEnd: Int) {
         if (selStart >= selEnd) return
 
@@ -304,26 +282,15 @@ class CalculatorViewModel(
         }
     }
 
-    /**
-     * Удаление последнего символа (обратная совместимость)
-     */
     fun removeLast() {
         updateExpression { removeLastCharUseCase(current = it) }
     }
 
-    /**
-     * Очистка всего выражения
-     */
     fun clear() {
         updateExpression { calculationRemoveExpressionUseCase(current = it) }
         setCursorPosition(0)
     }
 
-    // ============= Методы управления курсором =============
-
-    /**
-     * Установка позиции курсора
-     */
     fun setCursorPosition(position: Int) {
         val clampedPosition = position.coerceIn(0, _expression.value.length)
         _cursorPosition.value = clampedPosition
@@ -331,9 +298,6 @@ class CalculatorViewModel(
         _selectionEnd.value = clampedPosition
     }
 
-    /**
-     * Установка выделения текста
-     */
     fun setSelection(start: Int, end: Int) {
         val clampedStart = start.coerceIn(0, _expression.value.length)
         val clampedEnd = end.coerceIn(0, _expression.value.length)
@@ -343,17 +307,12 @@ class CalculatorViewModel(
         _cursorPosition.value = maxOf(clampedStart, clampedEnd)
     }
 
-    /**
-     * Очистка выделения (курсор в конец выделения)
-     */
     fun clearSelection() {
         val endPos = _selectionEnd.value
         _selectionStart.value = endPos
         _selectionEnd.value = endPos
         _cursorPosition.value = endPos
     }
-
-    // ============= Метод вычисления =============
 
     fun onCalculate() {
         val currentExpression = _expression.value
@@ -382,13 +341,123 @@ class CalculatorViewModel(
         }
     }
 
-    // ============= Внутренние вспомогательные методы =============
+    fun updateExpressionFromTextField(newText: String, cursorPos: Int) {
+        val currentExpression = _expression.value
+
+        // Определяем какой символ был добавлен
+        if (newText.length == currentExpression.length + 1) {
+            // Один символ добавлен
+            val addedChar = newText.substring(cursorPos - 1, cursorPos)
+
+            // Определяем тип символа и вызываем соответствующий метод
+            when {
+                addedChar.toIntOrNull() != null -> {
+                    // Это цифра
+                    onInputDigitAtCursor(addedChar, cursorPos - 1)
+                }
+                addedChar == "." -> {
+                    onInputDecimalAtCursor(cursorPos - 1)
+                }
+                addedChar in setOf("+", "-", "*", "/", "%") -> {
+                    onInputMathOperationAtCursor(addedChar, cursorPos - 1)
+                }
+                addedChar == "(" -> {
+                    onInputBracketLeftAtCursor(addedChar, cursorPos - 1)
+                }
+                addedChar == ")" -> {
+                    onInputBracketRigth(addedChar)
+                }
+            }
+        }
+    }
 
     /**
-     * Обновление выражения с поддержкой курсора
-     * @param currentCursorPos текущая позиция курсора
-     * @param transform функция трансформации (expression) -> Triple(newExpression, newCursorPos, newSelectionEnd)
+     * Обработка ввода символа пользователем через текстовое поле
      */
+    fun handleCharacterInput(character: String, expression: String, cursorPosition: Int) {
+        viewModelScope.launch {
+            triggerFeedback()
+
+            // Проверяем, находится ли курсор в начале пустого поля
+            val actualCursorPos = if (cursorPosition == 0 && _expression.value.isEmpty()) {
+                expression.length // Если пусто, добавляем в конец
+            } else {
+                cursorPosition
+            }
+
+            when {
+                // Это цифра
+                character.toIntOrNull() != null -> {
+                    val cursor = CursorPosition(expression, actualCursorPos)
+                    val (result, newPos) = buildDigitCursorUseCase(cursor, character)
+                    _expression.value = result
+                    setCursorPosition(newPos)
+                }
+
+                // Это десятичная точка
+                character == "." -> {
+                    val cursor = CursorPosition(expression, actualCursorPos)
+                    val result = buildDecimalCursorUseCase(cursor)
+                    if (result != null) {
+                        val (newExpr, newPos) = result
+                        _expression.value = newExpr
+                        setCursorPosition(newPos)
+                    }
+                }
+
+                // Это оператор
+                character in setOf("+", "-", "*", "/", "%") -> {
+                    val cursor = CursorPosition(expression, actualCursorPos)
+                    val result = buildOperatorCursorUseCase(cursor, character)
+                    if (result != null) {
+                        val (newExpr, newPos) = result
+                        _expression.value = newExpr
+                        setCursorPosition(newPos)
+                    }
+                }
+
+                // Открывающая скобка
+                character == "(" -> {
+                    val cursor = CursorPosition(expression, actualCursorPos)
+                    val (result, newPos) = buildBracketLeftCursorUseCase(cursor, character)
+                    _expression.value = result
+                    setCursorPosition(newPos)
+                }
+
+                // Закрывающая скобка
+                character == ")" -> {
+                    _expression.value = expression
+                    setCursorPosition(actualCursorPos)
+                }
+            }
+        }
+    }
+
+    /**
+     * Обработка удаления символа пользователем через текстовое поле
+     */
+    fun handleCharacterDeletion(expression: String, deletionPosition: Int) {
+        viewModelScope.launch {
+            triggerFeedback()
+            _expression.value = expression
+            setCursorPosition(deletionPosition)
+        }
+    }
+
+    private fun onInputMathOperationAtCursor(operation: String, cursorPos: Int) {
+        val actualCursorPos = if (cursorPos == 0) _expression.value.length else cursorPos
+        updateExpressionWithCursor(actualCursorPos) { expression ->
+            val cursor = CursorPosition(expression, actualCursorPos)
+            val result = buildOperatorCursorUseCase(cursor, operation)
+            if (result != null) {
+                val (newExpr, newPos) = result
+                Triple(newExpr, newPos, newPos)
+            } else {
+                Triple(expression, actualCursorPos, actualCursorPos)
+            }
+        }
+    }
+
     private fun updateExpressionWithCursor(
         currentCursorPos: Int,
         transform: (String) -> Triple<String, Int, Int>
@@ -403,9 +472,6 @@ class CalculatorViewModel(
         }
     }
 
-    /**
-     * Обновление выражения в конец (обратная совместимость)
-     */
     private fun updateExpression(transform: (String) -> String) {
         viewModelScope.launch {
             triggerFeedback()

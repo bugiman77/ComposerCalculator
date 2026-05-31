@@ -235,7 +235,7 @@ fun CalculatorScreen(
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Icon(
-                                        painter = painterResource(id = R.drawable.ic_more),
+                                        painter = painterResource(id = R.drawable.ic_settings),
                                         contentDescription = "Настройки приложения",
                                         tint = Color.White,
                                         modifier = Modifier
@@ -247,30 +247,6 @@ fun CalculatorScreen(
                                     )
                                 }
                             }
-                            /*Card(
-                                onClick = onNavigateToSettings,
-                                shape = CircleShape,
-                                modifier = Modifier
-                                    .size(48.dp),
-                                colors = CardDefaults.cardColors(
-                                    containerColor = Color(
-                                        0xFF2C2C2E
-                                    )
-                                ),
-                                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-                            ) {
-                                Box(
-                                    contentAlignment = Alignment.Center,
-                                    modifier = Modifier.fillMaxSize()
-                                ) {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_more),
-                                        contentDescription = "Настройки приложения",
-                                        tint = Color.White,
-                                        modifier = Modifier.size(32.dp)
-                                    )
-                                }
-                            }*/
                         } else {
                             Button(
                                 onClick = onNavigateToSettings,
@@ -290,17 +266,6 @@ fun CalculatorScreen(
                                     }
                                 )
                             }
-
-                            /*Button(
-                                onClick = onNavigateToSettings,
-                                colors = ButtonDefaults.buttonColors(containerColor = DarkGray)
-                            ) {
-                                Text(
-                                    text = "Настройки",
-                                    fontSize = 14.sp,
-                                    color = Color.White
-                                )
-                            }*/
                         }
                     }
 

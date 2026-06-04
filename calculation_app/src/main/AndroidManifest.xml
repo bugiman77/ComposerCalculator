@@ -16,6 +16,8 @@
         android:supportsRtl="true"
         android:enableOnBackInvokedCallback="true"
         android:theme="@style/Theme.App.Starting"
+        android:launchMode="singleTop"
+        android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout"
         tools:targetApi="33">
         <activity
             android:name=".presentation.main.MainActivity"

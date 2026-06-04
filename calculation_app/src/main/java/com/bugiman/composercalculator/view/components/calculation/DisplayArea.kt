@@ -1,6 +1,7 @@
 package com.bugiman.composercalculator.view.components.calculation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -18,13 +19,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -42,109 +46,99 @@ fun DisplayArea(
     val selectionStart by viewModelCalculation.selectionStart.collectAsStateWithLifecycle()
     val selectionEnd by viewModelCalculation.selectionEnd.collectAsStateWithLifecycle()
 
-    var fontSize by remember {
+    var fontSize by rememberSaveable {
         mutableStateOf(85.sp)
     }
 
     val minFontSize = 45.sp
-
     val scrollState = rememberScrollState()
+    var textFieldState = rememberSaveable { TextFieldState() }
+    val interactionSource = rememberSaveable { MutableInteractionSource() }
 
-    val textFieldState = remember {
-        TextFieldState()
-    }
+    var previousExpression by rememberSaveable { mutableStateOf("") }
+    var isUpdatingFromViewModel by rememberSaveable { mutableStateOf(false) }
 
-    val interactionSource = remember {
-        MutableInteractionSource()
-    }
-
-    var previousExpression by remember { mutableStateOf("") }
-
-    // Синхронизация выражения и курсора из ViewModel в TextFieldState
-    LaunchedEffect(expression, cursorPosition, selectionStart, selectionEnd) {
-        textFieldState.edit {
-            // Обновляем текст, если он изменился из ViewModel
-            if (this.text != expression) {
+    // Синхронизация текста из ViewModel в TextFieldState
+    LaunchedEffect(expression) {
+        if (textFieldState.text.toString() != expression) {
+            isUpdatingFromViewModel = true
+            textFieldState.edit {
                 replace(0, this.length, expression)
-                previousExpression = expression
             }
-
-            // Установка позиции курсора
-            val clampedCursorPos = cursorPosition.coerceIn(0, expression.length)
-
-            // Если есть выделение, используем его
-            if (selectionStart != selectionEnd) {
-                val start = selectionStart.coerceIn(0, expression.length)
-                val end = selectionEnd.coerceIn(0, expression.length)
-                // setSelection устанавливает выделение
-                setSelection(minOf(start, end), maxOf(start, end))
-            } else {
-                // Иначе просто размещаем курсор
-                // placeCursorAtIndex размещает курсор в указанную позицию
-                placeCursorAtIndex(clampedCursorPos)
-            }
+            previousExpression = expression
+            isUpdatingFromViewModel = false
         }
+    }
 
-        // Прокрутка к концу текста
+    // Синхронизация позиции курсора из ViewModel в TextFieldState
+    LaunchedEffect(cursorPosition, selectionStart, selectionEnd) {
+        if (isUpdatingFromViewModel) return@LaunchedEffect
+
+        val clampedCursorPos = cursorPosition.coerceIn(0, expression.length)
+
+        if (selectionStart != selectionEnd) {
+            // Устанавливаем выделение
+            val start = selectionStart.coerceIn(0, expression.length)
+            val end = selectionEnd.coerceIn(0, expression.length)
+            textFieldState.selection = TextRange(
+                minOf(start, end),
+                maxOf(start, end)
+            )
+        } else {
+            // Размещаем курсор без выделения
+            textFieldState.selection = TextRange(clampedCursorPos)
+        }
+    }
+
+    // Прокрутка к позиции курсора
+    LaunchedEffect(cursorPosition) {
         scrollState.animateScrollTo(scrollState.maxValue)
     }
 
-    // Обработка изменений, которые делает пользователь в текстовом поле
-    LaunchedEffect(textFieldState.text, textFieldState.selection.start) {
-        val newText = textFieldState.text
-        val newCursorPos = textFieldState.selection.start
-        val newSelectionStart = textFieldState.selection.start
-        val newSelectionEnd = textFieldState.selection.end
+    // Обработка изменений от пользователя в текстовом поле
+    LaunchedEffect(textFieldState.text) {
+        if (isUpdatingFromViewModel) return@LaunchedEffect
 
-        // Если текст отличается от текущего выражения в ViewModel
+        val newText = textFieldState.text.toString()
+
         if (newText != previousExpression && newText != expression) {
             previousExpression = newText
 
             when {
                 // Символ был добавлен
                 newText.length > expression.length -> {
-                    // Находим добавленный символ
-                    val addedChar = if (newCursorPos > 0) {
-                        newText.substring(newCursorPos - 1, newCursorPos)
-                    } else {
-                        ""
-                    }
-
-                    if (addedChar.isNotEmpty()) {
-                        // Передаем в ViewModel
-                        viewModelCalculation.handleCharacterInput(
-                            character = addedChar,
-                            expression = newText,
-                            cursorPosition = newCursorPos - 1 // позиция ДО добавленного символа
-                        )
-                    }
+                    handleCharacterAddition(
+                        newText = newText,
+                        previousText = expression,
+                        cursorPos = textFieldState.selection.start,
+                        viewModel = viewModelCalculation
+                    )
                 }
 
                 // Символ был удален
                 newText.length < expression.length -> {
-                    // Определяем позицию удаленного символа
-                    val deletionPos = newCursorPos
-                    viewModelCalculation.handleCharacterDeletion(
-                        expression = newText,
-                        deletionPosition = deletionPos
+                    handleCharacterDeletion(
+                        newText = newText,
+                        deletionPos = textFieldState.selection.start,
+                        viewModel = viewModelCalculation
                     )
                 }
-
-                // Только курсор изменился
-                else -> {
-                    viewModelCalculation.setCursorPosition(newCursorPos)
-
-                    // Если есть выделение
-                    if (newSelectionStart != newSelectionEnd) {
-                        viewModelCalculation.setSelection(newSelectionStart, newSelectionEnd)
-                    } else {
-                        viewModelCalculation.clearSelection()
-                    }
-                }
             }
-        } else if (newText == expression && textFieldState.selection.start != cursorPosition) {
-            // Только курсор изменился, текст остался тем же
-            viewModelCalculation.setCursorPosition(newCursorPos)
+        }
+    }
+
+    // Обработка изменения позиции курсора
+    LaunchedEffect(textFieldState.selection.start, textFieldState.selection.end) {
+        if (isUpdatingFromViewModel) return@LaunchedEffect
+
+        val newCursorPos = textFieldState.selection.start
+        val newSelectionStart = textFieldState.selection.start
+        val newSelectionEnd = textFieldState.selection.end
+
+        if (textFieldState.text.toString() == expression) {
+            if (newCursorPos != cursorPosition) {
+                viewModelCalculation.setCursorPosition(newCursorPos)
+            }
 
             if (newSelectionStart != newSelectionEnd) {
                 viewModelCalculation.setSelection(newSelectionStart, newSelectionEnd)
@@ -154,6 +148,30 @@ fun DisplayArea(
         }
     }
 
+    DisplayAreaContent(
+        fontSize = fontSize,
+        onFontSizeChange = { fontSize = it },
+        minFontSize = minFontSize,
+        expression = expression,
+        scrollState = scrollState,
+        textFieldState = textFieldState,
+        interactionSource = interactionSource,
+        settingModel = settingModel
+    )
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun DisplayAreaContent(
+    fontSize: TextUnit,
+    onFontSizeChange: (TextUnit) -> Unit,
+    minFontSize: TextUnit,
+    expression: String,
+    scrollState: ScrollState,
+    textFieldState: TextFieldState,
+    interactionSource: MutableInteractionSource,
+    settingModel: SettingModel,
+) {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxWidth()
@@ -165,60 +183,116 @@ fun DisplayArea(
             ),
         contentAlignment = Alignment.BottomEnd,
     ) {
-
         val containerWidth = constraints.maxWidth
 
         if (settingModel.isShowPlaceholderInput && expression.isEmpty()) {
-            Text(
-                text = "0",
-                color = Color.White.copy(alpha = 0.4f),
-                textAlign = TextAlign.End,
-                fontSize = fontSize,
-                modifier = Modifier.fillMaxWidth()
-            )
+            PlaceholderText(fontSize = fontSize)
         }
 
-        BasicTextField(
-            state = textFieldState,
-            modifier = Modifier
-                .fillMaxWidth()
-                .horizontalScroll(scrollState),
-
-            textStyle = TextStyle(
-                color = Color.White,
-                fontSize = fontSize,
-                textAlign = TextAlign.End,
-            ),
-
-            lineLimits = TextFieldLineLimits.SingleLine,
-
-            cursorBrush = SolidColor(
-                Color.LightGray
-            ),
-
+        TextInputField(
+            textFieldState = textFieldState,
+            fontSize = fontSize,
+            onFontSizeChange = onFontSizeChange,
+            minFontSize = minFontSize,
+            scrollState = scrollState,
             interactionSource = interactionSource,
-
-            onTextLayout = { getResult ->
-
-                val textLayoutResult = getResult() ?: return@BasicTextField
-
-                if (
-                    textLayoutResult.size.width > containerWidth &&
-                    fontSize > minFontSize
-                ) {
-                    fontSize *= 0.95f
-                }
-            },
-
-            decorator = { innerTextField ->
-
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.CenterEnd
-                ) {
-                    innerTextField()
-                }
-            }
+            containerWidth = containerWidth
         )
     }
+}
+
+@Composable
+private fun PlaceholderText(fontSize: androidx.compose.ui.unit.TextUnit) {
+    Text(
+        text = "0",
+        color = Color.White.copy(alpha = 0.4f),
+        textAlign = TextAlign.End,
+        fontSize = fontSize,
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun TextInputField(
+    textFieldState: TextFieldState,
+    fontSize: androidx.compose.ui.unit.TextUnit,
+    onFontSizeChange: (androidx.compose.ui.unit.TextUnit) -> Unit,
+    minFontSize: androidx.compose.ui.unit.TextUnit,
+    scrollState: androidx.compose.foundation.ScrollState,
+    interactionSource: MutableInteractionSource,
+    containerWidth: Int,
+) {
+    var currentFontSize by rememberSaveable { mutableStateOf(fontSize) }
+
+    BasicTextField(
+        state = textFieldState,
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(scrollState),
+        textStyle = TextStyle(
+            color = Color.White,
+            fontSize = currentFontSize,
+            textAlign = TextAlign.End,
+        ),
+        lineLimits = TextFieldLineLimits.SingleLine,
+        cursorBrush = SolidColor(Color.LightGray),
+        interactionSource = interactionSource,
+        onTextLayout = { getResult ->
+            val textLayoutResult = getResult() ?: return@BasicTextField
+
+            if (textLayoutResult.size.width > containerWidth && currentFontSize > minFontSize) {
+                currentFontSize *= 0.95f
+                onFontSizeChange(currentFontSize)
+            }
+        },
+        decorator = { innerTextField ->
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                innerTextField()
+            }
+        }
+    )
+}
+
+/**
+ * Обработка добавления символа пользователем
+ * Вставляет символ в позицию курсора
+ */
+private fun handleCharacterAddition(
+    newText: String,
+    previousText: String,
+    cursorPos: Int,
+    viewModel: CalculatorViewModel,
+) {
+    val addedChar = if (cursorPos > 0 && cursorPos <= newText.length) {
+        newText.substring(cursorPos - 1, cursorPos)
+    } else {
+        ""
+    }
+
+    if (addedChar.isNotEmpty()) {
+        viewModel.handleCharacterInput(
+            character = addedChar,
+            expression = newText,
+            cursorPosition = cursorPos - 1 // Позиция ДО добавленного символа
+        )
+    }
+}
+
+/**
+ * Обработка удаления символа пользователем
+ * Удаляет символ в позиции курсора
+ */
+private fun handleCharacterDeletion(
+    newText: String,
+    deletionPos: Int,
+    viewModel: CalculatorViewModel,
+) {
+    viewModel.handleCharacterDeletion(
+        expression = newText,
+        deletionPosition = deletionPos
+    )
 }

@@ -35,6 +35,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -71,7 +72,7 @@ fun CalculatorScreen(
 
     val isSheetVisible = sheetState.isVisible
 
-    var showHistorySheet by remember { mutableStateOf(value = false) }
+    var showHistorySheet by rememberSaveable { mutableStateOf(value = false) }
 
     val scope = rememberCoroutineScope()
 
@@ -138,7 +139,7 @@ fun CalculatorScreen(
                     ) {
 
                         if (isShowHistoryBotton) {
-                            val interactionSource = remember { MutableInteractionSource() }
+                            val interactionSource = rememberSaveable { MutableInteractionSource() }
                             val isPressedHistory by interactionSource.collectIsPressedAsState()
                             val contentScale by animateFloatAsState(
                                 targetValue = if (isPressedHistory) 1.12f else 1f,
@@ -205,7 +206,7 @@ fun CalculatorScreen(
                             Spacer(modifier = Modifier.size(size = 40.dp))
                         }
 
-                        val interactionSource = remember { MutableInteractionSource() }
+                        val interactionSource = rememberSaveable { MutableInteractionSource() }
                         val isPressedSettings by interactionSource.collectIsPressedAsState()
                         val contentScale by animateFloatAsState(
                             targetValue = if (isPressedSettings) 1.12f else 1f,

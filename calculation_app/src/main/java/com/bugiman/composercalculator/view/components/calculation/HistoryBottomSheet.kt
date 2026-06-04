@@ -56,6 +56,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -318,7 +319,7 @@ private fun HistoryItemRow(
     val clipboard = LocalClipboard.current
     val scope = rememberCoroutineScope()
 
-    var showNoteSheet by remember {
+    var showNoteSheet by rememberSaveable {
         mutableStateOf(false)
     }
 
@@ -549,7 +550,7 @@ private fun NoteSheet(
     onDismiss: () -> Unit,
     onNoteUpdate: (String) -> Unit
 ) {
-    var note by remember {
+    var note by rememberSaveable {
         mutableStateOf(initialText)
     }
 

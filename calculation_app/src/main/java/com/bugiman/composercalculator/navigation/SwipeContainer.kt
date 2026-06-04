@@ -20,6 +20,7 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -39,12 +40,12 @@ fun TelegramSwipeContainer(navigator: Navigator) {
     val screenWidthPx = with(density) { LocalConfiguration.current.screenWidthDp.dp.toPx() }
     val touchSlop = with(density) { 18.dp.toPx() }
 
-    val offsetX = remember { Animatable(0f) }
+    val offsetX = rememberSaveable { Animatable(0f) }
     val scope = rememberCoroutineScope()
-    var isDragging by remember { mutableStateOf(false) }
+    var isDragging by rememberSaveable { mutableStateOf(false) }
 
     val context = LocalContext.current
-    var lastBackPressTime by remember { mutableLongStateOf(0L) }
+    var lastBackPressTime by rememberSaveable { mutableLongStateOf(0L) }
 
     val maxCornerRadius = 32.dp
 

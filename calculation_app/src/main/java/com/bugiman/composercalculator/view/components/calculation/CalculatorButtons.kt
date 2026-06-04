@@ -31,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -91,7 +92,7 @@ private fun AnimatedCalculatorButton(
     onClick: () -> Unit,
     content: @Composable (Float) -> Unit
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
+    val interactionSource = rememberSaveable { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
     val scale by animateFloatAsState(
@@ -521,7 +522,7 @@ private fun LineCalculation5(
 ) {
     val cursorPosition by viewModelCalculation.cursorPosition.collectAsStateWithLifecycle()
 
-    var menuExpanded by remember { mutableStateOf(value = false) }
+    var menuExpanded by rememberSaveable { mutableStateOf(value = false) }
     val isSwitchEnableDarkMode = false
 
     Row(

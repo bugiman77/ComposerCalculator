@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -46,7 +47,7 @@ fun AppTheme(
             subtitle = "Использовать тему операционной системы",
             modifier = modifier.padding(vertical = 4.dp)
         ) {
-            val interactionSource = remember { MutableInteractionSource() }
+            val interactionSource = rememberSaveable { MutableInteractionSource() }
             val isPressed by interactionSource.collectIsPressedAsState()
             val scale by animateFloatAsState(
                 targetValue = if (isPressed) 1.13f else 1f,
@@ -95,7 +96,7 @@ fun AppTheme(
                 subtitle = "Принудительное включение темного оформления",
                 modifier = Modifier.padding(vertical = 4.dp)
             ) {
-                val interactionSourceIsDarkTheme = remember { MutableInteractionSource() }
+                val interactionSourceIsDarkTheme = rememberSaveable { MutableInteractionSource() }
                 val isPressedIsDarkTheme by interactionSourceIsDarkTheme.collectIsPressedAsState()
                 val scale by animateFloatAsState(
                     targetValue = if (isPressedIsDarkTheme) 1.13f else 1f,
@@ -167,7 +168,7 @@ fun AppTheme(
             Text(text = "Темы приложения")
         }*/
 
-        val interactionSourceThemes = remember {
+        val interactionSourceThemes = rememberSaveable {
             MutableInteractionSource()
         }
 
@@ -222,7 +223,7 @@ fun AppTheme(
             Text(text = "Создать тему")
         }*/
 
-        val interactionSourceCreate = remember {
+        val interactionSourceCreate = rememberSaveable {
             MutableInteractionSource()
         }
 

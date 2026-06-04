@@ -13,6 +13,7 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -52,7 +53,7 @@ fun Appearance(
             subtitle = "Отображать плейсхолдер в пустом поле ввода выражения",
             modifier = modifier.padding(vertical = 4.dp)
         ) {
-            val interactionSource = remember { MutableInteractionSource() }
+            val interactionSource = rememberSaveable { MutableInteractionSource() }
             val isPressed by interactionSource.collectIsPressedAsState()
             val scale by animateFloatAsState(
                 targetValue = if (isPressed) 1.13f else 1f,

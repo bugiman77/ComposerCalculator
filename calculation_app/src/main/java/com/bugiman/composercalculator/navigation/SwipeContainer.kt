@@ -40,12 +40,12 @@ fun TelegramSwipeContainer(navigator: Navigator) {
     val screenWidthPx = with(density) { LocalConfiguration.current.screenWidthDp.dp.toPx() }
     val touchSlop = with(density) { 18.dp.toPx() }
 
-    val offsetX = rememberSaveable { Animatable(0f) }
+    val offsetX = remember { Animatable(0f) }
     val scope = rememberCoroutineScope()
-    var isDragging by rememberSaveable { mutableStateOf(false) }
+    var isDragging by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
-    var lastBackPressTime by rememberSaveable { mutableLongStateOf(0L) }
+    var lastBackPressTime by remember { mutableLongStateOf(0L) }
 
     val maxCornerRadius = 32.dp
 

@@ -408,7 +408,7 @@ fun PrivacyPolicyScreen(
     onNavigateBack: () -> Unit
 ) {
 
-    var webViewReference by rememberSaveable { mutableStateOf<WebView?>(value = null) }
+    var webViewReference by remember { mutableStateOf<WebView?>(value = null) }
 
     Scaffold(
         containerColor = Color(color = 0xFF1C1C1E),

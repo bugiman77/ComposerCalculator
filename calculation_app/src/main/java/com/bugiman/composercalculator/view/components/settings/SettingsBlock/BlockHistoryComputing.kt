@@ -42,7 +42,7 @@ fun HistoryComputing(
             subtitle = "Отображать кнопку истории вычислений в левом верхнем углу главного экрана",
             modifier = modifier.padding(vertical = 4.dp)
         ) {
-            val interactionSource = rememberSaveable { MutableInteractionSource() }
+            val interactionSource = remember { MutableInteractionSource() }
             val isPressed by interactionSource.collectIsPressedAsState()
             val scale by animateFloatAsState(
                 targetValue = if (isPressed) 1.13f else 1f,
@@ -117,7 +117,7 @@ fun HistoryComputing(
                 subtitle = "Для удаления элемента истории можно включить использование свайпа",
                 modifier = Modifier.padding(vertical = 4.dp)
             ) {
-                val interactionSource = rememberSaveable { MutableInteractionSource() }
+                val interactionSource = remember { MutableInteractionSource() }
                 val isPressed by interactionSource.collectIsPressedAsState()
                 val scale by animateFloatAsState(
                     targetValue = if (isPressed) 1.13f else 1f,
@@ -178,7 +178,7 @@ fun HistoryComputing(
                 subtitle = "Пометка к вычисленному выражению",
                 modifier = Modifier.padding(vertical = 4.dp)
             ) {
-                val interactionSource = rememberSaveable { MutableInteractionSource() }
+                val interactionSource = remember { MutableInteractionSource() }
                 val isPressed by interactionSource.collectIsPressedAsState()
                 val scale by animateFloatAsState(
                     targetValue = if (isPressed) 1.13f else 1f,
@@ -240,7 +240,7 @@ fun HistoryComputing(
                     subtitle = "Начинать заметку с заглавной буквы",
                     modifier = Modifier.padding(vertical = 4.dp)
                 ) {
-                    val interactionSource = rememberSaveable { MutableInteractionSource() }
+                    val interactionSource = remember { MutableInteractionSource() }
                     val isPressed by interactionSource.collectIsPressedAsState()
                     val scale by animateFloatAsState(
                         targetValue = if (isPressed) 1.13f else 1f,
@@ -325,7 +325,7 @@ fun HistoryComputing(
                 subtitle = "Отображать последнее вычисление при запуске приложения",
                 modifier = Modifier.padding(vertical = 4.dp)
             ) {
-                val interactionSource = rememberSaveable { MutableInteractionSource() }
+                val interactionSource = remember { MutableInteractionSource() }
                 val isPressed by interactionSource.collectIsPressedAsState()
                 val scale by animateFloatAsState(
                     targetValue = if (isPressed) 1.13f else 1f,

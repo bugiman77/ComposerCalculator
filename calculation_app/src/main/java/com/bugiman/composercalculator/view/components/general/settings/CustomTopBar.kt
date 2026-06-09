@@ -63,7 +63,7 @@ fun CustomTopBar(
             }
         }*/
 
-        val backInteractionSource = rememberSaveable {
+        val backInteractionSource = remember {
             MutableInteractionSource()
         }
 
@@ -115,7 +115,7 @@ fun CustomTopBar(
                 )
             }
         }*/
-        val islandInteractionSource = rememberSaveable {
+        val islandInteractionSource = remember {
             MutableInteractionSource()
         }
 

@@ -88,7 +88,7 @@ fun Display(
             subtitle = "При использовании приложения экран не будет отключаться при долгих паузах",
             modifier = modifier.padding(vertical = 4.dp)
         ) {
-            val interactionSource = rememberSaveable { MutableInteractionSource() }
+            val interactionSource = remember { MutableInteractionSource() }
             val isPressed by interactionSource.collectIsPressedAsState()
             val scale by animateFloatAsState(
                 targetValue = if (isPressed) 1.13f else 1f,

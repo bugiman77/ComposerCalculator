@@ -47,7 +47,7 @@ fun AppTheme(
             subtitle = "Использовать тему операционной системы",
             modifier = modifier.padding(vertical = 4.dp)
         ) {
-            val interactionSource = rememberSaveable { MutableInteractionSource() }
+            val interactionSource = remember { MutableInteractionSource() }
             val isPressed by interactionSource.collectIsPressedAsState()
             val scale by animateFloatAsState(
                 targetValue = if (isPressed) 1.13f else 1f,
@@ -96,7 +96,7 @@ fun AppTheme(
                 subtitle = "Принудительное включение темного оформления",
                 modifier = Modifier.padding(vertical = 4.dp)
             ) {
-                val interactionSourceIsDarkTheme = rememberSaveable { MutableInteractionSource() }
+                val interactionSourceIsDarkTheme = remember { MutableInteractionSource() }
                 val isPressedIsDarkTheme by interactionSourceIsDarkTheme.collectIsPressedAsState()
                 val scale by animateFloatAsState(
                     targetValue = if (isPressedIsDarkTheme) 1.13f else 1f,
@@ -168,7 +168,7 @@ fun AppTheme(
             Text(text = "Темы приложения")
         }*/
 
-        val interactionSourceThemes = rememberSaveable {
+        val interactionSourceThemes = remember {
             MutableInteractionSource()
         }
 
@@ -223,7 +223,7 @@ fun AppTheme(
             Text(text = "Создать тему")
         }*/
 
-        val interactionSourceCreate = rememberSaveable {
+        val interactionSourceCreate = remember {
             MutableInteractionSource()
         }
 

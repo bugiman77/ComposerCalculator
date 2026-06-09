@@ -50,8 +50,8 @@ fun CreateThemeAppUser(
     onNavigateBack: () -> Unit,
 ) {
     // 1. Состояния цветов (по умолчанию)
-    var buttonColor by rememberSaveable { mutableStateOf(value = Color(color = 0xFF4A90E2)) }
-    var textColor by rememberSaveable { mutableStateOf(value = Color.White) }
+    var buttonColor by remember { mutableStateOf(value = Color(color = 0xFF4A90E2)) }
+    var textColor by remember { mutableStateOf(value = Color.White) }
 
     // 2. Какой элемент сейчас редактируем
     val options = listOf("Кнопки", "Текст")
@@ -140,11 +140,11 @@ private fun Color.toArgb(): Int {
 @Composable
 private fun ButtonDigit() {
 
-    var buttonColor by rememberSaveable { mutableStateOf(value = Color(color = 0xFF4A90E2)) }
-    var textColor by rememberSaveable { mutableStateOf(value = Color.White) }
+    var buttonColor by remember { mutableStateOf(value = Color(color = 0xFF4A90E2)) }
+    var textColor by remember { mutableStateOf(value = Color.White) }
 
     val options = listOf("Кнопка", "Текст")
-    var selectedOption by rememberSaveable { mutableStateOf(value = options[0]) }
+    var selectedOption by remember { mutableStateOf(value = options[0]) }
 
     // --- ПРЕДПРОСМОТР ---
     Text(text = "Цифры", color = Color.White, fontSize = 16.sp, modifier = Modifier.fillMaxWidth())
@@ -204,7 +204,7 @@ private fun ButtonDigit() {
     Text("Выберите оттенок для: $selectedOption", color = Color.Gray, fontSize = 14.sp)
 
     // Упрощенный выбор через Hue-слайдер (наиболее удобный для Compose)
-    var hueValue by rememberSaveable { mutableFloatStateOf(value = 0f) }
+    var hueValue by remember { mutableFloatStateOf(value = 0f) }
 
     Slider(
         value = hueValue,
@@ -253,11 +253,11 @@ private fun ButtonDigit() {
 @Composable
 private fun ButtonMathOperation() {
 
-    var buttonColor by rememberSaveable { mutableStateOf(value = Color(color = 0xFF4A90E2)) }
-    var textColor by rememberSaveable { mutableStateOf(value = Color.White) }
+    var buttonColor by remember { mutableStateOf(value = Color(color = 0xFF4A90E2)) }
+    var textColor by remember { mutableStateOf(value = Color.White) }
 
     val options = listOf("Кнопка", "Текст")
-    var selectedOption by rememberSaveable { mutableStateOf(value = options[0]) }
+    var selectedOption by remember { mutableStateOf(value = options[0]) }
 
     // --- ПРЕДПРОСМОТР ---
     Text(text = "Математические операции", color = Color.White, fontSize = 16.sp, modifier = Modifier.fillMaxWidth())
@@ -318,7 +318,7 @@ private fun ButtonMathOperation() {
     Text("Выберите оттенок для: $selectedOption", color = Color.Gray, fontSize = 14.sp)
 
     // Упрощенный выбор через Hue-слайдер (наиболее удобный для Compose)
-    var hueValue by rememberSaveable { mutableFloatStateOf(value = 0f) }
+    var hueValue by remember { mutableFloatStateOf(value = 0f) }
 
     Slider(
         value = hueValue,
@@ -367,11 +367,11 @@ private fun ButtonMathOperation() {
 @Composable
 private fun ButtonDelete() {
 
-    var buttonColor by rememberSaveable { mutableStateOf(value = Color(color = 0xFF4A90E2)) }
-    var textColor by rememberSaveable { mutableStateOf(value = Color.White) }
+    var buttonColor by remember { mutableStateOf(value = Color(color = 0xFF4A90E2)) }
+    var textColor by remember { mutableStateOf(value = Color.White) }
 
     val options = listOf("Кнопка", "Текст")
-    var selectedOption by rememberSaveable { mutableStateOf(value = options[0]) }
+    var selectedOption by remember { mutableStateOf(value = options[0]) }
 
     // --- ПРЕДПРОСМОТР ---
     Text(text = "Кнопка удалить", color = Color.White, fontSize = 16.sp, modifier = Modifier.fillMaxWidth())
@@ -481,11 +481,11 @@ private fun ButtonDelete() {
 @Composable
 private fun ButtonEqual() {
 
-    var buttonColor by rememberSaveable { mutableStateOf(value = Color(color = 0xFF4A90E2)) }
-    var textColor by rememberSaveable { mutableStateOf(value = Color.White) }
+    var buttonColor by remember { mutableStateOf(value = Color(color = 0xFF4A90E2)) }
+    var textColor by remember { mutableStateOf(value = Color.White) }
 
     val options = listOf("Кнопки", "Текст")
-    var selectedOption by rememberSaveable { mutableStateOf(value = options[0]) }
+    var selectedOption by remember { mutableStateOf(value = options[0]) }
 
     // --- ПРЕДПРОСМОТР ---
     Text(text = "Кнопка вычисления", color = Color.White, fontSize = 16.sp, modifier = Modifier.fillMaxWidth())
@@ -546,7 +546,7 @@ private fun ButtonEqual() {
     Text("Выберите оттенок для: $selectedOption", color = Color.Gray, fontSize = 14.sp)
 
     // Упрощенный выбор через Hue-слайдер (наиболее удобный для Compose)
-    var hueValue by rememberSaveable { mutableFloatStateOf(value = 0f) }
+    var hueValue by remember { mutableFloatStateOf(value = 0f) }
 
     Slider(
         value = hueValue,

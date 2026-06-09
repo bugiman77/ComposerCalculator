@@ -72,7 +72,7 @@ fun CalculatorScreen(
 
     val isSheetVisible = sheetState.isVisible
 
-    var showHistorySheet by rememberSaveable { mutableStateOf(value = false) }
+    var showHistorySheet by remember { mutableStateOf(value = false) }
 
     val scope = rememberCoroutineScope()
 
@@ -139,7 +139,7 @@ fun CalculatorScreen(
                     ) {
 
                         if (isShowHistoryBotton) {
-                            val interactionSource = rememberSaveable { MutableInteractionSource() }
+                            val interactionSource = remember { MutableInteractionSource() }
                             val isPressedHistory by interactionSource.collectIsPressedAsState()
                             val contentScale by animateFloatAsState(
                                 targetValue = if (isPressedHistory) 1.12f else 1f,
@@ -206,7 +206,7 @@ fun CalculatorScreen(
                             Spacer(modifier = Modifier.size(size = 40.dp))
                         }
 
-                        val interactionSource = rememberSaveable { MutableInteractionSource() }
+                        val interactionSource = remember { MutableInteractionSource() }
                         val isPressedSettings by interactionSource.collectIsPressedAsState()
                         val contentScale by animateFloatAsState(
                             targetValue = if (isPressedSettings) 1.12f else 1f,

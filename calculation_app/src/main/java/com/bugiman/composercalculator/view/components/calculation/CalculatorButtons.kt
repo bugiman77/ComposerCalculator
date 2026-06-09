@@ -92,7 +92,7 @@ private fun AnimatedCalculatorButton(
     onClick: () -> Unit,
     content: @Composable (Float) -> Unit
 ) {
-    val interactionSource = rememberSaveable { MutableInteractionSource() }
+    val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
     val scale by animateFloatAsState(
@@ -522,7 +522,7 @@ private fun LineCalculation5(
 ) {
     val cursorPosition by viewModelCalculation.cursorPosition.collectAsStateWithLifecycle()
 
-    var menuExpanded by rememberSaveable { mutableStateOf(value = false) }
+    var menuExpanded by remember { mutableStateOf(value = false) }
     val isSwitchEnableDarkMode = false
 
     Row(

@@ -319,7 +319,7 @@ private fun HistoryItemRow(
     val clipboard = LocalClipboard.current
     val scope = rememberCoroutineScope()
 
-    var showNoteSheet by rememberSaveable {
+    var showNoteSheet by remember {
         mutableStateOf(false)
     }
 
@@ -550,7 +550,7 @@ private fun NoteSheet(
     onDismiss: () -> Unit,
     onNoteUpdate: (String) -> Unit
 ) {
-    var note by rememberSaveable {
+    var note by remember {
         mutableStateOf(initialText)
     }
 

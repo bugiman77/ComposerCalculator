@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -45,17 +46,17 @@ fun DisplayArea(
     val selectionStart by viewModelCalculation.selectionStart.collectAsStateWithLifecycle()
     val selectionEnd by viewModelCalculation.selectionEnd.collectAsStateWithLifecycle()
 
-    var fontSize by rememberSaveable {
+    var fontSize by remember {
         mutableStateOf(85.sp)
     }
 
     val minFontSize = 45.sp
     val scrollState = rememberScrollState()
-    val textFieldState = rememberSaveable { TextFieldState() }
-    val interactionSource = rememberSaveable { MutableInteractionSource() }
+    val textFieldState = remember { TextFieldState() }
+    val interactionSource = remember { MutableInteractionSource() }
 
-    var previousExpression by rememberSaveable { mutableStateOf("") }
-    var isUpdatingFromViewModel by rememberSaveable { mutableStateOf(false) }
+    var previousExpression by remember { mutableStateOf("") }
+    var isUpdatingFromViewModel by remember { mutableStateOf(false) }
 
     // Синхронизация текста из ViewModel в TextFieldState
     LaunchedEffect(expression) {
@@ -79,13 +80,17 @@ fun DisplayArea(
             // Устанавливаем выделение
             val start = selectionStart.coerceIn(0, expression.length)
             val end = selectionEnd.coerceIn(0, expression.length)
-            textFieldState.selection = TextRange(
-                minOf(start, end),
-                maxOf(start, end)
-            )
+            textFieldState.edit {
+                selection = TextRange(
+                    minOf(start, end),
+                    maxOf(start, end)
+                )
+            }
         } else {
             // Размещаем курсор без выделения
-            textFieldState.selection = TextRange(clampedCursorPos)
+            textFieldState.edit {
+                selection = TextRange(clampedCursorPos)
+            }
         }
     }
 
@@ -222,7 +227,7 @@ private fun TextInputField(
     interactionSource: MutableInteractionSource,
     containerWidth: Int,
 ) {
-    var currentFontSize by rememberSaveable { mutableStateOf(fontSize) }
+    var currentFontSize by remember { mutableStateOf(fontSize) }
 
     BasicTextField(
         state = textFieldState,

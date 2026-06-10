@@ -22,9 +22,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.InterceptPlatformTextInput
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -34,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
 import com.bugiman.domain.models.settings.SettingModel
+import kotlinx.coroutines.awaitCancellation
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -206,7 +209,7 @@ private fun DisplayAreaContent(
 }
 
 @Composable
-private fun PlaceholderText(fontSize: androidx.compose.ui.unit.TextUnit) {
+private fun PlaceholderText(fontSize: TextUnit) {
     Text(
         text = "0",
         color = Color.White.copy(alpha = 0.4f),
@@ -216,49 +219,58 @@ private fun PlaceholderText(fontSize: androidx.compose.ui.unit.TextUnit) {
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 private fun TextInputField(
     textFieldState: TextFieldState,
-    fontSize: androidx.compose.ui.unit.TextUnit,
-    onFontSizeChange: (androidx.compose.ui.unit.TextUnit) -> Unit,
-    minFontSize: androidx.compose.ui.unit.TextUnit,
-    scrollState: androidx.compose.foundation.ScrollState,
+    fontSize: TextUnit,
+    onFontSizeChange: (TextUnit) -> Unit,
+    minFontSize: TextUnit,
+    scrollState: ScrollState,
     interactionSource: MutableInteractionSource,
     containerWidth: Int,
 ) {
-    var currentFontSize by remember { mutableStateOf(fontSize) }
 
-    BasicTextField(
-        state = textFieldState,
-        modifier = Modifier
-            .fillMaxWidth()
-            .horizontalScroll(scrollState),
-        textStyle = TextStyle(
-            color = Color.White,
-            fontSize = currentFontSize,
-            textAlign = TextAlign.End,
-        ),
-        lineLimits = TextFieldLineLimits.SingleLine,
-        cursorBrush = SolidColor(Color.LightGray),
-        interactionSource = interactionSource,
-        onTextLayout = { getResult ->
-            val textLayoutResult = getResult() ?: return@BasicTextField
-
-            if (textLayoutResult.size.width > containerWidth && currentFontSize > minFontSize) {
-                currentFontSize *= 0.95f
-                onFontSizeChange(currentFontSize)
-            }
-        },
-        decorator = { innerTextField ->
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.CenterEnd
-            ) {
-                innerTextField()
-            }
+    InterceptPlatformTextInput(
+        interceptor = { _, _ ->
+            // Блокируем вызов системной клавиатуры
+            awaitCancellation()
         }
-    )
+    ) {
+        var currentFontSize by remember { mutableStateOf(fontSize) }
+
+        BasicTextField(
+            state = textFieldState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(scrollState),
+            textStyle = TextStyle(
+                color = Color.White,
+                fontSize = currentFontSize,
+                textAlign = TextAlign.End,
+            ),
+            lineLimits = TextFieldLineLimits.SingleLine,
+            cursorBrush = SolidColor(Color.LightGray),
+            interactionSource = interactionSource,
+            onTextLayout = { getResult ->
+                val textLayoutResult = getResult() ?: return@BasicTextField
+
+                if (textLayoutResult.size.width > containerWidth && currentFontSize > minFontSize) {
+                    currentFontSize *= 0.95f
+                    onFontSizeChange(currentFontSize)
+                }
+            },
+            decorator = { innerTextField ->
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+                    innerTextField()
+                }
+            }
+        )
+    }
+
 }
 
 /**

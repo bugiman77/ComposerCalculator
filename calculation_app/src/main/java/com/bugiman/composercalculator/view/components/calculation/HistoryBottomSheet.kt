@@ -456,7 +456,7 @@ private fun HistoryItemRow(
                     )
                 }
 
-                if (historyModel.note.isNotBlank()) {
+                if (historyModel.note.isNotBlank() && settingModel.isNoteEnabled) {
 
                     Spacer(
                         modifier = Modifier.height(8.dp)

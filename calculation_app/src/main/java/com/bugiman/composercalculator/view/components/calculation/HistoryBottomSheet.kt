@@ -417,21 +417,16 @@ private fun HistoryItemRow(
                         }
                     )
 
-                    Spacer(Modifier.width(8.dp))
+                    if (settingModel.isNoteEnabled) {
+                        Spacer(Modifier.width(8.dp))
 
-                    HistoryActionButton(
-                        icon = Icons.Default.Edit,
-                        onClick = onEditExpression
-                    )
-
-                    Spacer(Modifier.width(8.dp))
-
-                    HistoryActionButton(
-                        icon = Icons.Default.Note,
-                        onClick = {
-                            showNoteSheet = true
-                        }
-                    )
+                        HistoryActionButton(
+                            icon = Icons.Default.Note,
+                            onClick = {
+                                showNoteSheet = true
+                            }
+                        )
+                    }
 
                     Spacer(Modifier.weight(1f))
 
@@ -464,7 +459,7 @@ private fun HistoryItemRow(
                 if (historyModel.note.isNotBlank()) {
 
                     Spacer(
-                        modifier = Modifier.height(10.dp)
+                        modifier = Modifier.height(8.dp)
                     )
 
                     Surface(

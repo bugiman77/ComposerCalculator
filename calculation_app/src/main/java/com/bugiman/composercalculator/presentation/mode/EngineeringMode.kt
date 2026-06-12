@@ -1,4 +1,4 @@
-package com.bugiman.composercalculator.view.screen.main
+package com.bugiman.composercalculator.presentation.mode
 
 import androidx.compose.runtime.Composable
 

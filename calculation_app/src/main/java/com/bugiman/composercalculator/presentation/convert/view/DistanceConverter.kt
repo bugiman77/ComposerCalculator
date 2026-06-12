@@ -1,4 +1,4 @@
-package com.bugiman.composercalculator.view.screen.main
+package com.bugiman.composercalculator.presentation.convert.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CurrencyConverter() {
+fun DistanceConverter() {
 
     ModalBottomSheet(
         onDismissRequest = {},

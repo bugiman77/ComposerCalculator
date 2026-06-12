@@ -5,11 +5,10 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
+import com.bugiman.composercalculator.presentation.settings.viewmodel.SettingsViewModel
 import com.bugiman.composercalculator.ui.theme.iOSGray
 import com.bugiman.composercalculator.ui.theme.iOSGreen
 import com.bugiman.composercalculator.view.components.calculation.SettingsGroup

@@ -5,17 +5,15 @@ import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
-import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
-import com.bugiman.composercalculator.view.screen.main.CalculatorScreen
-import com.bugiman.composercalculator.view.screen.settings.AboutScreen
-import com.bugiman.composercalculator.view.screen.settings.CreateThemeAppUser
-import com.bugiman.composercalculator.view.screen.settings.PrivacyPolicyScreen
-import com.bugiman.composercalculator.view.screen.settings.SettingsScreen
-import com.bugiman.domain.models.settings.SettingModel
-import androidx.hilt.navigation.compose.hiltViewModel
+import com.bugiman.composercalculator.presentation.calculation.viewmodel.CalculatorViewModel
+import com.bugiman.composercalculator.presentation.settings.viewmodel.SettingsViewModel
+import com.bugiman.composercalculator.presentation.main.view.CalculatorScreen
+import com.bugiman.composercalculator.presentation.aboutscreen.AboutScreen
+import com.bugiman.composercalculator.presentation.createtheme.CreateThemeAppUser
+import com.bugiman.composercalculator.presentation.privacypolicy.PrivacyPolicyScreen
+import com.bugiman.composercalculator.presentation.settings.view.SettingsScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bugiman.composercalculator.presentation.history.HistoryViewModel
+import com.bugiman.composercalculator.presentation.history.viewmodel.HistoryViewModel
 
 class CalculatorScreenNavigation(
     val settingsViewModel: SettingsViewModel,

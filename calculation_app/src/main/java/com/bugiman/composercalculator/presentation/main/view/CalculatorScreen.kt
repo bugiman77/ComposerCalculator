@@ -1,6 +1,5 @@
-package com.bugiman.composercalculator.view.screen.main
+package com.bugiman.composercalculator.presentation.main.view
 
-import android.R.attr.scaleY
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -19,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -35,7 +33,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,9 +42,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bugiman.composercalculator.R
-import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
-import com.bugiman.composercalculator.presentation.history.HistoryViewModel
-import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
+import com.bugiman.composercalculator.presentation.calculation.viewmodel.CalculatorViewModel
+import com.bugiman.composercalculator.presentation.history.viewmodel.HistoryViewModel
 import com.bugiman.composercalculator.ui.theme.DarkGray
 import com.bugiman.composercalculator.view.components.calculation.CalculatorButtonGrid
 import com.bugiman.composercalculator.view.components.calculation.DisplayArea
@@ -98,7 +94,6 @@ fun CalculatorScreen(
                     showHistorySheet = false
                 }
             },
-            // Действия приходят извне согласно чистой архитектуре
             onDeleteItem = { historyModel ->
                 scope.launch {
                      viewModelHistory.deleteItem(historyModel)

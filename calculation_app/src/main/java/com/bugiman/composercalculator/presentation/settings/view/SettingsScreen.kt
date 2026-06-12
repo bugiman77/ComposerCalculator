@@ -1,4 +1,4 @@
-package com.bugiman.composercalculator.view.screen.settings
+package com.bugiman.composercalculator.presentation.settings.view
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,9 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
-import com.bugiman.composercalculator.presentation.history.HistoryViewModel
-import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
+import com.bugiman.composercalculator.presentation.calculation.viewmodel.CalculatorViewModel
+import com.bugiman.composercalculator.presentation.history.viewmodel.HistoryViewModel
+import com.bugiman.composercalculator.presentation.settings.viewmodel.SettingsViewModel
 import com.bugiman.composercalculator.view.components.general.settings.CustomTopBar
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.App
 import com.bugiman.composercalculator.view.components.settings.SettingsBlock.AppTheme

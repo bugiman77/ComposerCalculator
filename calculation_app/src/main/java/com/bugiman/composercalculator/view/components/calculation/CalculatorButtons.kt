@@ -4,7 +4,6 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,7 +18,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
@@ -30,8 +28,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,14 +41,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bugiman.composercalculator.R
-import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
-import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
+import com.bugiman.composercalculator.presentation.calculation.viewmodel.CalculatorViewModel
 import com.bugiman.composercalculator.ui.theme.DarkGray
 import com.bugiman.composercalculator.ui.theme.DarkOrange
 import com.bugiman.composercalculator.ui.theme.LightGray
 import com.bugiman.composercalculator.ui.theme.Orange
 import com.bugiman.domain.models.settings.SettingModel
-import kotlinx.coroutines.launch
 
 @Composable
 fun CalculatorButtonGrid(

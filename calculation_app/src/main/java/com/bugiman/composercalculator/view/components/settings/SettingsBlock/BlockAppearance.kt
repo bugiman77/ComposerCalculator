@@ -13,12 +13,11 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
-import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
+import com.bugiman.composercalculator.presentation.settings.viewmodel.SettingsViewModel
 import com.bugiman.composercalculator.ui.theme.iOSGray
 import com.bugiman.composercalculator.ui.theme.iOSGreen
 import com.bugiman.composercalculator.view.components.calculation.SettingsGroup

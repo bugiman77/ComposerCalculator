@@ -1,4 +1,4 @@
-package com.bugiman.composercalculator.presentation.calculation
+package com.bugiman.composercalculator.presentation.calculation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -6,7 +6,6 @@ import com.bugiman.domain.usecase.calculation.CalculateExpressionUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildBracketLeftCursorUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildBracketLeftUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildBracketRigthUseCase
-import com.bugiman.domain.usecase.calculation.CalculationBuildBracketUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildCommaUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildDecimalCursorUseCase
 import com.bugiman.domain.usecase.calculation.CalculationBuildDecimalUseCase

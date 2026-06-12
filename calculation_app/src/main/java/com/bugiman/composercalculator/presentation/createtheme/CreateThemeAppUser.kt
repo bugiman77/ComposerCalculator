@@ -1,4 +1,4 @@
-package com.bugiman.composercalculator.view.screen.settings
+package com.bugiman.composercalculator.presentation.createtheme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

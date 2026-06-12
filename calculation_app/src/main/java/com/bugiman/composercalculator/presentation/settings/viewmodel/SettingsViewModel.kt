@@ -1,4 +1,4 @@
-package com.bugiman.composercalculator.presentation.settings
+package com.bugiman.composercalculator.presentation.settings.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

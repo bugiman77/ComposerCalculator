@@ -1,6 +1,6 @@
 @file:Suppress("COMPOSE_APPLIER_CALL_MISMATCH")
 
-package com.bugiman.composercalculator.view.screen.settings
+package com.bugiman.composercalculator.presentation.privacypolicy
 
 import android.annotation.SuppressLint
 import android.webkit.WebView
@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color

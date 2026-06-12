@@ -1,4 +1,4 @@
-package com.bugiman.composercalculator.presentation.history
+package com.bugiman.composercalculator.presentation.history.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,12 +12,10 @@ import com.bugiman.domain.usecase.history.HistoryItemDeleteUseCase
 import com.bugiman.domain.usecase.history.HistoryItemEditUseCase
 import com.bugiman.domain.usecase.history.HistoryItemSaveUseCase
 import com.bugiman.domain.usecase.history.HistoryItemUpdateNoteUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 //@HiltViewModel
 class HistoryViewModel /*@Inject constructor*/(

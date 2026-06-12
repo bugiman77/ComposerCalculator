@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.navigator.Navigator
-import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
-import com.bugiman.composercalculator.presentation.convert.ConvertViewModel
-import com.bugiman.composercalculator.presentation.history.HistoryViewModel
-import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
+import com.bugiman.composercalculator.presentation.calculation.viewmodel.CalculatorViewModel
+import com.bugiman.composercalculator.presentation.convert.viewmodel.ConvertViewModel
+import com.bugiman.composercalculator.presentation.history.viewmodel.HistoryViewModel
+import com.bugiman.composercalculator.presentation.settings.viewmodel.SettingsViewModel
 
 @Composable
 fun AppNavigation(

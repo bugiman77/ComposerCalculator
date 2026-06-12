@@ -1,10 +1,9 @@
-package com.bugiman.composercalculator.presentation.convert
+package com.bugiman.composercalculator.presentation.convert.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.bugiman.domain.usecase.convert.ConvertGetFormattedConversionUseCase
 import com.bugiman.domain.usecase.convert.ConvertSwapCurrenciesUseCase
-import com.bugiman.domain.usecase.convert.ConvertValueUseCase
 import com.bugiman.domain.usecase.feedback.FeedbackTriggerUseCase
 
 class ConvertViewModelFactory(

@@ -1,4 +1,4 @@
-package com.bugiman.composercalculator.presentation.main
+package com.bugiman.composercalculator.presentation.main.view
 
 import android.os.Bundle
 import android.util.Log
@@ -14,14 +14,14 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bugiman.composercalculator.CalcApplication
 import com.bugiman.composercalculator.navigation.AppNavigation
-import com.bugiman.composercalculator.presentation.calculation.CalculationViewModelFactory
-import com.bugiman.composercalculator.presentation.calculation.CalculatorViewModel
-import com.bugiman.composercalculator.presentation.convert.ConvertViewModel
-import com.bugiman.composercalculator.presentation.convert.ConvertViewModelFactory
-import com.bugiman.composercalculator.presentation.history.HistoryViewModel
-import com.bugiman.composercalculator.presentation.history.HistoryViewModelFactory
-import com.bugiman.composercalculator.presentation.settings.SettingsViewModel
-import com.bugiman.composercalculator.presentation.settings.SettingsViewModelFactory
+import com.bugiman.composercalculator.presentation.calculation.viewmodel.CalculationViewModelFactory
+import com.bugiman.composercalculator.presentation.calculation.viewmodel.CalculatorViewModel
+import com.bugiman.composercalculator.presentation.convert.viewmodel.ConvertViewModel
+import com.bugiman.composercalculator.presentation.convert.viewmodel.ConvertViewModelFactory
+import com.bugiman.composercalculator.presentation.history.viewmodel.HistoryViewModel
+import com.bugiman.composercalculator.presentation.history.viewmodel.HistoryViewModelFactory
+import com.bugiman.composercalculator.presentation.settings.viewmodel.SettingsViewModel
+import com.bugiman.composercalculator.presentation.settings.viewmodel.SettingsViewModelFactory
 import com.bugiman.composercalculator.ui.theme.ComposerCalculatorTheme
 
 //@AndroidEntryPoint

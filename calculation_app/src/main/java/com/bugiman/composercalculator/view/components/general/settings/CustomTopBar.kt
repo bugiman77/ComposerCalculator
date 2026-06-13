@@ -1,6 +1,5 @@
 package com.bugiman.composercalculator.view.components.general.settings
 
-import android.R.attr.scaleY
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -21,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,23 +43,6 @@ fun CustomTopBar(
             .padding(horizontal = 16.dp, vertical = 10.dp),
         contentAlignment = Alignment.Center
     ) {
-        // Островок кнопки "Назад"
-        /*Card(
-            onClick = onNavigateBack,
-            shape = CircleShape,
-            modifier = Modifier.size(48.dp).align(Alignment.CenterStart),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFF2C2C2E)),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-        ) {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                Icon(
-                    painter = painterResource(id = R.drawable.back_ios),
-                    contentDescription = "Назад",
-                    tint = Color.White,
-                    modifier = Modifier.size(20.dp)
-                )
-            }
-        }*/
 
         val backInteractionSource = remember {
             MutableInteractionSource()
@@ -95,26 +76,6 @@ fun CustomTopBar(
             }
         }
 
-        // Островок заголовка
-        /*Card(
-            onClick = onScrollToTop,
-            shape = RoundedCornerShape(24.dp),
-            modifier = Modifier.align(Alignment.Center),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFF2C2C2E)),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-        ) {
-            Row(
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = screenTitle,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.White,
-                    fontSize = 17.sp
-                )
-            }
-        }*/
         val islandInteractionSource = remember {
             MutableInteractionSource()
         }
